@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>RenderUiTemplate</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">RenderUiTemplate<a name="API_RenderUiTemplate"></a></h1>
+</header>
+<p>Renders the UI template so that you can preview the worker’s experience.</p>
+<pre><code>{
+   &quot;[RoleArn](#SageMaker-RenderUiTemplate-request-RoleArn)&quot;: &quot;string&quot;,
+   &quot;[Task](#SageMaker-RenderUiTemplate-request-Task)&quot;: { 
+      &quot;[Input](API_RenderableTask.md#SageMaker-Type-RenderableTask-Input)&quot;: &quot;string&quot;
+   },
+   &quot;[UiTemplate](#SageMaker-RenderUiTemplate-request-UiTemplate)&quot;: { 
+      &quot;[Content](API_UiTemplate.md#SageMaker-Type-UiTemplate-Content)&quot;: &quot;string&quot;
+   }
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_RenderUiTemplate_RequestSyntax">RoleArn</a> ** <a name="SageMaker-RenderUiTemplate-request-RoleArn"></a> The Amazon Resource Name (ARN) that has access to the S3 objects that are used by the template.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code><br />
+Required: Yes</p>
+<p>** <a href="#API_RenderUiTemplate_RequestSyntax">Task</a> ** <a name="SageMaker-RenderUiTemplate-request-Task"></a> A <code>RenderableTask</code> object containing a representative task to render.<br />
+Type: <a href="API_RenderableTask.md">RenderableTask</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_RenderUiTemplate_RequestSyntax">UiTemplate</a> ** <a name="SageMaker-RenderUiTemplate-request-UiTemplate"></a> A <code>Template</code> object containing the worker UI template to render.<br />
+Type: <a href="API_UiTemplate.md">UiTemplate</a> object<br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[Errors](#SageMaker-RenderUiTemplate-response-Errors)&quot;: [ 
+      { 
+         &quot;[Code](API_RenderingError.md#SageMaker-Type-RenderingError-Code)&quot;: &quot;string&quot;,
+         &quot;[Message](API_RenderingError.md#SageMaker-Type-RenderingError-Message)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[RenderedContent](#SageMaker-RenderUiTemplate-response-RenderedContent)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_RenderUiTemplate_ResponseSyntax">Errors</a> ** <a name="SageMaker-RenderUiTemplate-response-Errors"></a> A list of one or more <code>RenderingError</code> objects if any were encountered while rendering the template. If there were no errors, the list is empty.<br />
+Type: Array of <a href="API_RenderingError.md">RenderingError</a> objects</p>
+<p>** <a href="#API_RenderUiTemplate_ResponseSyntax">RenderedContent</a> ** <a name="SageMaker-RenderUiTemplate-response-RenderedContent"></a> A Liquid template that renders the HTML for the worker UI.<br />
+Type: String</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/RenderUiTemplate">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/RenderUiTemplate">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

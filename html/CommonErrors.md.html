@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Common Errors</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Common Errors<a name="CommonErrors"></a></h1>
+</header>
+<p>This section lists the errors common to the API actions of all AWS services. For errors specific to an API action for this service, see the topic for that API action.</p>
+<p><strong>AccessDeniedException</strong><br />
+You do not have sufficient access to perform this action.<br />
+HTTP Status Code: 400</p>
+<p><strong>IncompleteSignature</strong><br />
+The request signature does not conform to AWS standards.<br />
+HTTP Status Code: 400</p>
+<p><strong>InternalFailure</strong> <a name="CommonErrors-InternalFailure"></a> The request processing has failed because of an unknown error, exception or failure.<br />
+HTTP Status Code: 500</p>
+<p><strong>InvalidAction</strong> <a name="CommonErrors-InvalidAction"></a> The action or operation requested is invalid. Verify that the action is typed correctly.<br />
+HTTP Status Code: 400</p>
+<p><strong>InvalidClientTokenId</strong> <a name="CommonErrors-InvalidClientTokenId"></a> The X.509 certificate or AWS access key ID provided does not exist in our records.<br />
+HTTP Status Code: 403</p>
+<p><strong>InvalidParameterCombination</strong> <a name="CommonErrors-InvalidParameterCombination"></a> Parameters that must not be used together were used together.<br />
+HTTP Status Code: 400</p>
+<p><strong>InvalidParameterValue</strong> <a name="CommonErrors-InvalidParameterValue"></a> An invalid or out-of-range value was supplied for the input parameter.<br />
+HTTP Status Code: 400</p>
+<p><strong>InvalidQueryParameter</strong> <a name="CommonErrors-InvalidQueryParameter"></a> The AWS query string is malformed or does not adhere to AWS standards.<br />
+HTTP Status Code: 400</p>
+<p><strong>MalformedQueryString</strong> <a name="CommonErrors-MalformedQueryString"></a> The query string contains a syntax error.<br />
+HTTP Status Code: 404</p>
+<p><strong>MissingAction</strong> <a name="CommonErrors-MissingAction"></a> The request is missing an action or a required parameter.<br />
+HTTP Status Code: 400</p>
+<p><strong>MissingAuthenticationToken</strong> <a name="CommonErrors-MissingAuthenticationToken"></a> The request must contain either a valid (registered) AWS access key ID or X.509 certificate.<br />
+HTTP Status Code: 403</p>
+<p><strong>MissingParameter</strong> <a name="CommonErrors-MissingParameter"></a> A required parameter for the specified action is not supplied.<br />
+HTTP Status Code: 400</p>
+<p><strong>OptInRequired</strong> <a name="CommonErrors-OptInRequired"></a> The AWS access key ID needs a subscription for the service.<br />
+HTTP Status Code: 403</p>
+<p><strong>RequestExpired</strong> <a name="CommonErrors-RequestExpired"></a> The request reached the service more than 15 minutes after the date stamp on the request or more than 15 minutes after the request expiration date (such as for pre-signed URLs), or the date stamp on the request is more than 15 minutes in the future.<br />
+HTTP Status Code: 400</p>
+<p><strong>ServiceUnavailable</strong> <a name="CommonErrors-ServiceUnavailable"></a> The request has failed due to a temporary failure of the server.<br />
+HTTP Status Code: 503</p>
+<p><strong>ThrottlingException</strong> <a name="CommonErrors-ThrottlingException"></a> The request was denied due to request throttling.<br />
+HTTP Status Code: 400</p>
+<p><strong>ValidationError</strong> <a name="CommonErrors-ValidationError"></a> The input fails to satisfy the constraints specified by an AWS service.<br />
+HTTP Status Code: 400</p>
+</body>
+</html>

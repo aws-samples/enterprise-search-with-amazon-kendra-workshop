@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>UpdateNotebookInstance</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">UpdateNotebookInstance<a name="API_UpdateNotebookInstance"></a></h1>
+</header>
+<p>Updates a notebook instance. NotebookInstance updates include upgrading or downgrading the ML compute instance used for your notebook instance to accommodate changes in your workload requirements.</p>
+<pre><code>{
+   &quot;[AcceleratorTypes](#SageMaker-UpdateNotebookInstance-request-AcceleratorTypes)&quot;: [ &quot;string&quot; ],
+   &quot;[AdditionalCodeRepositories](#SageMaker-UpdateNotebookInstance-request-AdditionalCodeRepositories)&quot;: [ &quot;string&quot; ],
+   &quot;[DefaultCodeRepository](#SageMaker-UpdateNotebookInstance-request-DefaultCodeRepository)&quot;: &quot;string&quot;,
+   &quot;[DisassociateAcceleratorTypes](#SageMaker-UpdateNotebookInstance-request-DisassociateAcceleratorTypes)&quot;: boolean,
+   &quot;[DisassociateAdditionalCodeRepositories](#SageMaker-UpdateNotebookInstance-request-DisassociateAdditionalCodeRepositories)&quot;: boolean,
+   &quot;[DisassociateDefaultCodeRepository](#SageMaker-UpdateNotebookInstance-request-DisassociateDefaultCodeRepository)&quot;: boolean,
+   &quot;[DisassociateLifecycleConfig](#SageMaker-UpdateNotebookInstance-request-DisassociateLifecycleConfig)&quot;: boolean,
+   &quot;[InstanceType](#SageMaker-UpdateNotebookInstance-request-InstanceType)&quot;: &quot;string&quot;,
+   &quot;[LifecycleConfigName](#SageMaker-UpdateNotebookInstance-request-LifecycleConfigName)&quot;: &quot;string&quot;,
+   &quot;[NotebookInstanceName](#SageMaker-UpdateNotebookInstance-request-NotebookInstanceName)&quot;: &quot;string&quot;,
+   &quot;[RoleArn](#SageMaker-UpdateNotebookInstance-request-RoleArn)&quot;: &quot;string&quot;,
+   &quot;[RootAccess](#SageMaker-UpdateNotebookInstance-request-RootAccess)&quot;: &quot;string&quot;,
+   &quot;[VolumeSizeInGB](#SageMaker-UpdateNotebookInstance-request-VolumeSizeInGB)&quot;: number
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">AcceleratorTypes</a> ** <a name="SageMaker-UpdateNotebookInstance-request-AcceleratorTypes"></a> A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.<br />
+Type: Array of strings<br />
+Valid Values:<code>ml.eia1.medium | ml.eia1.large | ml.eia1.xlarge</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">AdditionalCodeRepositories</a> ** <a name="SageMaker-UpdateNotebookInstance-request-AdditionalCodeRepositories"></a> An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.<br />
+Type: Array of strings<br />
+Array Members: Maximum number of 3 items.<br />
+Length Constraints: Minimum length of 1. Maximum length of 1024.<br />
+Pattern: <code>^https://([^/]+)/?(.*)$|^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">DefaultCodeRepository</a> ** <a name="SageMaker-UpdateNotebookInstance-request-DefaultCodeRepository"></a> The Git repository to associate with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 1024.<br />
+Pattern: <code>^https://([^/]+)/?(.*)$|^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">DisassociateAcceleratorTypes</a> ** <a name="SageMaker-UpdateNotebookInstance-request-DisassociateAcceleratorTypes"></a> A list of the Elastic Inference (EI) instance types to remove from this notebook instance. This operation is idempotent. If you specify an accelerator type that is not associated with the notebook instance when you call this method, it does not throw an error.<br />
+Type: Boolean<br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">DisassociateAdditionalCodeRepositories</a> ** <a name="SageMaker-UpdateNotebookInstance-request-DisassociateAdditionalCodeRepositories"></a> A list of names or URLs of the default Git repositories to remove from this notebook instance. This operation is idempotent. If you specify a Git repository that is not associated with the notebook instance when you call this method, it does not throw an error.<br />
+Type: Boolean<br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">DisassociateDefaultCodeRepository</a> ** <a name="SageMaker-UpdateNotebookInstance-request-DisassociateDefaultCodeRepository"></a> The name or URL of the default Git repository to remove from this notebook instance. This operation is idempotent. If you specify a Git repository that is not associated with the notebook instance when you call this method, it does not throw an error.<br />
+Type: Boolean<br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">DisassociateLifecycleConfig</a> ** <a name="SageMaker-UpdateNotebookInstance-request-DisassociateLifecycleConfig"></a> Set to <code>true</code> to remove the notebook instance lifecycle configuration currently associated with the notebook instance. This operation is idempotent. If you specify a lifecycle configuration that is not associated with the notebook instance when you call this method, it does not throw an error.<br />
+Type: Boolean<br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">InstanceType</a> ** <a name="SageMaker-UpdateNotebookInstance-request-InstanceType"></a> The Amazon ML compute instance type.<br />
+Type: String<br />
+Valid Values:<code>ml.t2.medium | ml.t2.large | ml.t2.xlarge | ml.t2.2xlarge | ml.t3.medium | ml.t3.large | ml.t3.xlarge | ml.t3.2xlarge | ml.m4.xlarge | ml.m4.2xlarge | ml.m4.4xlarge | ml.m4.10xlarge | ml.m4.16xlarge | ml.m5.xlarge | ml.m5.2xlarge | ml.m5.4xlarge | ml.m5.12xlarge | ml.m5.24xlarge | ml.c4.xlarge | ml.c4.2xlarge | ml.c4.4xlarge | ml.c4.8xlarge | ml.c5.xlarge | ml.c5.2xlarge | ml.c5.4xlarge | ml.c5.9xlarge | ml.c5.18xlarge | ml.c5d.xlarge | ml.c5d.2xlarge | ml.c5d.4xlarge | ml.c5d.9xlarge | ml.c5d.18xlarge | ml.p2.xlarge | ml.p2.8xlarge | ml.p2.16xlarge | ml.p3.2xlarge | ml.p3.8xlarge | ml.p3.16xlarge</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">LifecycleConfigName</a> ** <a name="SageMaker-UpdateNotebookInstance-request-LifecycleConfigName"></a> The name of a lifecycle configuration to associate with the notebook instance. For information about lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">NotebookInstanceName</a> ** <a name="SageMaker-UpdateNotebookInstance-request-NotebookInstanceName"></a> The name of the notebook instance to update.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">RoleArn</a> ** <a name="SageMaker-UpdateNotebookInstance-request-RoleArn"></a> The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker can assume to access the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html">Amazon SageMaker Roles</a>.<br />
+To be able to pass this role to Amazon SageMaker, the caller of this API must have the <code>iam:PassRole</code> permission. Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">RootAccess</a> ** <a name="SageMaker-UpdateNotebookInstance-request-RootAccess"></a> Whether root access is enabled or disabled for users of the notebook instance. The default value is <code>Enabled</code>.<br />
+If you set this to <code>Disabled</code>, users don’t have root access on the notebook instance, but lifecycle configuration scripts still run with root permissions. Type: String<br />
+Valid Values:<code>Enabled | Disabled</code><br />
+Required: No</p>
+<p>** <a href="#API_UpdateNotebookInstance_RequestSyntax">VolumeSizeInGB</a> ** <a name="SageMaker-UpdateNotebookInstance-request-VolumeSizeInGB"></a> The size, in GB, of the ML storage volume to attach to the notebook instance. The default value is 5 GB. ML storage volumes are encrypted, so Amazon SageMaker can’t determine the amount of available free space on the volume. Because of this, you can increase the volume size when you update a notebook instance, but you can’t decrease the volume size. If you want to decrease the size of the ML storage volume in use, create a new notebook instance with the desired size.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 5. Maximum value of 16384.<br />
+Required: No</p>
+<p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/UpdateNotebookInstance">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/UpdateNotebookInstance">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

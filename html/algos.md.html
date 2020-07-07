@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Use Amazon SageMaker Built-in Algorithms</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Use Amazon SageMaker Built-in Algorithms<a name="algos"></a></h1>
+</header>
+<p>A machine learning algorithm uses example data to create a generalized solution (a <em>model</em>) that addresses the business question you are trying to answer. After you create a model using example data, you can use it to answer the same business question for a new set of data. This is also referred to as obtaining inferences.</p>
+<p>Amazon SageMaker provides several built-in machine learning algorithms that you can use for a variety of problem types.</p>
+<p>Because you create a model to address a business question, your first step is to understand the problem that you want to solve. Specifically, the format of the answer that you are looking for influences the algorithm that you choose. For example, suppose that you are a bank marketing manager, and that you want to conduct a direct mail campaign to attract new customers. Consider the potential types of answers that you’re looking for: + Answers that fit into discrete categories—For example, answers to these questions:</p>
+<p>  + “Based on past customer responses, should I mail this particular customer?” Answers to this question fall into two categories, “yes” or “no.” In this case, you use the answer to narrow the recipients of the mail campaign.</p>
+<pre><code> </code></pre>
+<ul>
+<li><p>“Based on past customer segmentation, which segment does this customer fall into?” Answers might fall into categories such as “empty nester,” “suburban family,” or “urban professional.” You could use these segments to decide who should receive the mailing.</p>
+<p> </p></li>
+</ul>
+<p>For this type of discrete classification problem, Amazon SageMaker provides two algorithms: <a href="linear-learner.md">Linear Learner Algorithm</a> and the <a href="xgboost.md">XGBoost Algorithm</a>. You set the following hyperparameters to direct these algorithms to produce discrete results:</p>
+<p>  + For the Linear Learner algorithm, set the <code>predictor_type</code> hyperparameter to <code>binary_classifier</code>.</p>
+<pre><code> </code></pre>
+<ul>
+<li>For the XGBoost algorithm, set the <code>objective</code> hyperparameter to <code>reg:logistic</code>.</li>
+</ul>
+<p>  + Answers that are quantitative—Consider this question: “Based on the return on investment (ROI) from past mailings, what is the ROI for mailing this customer?” In this case, you use the ROI to target customers for the mail campaign. For these quantitative analysis problems, you can also use the <a href="linear-learner.md">Linear Learner Algorithm</a> or the <a href="xgboost.md">XGBoost Algorithm</a> algorithms. You set the following hyperparameters to direct these algorithms to produce quantitative results:</p>
+<p>  + For the Linear Learner algorithm, set the <code>predictor_type</code> hyperparameter to <code>regressor</code>.</p>
+<pre><code> </code></pre>
+<ul>
+<li>For the XGBoost algorithm, set the <code>objective</code> hyperparameter to <code>reg:linear</code>.</li>
+</ul>
+<p>  + Answers in the form of discrete recommendations—Consider this question: “Based on past responses to mailings, what is the recommended content for each customer?” In this case, you are looking for a recommendation on what to mail, not whether to mail, the customer. For this problem, Amazon SageMaker provides the <a href="fact-machines.md">Factorization Machines Algorithm</a> algorithm.</p>
+<p> </p>
+<p>All of the questions in the preceding examples rely on having example data that includes answers. There are times that you don’t need, or can’t get, example data with answers. This is true for problems whose answers identify groups. For example: + “I want to group current and prospective customers into 10 groups based on their attributes. How should I group them?” You might choose to send the mailing to customers in the group that has the highest percentage of current customers. That is, prospective customers that most resemble current customers based on the same set of attributes. For this type of question, Amazon SageMaker provides the <a href="k-means.md">K-Means Algorithm</a>.</p>
+<p>  + “What are the attributes that differentiate these customers, and what are the values for each customer along those dimensions.” You use these answers to simplify the view of current and prospective customers, and, maybe, to better understand these customer attributes. For this type of question, Amazon SageMaker provides the <a href="pca.md">Principal Component Analysis (PCA) Algorithm</a> algorithm.</p>
+<p>In addition to these general-purpose algorithms, Amazon SageMaker provides algorithms that are tailored to specific use cases. These include: + <a href="image-classification.md">Image Classification Algorithm</a>—Use this algorithm to classify images. It uses example data with answers (referred to as <em>supervised algorithm</em>).</p>
+<p>  + <a href="seq-2-seq.md">Sequence-to-Sequence Algorithm</a>—This supervised algorithm is commonly used for neural machine translation.</p>
+<p>  + <a href="lda.md">Latent Dirichlet Allocation (LDA) Algorithm</a>—This algorithm is suitable for determining topics in a set of documents. It is an <em>unsupervised algorithm</em>, which means that it doesn’t use example data with answers during training.</p>
+<p>  + <a href="ntm.md">Neural Topic Model (NTM) Algorithm</a>—Another unsupervised technique for determining topics in a set of documents, using a neural network approach.</p>
+<p><strong>Topics</strong> + <a href="common-info-all-im-models.md">Common Elements of Built-in Algorithms</a> + <a href="blazingtext.md">BlazingText Algorithm</a> + <a href="deepar.md">DeepAR Forecasting Algorithm</a> + <a href="fact-machines.md">Factorization Machines Algorithm</a> + <a href="image-classification.md">Image Classification Algorithm</a> + <a href="ip-insights.md">IP Insights Algorithm</a> + <a href="k-means.md">K-Means Algorithm</a> + <a href="k-nearest-neighbors.md">K-Nearest Neighbors (k-NN) Algorithm</a> + <a href="lda.md">Latent Dirichlet Allocation (LDA) Algorithm</a> + <a href="linear-learner.md">Linear Learner Algorithm</a> + <a href="ntm.md">Neural Topic Model (NTM) Algorithm</a> + <a href="object2vec.md">Object2Vec Algorithm</a> + <a href="object-detection.md">Object Detection Algorithm</a> + <a href="pca.md">Principal Component Analysis (PCA) Algorithm</a> + <a href="randomcutforest.md">Random Cut Forest (RCF) Algorithm</a> + <a href="semantic-segmentation.md">Semantic Segmentation Algorithm</a> + <a href="seq-2-seq.md">Sequence-to-Sequence Algorithm</a> + <a href="xgboost.md">XGBoost Algorithm</a></p>
+</body>
+</html>

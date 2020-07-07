@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Specify a Bucket and Data Output Location</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Specify a Bucket and Data Output Location<a name="automatic-model-tuning-ex-bucket"></a></h1>
+</header>
+<p>Specify the name of the Amazon S3 bucket where you want to store the output of the training jobs that the tuning job launches. The name of the bucket must contain <strong>sagemaker</strong>, and be globally unique. The bucket must be in the same AWS Region as the notebook instance that you use for this example. You can use the bucket that you created when you set up Amazon SageMaker, or you can create a new bucket. For information, see <a href="gs-config-permissions.md">Step 1: Create an Amazon S3 Bucket</a>.</p>
+<p><strong>Note</strong><br />
+The name of the bucket doesn’t need to contain <strong>sagemaker</strong> if the role that you use to run the hyperparameter tuning job has a policy that gives the SageMaker service principle <code>S3FullAccess</code> permission.</p>
+<p><code>prefix</code> is the path within the bucket where Amazon SageMaker stores the output from training jobs.</p>
+<pre><code>bucket = &#39;sagemaker-MyBucket&#39;                               # Replace with the name of your S3 bucket
+prefix = &#39;sagemaker/DEMO-automatic-model-tuning-xgboost-dm&#39;</code></pre>
+<p><a href="automatic-model-tuning-ex-data.md">Download, Prepare, and Upload Training Data</a></p>
+</body>
+</html>

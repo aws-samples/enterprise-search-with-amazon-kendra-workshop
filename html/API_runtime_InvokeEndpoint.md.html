@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>InvokeEndpoint</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">InvokeEndpoint<a name="API_runtime_InvokeEndpoint"></a></h1>
+</header>
+<p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint.</p>
+<p>For an overview of Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>.</p>
+<p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax.</p>
+<p>Calls to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <em>Amazon S3 API Reference</em>.</p>
+<p>A customer’s model containers must respond to requests within 60 seconds. The model itself can have a maximum processing time of 60 seconds before responding to the /invocations. If your model is going to take 50-60 seconds of processing time, the SDK socket timeout should be set to be 70 seconds.</p>
+<p><strong>Note</strong><br />
+Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p>
+<pre><code>POST /endpoints/EndpointName/invocations HTTP/1.1
+Content-Type: ContentType
+Accept: Accept
+X-Amzn-SageMaker-Custom-Attributes: CustomAttributes
+
+Body</code></pre>
+<p>The request requires the following URI parameters.</p>
+<p>** <a href="#API_runtime_InvokeEndpoint_RequestSyntax">Accept</a> ** <a name="SageMaker-runtime_InvokeEndpoint-request-Accept"></a> The desired MIME type of the inference in the response.<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>\p{ASCII}*</code></p>
+<p>** <a href="#API_runtime_InvokeEndpoint_RequestSyntax">ContentType</a> ** <a name="SageMaker-runtime_InvokeEndpoint-request-ContentType"></a> The MIME type of the input data in the request body.<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>\p{ASCII}*</code></p>
+<p>** <a href="#API_runtime_InvokeEndpoint_RequestSyntax">CustomAttributes</a> ** <a name="SageMaker-runtime_InvokeEndpoint-request-CustomAttributes"></a> Provides additional information about a request for an inference submitted to a model hosted at an Amazon SageMaker endpoint. The information is an opaque value that is forwarded verbatim. You could use this value, for example, to provide an ID that you can use to track a request or to provide other metadata that a service endpoint was programmed to process. The value must consist of no more than 1024 visible US-ASCII characters as specified in <a href="https://tools.ietf.org/html/rfc7230#section-3.2.6">Section 3.3.6. Field Value Components</a> of the Hypertext Transfer Protocol (HTTP/1.1). This feature is currently supported in the AWS SDKs but not in the Amazon SageMaker Python SDK.<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>\p{ASCII}*</code></p>
+<p>** <a href="#API_runtime_InvokeEndpoint_RequestSyntax">EndpointName</a> ** <a name="SageMaker-runtime_InvokeEndpoint-request-EndpointName"></a> The name of the endpoint that you specified when you created the endpoint using the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API.<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code></p>
+<p>The request accepts the following binary data.</p>
+<p>** <a href="#API_runtime_InvokeEndpoint_RequestSyntax">Body</a> ** <a name="SageMaker-runtime_InvokeEndpoint-request-Body"></a> Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model.<br />
+For information about the format of the request body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.<br />
+Length Constraints: Maximum length of 5242880.</p>
+<pre><code>HTTP/1.1 200
+Content-Type: ContentType
+x-Amzn-Invoked-Production-Variant: InvokedProductionVariant
+X-Amzn-SageMaker-Custom-Attributes: CustomAttributes
+
+Body</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The response returns the following HTTP headers.</p>
+<p>** <a href="#API_runtime_InvokeEndpoint_ResponseSyntax">ContentType</a> ** <a name="SageMaker-runtime_InvokeEndpoint-response-ContentType"></a> The MIME type of the inference returned in the response body.<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>\p{ASCII}*</code></p>
+<p>** <a href="#API_runtime_InvokeEndpoint_ResponseSyntax">CustomAttributes</a> ** <a name="SageMaker-runtime_InvokeEndpoint-response-CustomAttributes"></a> Provides additional information in the response about the inference returned by a model hosted at an Amazon SageMaker endpoint. The information is an opaque value that is forwarded verbatim. You could use this value, for example, to return an ID received in the <code>CustomAttributes</code> header of a request or other metadata that a service endpoint was programmed to produce. The value must consist of no more than 1024 visible US-ASCII characters as specified in <a href="https://tools.ietf.org/html/rfc7230#section-3.2.6">Section 3.3.6. Field Value Components</a> of the Hypertext Transfer Protocol (HTTP/1.1). If the customer wants the custom attribute returned, the model must set the custom attribute to be included on the way back.<br />
+This feature is currently supported in the AWS SDKs but not in the Amazon SageMaker Python SDK.<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>\p{ASCII}*</code></p>
+<p>** <a href="#API_runtime_InvokeEndpoint_ResponseSyntax">InvokedProductionVariant</a> ** <a name="SageMaker-runtime_InvokeEndpoint-response-InvokedProductionVariant"></a> Identifies the production variant that was invoked.<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>\p{ASCII}*</code></p>
+<p>The response returns the following as the HTTP body.</p>
+<p>** <a href="#API_runtime_InvokeEndpoint_ResponseSyntax">Body</a> ** <a name="SageMaker-runtime_InvokeEndpoint-response-Body"></a> Includes the inference provided by the model.<br />
+For information about the format of the response body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.<br />
+Length Constraints: Maximum length of 5242880.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>InternalFailure</strong><br />
+An internal failure occurred.<br />
+HTTP Status Code: 500</p>
+<p><strong>ModelError</strong><br />
+Model (owned by the customer in the container) returned 4xx or 5xx error code.<br />
+HTTP Status Code: 424</p>
+<p><strong>ServiceUnavailable</strong><br />
+The service is unavailable. Try your call again.<br />
+HTTP Status Code: 503</p>
+<p><strong>ValidationError</strong><br />
+Inspect your request and try again.<br />
+HTTP Status Code: 400</p>
+<p>In this example a trace ID is passed to the service endpoint in the <code>CustomAttributes</code> header of the request and then retrieved and returned in the <code>CustomAttributes</code> header of the response.</p>
+<pre><code>import boto3
+
+client = boto3.client(&#39;sagemaker-runtime&#39;)
+
+custom_attributes = &quot;c000b4f9-df62-4c85-a0bf-7c525f9104a4&quot;  # An example of a trace ID.
+endpoint_name = &quot;...&quot;                                       # Your endpoint name.
+content_type = &quot;...&quot;                                        # The MIME type of the input data in the request body.
+accept = &quot;...&quot;                                              # The desired MIME type of the inference in the response.
+payload = &quot;...&quot;                                             # Payload for inference.</code></pre>
+<pre><code>response = client.invoke_endpoint(
+    EndpointName=endpoint_name, 
+    CustomAttributes=custom_attributes, 
+    ContentType=content_type,
+    Accept=accept,
+    Body=payload
+    )
+
+print(response[&#39;CustomAttributes&#39;])                         # If model receives and updates the custom_attributes header 
+                                                            # by adding &quot;Trace id: &quot; in front of custom_attributes in the request,
+                                                            # custom_attributes in response becomes
+                                                            # &quot;Trace ID: c000b4f9-df62-4c85-a0bf-7c525f9104a4&quot;</code></pre>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/runtime.sagemaker-2017-05-13/InvokeEndpoint">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

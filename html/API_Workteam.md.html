@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Workteam</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Workteam<a name="API_Workteam"></a></h1>
+</header>
+<p>Provides details about a labeling work team.</p>
+<p><strong>CreateDate</strong> <a name="SageMaker-Type-Workteam-CreateDate"></a> The date and time that the work team was created (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>Description</strong> <a name="SageMaker-Type-Workteam-Description"></a> A description of the work team.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 200.<br />
+Pattern: <code>.+</code><br />
+Required: Yes</p>
+<p><strong>LastUpdatedDate</strong> <a name="SageMaker-Type-Workteam-LastUpdatedDate"></a> The date and time that the work team was last updated (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>MemberDefinitions</strong> <a name="SageMaker-Type-Workteam-MemberDefinitions"></a> The Amazon Cognito user groups that make up the work team.<br />
+Type: Array of <a href="API_MemberDefinition.md">MemberDefinition</a> objects<br />
+Array Members: Minimum number of 1 item. Maximum number of 10 items.<br />
+Required: Yes</p>
+<p><strong>NotificationConfiguration</strong> <a name="SageMaker-Type-Workteam-NotificationConfiguration"></a> Configures SNS notifications of available or expiring work items for work teams.<br />
+Type: <a href="API_NotificationConfiguration.md">NotificationConfiguration</a> object<br />
+Required: No</p>
+<p><strong>ProductListingIds</strong> <a name="SageMaker-Type-Workteam-ProductListingIds"></a> The Amazon Marketplace identifier for a vendor’s work team.<br />
+Type: Array of strings<br />
+Required: No</p>
+<p><strong>SubDomain</strong> <a name="SageMaker-Type-Workteam-SubDomain"></a> The URI of the labeling job’s user interface. Workers open this URI to start labeling your data objects.<br />
+Type: String<br />
+Required: No</p>
+<p><strong>WorkteamArn</strong> <a name="SageMaker-Type-Workteam-WorkteamArn"></a> The Amazon Resource Name (ARN) that identifies the work team.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:workteam/.*</code><br />
+Required: Yes</p>
+<p><strong>WorkteamName</strong> <a name="SageMaker-Type-Workteam-WorkteamName"></a> The name of the work team.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/Workteam">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/Workteam">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/Workteam">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/Workteam">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/Workteam">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>PCA Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">PCA Hyperparameters<a name="PCA-reference"></a></h1>
+</header>
+<p>In the <code>CreateTrainingJob</code> request, you specify the training algorithm. You can also specify algorithm-specific HyperParameters as string-to-string maps. The following table lists the hyperparameters for the PCA training algorithm provided by Amazon SageMaker. For more information about how PCA works, see <a href="how-pca-works.md">How PCA Works</a>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature_dim</td>
+<td>Input dimension. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>Number of rows in a mini-batch. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>num_components</td>
+<td>The number of principal components to compute. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="even">
+<td>algorithm_mode</td>
+<td>Mode for computing the principal components. <strong>Optional</strong> Valid values: <em>regular</em> or <em>randomized</em> Default value: <em>regular</em></td>
+</tr>
+<tr class="odd">
+<td>extra_components</td>
+<td>As the value increases, the solution becomes more accurate but the runtime and memory consumption increase linearly. The default, -1, means the maximum of 10 and <code>num_components</code>. Valid for <em>randomized</em> mode only. <strong>Optional</strong> Valid values: Non-negative integer or -1 Default value: -1</td>
+</tr>
+<tr class="even">
+<td>subtract_mean</td>
+<td>Indicates whether the data should be unbiased both during training and at inference. <strong>Optional</strong> Valid values: One of <em>true</em> or <em>false</em> Default value: <em>true</em></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

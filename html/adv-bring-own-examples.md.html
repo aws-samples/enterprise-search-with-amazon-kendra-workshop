@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Example Notebooks: Use Your Own Algorithm or Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Example Notebooks: Use Your Own Algorithm or Model<a name="adv-bring-own-examples"></a></h1>
+</header>
+<p>The following sample notebooks show how to use your own algorithms or pretrained models from an Amazon SageMaker notebook instance. . After you have created a notebook instance and opened it, choose the <strong>SageMaker Examples</strong> tab for a list of all Amazon SageMaker example notebooks. You can open the sample notebooks from the <strong>Advanced Functionality</strong> section in your notebook instance or in GitHub at the provided links. To open a notebook, choose its <strong>Use</strong> tab, then choose <strong>Create copy</strong>.</p>
+<p>For instructions on how to create and access Jupyter notebook instances, see <a href="nbi.md">Use Notebook Instances</a></p>
+<p>To learn how to <strong>host models trained in scikit-learn</strong> for making predictions in Amazon SageMaker by injecting them first-party k-means and XGBoost containers, see the following sample notebooks. + kmeans_bring_your_own_model - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/kmeans_bring_your_own_model">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/kmeans_bring_your_own_model</a> + xgboost_bring_your_own_model - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/xgboost_bring_your_own_model">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/xgboost_bring_your_own_model</a></p>
+<p>To learn how to <strong>package algorithms that you have developed in TensorFlow and scikit-learn frameworks for training and deployment in the Amazon SageMaker</strong> environment, see the following notebooks. They show you how to build, register, and deploy you own Docker containers using Dockerfiles. + tensorflow_bring_your_own - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/tensorflow_bring_your_own">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/tensorflow_bring_your_own</a> + scikit_bring_your_own - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/scikit_bring_your_own">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/scikit_bring_your_own</a></p>
+<p>To learn how to <strong>train a neural network locally using MXNet or TensorFlow</strong>, and then create an endpoint from the trained model and <strong>deploy it on Amazon SageMaker</strong>, see the following notebooks. The MXNet model is trained to recognize handwritten numbers from the MNIST dataset. The TensorFlow model is trained to classify irises. + mxnet_mnist_byom - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/mxnet_mnist_byom">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/mxnet_mnist_byom</a> + tensorflow_iris_byom - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/tensorflow_iris_byom">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/tensorflow_iris_byom</a></p>
+<p>To learn how to <strong>use a Dockerfile to build a container that calls the <code>train.py script</code></strong> and uses pipe mode to custom train an algorithm, see the following notebook. In pipe mode, the input data is transferred to the algorithm while it is training. This can decrease training time compared to using file-mode. + pipe_bring_your_own - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/pipe_bring_your_own">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/pipe_bring_your_own</a></p>
+<p>To learn how to** use an R container to train and host a model** with the R kernel installed in a notebook , see the following notebook. To take advantage of the AWS SDK for Python (Boto 3), we use Python within the notebook. You can achieve the same results completely in R by invoking command line arguments. + r_bring_your_own - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/r_bring_your_own">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/r_bring_your_own</a></p>
+<p>To learn how to <strong>extend a prebuilt Amazon SageMaker PyTorch container image</strong> when you have additional functional requirements for your algorithm or model that the pre-built Docker image doesn’t support, see the following notebook. + pytorch_extending_our_containers - <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/pytorch_extending_our_containers">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/advanced_functionality/pytorch_extending_our_containers</a></p>
+<p>For links to the GitHub repositories with the prebuilt Dockerfiles for the TensorFlow, MXNet, Chainer, and PyTorch frameworks and instructions on use the AWS SDK for Python (Boto 3) estimators to run your own training algorithms on Amazon SageMaker Learner and your own models on Amazon SageMaker hosting, see <a href="pre-built-containers-frameworks-deep-learning.md">Prebuilt Amazon SageMaker Docker Images for TensorFlow, MXNet, Chainer, and PyTorch</a></p>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Stop Training Jobs Early</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Stop Training Jobs Early<a name="automatic-model-tuning-early-stopping"></a></h1>
+</header>
+<p>Stop the training jobs that a hyperparameter tuning job launches early when they are not improving significantly as measured by the objective metric. Stopping training jobs early can help reduce compute time and helps you avoid overfitting your model. To configure a hyperparameter tuning job to stop training jobs early, set the <code>TrainingJobEarlyStoppingType</code> field of the <a href="API_HyperParameterTuningJobConfig.md">HyperParameterTuningJobConfig</a> object that you use to configure the tuning job to <code>AUTO</code>. For information about configuring and launching a hyperparameter tuning job, see <a href="automatic-model-tuning-ex.md">Example: Hyperparameter Tuning Job</a>.</p>
+<p>When you enable early stopping for a hyperparameter tuning job, Amazon SageMaker evaluates each training job the hyperparameter tuning job launches as follows: + After each epoch of training, get the value of the objective metric. + Compute the running average of the objective metric for all previous training jobs up to the same epoch, and then compute the median of all of the running averages. + If the value of the objective metric for the current training job is worse (higher when minimizing or lower when maximizing the objective metric) than the median value of running averages of the objective metric for previous training jobs up to the same epoch, Amazon SageMaker stops the current training job.</p>
+<p>To support early stopping, an algorithm must emit objective metrics for each epoch. The following built-in Amazon SageMaker algorithms support early stopping: + <a href="linear-learner.md">Linear Learner Algorithm</a>—Supported only if you use <code>objective_loss</code> as the objective metric. + <a href="xgboost.md">XGBoost Algorithm</a> + <a href="image-classification.md">Image Classification Algorithm</a> + <a href="object-detection.md">Object Detection Algorithm</a> + <a href="seq-2-seq.md">Sequence-to-Sequence Algorithm</a> + <a href="ip-insights.md">IP Insights Algorithm</a></p>
+<p><strong>Note</strong><br />
+This list of built-in algorithms that support early stopping is current as of December 13, 2018. Other built-in algorithms might support early stopping in the future. If an algorithm emits a metric that can be used as an objective metric for a hyperparameter tuning job (preferably a validation metric), then it supports early stopping.</p>
+<p>To use early stopping with your own algorithm, you must write your algorithms such that it emits the value of the objective metric after each epoch. The following list shows how you can do that in different frameworks:</p>
+<p>TensorFlow<br />
+Use the t<code>f.contrib.learn.monitors.ValidationMonitor</code> class. For information, see <a href="https://www.tensorflow.org/api_docs/python/tf/contrib/learn/monitors">https://www.tensorflow.org/api_docs/python/tf/contrib/learn/monitors</a>.</p>
+<p>MXNet<br />
+Use the <code>mxnet.callback.LogValidationMetricsCallback</code>. For information, see <a href="https://mxnet.apache.org/api/python/callback/callback.html">https://mxnet.apache.org/api/python/callback/callback.html</a>.</p>
+<p>Chainer<br />
+Extend chainer by using the <code>extensions.Evaluator</code> class. For information, see <a href="https://docs.chainer.org/en/v1.24.0/reference/extensions.html#evaluator">https://docs.chainer.org/en/v1.24.0/reference/extensions.html#evaluator</a>.</p>
+<p>PyTorch and Spark<br />
+There is no high-level support. You must explicitly write your training code so that it computes objective metrics and writes them to logs after each epoch.</p>
+</body>
+</html>

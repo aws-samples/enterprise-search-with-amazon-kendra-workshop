@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SecondaryStatusTransition</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">SecondaryStatusTransition<a name="API_SecondaryStatusTransition"></a></h1>
+</header>
+<p>An array element of <a href="API_DescribeTrainingJob.md#SageMaker-DescribeTrainingJob-response-SecondaryStatusTransitions">DescribeTrainingJob:SecondaryStatusTransitions</a>. It provides additional details about a status that the training job has transitioned through. A training job can be in one of several states, for example, starting, downloading, training, or uploading. Within each state, there are a number of intermediate states. For example, within the starting state, Amazon SageMaker could be starting the training job or launching the ML instances. These transitional states are referred to as the job’s secondary status.</p>
+<p><strong>EndTime</strong> <a name="SageMaker-Type-SecondaryStatusTransition-EndTime"></a> A timestamp that shows when the training job transitioned out of this secondary status state into another secondary status state or when the training job has ended.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>StartTime</strong> <a name="SageMaker-Type-SecondaryStatusTransition-StartTime"></a> A timestamp that shows when the training job transitioned to the current secondary status state.<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>Status</strong> <a name="SageMaker-Type-SecondaryStatusTransition-Status"></a> Contains a secondary status information from a training job.<br />
+Status might be one of the following secondary statuses:<br />
+InProgress<br />
++ <code>Starting</code> - Starting the training job. + <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes. + <code>Training</code> - Training is in progress. + <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.<br />
+Completed<br />
++ <code>Completed</code> - The training job has completed.<br />
+Failed<br />
++ <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.<br />
+Stopped<br />
++ <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime. + <code>Stopped</code> - The training job has stopped.<br />
+Stopping<br />
++ <code>Stopping</code> - Stopping the training job. We no longer support the following secondary statuses:<br />
++ <code>LaunchingMLInstances</code> + <code>PreparingTrainingStack</code> + <code>DownloadingTrainingImage</code> Type: String<br />
+Valid Values:<code>Starting | LaunchingMLInstances | PreparingTrainingStack | Downloading | DownloadingTrainingImage | Training | Uploading | Stopping | Stopped | MaxRuntimeExceeded | Completed | Failed | Interrupted | MaxWaitTimeExceeded</code><br />
+Required: Yes</p>
+<p><strong>StatusMessage</strong> <a name="SageMaker-Type-SecondaryStatusTransition-StatusMessage"></a> A detailed description of the progress within a secondary status.<br />
+Amazon SageMaker provides secondary statuses and status messages that apply to each of them:<br />
+Starting<br />
++ Starting the training job. + Launching requested ML instances. + Insufficient capacity error from EC2 while launching instances, retrying! + Launched instance was unhealthy, replacing it! + Preparing the instances for training.<br />
+Training<br />
++ Downloading the training image. + Training image download completed. Training in progress. Status messages are subject to change. Therefore, we recommend not including them in code that programmatically initiates actions. For examples, don’t use status messages in if statements. To have an overview of your training job’s progress, view <code>TrainingJobStatus</code> and <code>SecondaryStatus</code> in <a href="API_DescribeTrainingJob.md">DescribeTrainingJob</a>, and <code>StatusMessage</code> together. For example, at the start of a training job, you might see the following:<br />
++ <code>TrainingJobStatus</code> - InProgress + <code>SecondaryStatus</code> - Training + <code>StatusMessage</code> - Downloading the training image Type: String<br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/SecondaryStatusTransition">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/SecondaryStatusTransition">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/SecondaryStatusTransition">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/SecondaryStatusTransition">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/SecondaryStatusTransition">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

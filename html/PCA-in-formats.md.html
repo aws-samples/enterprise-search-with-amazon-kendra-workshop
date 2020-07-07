@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>PCA Response Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">PCA Response Formats<a name="PCA-in-formats"></a></h1>
+</header>
+<p>All Amazon SageMaker built-in algorithms adhere to the common input inference format described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats - Inference</a>. This topic contains a list of the available output formats for the Amazon SageMaker PCA algorithm.</p>
+<p>Accept—application/json</p>
+<pre><code>{
+    &quot;projections&quot;: [
+        {
+            &quot;projection&quot;: [1.0, 2.0, 3.0, 4.0, 5.0]
+        },
+        {
+            &quot;projection&quot;: [6.0, 7.0, 8.0, 9.0, 0.0]
+        },
+        ....
+    ]
+}</code></pre>
+<p>Accept—application/jsonlines</p>
+<pre><code>{ &quot;projection&quot;: [1.0, 2.0, 3.0, 4.0, 5.0] }
+{ &quot;projection&quot;: [6.0, 7.0, 8.0, 9.0, 0.0] }</code></pre>
+<p>Accept—application/x-recordio-protobuf</p>
+<pre><code>[
+    Record = {
+        features = {},
+        label = {
+            &#39;projection&#39;: {
+                keys: [],
+                values: [1.0, 2.0, 3.0, 4.0, 5.0]
+            }
+        }
+    },
+    Record = {
+        features = {},
+        label = {
+            &#39;projection&#39;: {
+                keys: [],
+                values: [1.0, 2.0, 3.0, 4.0, 5.0]
+            }
+        }
+    }  
+]</code></pre>
+</body>
+</html>

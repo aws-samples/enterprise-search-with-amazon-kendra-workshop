@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Search</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Search<a name="API_Search"></a></h1>
+</header>
+<p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p>
+<p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
+<pre><code>{
+   &quot;[MaxResults](#SageMaker-Search-request-MaxResults)&quot;: number,
+   &quot;[NextToken](#SageMaker-Search-request-NextToken)&quot;: &quot;string&quot;,
+   &quot;[Resource](#SageMaker-Search-request-Resource)&quot;: &quot;string&quot;,
+   &quot;[SearchExpression](#SageMaker-Search-request-SearchExpression)&quot;: { 
+      &quot;[Filters](API_SearchExpression.md#SageMaker-Type-SearchExpression-Filters)&quot;: [ 
+         { 
+            &quot;[Name](API_Filter.md#SageMaker-Type-Filter-Name)&quot;: &quot;string&quot;,
+            &quot;[Operator](API_Filter.md#SageMaker-Type-Filter-Operator)&quot;: &quot;string&quot;,
+            &quot;[Value](API_Filter.md#SageMaker-Type-Filter-Value)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[NestedFilters](API_SearchExpression.md#SageMaker-Type-SearchExpression-NestedFilters)&quot;: [ 
+         { 
+            &quot;[Filters](API_NestedFilters.md#SageMaker-Type-NestedFilters-Filters)&quot;: [ 
+               { 
+                  &quot;[Name](API_Filter.md#SageMaker-Type-Filter-Name)&quot;: &quot;string&quot;,
+                  &quot;[Operator](API_Filter.md#SageMaker-Type-Filter-Operator)&quot;: &quot;string&quot;,
+                  &quot;[Value](API_Filter.md#SageMaker-Type-Filter-Value)&quot;: &quot;string&quot;
+               }
+            ],
+            &quot;[NestedPropertyName](API_NestedFilters.md#SageMaker-Type-NestedFilters-NestedPropertyName)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[Operator](API_SearchExpression.md#SageMaker-Type-SearchExpression-Operator)&quot;: &quot;string&quot;,
+      &quot;[SubExpressions](API_SearchExpression.md#SageMaker-Type-SearchExpression-SubExpressions)&quot;: [ 
+         &quot;[SearchExpression](API_SearchExpression.md)&quot;
+      ]
+   },
+   &quot;[SortBy](#SageMaker-Search-request-SortBy)&quot;: &quot;string&quot;,
+   &quot;[SortOrder](#SageMaker-Search-request-SortOrder)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_Search_RequestSyntax">MaxResults</a> ** <a name="SageMaker-Search-request-MaxResults"></a> The maximum number of results to return in a <code>SearchResponse</code>.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1. Maximum value of 100.<br />
+Required: No</p>
+<p>** <a href="#API_Search_RequestSyntax">NextToken</a> ** <a name="SageMaker-Search-request-NextToken"></a> If more than <code>MaxResults</code> resource objects match the specified <code>SearchExpression</code>, the <code>SearchResponse</code> includes a <code>NextToken</code>. The <code>NextToken</code> can be passed to the next <code>SearchRequest</code> to continue retrieving results for the specified <code>SearchExpression</code> and <code>Sort</code> parameters.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_Search_RequestSyntax">Resource</a> ** <a name="SageMaker-Search-request-Resource"></a> The name of the Amazon SageMaker resource to search for. Currently, the only valid <code>Resource</code> value is <code>TrainingJob</code>.<br />
+Type: String<br />
+Valid Values:<code>TrainingJob</code><br />
+Required: Yes</p>
+<p>** <a href="#API_Search_RequestSyntax">SearchExpression</a> ** <a name="SageMaker-Search-request-SearchExpression"></a> A Boolean conditional statement. Resource objects must satisfy this condition to be included in search results. You must provide at least one subexpression, filter, or nested filter. The maximum number of recursive <code>SubExpressions</code>, <code>NestedFilters</code>, and <code>Filters</code> that can be included in a <code>SearchExpression</code> object is 50.<br />
+Type: <a href="API_SearchExpression.md">SearchExpression</a> object<br />
+Required: No</p>
+<p>** <a href="#API_Search_RequestSyntax">SortBy</a> ** <a name="SageMaker-Search-request-SortBy"></a> The name of the resource property used to sort the <code>SearchResults</code>. The default is <code>LastModifiedTime</code>.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 255.<br />
+Pattern: <code>.+</code><br />
+Required: No</p>
+<p>** <a href="#API_Search_RequestSyntax">SortOrder</a> ** <a name="SageMaker-Search-request-SortOrder"></a> How <code>SearchResults</code> are ordered. Valid values are <code>Ascending</code> or <code>Descending</code>. The default is <code>Descending</code>.<br />
+Type: String<br />
+Valid Values:<code>Ascending | Descending</code><br />
+Required: No</p>
+<pre><code>{
+   &quot;[NextToken](#SageMaker-Search-response-NextToken)&quot;: &quot;string&quot;,
+   &quot;[Results](#SageMaker-Search-response-Results)&quot;: [ 
+      { 
+         &quot;[TrainingJob](API_SearchRecord.md#SageMaker-Type-SearchRecord-TrainingJob)&quot;: { 
+            &quot;[AlgorithmSpecification](API_TrainingJob.md#SageMaker-Type-TrainingJob-AlgorithmSpecification)&quot;: { 
+               &quot;[AlgorithmName](API_AlgorithmSpecification.md#SageMaker-Type-AlgorithmSpecification-AlgorithmName)&quot;: &quot;string&quot;,
+               &quot;[MetricDefinitions](API_AlgorithmSpecification.md#SageMaker-Type-AlgorithmSpecification-MetricDefinitions)&quot;: [ 
+                  { 
+                     &quot;[Name](API_MetricDefinition.md#SageMaker-Type-MetricDefinition-Name)&quot;: &quot;string&quot;,
+                     &quot;[Regex](API_MetricDefinition.md#SageMaker-Type-MetricDefinition-Regex)&quot;: &quot;string&quot;
+                  }
+               ],
+               &quot;[TrainingImage](API_AlgorithmSpecification.md#SageMaker-Type-AlgorithmSpecification-TrainingImage)&quot;: &quot;string&quot;,
+               &quot;[TrainingInputMode](API_AlgorithmSpecification.md#SageMaker-Type-AlgorithmSpecification-TrainingInputMode)&quot;: &quot;string&quot;
+            },
+            &quot;[CreationTime](API_TrainingJob.md#SageMaker-Type-TrainingJob-CreationTime)&quot;: number,
+            &quot;[EnableInterContainerTrafficEncryption](API_TrainingJob.md#SageMaker-Type-TrainingJob-EnableInterContainerTrafficEncryption)&quot;: boolean,
+            &quot;[EnableNetworkIsolation](API_TrainingJob.md#SageMaker-Type-TrainingJob-EnableNetworkIsolation)&quot;: boolean,
+            &quot;[FailureReason](API_TrainingJob.md#SageMaker-Type-TrainingJob-FailureReason)&quot;: &quot;string&quot;,
+            &quot;[FinalMetricDataList](API_TrainingJob.md#SageMaker-Type-TrainingJob-FinalMetricDataList)&quot;: [ 
+               { 
+                  &quot;[MetricName](API_MetricData.md#SageMaker-Type-MetricData-MetricName)&quot;: &quot;string&quot;,
+                  &quot;[Timestamp](API_MetricData.md#SageMaker-Type-MetricData-Timestamp)&quot;: number,
+                  &quot;[Value](API_MetricData.md#SageMaker-Type-MetricData-Value)&quot;: number
+               }
+            ],
+            &quot;[HyperParameters](API_TrainingJob.md#SageMaker-Type-TrainingJob-HyperParameters)&quot;: { 
+               &quot;string&quot; : &quot;string&quot; 
+            },
+            &quot;[InputDataConfig](API_TrainingJob.md#SageMaker-Type-TrainingJob-InputDataConfig)&quot;: [ 
+               { 
+                  &quot;[ChannelName](API_Channel.md#SageMaker-Type-Channel-ChannelName)&quot;: &quot;string&quot;,
+                  &quot;[CompressionType](API_Channel.md#SageMaker-Type-Channel-CompressionType)&quot;: &quot;string&quot;,
+                  &quot;[ContentType](API_Channel.md#SageMaker-Type-Channel-ContentType)&quot;: &quot;string&quot;,
+                  &quot;[DataSource](API_Channel.md#SageMaker-Type-Channel-DataSource)&quot;: { 
+                     &quot;[S3DataSource](API_DataSource.md#SageMaker-Type-DataSource-S3DataSource)&quot;: { 
+                        &quot;[AttributeNames](API_S3DataSource.md#SageMaker-Type-S3DataSource-AttributeNames)&quot;: [ &quot;string&quot; ],
+                        &quot;[S3DataDistributionType](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3DataDistributionType)&quot;: &quot;string&quot;,
+                        &quot;[S3DataType](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3DataType)&quot;: &quot;string&quot;,
+                        &quot;[S3Uri](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3Uri)&quot;: &quot;string&quot;
+                     }
+                  },
+                  &quot;[InputMode](API_Channel.md#SageMaker-Type-Channel-InputMode)&quot;: &quot;string&quot;,
+                  &quot;[RecordWrapperType](API_Channel.md#SageMaker-Type-Channel-RecordWrapperType)&quot;: &quot;string&quot;,
+                  &quot;[ShuffleConfig](API_Channel.md#SageMaker-Type-Channel-ShuffleConfig)&quot;: { 
+                     &quot;[Seed](API_ShuffleConfig.md#SageMaker-Type-ShuffleConfig-Seed)&quot;: number
+                  }
+               }
+            ],
+            &quot;[LabelingJobArn](API_TrainingJob.md#SageMaker-Type-TrainingJob-LabelingJobArn)&quot;: &quot;string&quot;,
+            &quot;[LastModifiedTime](API_TrainingJob.md#SageMaker-Type-TrainingJob-LastModifiedTime)&quot;: number,
+            &quot;[ModelArtifacts](API_TrainingJob.md#SageMaker-Type-TrainingJob-ModelArtifacts)&quot;: { 
+               &quot;[S3ModelArtifacts](API_ModelArtifacts.md#SageMaker-Type-ModelArtifacts-S3ModelArtifacts)&quot;: &quot;string&quot;
+            },
+            &quot;[OutputDataConfig](API_TrainingJob.md#SageMaker-Type-TrainingJob-OutputDataConfig)&quot;: { 
+               &quot;[KmsKeyId](API_OutputDataConfig.md#SageMaker-Type-OutputDataConfig-KmsKeyId)&quot;: &quot;string&quot;,
+               &quot;[S3OutputPath](API_OutputDataConfig.md#SageMaker-Type-OutputDataConfig-S3OutputPath)&quot;: &quot;string&quot;
+            },
+            &quot;[ResourceConfig](API_TrainingJob.md#SageMaker-Type-TrainingJob-ResourceConfig)&quot;: { 
+               &quot;[InstanceCount](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-InstanceCount)&quot;: number,
+               &quot;[InstanceType](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-InstanceType)&quot;: &quot;string&quot;,
+               &quot;[VolumeKmsKeyId](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-VolumeKmsKeyId)&quot;: &quot;string&quot;,
+               &quot;[VolumeSizeInGB](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-VolumeSizeInGB)&quot;: number
+            },
+            &quot;[RoleArn](API_TrainingJob.md#SageMaker-Type-TrainingJob-RoleArn)&quot;: &quot;string&quot;,
+            &quot;[SecondaryStatus](API_TrainingJob.md#SageMaker-Type-TrainingJob-SecondaryStatus)&quot;: &quot;string&quot;,
+            &quot;[SecondaryStatusTransitions](API_TrainingJob.md#SageMaker-Type-TrainingJob-SecondaryStatusTransitions)&quot;: [ 
+               { 
+                  &quot;[EndTime](API_SecondaryStatusTransition.md#SageMaker-Type-SecondaryStatusTransition-EndTime)&quot;: number,
+                  &quot;[StartTime](API_SecondaryStatusTransition.md#SageMaker-Type-SecondaryStatusTransition-StartTime)&quot;: number,
+                  &quot;[Status](API_SecondaryStatusTransition.md#SageMaker-Type-SecondaryStatusTransition-Status)&quot;: &quot;string&quot;,
+                  &quot;[StatusMessage](API_SecondaryStatusTransition.md#SageMaker-Type-SecondaryStatusTransition-StatusMessage)&quot;: &quot;string&quot;
+               }
+            ],
+            &quot;[StoppingCondition](API_TrainingJob.md#SageMaker-Type-TrainingJob-StoppingCondition)&quot;: { 
+               &quot;[MaxRuntimeInSeconds](API_StoppingCondition.md#SageMaker-Type-StoppingCondition-MaxRuntimeInSeconds)&quot;: number
+            },
+            &quot;[Tags](API_TrainingJob.md#SageMaker-Type-TrainingJob-Tags)&quot;: [ 
+               { 
+                  &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+                  &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+               }
+            ],
+            &quot;[TrainingEndTime](API_TrainingJob.md#SageMaker-Type-TrainingJob-TrainingEndTime)&quot;: number,
+            &quot;[TrainingJobArn](API_TrainingJob.md#SageMaker-Type-TrainingJob-TrainingJobArn)&quot;: &quot;string&quot;,
+            &quot;[TrainingJobName](API_TrainingJob.md#SageMaker-Type-TrainingJob-TrainingJobName)&quot;: &quot;string&quot;,
+            &quot;[TrainingJobStatus](API_TrainingJob.md#SageMaker-Type-TrainingJob-TrainingJobStatus)&quot;: &quot;string&quot;,
+            &quot;[TrainingStartTime](API_TrainingJob.md#SageMaker-Type-TrainingJob-TrainingStartTime)&quot;: number,
+            &quot;[TuningJobArn](API_TrainingJob.md#SageMaker-Type-TrainingJob-TuningJobArn)&quot;: &quot;string&quot;,
+            &quot;[VpcConfig](API_TrainingJob.md#SageMaker-Type-TrainingJob-VpcConfig)&quot;: { 
+               &quot;[SecurityGroupIds](API_VpcConfig.md#SageMaker-Type-VpcConfig-SecurityGroupIds)&quot;: [ &quot;string&quot; ],
+               &quot;[Subnets](API_VpcConfig.md#SageMaker-Type-VpcConfig-Subnets)&quot;: [ &quot;string&quot; ]
+            }
+         }
+      }
+   ]
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_Search_ResponseSyntax">NextToken</a> ** <a name="SageMaker-Search-response-NextToken"></a> If the result of the previous <code>Search</code> request was truncated, the response includes a NextToken. To retrieve the next set of results, use the token in the next request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code></p>
+<p>** <a href="#API_Search_ResponseSyntax">Results</a> ** <a name="SageMaker-Search-response-Results"></a> A list of <code>SearchResult</code> objects.<br />
+Type: Array of <a href="API_SearchRecord.md">SearchRecord</a> objects</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/Search">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/Search">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/Search">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/Search">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/Search">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/Search">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/Search">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/Search">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/Search">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/Search">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

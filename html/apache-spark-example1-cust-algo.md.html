@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Use Custom Algorithms for Model Training and Hosting on Amazon SageMaker with Apache Spark</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Use Custom Algorithms for Model Training and Hosting on Amazon SageMaker with Apache Spark<a name="apache-spark-example1-cust-algo"></a></h1>
+</header>
+<p>In <a href="apache-spark-example1.md">Example 1: Use Amazon SageMaker for Training and Inference with Apache Spark</a>, you use the <code>kMeansSageMakerEstimator</code> because the example uses the k-means algorithm provided by Amazon SageMaker for model training. You might choose to use your own custom algorithm for model training instead. Assuming that you have already created a Docker image, you can create your own <code>SageMakerEstimator</code> and specify the Amazon Elastic Container Registry path for your custom image.</p>
+<p>The following example shows how to create a <code>KMeansSageMakerEstimator</code> from the <code>SageMakerEstimator</code>. In the new estimator, you explicitly specify the Docker registry path to your training and inference code images.</p>
+<pre><code>import com.amazonaws.services.sagemaker.sparksdk.IAMRole
+import com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator
+import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer
+import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.KMeansProtobufResponseRowDeserializer
+
+val estimator = new SageMakerEstimator(
+  trainingImage =
+    &quot;811284229777.dkr.ecr.us-east-1.amazonaws.com/kmeans:1&quot;,
+  modelImage =
+    &quot;811284229777.dkr.ecr.us-east-1.amazonaws.com/kmeans:1&quot;,
+  requestRowSerializer = new ProtobufRequestRowSerializer(),
+  responseRowDeserializer = new KMeansProtobufResponseRowDeserializer(),
+  hyperParameters = Map(&quot;k&quot; -&gt; &quot;10&quot;, &quot;feature_dim&quot; -&gt; &quot;784&quot;),
+  sagemakerRole = IAMRole(roleArn),
+  trainingInstanceType = &quot;ml.p2.xlarge&quot;,
+  trainingInstanceCount = 1,
+  endpointInstanceType = &quot;ml.c4.xlarge&quot;,
+  endpointInitialInstanceCount = 1,
+  trainingSparkDataFormat = &quot;sagemaker&quot;)</code></pre>
+<p>In the code, the parameters in the <code>SageMakerEstimator</code> constructor include: + <code>trainingImage</code> —Identifies the Docker registry path to the training image containing your custom code. + <code>modelImage</code> —Identifies the Docker registry path to the image containing inference code. + <code>requestRowSerializer</code> —Implements <code>com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer</code>.</p>
+<p>This parameter serializes rows in the input <code>DataFrame</code> to send them to the model hosted in Amazon SageMaker for inference. + <code>responseRowDeserializer</code> —Implements</p>
+<p><code>com.amazonaws.services.sagemaker.sparksdk.transformation.ResponseRowDeserializer</code>.</p>
+<p>This parameter deserializes responses from the model, hosted in Amazon SageMaker, back into a <code>DataFrame</code>. + <code>trainingSparkDataFormat</code> —Specifies the data format that Spark uses when uploading training data from a <code>DataFrame</code> to S3. For example, <code>"sagemaker"</code> for protobuf format, <code>"csv"</code> for comma-separated values, and <code>"libsvm"</code> for LibSVM format.</p>
+<p>You can implement your own <code>RequestRowSerializer</code> and <code>ResponseRowDeserializer</code> to serialize and deserialize rows from a data format that your inference code supports, such as .libsvm or ..csv.</p>
+</body>
+</html>

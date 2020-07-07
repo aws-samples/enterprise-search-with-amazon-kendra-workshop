@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Overview of Managing Access Permissions to Your Amazon SageMaker Resources</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Overview of Managing Access Permissions to Your Amazon SageMaker Resources<a name="access-control-overview"></a></h1>
+</header>
+<p>Every AWS resource is owned by an AWS account, and permissions to create or access a resource are governed by permissions policies. An account administrator can attach permissions policies to IAM identities (that is, users, groups, and roles). Some services (such as AWS Lambda) also support attaching permissions policies to resources.</p>
+<p><strong>Note</strong><br />
+An <em>account administrator</em> (or administrator user) is a user with administrator privileges. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html">IAM Best Practices</a> in the <em>IAM User Guide</em>.</p>
+<p>When granting permissions, you decide who is getting the permissions, the resources they get permissions for, and the specific actions that you want to allow on those resources.</p>
+<p><strong>Topics</strong> + <a href="#access-control-resources">Amazon SageMaker Resources and Operations</a> + <a href="#access-control-resource-ownership">Understanding Resource Ownership</a> + <a href="#manage-access-overview">Managing Access to Resources</a> + <a href="#specify-policy-elements">Specifying Policy Elements: Resources, Actions, Effects, and Principals</a> + <a href="#specifying-conditions-overview">Specifying Conditions in a Policy</a></p>
+<p>In Amazon SageMaker, the primary resource is a <em>notebook instance</em>. Amazon SageMaker also supports additional resource types: <em>training jobs</em>, <em>models</em>, <em>endpoint configurations</em>, <em>endpoints</em>, and <em>tags</em>. These additional resources are referred to as <em>subresources</em>. In a policy, you use an Amazon Resource Name (ARN) to identify the resource that the policy applies to.</p>
+<p>Except for <em>tags</em>, these resources and subresources have unique ARNs associated with them, as shown in the following table. <em>Tags</em> use the ARN of the resource that they are modifying. For example, when used on a model, the <code>AddTag</code> action uses the same ARN as the model resource.</p>
+<hr />
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource Type</th>
+<th>ARN Format</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Batch Transform Job</td>
+<td>arn:aws:sagemaker:region:account-id:transform-job/transformJobName</td>
+</tr>
+<tr class="even">
+<td>Endpoint</td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="odd">
+<td>Endpoint Config</td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint-config/endpointConfigName</code></td>
+</tr>
+<tr class="even">
+<td>Hyperparemeter Tuning Job</td>
+<td>arn:aws:sagemaker:region:account-id:hyper-parameter-tuning-job/hyperParameterTuningJobName</td>
+</tr>
+<tr class="odd">
+<td>Model</td>
+<td>arn:aws:sagemaker:region:account-id:model/modelName</td>
+</tr>
+<tr class="even">
+<td>Notebook Instance</td>
+<td>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</td>
+</tr>
+<tr class="odd">
+<td>Notebook Instance Lifecycle Configuration</td>
+<td>arn:aws:sagemaker:region:account-id:notebook-instance-lifecycle-config/notebookInstanceLifecycleConfigName</td>
+</tr>
+<tr class="even">
+<td>Training Job</td>
+<td>arn:aws:sagemaker:region:account-id:training-job/trainingJobName</td>
+</tr>
+</tbody>
+</table>
+<p>Amazon SageMaker provides a set of operations to work with Amazon SageMaker resources. For a list of available operations, see the Amazon SageMaker <a href="API_Reference.md">API Reference</a>.</p>
+<p>The AWS account owns the resources that are created in the account, regardless of who created the resources. Specifically, the resource owner is the AWS account of the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html">principal entity</a> (that is, the root account, an IAM user, or an IAM role) that authenticates the resource creation request. The following examples illustrate how this works: + If you use the root account credentials of your AWS account to create a notebook instance, your AWS account is the owner of the resource (in Amazon SageMaker, the resource is a notebook instance). + If you create an IAM user in your AWS account and grant permissions to create a notebook instance to that user, the user can create a notebook instance. However, your AWS account, to which the user belongs, owns the notebook instance resource. + If you create an IAM role in your AWS account with permissions to create a notebook instance, anyone who can assume the role can create a notebook instance. Your AWS account, to which the user belongs, owns the notebook instance resource.</p>
+<p>A <em>permissions policy</em> describes who has access to what. The following section explains the options for creating permissions policies.</p>
+<p><strong>Note</strong><br />
+This section discusses using IAM in the context of Amazon SageMaker. It doesn’t provide detailed information about the IAM service. For complete IAM documentation, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">What Is IAM?</a> in the <em>IAM User Guide</em>. For information about IAM policy syntax and descriptions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html">AWS IAM Policy Reference</a> in the <em>IAM User Guide</em>.</p>
+<p>Permissions policies attached to an IAM identity are referred to as <em>identity-based</em> policies (IAM polices). Permissions policies attached to a resource are referred to as <em>resource-based</em> policies. Amazon SageMaker supports only identity-based permissions policies.</p>
+<p><strong>Topics</strong> + <a href="#manage-access-iam-policies">Identity-Based Policies (IAM Policies)</a> + <a href="#manage-access-resource-policies">Resource-Based Policies</a></p>
+<p>You can attach permissions policies to IAM identities. For example, you can do the following: + <strong>Attach a permissions policy to a user or a group in your account</strong> – To grant a user permissions to create a Amazon SageMaker resource, such as a notebook instance, you can attach a permissions policy to a user or to a group that the user belongs to. + <strong>Attach a permissions policy to a role (grant cross-account permissions)</strong> – You can attach an identity-based permissions policy to an IAM role to grant cross-account permissions. For example, the administrator in account A can create a role to grant cross-account permissions to another AWS account (for example, account B) or an AWS service as follows:</p>
+<ol type="1">
+<li><p>Account A administrator creates an IAM role and attaches a permissions policy to the role that grants permissions on resources in account A.</p></li>
+<li><p>Account A administrator attaches a trust policy to the role identifying account B as the principal who can assume the role.</p></li>
+<li><p>Account B administrator can then delegate permissions to assume the role to any users in account B. Doing this allows users in account B to create or access resources in account A. The principal in the trust policy can also be an AWS service principal if you want to grant an AWS service permissions to assume the role.</p></li>
+</ol>
+<p>For more information about using IAM to delegate permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <em>IAM User Guide</em>.</p>
+<p>Some of the Amazon SageMaker actions (for example, <code>CreateTrainingJob</code>) require the user to pass an IAM role to Amazon SageMaker so that the service can assume that role and its permissions. To pass a role (and its permissions) to an AWS service, a user must have permissions to pass the role to the service. To allow a user to pass a role to an AWS service, you must grant permission for the <code>iam:PassRole</code> action. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a> in the * IAM User Guide*.</p>
+<p>The following is an example permission policy. You attach it to an IAM user.</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Action&quot;: [
+                &quot;sagemaker:CreateModel&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: 
+                &quot;arn:aws:sagemaker:region:account-id:model/modelName&quot;
+        },
+        {
+            &quot;Action&quot;: &quot;iam:PassRole&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: [
+                &quot;arn:aws:iam::account-id:role/role-name&quot;
+            ]
+        }
+    ]
+}</code></pre>
+<p>For more information about using identity-based policies with Amazon SageMaker, see <a href="using-identity-based-policies.md">Using Identity-based Policies (IAM Policies) for Amazon SageMaker</a>. For more information about users, groups, roles, and permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id.html">Identities (Users, Groups, and Roles)</a> in the <em>IAM User Guide</em>.</p>
+<p>Other services, such as Amazon S3, also support resource-based permissions policies. For example, you can attach a policy to an S3 bucket to manage access permissions to that bucket. Amazon SageMaker doesn’t support resource-based policies.</p>
+<p>For each Amazon SageMaker resource, the service defines a set of API operations. To grant permissions for these API operations, Amazon SageMaker defines a set of actions that you can specify in a policy. For example, for the Amazon SageMaker notebook instance resource, the following actions are defined: <code>CreateNotebookInstance</code>, <code>DeleteNotebookInstance</code>, and <code>DescribeNotebookInstance</code>. Some API operations can require permissions for more than one action in order to perform the API operation. For more information about resources and API operations, see <a href="#access-control-resources">Amazon SageMaker Resources and Operations</a> and <a href="API_Reference.md">API Reference</a>.</p>
+<p>The following are the most basic policy elements: + <strong>Resource</strong> – You use an Amazon Resource Name (ARN) to identify the resource that the identity-based policy applies to. For more information, see <a href="#access-control-resources">Amazon SageMaker Resources and Operations</a>. + <strong>Action</strong> – You use action keywords to identify resource operations that you want to allow or deny. For example, you can use <code>sagemaker:CreateModel</code> to add a model to the notebook instance. + <strong>Effect</strong> – You specify the effect, either allow or deny, when the user requests the specific action. If you don’t explicitly grant access to (allow) a resource, access is implicitly denied. You can also explicitly deny access to a resource, which you might do to make sure that a user cannot access it, even if a different policy grants access. + <strong>Principal</strong> – In identity-based policies (IAM policies), the user that the policy is attached to is the implicit principal. Amazon SageMaker doesn’t support resource-based policies.</p>
+<p>To learn more about IAM policy syntax and to read policy descriptions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html">AWS IAM Policy Reference</a> in the <em>IAM User Guide</em>.</p>
+<p>For a showing all of the Amazon SageMaker API operations and the resources that they apply to, see <a href="api-permissions-reference.md">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</a>.</p>
+<p>When you grant permissions, you can use the IAM policy language to specify the conditions under which a policy should take effect. For example, you might want a policy to be applied only after a specific date. For more information about specifying conditions in a policy language, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html#Condition">Conditions</a> in the <em>IAM User Guide</em>.</p>
+<p>To express conditions, you use predefined condition keys. There are no condition keys specific to Amazon SageMaker. However, there are AWS-wide condition keys that you can use as appropriate. For an example of AWS-wide keys used in an Amazon SageMaker permissions policy, see <a href="using-identity-based-policies.md#console-permissions">Permissions Required to Use the Amazon SageMaker Console</a>. For a complete list of AWS-wide keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html#AvailableKeys">Available Keys for Conditions</a> in the <em>IAM User Guide</em>.</p>
+</body>
+</html>

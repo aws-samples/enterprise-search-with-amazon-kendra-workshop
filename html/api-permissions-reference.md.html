@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference<a name="api-permissions-reference"></a></h1>
+</header>
+<p>When you are setting up <a href="authentication-and-access-control.md#access-control">Access Control</a> and writing a permissions policy that you can attach to an IAM identity (an identity-based policy), use the following table as a reference. The table lists each Amazon SageMaker API operation, the corresponding actions for which you can grant permissions to perform the action, and the AWS resource for which you can grant the permissions. You specify the actions in the policy’s <code>Action</code> field, and you specify the resource value in the policy’s <code>Resource</code> field.</p>
+<p><strong>Note</strong><br />
+Except for the <code>ListTags</code> API, resource-level restrictions are not available on <code>List-</code> calls . Any user calling a <code>List-</code> API will see all resources of that type in the account.</p>
+<p>To express conditions in your Amazon SageMaker policies, you can use AWS-wide condition keys. For a complete list of AWS-wide keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html#AvailableKeys">Available Keys</a> in the <em>IAM User Guide</em>.</p>
+<p>If you see an expand arrow (<strong>↗</strong>) in the upper-right corner of the table, you can open the table in a new window. To close the window, choose the close button (<strong>X</strong>) in the lower-right corner.</p>
+<p><strong>Amazon SageMaker API Operations and Required Permissions for Actions</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Amazon SageMaker API Operations</th>
+<th>Required Permissions (API Actions)</th>
+<th>Resources</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="API_AddTags.md">AddTags</a></td>
+<td><code>sagemaker:AddTags</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_CreateEndpoint.md">CreateEndpoint</a></td>
+<td><code>sagemaker:CreateEndpoint</code> <code>kms:CreateGrant</code> (required only if the associated <code>EndPointConfig</code> has a <code>KmsKeyId</code> specified)</td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_CreateEndpointConfig.md">CreateEndpointConfig</a></td>
+<td><code>sagemaker:CreateEndpointConfig</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint-config/endpointConfigName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a></td>
+<td><code>sagemaker:CreateHyperParameterTuningJob</code> <code>iam:PassRole</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:hyper-parameter-tuning-job/hyperParameterTuningJobName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_CreatePresignedNotebookInstanceUrl.md">CreatePresignedNotebookInstanceUrl</a></td>
+<td><code>sagemaker:CreatePresignedNotebookInstanceUrl</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_CreateLabelingJob.md">CreateLabelingJob</a></td>
+<td>sagemaker:CreateLabelingJob iam:PassRole</td>
+<td><code>arn:aws:sagemaker:region:account-id:labeling-job/labelingJobName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_CreateModel.md">CreateModel</a></td>
+<td><code>sagemaker:CreateModel</code> <code>iam:PassRole</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:model/modelName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a></td>
+<td><code>sagemaker:CreateNotebookInstance</code> <code>iam:PassRole</code> The following permissions are required only if you specify a VPC for your notebook instance: <code>ec2:CreateNetworkInterface</code> <code>ec2:DescribeSecurityGroups</code> <code>ec2:DescribeSubnets</code> <code>ec2:DescribeVpcs</code> The following permission is required only if you specify a VPC and an elastic inference accelerator for your notebook instance: <code>ec2:DescribeVpcEndpoints</code> The following permissions are required only if you specify an encryption key: <code>kms:DescribeKey</code> <code>kms:CreateGrant</code> The following permission is required only if you specify an AWS Secrets Manager secret to access a private Git repository: <code>secretsmanager:GetSecretValue</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_CreateTrainingJob.md">CreateTrainingJob</a></td>
+<td><code>sagemaker:CreateTrainingJob</code> <code>iam:PassRole</code> <code>kms:CreateGrant</code> (required only if the associated <code>ResourceConfig</code> has a specified <code>VolumeKmsKeyId</code> and the associated role does not have a policy that permits this action)</td>
+<td><code>arn:aws:sagemaker:region:account-id:training-job/trainingJobName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_CreateTransformJob.md">CreateTransformJob</a></td>
+<td><code>sagemaker:CreateTransformJob</code> <code>iam:PassRole</code> <code>kms:CreateGrant</code> (required only if the associated <code>TransformResources</code> has a specified <code>VolumeKmsKeyId</code> and the associated role does not have a policy that permits this action)</td>
+<td><code>arn:aws:sagemaker:region:account-id:transform-job/transformJobName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_CreateWorkteam.md">CreateWorkteam</a></td>
+<td><code>sagemaker:CreateWorkteam</code> <code>cognito-idp:DescribeUserPoolClient</code> <code>cognito-idp:UpdateUserPool</code> <code>cognito-idp:DescribeUserPool</code> <code>cognito-idp:UpdateUserPoolClient</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/private-crowd/work team name</code> <code>arn:aws:sagemaker:region:account-id:workteam/vendor-crowd/work team name</code> <code>arn:aws:sagemaker:region:account-id:workteam/public-crowd/work team name</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DeleteEndpoint.md">DeleteEndpoint</a></td>
+<td><code>sagemaker:DeleteEndpoint</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DeleteEndpointConfig.md">DeleteEndpointConfig</a></td>
+<td><code>sagemaker:DeleteEndpointConfig</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint-config/endpointConfigName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DeleteModel.md">DeleteModel</a></td>
+<td><code>sagemaker:DeleteModel</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:model/modelName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DeleteNotebookInstance.md">DeleteNotebookInstance</a></td>
+<td><code>sagemaker:DeleteNotebookInstance</code> The following permission is required only if you specified a VPC for your notebook instance: <code>ec2:DeleteNetworkInterface</code> The following permissions are required only if you specified an encryption key when you created the notebook instance: <code>kms:DescribeKey</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DeleteTags.md">DeleteTags</a></td>
+<td><code>sagemaker:DeleteTags</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DeleteWorkteam.md">DeleteWorkteam</a></td>
+<td><code>sagemaker:DeleteWorkteam</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DescribeEndpoint.md">DescribeEndpoint</a></td>
+<td><code>sagemaker:DescribeEndpoint</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DescribeEndpointConfig.md">DescribeEndpointConfig</a></td>
+<td><code>sagemaker:DescribeEndpointConfig</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint-config/endpointConfigName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DescribeHyperParameterTuningJob.md">DescribeHyperParameterTuningJob</a></td>
+<td><code>sagemaker:DescribeHyperParameterTuningJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:hyper-parameter-tuning-job/hyperParameterTuningJob</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DescribeLabelingJob.md">DescribeLabelingJob</a></td>
+<td><code>sagemaker:DescribeLabelingJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:labeling-job/labelingJobName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DescribeModel.md">DescribeModel</a></td>
+<td><code>sagemaker:DescribeModel</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:model/modelName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DescribeNotebookInstance.md">DescribeNotebookInstance</a></td>
+<td><code>sagemaker:DescribeNotebookInstance</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DescribeSubscribedWorkteam.md">DescribeSubscribedWorkteam</a></td>
+<td><code>sagemaker:DescribeSubscribedWorkteam</code> <code>aws-marketplace:ViewSubscriptions</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DescribeTrainingJob.md">DescribeTrainingJob</a></td>
+<td><code>sagemaker:DescribeTrainingJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:training-job/trainingjobname</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_DescribeTransformJob.md">DescribeTransformJob</a></td>
+<td><code>sagemaker:DescribeTransformJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:transform-job/transformjobname</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_DescribeWorkteam.md">DescribeWorkteam</a></td>
+<td><code>sagemaker:DescribeWorkteam</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a></td>
+<td><code>sagemaker:InvokeEndpoint</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListEndpointConfigs.md">ListEndpointConfigs</a></td>
+<td><code>sagemaker:ListEndpointConfigs</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_ListEndpoints.md">ListEndpoints</a></td>
+<td><code>sagemaker:ListEndpoints</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListHyperParameterTuningJobs.md">ListHyperParameterTuningJobs</a></td>
+<td><code>sagemaker:ListHyperParameterTuningJobs</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:hyper-parameter-tuning-job/hyperParameterTuningJob</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_ListLabelingJobs.md">ListLabelingJobs</a></td>
+<td><code>sagemaker:ListLabelingJobs</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListLabelingJobsForWorkteam.md">ListLabelingJobsForWorkteam</a></td>
+<td><code>sagemaker:ListLabelingJobForWorkteam</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_ListModels.md">ListModels</a></td>
+<td><code>sagemaker:ListModels</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListNotebookInstances.md">ListNotebookInstances</a></td>
+<td><code>sagemaker:ListNotebookInstances</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_ListSubscribedWorkteams.md">ListSubscribedWorkteams</a></td>
+<td><code>sagemaker:ListSubscribedWorkteams</code> <code>aws-marketplace:ViewSubscriptions</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListTags.md">ListTags</a></td>
+<td><code>sagemaker:ListTags</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_ListTrainingJobs.md">ListTrainingJobs</a></td>
+<td><code>sagemaker:ListTrainingJobs</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListTransformJobs.md">ListTransformJobs</a></td>
+<td><code>sagemaker:ListTransformJobs</code></td>
+<td><code>*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_ListTrainingJobsForHyperParameterTuningJob.md">ListTrainingJobsForHyperParameterTuningJob</a></td>
+<td><code>sagemaker:ListTrainingJobsForHyperParameterTuningJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:hyper-parameter-tuning-job/hyperParameterTuningJob</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_ListWorkteams.md">ListWorkteams</a></td>
+<td><code>sagemaker:ListWorkteams</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/*</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_StartNotebookInstance.md">StartNotebookInstance</a></td>
+<td><code>sagemaker:StartNotebookInstance</code> <code>iam:PassRole</code> The following permissions are required only if you specified a VPC when you created your notebook instance: <code>ec2:CreateNetworkInterface</code> <code>ec2:DescribeSecurityGroups</code> <code>ec2:DescribeSubnets</code> <code>ec2:DescribeVpcs</code> The following permission is required only if you specify a VPC and an elastic inference accelerator for your notebook instance: <code>ec2:DescribeVpcEndpoints</code> The following permissions are required only if you specified an encryption key when you created the notebookinstance: <code>kms:DescribeKey</code> <code>kms:CreateGrant</code> The following permission is required only if you specified an AWS Secrets Manager secret to access a private Git repository when you created the notebook instance: <code>secretsmanager:GetSecretValue</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_StopHyperParameterTuningJob.md">StopHyperParameterTuningJob</a></td>
+<td><code>sagemaker:StopHyperParameterTuningJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:hyper-parameter-tuning-job/hyperParameterTuningJob</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_StopLabelingJob.md">StopLabelingJob</a></td>
+<td><code>sagemaker:StopLabelingJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:labeling-job/labelingJobName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_StopNotebookInstance.md">StopNotebookInstance</a></td>
+<td><code>sagemaker:StopNotebookInstance</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_StopTrainingJob.md">StopTrainingJob</a></td>
+<td><code>sagemaker:StopTrainingJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:training-job/trainingJobName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_StopTransformJob.md">StopTransformJob</a></td>
+<td><code>sagemaker:StopTransformJob</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:transform-job/transformJobName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_UpdateEndpoint.md">UpdateEndpoint</a></td>
+<td><code>sagemaker:UpdateEndpoint</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a></td>
+<td><code>sagemaker:UpdateEndpointWeightsAndCapacities</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:endpoint/endpointName</code></td>
+</tr>
+<tr class="even">
+<td><a href="API_UpdateNotebookInstance.md">UpdateNotebookInstance</a></td>
+<td><code>sagemaker:UpdateNotebookInstance</code> <code>iam:PassRole</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:notebook-instance/notebookInstanceName</code></td>
+</tr>
+<tr class="odd">
+<td><a href="API_UpdateWorkteam.md">UpdateWorkteam</a></td>
+<td><code>sagemaker:UpdateWorkteam</code></td>
+<td><code>arn:aws:sagemaker:region:account-id:workteam/*</code></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>NotebookInstanceSummary</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">NotebookInstanceSummary<a name="API_NotebookInstanceSummary"></a></h1>
+</header>
+<p>Provides summary information for an Amazon SageMaker notebook instance.</p>
+<p><strong>AdditionalCodeRepositories</strong> <a name="SageMaker-Type-NotebookInstanceSummary-AdditionalCodeRepositories"></a> An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.<br />
+Type: Array of strings<br />
+Array Members: Maximum number of 3 items.<br />
+Length Constraints: Minimum length of 1. Maximum length of 1024.<br />
+Pattern: <code>^https://([^/]+)/?(.*)$|^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p><strong>CreationTime</strong> <a name="SageMaker-Type-NotebookInstanceSummary-CreationTime"></a> A timestamp that shows when the notebook instance was created.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>DefaultCodeRepository</strong> <a name="SageMaker-Type-NotebookInstanceSummary-DefaultCodeRepository"></a> The Git repository associated with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 1024.<br />
+Pattern: <code>^https://([^/]+)/?(.*)$|^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p><strong>InstanceType</strong> <a name="SageMaker-Type-NotebookInstanceSummary-InstanceType"></a> The type of ML compute instance that the notebook instance is running on.<br />
+Type: String<br />
+Valid Values:<code>ml.t2.medium | ml.t2.large | ml.t2.xlarge | ml.t2.2xlarge | ml.t3.medium | ml.t3.large | ml.t3.xlarge | ml.t3.2xlarge | ml.m4.xlarge | ml.m4.2xlarge | ml.m4.4xlarge | ml.m4.10xlarge | ml.m4.16xlarge | ml.m5.xlarge | ml.m5.2xlarge | ml.m5.4xlarge | ml.m5.12xlarge | ml.m5.24xlarge | ml.c4.xlarge | ml.c4.2xlarge | ml.c4.4xlarge | ml.c4.8xlarge | ml.c5.xlarge | ml.c5.2xlarge | ml.c5.4xlarge | ml.c5.9xlarge | ml.c5.18xlarge | ml.c5d.xlarge | ml.c5d.2xlarge | ml.c5d.4xlarge | ml.c5d.9xlarge | ml.c5d.18xlarge | ml.p2.xlarge | ml.p2.8xlarge | ml.p2.16xlarge | ml.p3.2xlarge | ml.p3.8xlarge | ml.p3.16xlarge</code><br />
+Required: No</p>
+<p><strong>LastModifiedTime</strong> <a name="SageMaker-Type-NotebookInstanceSummary-LastModifiedTime"></a> A timestamp that shows when the notebook instance was last modified.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>NotebookInstanceArn</strong> <a name="SageMaker-Type-NotebookInstanceSummary-NotebookInstanceArn"></a> The Amazon Resource Name (ARN) of the notebook instance.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Required: Yes</p>
+<p><strong>NotebookInstanceLifecycleConfigName</strong> <a name="SageMaker-Type-NotebookInstanceSummary-NotebookInstanceLifecycleConfigName"></a> The name of a notebook instance lifecycle configuration associated with this notebook instance.<br />
+For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p><strong>NotebookInstanceName</strong> <a name="SageMaker-Type-NotebookInstanceSummary-NotebookInstanceName"></a> The name of the notebook instance that you want a summary for.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p><strong>NotebookInstanceStatus</strong> <a name="SageMaker-Type-NotebookInstanceSummary-NotebookInstanceStatus"></a> The status of the notebook instance.<br />
+Type: String<br />
+Valid Values:<code>Pending | InService | Stopping | Stopped | Failed | Deleting | Updating</code><br />
+Required: No</p>
+<p><strong>Url</strong> <a name="SageMaker-Type-NotebookInstanceSummary-Url"></a> The URL that you use to connect to the Jupyter instance running in your notebook instance.<br />
+Type: String<br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/NotebookInstanceSummary">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/NotebookInstanceSummary">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/NotebookInstanceSummary">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/NotebookInstanceSummary">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/NotebookInstanceSummary">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

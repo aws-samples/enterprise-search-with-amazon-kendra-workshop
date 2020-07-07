@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Define Metrics</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Define Metrics<a name="automatic-model-tuning-define-metrics"></a></h1>
+</header>
+<p><strong>Note</strong><br />
+When you use one of the Amazon SageMaker built-in algorithms, you don’t need to define metrics. Built-in algorithms automatically send metrics to hyperparameter tuning. You do need to choose one of the metrics that the built-in algorithm emits as the objective metric for the tuning job. For a list of metrics that a built-in algorithm emits, see the <em>Metrics</em> table for the algorithm in <a href="algos.md">Use Amazon SageMaker Built-in Algorithms</a>.</p>
+<p>To optimize hyperparameters for a machine learning model, a tuning job evaluates the training jobs it launches by using a metric that the training algorithm writes to logs. Amazon SageMaker hyperparameter tuning parses your algorithm’s <code>stdout</code> and <code>stderr</code> streams to find algorithm metrics, such as loss or validation-accuracy, that show how well the model is performing on the dataset</p>
+<p><strong>Note</strong><br />
+These are the same metrics that Amazon SageMaker sends to CloudWatch Logs. For more information, see <a href="logging-cloudwatch.md">Log Amazon SageMaker Events with Amazon CloudWatch</a>.</p>
+<p>If you use your own algorithm for hyperparameter tuning, make sure that your algorithm emits at least one metric by writing evaluation data to <code>stderr</code> or <code>stdout</code>.</p>
+<p><strong>Note</strong><br />
+Hyperparameter tuning sends an additional hyperparameter, <code>_tuning_objective_metric</code> to the training algorithm. This hyperparameter specifies the objective metric being used for the hyperparameter tuning job, so that your algorithm can use that information during training.</p>
+<p>You can define up to 20 metrics for your tuning job to monitor. You choose one of those metrics to be the objective metric, which hyperparameter tuning uses to evaluate the training jobs. The hyperparameter tuning job returns the training job that returned the best value for the objective metric as the best training job.</p>
+<p>You define metrics for a tuning job by specifying a name and a regular expression for each metric that your tuning job monitors. Design the regular expressions to capture the values of metrics that your algorithm emits. You pass these metrics to the <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a> operation in the <code>TrainingJobDefinition</code> parameter as the <code>MetricDefinitions</code> field of the <code>AlgorithmSpecification</code> field.</p>
+<p>The following example defines 4 metrics:</p>
+<pre><code>=[
+    {
+        &quot;Name&quot;: &quot;loss&quot;,
+        &quot;Regex&quot;: &quot;Loss = (.*?);&quot;,
+    },
+    {
+        &quot;Name&quot;: &quot;ganloss&quot;,
+        &quot;Regex&quot;: &quot;GAN_loss=(.*?);&quot;,
+    },    
+    {
+        &quot;Name&quot;: &quot;discloss&quot;,
+        &quot;Regex&quot;: &quot;disc_train_loss=(.*?);&quot;,
+    },    
+    {
+        &quot;Name&quot;: &quot;disc-combined&quot;,
+        &quot;Regex&quot;: &quot;disc-combined=(.*?);&quot;,
+    },    
+]</code></pre>
+<p>The following is an example of the log that the algorithm writes:</p>
+<pre><code>GAN_loss=0.138318;  Scaled_reg=2.654134; disc:[-0.017371,0.102429] real 93.3% gen 0.0% disc-combined=0.000000; disc_train_loss=1.374587;  Loss = 16.020744;  Iteration 0 took 0.704s;  Elapsed=0s</code></pre>
+<p>Use the regular expression (regex) to match the algorithm’s log output and capture the numeric values of metrics. For example, in the regex for the <code>loss</code> metric defined above, the first part of the regex finds the exact text “Loss =”, and the expression <code>(.*?);</code> captures zero or more of any character until the first semicolon character. In this expression, the parenthesis tell the regex to capture what is inside them, <code>.</code> means any character, <code>*</code> means zero or more, and <code>?</code> means capture only until the first instance of the <code>;</code> character.</p>
+<p>Choose one of the metrics that you define as the objective metric for the tuning job. If you are using the API, specify the value of the <code>name</code> key in the <code>HyperParameterTuningJobObjective</code> field of the <code>HyperParameterTuningJobConfig</code> parameter that you send to the <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a> operation.</p>
+</body>
+</html>

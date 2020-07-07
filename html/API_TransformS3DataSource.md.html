@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>TransformS3DataSource</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">TransformS3DataSource<a name="API_TransformS3DataSource"></a></h1>
+</header>
+<p>Describes the S3 data source.</p>
+<p><strong>S3DataType</strong> <a name="SageMaker-Type-TransformS3DataSource-S3DataType"></a> If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for batch transform.<br />
+If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for batch transform.<br />
+The following values are compatible: <code>ManifestFile</code>, <code>S3Prefix</code><br />
+The following value is not compatible: <code>AugmentedManifestFile</code><br />
+Type: String<br />
+Valid Values:<code>ManifestFile | S3Prefix | AugmentedManifestFile</code><br />
+Required: Yes</p>
+<p><strong>S3Uri</strong> <a name="SageMaker-Type-TransformS3DataSource-S3Uri"></a> Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example:<br />
++ A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. + A manifest might look like this: <code>s3://bucketname/example.manifest</code></p>
+<p>The manifest is an S3 object which is a JSON file with the following format:</p>
+<p><code>[</code></p>
+<p><code>{"prefix": "s3://customer_bucket/some/prefix/"},</code></p>
+<p><code>"relative/path/to/custdata-1",</code></p>
+<p><code>"relative/path/custdata-2",</code></p>
+<p><code>...</code></p>
+<p><code>]</code></p>
+<p>The preceding JSON matches the following <code>S3Uris</code>:</p>
+<p><code>s3://customer_bucket/some/prefix/relative/path/to/custdata-1</code></p>
+<p><code>s3://customer_bucket/some/prefix/relative/path/custdata-1</code></p>
+<p><code>...</code></p>
+<p>The complete set of <code>S3Uris</code> in this manifest constitutes the input data for the channel for this datasource. The object that each <code>S3Uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf. Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>^(https|s3)://([^/]+)/?(.*)$</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/TransformS3DataSource">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/TransformS3DataSource">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/TransformS3DataSource">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/TransformS3DataSource">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/TransformS3DataSource">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

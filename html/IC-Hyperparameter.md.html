@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Image Classification Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Image Classification Hyperparameters<a name="IC-Hyperparameter"></a></h1>
+</header>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_classes</td>
+<td>Number of output classes. This parameter defines the dimensions of the network output and is typically set to the number of classes in the dataset. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="even">
+<td>num_training_samples</td>
+<td>Number of training examples in the input dataset. If there is a mismatch between this value and the number of samples in the training set, then the behavior of the <code>lr_scheduler_step</code> parameter is undefined and distributed training accuracy might be affected. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>augmentation_type</td>
+<td>Data augmentation type. The input images can be augmented in multiple ways as specified below. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/IC-Hyperparameter.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>crop</code>, <code>crop_color</code>, or <code>crop_color_transform</code>. Default value: no default value</td>
+</tr>
+<tr class="even">
+<td>beta_1</td>
+<td>The beta1 for <code>adam</code>, that is the exponential decay rate for the first moment estimates. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.9</td>
+</tr>
+<tr class="odd">
+<td>beta_2</td>
+<td>The beta2 for <code>adam</code>, that is the exponential decay rate for the second moment estimates. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.999</td>
+</tr>
+<tr class="even">
+<td>checkpoint_frequency</td>
+<td>Period to store model parameters (in number of epochs). <strong>Optional</strong> Valid values: positive integer no greater than <code>epochs</code>. Default value: None (Save checkpoint at the epoch that has the best validation accuracy.)</td>
+</tr>
+<tr class="odd">
+<td>early_stopping</td>
+<td><code>True</code> to use early stopping logic during training. <code>False</code> not to use it. <strong>Optional</strong> Valid values: <code>True</code> or <code>False</code> Default value: <code>False</code></td>
+</tr>
+<tr class="even">
+<td>early_stopping_min_epochs</td>
+<td>The minimum number of epochs that must be run before the early stopping logic can be invoked. It is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: positive integer Default value: 10</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_patience</td>
+<td>The number of epochs to wait before ending training if no improvement is made in the relevant metric. It is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: positive integer Default value: 5</td>
+</tr>
+<tr class="even">
+<td>early_stopping_tolerance</td>
+<td>Relative tolerance to measure an improvement in accuracy validation metric. If the ratio of the improvement in accuracy divided by the previous best accuracy is smaller than the <code>early_stopping_tolerance</code> value set, early stopping considers there is no improvement. It is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: 0 ≤ float ≤ 1 Default value: 0.0</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>Number of training epochs. <strong>Optional</strong> Valid values: positive integer Default value: 30</td>
+</tr>
+<tr class="even">
+<td>eps</td>
+<td>The epsilon for <code>adam</code> and <code>rmsprop</code>. It is usually set to a small value to avoid division by 0. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 1e-8</td>
+</tr>
+<tr class="odd">
+<td>gamma</td>
+<td>The gamma for <code>rmsprop</code>, the decay factor for the moving average of the squared gradient. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.9</td>
+</tr>
+<tr class="even">
+<td>image_shape</td>
+<td>The input image dimensions, which is the same size as the input layer of the network. The format is defined as ‘<code>num_channels</code>, height, width’. The image dimension can take on any value as the network can handle varied dimensions of the input. However, there may be memory constraints if a larger image dimension is used. Typical image dimensions for image classification are ‘3, 224, 224’. This is similar to the ImageNet dataset. <strong>Optional</strong> Valid values: string Default value: ‘3, 224, 224’</td>
+</tr>
+<tr class="odd">
+<td>kv_store</td>
+<td>Weight update synchronization mode during distributed training. The weight updates can be updated either synchronously or asynchronously across machines. Synchronous updates typically provide better accuracy than asynchronous updates but can be slower. See distributed training in MXNet for more details. This parameter is not applicable to single machine training. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/IC-Hyperparameter.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>dist_sync</code> or <code>dist_async</code> Default value: no default value</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>Initial learning rate. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.1</td>
+</tr>
+<tr class="odd">
+<td>lr_scheduler_factor</td>
+<td>The ratio to reduce learning rate used in conjunction with the <code>lr_scheduler_step</code> parameter, defined as <code>lr_new</code> = <code>lr_old</code> * <code>lr_scheduler_factor</code>. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.1</td>
+</tr>
+<tr class="even">
+<td>lr_scheduler_step</td>
+<td>The epochs at which to reduce the learning rate. As explained in the <code>lr_scheduler_factor</code> parameter, the learning rate is reduced by <code>lr_scheduler_factor</code> at these epochs. For example, if the value is set to “10, 20”, then the learning rate is reduced by <code>lr_scheduler_factor</code> after 10th epoch and again by <code>lr_scheduler_factor</code> after 20th epoch. The epochs are delimited by “,”. <strong>Optional</strong> Valid values: string Default value: no default value</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The batch size for training. In a single-machine multi-GPU setting, each GPU handles <code>mini_batch_size</code>/num_gpu training samples. For the multi-machine training in dist_sync mode, the actual batch size is <code>mini_batch_size</code>*number of machines. See MXNet docs for more details. <strong>Optional</strong> Valid values: positive integer Default value: 32</td>
+</tr>
+<tr class="even">
+<td>momentum</td>
+<td>The momentum for <code>sgd</code> and <code>nag</code>, ignored for other optimizers. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.9</td>
+</tr>
+<tr class="odd">
+<td>multi_label</td>
+<td>Flag to use for multi-label classification where each sample can be assigned multiple labels. Average accuracy across all classes is logged. <strong>Optional</strong> Valid values: 0 or 1 Default value: 0</td>
+</tr>
+<tr class="even">
+<td>num_layers</td>
+<td>Number of layers for the network. For data with large image size (for example, 224x224 - like ImageNet), we suggest selecting the number of layers from the set [18, 34, 50, 101, 152, 200]. For data with small image size (for example, 28x28 - like CIFAR), we suggest selecting the number of layers from the set [20, 32, 44, 56, 110]. The number of layers in each set is based on the ResNet paper. For transfer learning, the number of layers defines the architecture of base network and hence can only be selected from the set [18, 34, 50, 101, 152, 200]. <strong>Optional</strong> Valid values: positive integer in [18, 34, 50, 101, 152, 200] or [20, 32, 44, 56, 110] Default value: 152</td>
+</tr>
+<tr class="odd">
+<td>optimizer</td>
+<td>The optimizer type. For more details of the parameters for the optimizers, please refer to MXNet’s API. <strong>Optional</strong> Valid values: One of <code>sgd</code>, <code>adam</code>, <code>rmsprop</code>, or <code>nag</code>. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/IC-Hyperparameter.html">[See the AWS documentation website for more details]</a> Default value: <code>sgd</code></td>
+</tr>
+<tr class="even">
+<td>precision_dtype</td>
+<td>The precision of the weights used for training. The algorithm can use either single precision (<code>float32</code>) or half precision (<code>float16</code>) for the weights. Using half-precision for weights results in reduced memory consumption. <strong>Optional</strong> Valid values: <code>float32</code> or <code>float16</code> Default value: <code>float32</code></td>
+</tr>
+<tr class="odd">
+<td>resize</td>
+<td>Resizes the image before using it for training. The images are resized so that the shortest side has the number of pixels specified by this parameter. If the parameter is not set, then the training data is used without resizing. <strong>Optional</strong> Valid values: positive integer Default value: no default value</td>
+</tr>
+<tr class="even">
+<td>top_k</td>
+<td>Reports the top-k accuracy during training. This parameter has to be greater than 1, since the top-1 training accuracy is the same as the regular training accuracy that has already been reported. <strong>Optional</strong> Valid values: positive integer larger than 1. Default value: no default value</td>
+</tr>
+<tr class="odd">
+<td>use_pretrained_model</td>
+<td>Flag to use pre-trained model for training. If set to 1, then the pretrained model with the corresponding number of layers is loaded and used for training. Only the top FC layer are reinitialized with random weights. Otherwise, the network is trained from scratch. <strong>Optional</strong> Valid values: 0 or 1 Default value: 0</td>
+</tr>
+<tr class="even">
+<td>use_weighted_loss</td>
+<td>Flag to use weighted cross-entropy loss for multi-label classification (used only when <code>multi_label</code> = 1), where the weights are calculated based on the distribution of classes. <strong>Optional</strong> Valid values: 0 or 1 Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>weight_decay</td>
+<td>The coefficient weight decay for <code>sgd</code> and <code>nag</code>, ignored for other optimizers. <strong>Optional</strong> Valid values: float. Range in [0, 1]. Default value: 0.0001</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

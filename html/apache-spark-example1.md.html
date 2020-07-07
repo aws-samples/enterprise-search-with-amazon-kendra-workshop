@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Example 1: Use Amazon SageMaker for Training and Inference with Apache Spark</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Example 1: Use Amazon SageMaker for Training and Inference with Apache Spark<a name="apache-spark-example1"></a></h1>
+</header>
+<p><strong>Topics</strong> + <a href="apache-spark-example1-cust-algo.md">Use Custom Algorithms for Model Training and Hosting on Amazon SageMaker with Apache Spark</a> + <a href="apache-spark-example1-extend-pipeline.md">Use the SageMakerEstimator in a Spark Pipeline</a></p>
+<p>Amazon SageMaker provides an Apache Spark library (in both Python and Scala) that you can use to integrate your Apache Spark applications with Amazon SageMaker. For example, you might use Apache Spark for data preprocessing and Amazon SageMaker for model training and hosting. For more information, see <a href="apache-spark.md">Use Apache Spark with Amazon SageMaker</a>. This section provides example code that uses the Apache Spark Scala library provided by Amazon SageMaker to train a model in Amazon SageMaker using <code>DataFrame</code>s in your Spark cluster. The example also hosts the resulting model artifacts using Amazon SageMaker hosting services. Specifically, this example does the following: + Uses the <code>KMeansSageMakerEstimator</code> to fit (or train) a model on data</p>
+<p> </p>
+<p>Because the example uses the k-means algorithm provided by Amazon SageMaker to train a model, you use the <code>KMeansSageMakerEstimator</code>. You train the model using images of handwritten single-digit numbers (from the MNIST dataset). You provide the images as an input <code>DataFrame</code>. For your convenience, Amazon SageMaker provides this dataset in an S3 bucket.</p>
+<p> </p>
+<p>In response, the estimator returns a <code>SageMakerModel</code> object.</p>
+<p>  + Obtains inferences using the trained <code>SageMakerModel</code></p>
+<p> </p>
+<p>To get inferences from a model hosted in Amazon SageMaker, you call the <code>SageMakerModel.transform</code> method. You pass a <code>DataFrame</code> as input. The method transforms the input <code>DataFrame</code> to another <code>DataFrame</code> containing inferences obtained from the model.</p>
+<p> </p>
+<p>For a given input image of a handwritten single-digit number, the inference identifies a cluster that the image belongs to. For more information, see <a href="k-means.md">K-Means Algorithm</a>.</p>
+<p>This is the example code:</p>
+<pre><code>import org.apache.spark.sql.SparkSession
+import com.amazonaws.services.sagemaker.sparksdk.IAMRole
+import com.amazonaws.services.sagemaker.sparksdk.algorithms
+import com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator
+
+val spark = SparkSession.builder.getOrCreate
+
+// load mnist data as a dataframe from libsvm
+val region = &quot;us-east-1&quot;
+val trainingData = spark.read.format(&quot;libsvm&quot;)
+  .option(&quot;numFeatures&quot;, &quot;784&quot;)
+  .load(s&quot;s3://sagemaker-sample-data-$region/spark/mnist/train/&quot;)
+val testData = spark.read.format(&quot;libsvm&quot;)
+  .option(&quot;numFeatures&quot;, &quot;784&quot;)
+  .load(s&quot;s3://sagemaker-sample-data-$region/spark/mnist/test/&quot;)
+
+val roleArn = &quot;arn:aws:iam::account-id:role/rolename&quot;
+
+val estimator = new KMeansSageMakerEstimator(
+  sagemakerRole = IAMRole(roleArn),
+  trainingInstanceType = &quot;ml.p2.xlarge&quot;,
+  trainingInstanceCount = 1,
+  endpointInstanceType = &quot;ml.c4.xlarge&quot;,
+  endpointInitialInstanceCount = 1)
+  .setK(10).setFeatureDim(784)
+
+// train
+val model = estimator.fit(trainingData)
+
+val transformedData = model.transform(testData)
+transformedData.show</code></pre>
+<p>The code does the following: + Loads the MNIST dataset from an S3 bucket provided by Amazon SageMaker (<code>awsai-sparksdk-dataset</code>) into a Spark <code>DataFrame</code> (<code>mnistTrainingDataFrame</code>):</p>
+<pre><code>// Get a Spark session.
+
+val spark = SparkSession.builder.getOrCreate
+
+// load mnist data as a dataframe from libsvm
+val region = &quot;us-east-1&quot;
+val trainingData = spark.read.format(&quot;libsvm&quot;)
+  .option(&quot;numFeatures&quot;, &quot;784&quot;)
+  .load(s&quot;s3://sagemaker-sample-data-$region/spark/mnist/train/&quot;)
+val testData = spark.read.format(&quot;libsvm&quot;)
+  .option(&quot;numFeatures&quot;, &quot;784&quot;)
+  .load(s&quot;s3://sagemaker-sample-data-$region/spark/mnist/test/&quot;)
+
+val roleArn = &quot;arn:aws:iam::account-id:role/rolename&quot;
+trainingData.show()</code></pre>
+<p>The <code>show</code> method displays the first 20 rows in the data frame:</p>
+<pre><code>+-----+--------------------+
+|label|            features|
++-----+--------------------+
+|  5.0|(784,[152,153,154...|
+|  0.0|(784,[127,128,129...|
+|  4.0|(784,[160,161,162...|
+|  1.0|(784,[158,159,160...|
+|  9.0|(784,[208,209,210...|
+|  2.0|(784,[155,156,157...|
+|  1.0|(784,[124,125,126...|
+|  3.0|(784,[151,152,153...|
+|  1.0|(784,[152,153,154...|
+|  4.0|(784,[134,135,161...|
+|  3.0|(784,[123,124,125...|
+|  5.0|(784,[216,217,218...|
+|  3.0|(784,[143,144,145...|
+|  6.0|(784,[72,73,74,99...|
+|  1.0|(784,[151,152,153...|
+|  7.0|(784,[211,212,213...|
+|  2.0|(784,[151,152,153...|
+|  8.0|(784,[159,160,161...|
+|  6.0|(784,[100,101,102...|
+|  9.0|(784,[209,210,211...|
++-----+--------------------+
+only showing top 20 rows</code></pre>
+<p>In each row: + The <code>label</code> column identifies the image’s label. For example, if the image of the handwritten number is the digit 5, the label value is 5. + The <code>features</code> column stores a vector (<code>org.apache.spark.ml.linalg.Vector</code>) of <code>Double</code> values. These are the 784 features of the handwritten number. (Each handwritten number is a 28 x 28-pixel image, making 784 features.)</p>
+<p>  + Creates an Amazon SageMaker estimator (<code>KMeansSageMakerEstimator</code>)</p>
+<p>The <code>fit</code> method of this estimator uses the k-means algorithm provided by Amazon SageMaker to train models using an input <code>DataFrame</code>. In response, it returns a <code>SageMakerModel</code> object that you can use to get inferences. <strong>Note</strong><br />
+The <code>KMeansSageMakerEstimator</code> extends the Amazon SageMaker <code>SageMakerEstimator</code>, which extends the Apache Spark <code>Estimator</code>.</p>
+<pre><code>val estimator = new KMeansSageMakerEstimator(
+  sagemakerRole = IAMRole(roleArn),
+  trainingInstanceType = &quot;ml.p2.xlarge&quot;,
+  trainingInstanceCount = 1,
+  endpointInstanceType = &quot;ml.c4.xlarge&quot;,
+  endpointInitialInstanceCount = 1)
+  .setK(10).setFeatureDim(784)</code></pre>
+<p>The constructor parameters provide information that is used for training a model and deploying it on Amazon SageMaker: + <code>trainingInstanceType</code> and <code>trainingInstanceCount</code>—Identify the type and number of ML compute instances to use for model training.</p>
+<pre><code> </code></pre>
+<ul>
+<li><p><code>endpointInstanceType</code>—Identifies the ML compute instance type to use when hosting the model in Amazon SageMaker. By default, one ML compute instance is assumed.</p>
+<p> </p></li>
+<li><p><code>endpointInitialInstanceCount</code>—Identifies the number of ML compute instances initially backing the endpoint hosting the model in Amazon SageMaker.</p>
+<p> </p></li>
+<li><p><code>sagemakerRole</code>—Amazon SageMaker assumes this IAM role to perform tasks on your behalf. For example, for model training, it reads data from S3 and writes training results (model artifacts) to S3. <strong>Note</strong><br />
+This example implicitly creates an Amazon SageMaker client. To create this client, you must provide your credentials. The API uses these credentials to authenticate requests to Amazon SageMaker. For example, it uses the credentials to authenticate requests to create a training job and API calls for deploying the model using Amazon SageMaker hosting services.</p></li>
+<li><p>After the <code>KMeansSageMakerEstimator</code> object has been created, you set the following parameters, are used in model training:</p>
+<ul>
+<li>The number of clusters that the k-means algorithm should create during model training. You specify 10 clusters, one for each digit, 0 through 9.</li>
+<li>Identifies that each input image has 784 features (each handwritten number is a 28 x 28-pixel image, making 784 features).</li>
+</ul>
+<p> </p></li>
+<li><p>Calls the estimator <code>fit</code> method</p>
+<pre><code>// train
+val model = estimator.fit(trainingData)</code></pre>
+<p>You pass the input <code>DataFrame</code> as a parameter. The model does all the work of training the model and deploying it to Amazon SageMaker. For more information see, <a href="apache-spark.md#spark-sdk-common-process">Integrate Your Apache Spark Application with Amazon SageMaker</a>. In response, you get a <code>SageMakerModel</code> object, which you can use to get inferences from your model deployed in Amazon SageMaker.</p>
+<p> </p>
+<p>You provide only the input <code>DataFrame</code>. You don’t need to specify the registry path to the k-means algorithm used for model training because the <code>KMeansSageMakerEstimator</code> knows it.</p>
+<p> </p></li>
+<li><p>Calls the <code>SageMakerModel.transform</code> method to get inferences from the model deployed in Amazon SageMaker.</p>
+<p>The <code>transform</code> method takes a <code>DataFrame</code> as input, transforms it, and returns another <code>DataFrame</code> containing inferences obtained from the model.</p>
+<pre><code>val transformedData = model.transform(testData)
+transformedData.show</code></pre>
+<p>For simplicity, we use the same <code>DataFrame</code> as input to the <code>transform</code> method that we used for model training in this example. The <code>transform</code> method does the following:</p>
+<ul>
+<li>Serializes the <code>features</code> column in the input <code>DataFrame</code> to protobuf and sends it to the Amazon SageMaker endpoint for inference.</li>
+<li>Deserializes the protobuf response into the two additional columns (<code>distance_to_cluster</code> and <code>closest_cluster</code>) in the transformed <code>DataFrame</code>.</li>
+</ul>
+<p>The <code>show</code> method gets inferences to the first 20 rows in the input <code>DataFrame</code>:</p>
+<pre><code>+-----+--------------------+-------------------+---------------+
+|label|            features|distance_to_cluster|closest_cluster|
++-----+--------------------+-------------------+---------------+
+|  5.0|(784,[152,153,154...|  1767.897705078125|            4.0|
+|  0.0|(784,[127,128,129...|  1392.157470703125|            5.0|
+|  4.0|(784,[160,161,162...| 1671.5711669921875|            9.0|
+|  1.0|(784,[158,159,160...| 1182.6082763671875|            6.0|
+|  9.0|(784,[208,209,210...| 1390.4002685546875|            0.0|
+|  2.0|(784,[155,156,157...|  1713.988037109375|            1.0|
+|  1.0|(784,[124,125,126...| 1246.3016357421875|            2.0|
+|  3.0|(784,[151,152,153...|  1753.229248046875|            4.0|
+|  1.0|(784,[152,153,154...|  978.8394165039062|            2.0|
+|  4.0|(784,[134,135,161...|  1623.176513671875|            3.0|
+|  3.0|(784,[123,124,125...|  1533.863525390625|            4.0|
+|  5.0|(784,[216,217,218...|  1469.357177734375|            6.0|
+|  3.0|(784,[143,144,145...|  1736.765869140625|            4.0|
+|  6.0|(784,[72,73,74,99...|   1473.69384765625|            8.0|
+|  1.0|(784,[151,152,153...|    944.88720703125|            2.0|
+|  7.0|(784,[211,212,213...| 1285.9071044921875|            3.0|
+|  2.0|(784,[151,152,153...| 1635.0125732421875|            1.0|
+|  8.0|(784,[159,160,161...| 1436.3162841796875|            6.0|
+|  6.0|(784,[100,101,102...| 1499.7366943359375|            7.0|
+|  9.0|(784,[209,210,211...| 1364.6319580078125|            6.0|
++-----+--------------------+-------------------+---------------+</code></pre>
+<p>You can interpret the data, as follows:</p>
+<ul>
+<li>A handwritten number with the <code>label</code> 5 belongs to cluster 5 (<code>closest_cluster</code>).</li>
+<li>A handwritten number with the <code>label</code> 0 belongs to cluster 2.</li>
+<li>A handwritten number with the <code>label</code> 4 belongs to cluster 4.</li>
+<li>A handwritten number with the <code>label</code> 1 belongs to cluster 1.</li>
+</ul></li>
+</ul>
+<p>For more information on how to run these examples, see <a href="https://github.com/aws/sagemaker-spark/blob/master/README.md">https://github.com/aws/sagemaker-spark/blob/master/README.md</a> on GitHub.</p>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune an Image Classification Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune an Image Classification Model<a name="IC-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The image classification algorithm is a supervised algorithm. It reports an accuracy metric that is computed during training. When tuning the model, choose this metric as the objective metric.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>validation:accuracy</td>
+<td>The ratio of the number of correct predictions to the total number of predictions made.</td>
+<td>Maximize</td>
+</tr>
+</tbody>
+</table>
+<p>Tune an image classification model with the following hyperparameters. The hyperparameters that have the greatest impact on image classification objective metrics are: <code>mini_batch_size</code>, <code>learning_rate</code>, and <code>optimizer</code>. Tune the optimizer-related hyperparameters, such as <code>momentum</code>, <code>weight_decay</code>, <code>beta_1</code>, <code>beta_2</code>, <code>eps</code>, and <code>gamma</code>, based on the selected <code>optimizer</code>. For example, use <code>beta_1</code> and <code>beta_2</code> only when <code>adam</code> is the <code>optimizer</code>.</p>
+<p>For more information about which hyperparameters are used in each optimizer, see <a href="IC-Hyperparameter.md">Image Classification Hyperparameters</a>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>beta_1</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 1e-6, MaxValue: 0.999</td>
+</tr>
+<tr class="even">
+<td>beta_2</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 1e-6, MaxValue: 0.999</td>
+</tr>
+<tr class="odd">
+<td>eps</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 1e-8, MaxValue: 1.0</td>
+</tr>
+<tr class="even">
+<td>gamma</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 1e-8, MaxValue: 0.999</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 1e-6, MaxValue: 0.5</td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 8, MaxValue: 512</td>
+</tr>
+<tr class="odd">
+<td>momentum</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0.0, MaxValue: 0.999</td>
+</tr>
+<tr class="even">
+<td>optimizer</td>
+<td>CategoricalParameterRanges</td>
+<td>[‘sgd’, ‘adam’, ‘rmsprop’, ‘nag’]</td>
+</tr>
+<tr class="odd">
+<td>weight_decay</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0.0, MaxValue: 0.999</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

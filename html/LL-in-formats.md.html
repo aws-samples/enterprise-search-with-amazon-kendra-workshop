@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Linear Learner Response Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Linear Learner Response Formats<a name="LL-in-formats"></a></h1>
+</header>
+<p>All Amazon SageMaker built-in algorithms adhere to the common input inference format described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats - Inference</a>. The following are the available output formats for the Amazon SageMaker linear learner algorithm.</p>
+<p><strong>Binary Classification</strong></p>
+<pre><code>let response =   {
+    &quot;predictions&quot;:    [
+        {
+            &quot;score&quot;: 0.4,
+            &quot;predicted_label&quot;: 0
+        } 
+    ]
+}</code></pre>
+<p><strong>Multiclass Classification</strong></p>
+<pre><code>let response =   {
+    &quot;predictions&quot;:    [
+        {
+            &quot;score&quot;: [0.1, 0.2, 0.4, 0.3],
+            &quot;predicted_label&quot;: 2
+        } 
+    ]
+}</code></pre>
+<p><strong>Regression</strong></p>
+<pre><code>let response =   {
+    &quot;predictions&quot;:    [
+        {
+            &quot;score&quot;: 0.4
+        } 
+    ]
+}</code></pre>
+<p><strong>Binary Classification</strong></p>
+<pre><code>{&quot;score&quot;: 0.4, &quot;predicted_label&quot;: 0}</code></pre>
+<p><strong>Multiclass Classification</strong></p>
+<pre><code>{&quot;score&quot;: [0.1, 0.2, 0.4, 0.3], &quot;predicted_label&quot;: 2}</code></pre>
+<p><strong>Regression</strong></p>
+<pre><code>{&quot;score&quot;: 0.4}</code></pre>
+<p><strong>Binary Classification</strong></p>
+<pre><code>[
+    Record = {
+        features = {},
+        label = {
+            &#39;score’: {
+                keys: [],
+                values: [0.4]  # float32
+            },
+            &#39;predicted_label&#39;: {
+                keys: [],
+                values: [0.0]  # float32
+            }
+        }
+    }
+]</code></pre>
+<p><strong>Multiclass Classification</strong></p>
+<pre><code>[
+    Record = {
+    &quot;features&quot;: [],
+    &quot;label&quot;:    {
+            &quot;score&quot;:  {
+                    &quot;values&quot;:   [0.1, 0.2, 0.3, 0.4]   
+            },
+            &quot;predicted_label&quot;:  {
+                    &quot;values&quot;:   [3]
+            }
+       },
+    &quot;uid&quot;:  &quot;abc123&quot;,
+    &quot;metadata&quot;: &quot;{created_at: &#39;2017-06-03&#39;}&quot;
+   }
+]</code></pre>
+<p><strong>Regression</strong></p>
+<pre><code>[
+    Record = {
+        features = {},
+        label = {
+            &#39;score’: {
+                keys: [],
+                values: [0.4]  # float32
+            }   
+        }
+    }
+]</code></pre>
+</body>
+</html>

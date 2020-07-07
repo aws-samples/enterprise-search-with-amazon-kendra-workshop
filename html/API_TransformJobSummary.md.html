@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>TransformJobSummary</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">TransformJobSummary<a name="API_TransformJobSummary"></a></h1>
+</header>
+<p>Provides a summary of a transform job. Multiple <code>TransformJobSummary</code> objects are returned as a list after in response to a <a href="API_ListTransformJobs.md">ListTransformJobs</a> call.</p>
+<p><strong>CreationTime</strong> <a name="SageMaker-Type-TransformJobSummary-CreationTime"></a> A timestamp that shows when the transform Job was created.<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>FailureReason</strong> <a name="SageMaker-Type-TransformJobSummary-FailureReason"></a> If the transform job failed, the reason it failed.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Required: No</p>
+<p><strong>LastModifiedTime</strong> <a name="SageMaker-Type-TransformJobSummary-LastModifiedTime"></a> Indicates when the transform job was last modified.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>TransformEndTime</strong> <a name="SageMaker-Type-TransformJobSummary-TransformEndTime"></a> Indicates when the transform job ends on compute instances. For successful jobs and stopped jobs, this is the exact time recorded after the results are uploaded. For failed jobs, this is when Amazon SageMaker detected that the job failed.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>TransformJobArn</strong> <a name="SageMaker-Type-TransformJobSummary-TransformJobArn"></a> The Amazon Resource Name (ARN) of the transform job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:transform-job/.*</code><br />
+Required: Yes</p>
+<p><strong>TransformJobName</strong> <a name="SageMaker-Type-TransformJobSummary-TransformJobName"></a> The name of the transform job.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p><strong>TransformJobStatus</strong> <a name="SageMaker-Type-TransformJobSummary-TransformJobStatus"></a> The status of the transform job.<br />
+Type: String<br />
+Valid Values:<code>InProgress | Completed | Failed | Stopping | Stopped</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/TransformJobSummary">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/TransformJobSummary">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/TransformJobSummary">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/TransformJobSummary">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/TransformJobSummary">AWS SDK for Ruby V2</a></p>
+</body>
+</html>
