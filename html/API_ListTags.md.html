@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ListTags</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ListTags<a name="API_ListTags"></a></h1>
+</header>
+<p>Returns the tags for the specified Amazon SageMaker resource.</p>
+<pre><code>{
+   &quot;[MaxResults](#SageMaker-ListTags-request-MaxResults)&quot;: number,
+   &quot;[NextToken](#SageMaker-ListTags-request-NextToken)&quot;: &quot;string&quot;,
+   &quot;[ResourceArn](#SageMaker-ListTags-request-ResourceArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_ListTags_RequestSyntax">MaxResults</a> ** <a name="SageMaker-ListTags-request-MaxResults"></a> Maximum number of tags to return.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 50.<br />
+Required: No</p>
+<p>** <a href="#API_ListTags_RequestSyntax">NextToken</a> ** <a name="SageMaker-ListTags-request-NextToken"></a> If the response to the previous <code>ListTags</code> request is truncated, Amazon SageMaker returns this token. To retrieve the next set of tags, use it in the subsequent request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_ListTags_RequestSyntax">ResourceArn</a> ** <a name="SageMaker-ListTags-request-ResourceArn"></a> The Amazon Resource Name (ARN) of the resource whose tags you want to retrieve.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:.*</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[NextToken](#SageMaker-ListTags-response-NextToken)&quot;: &quot;string&quot;,
+   &quot;[Tags](#SageMaker-ListTags-response-Tags)&quot;: [ 
+      { 
+         &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+         &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+      }
+   ]
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_ListTags_ResponseSyntax">NextToken</a> ** <a name="SageMaker-ListTags-response-NextToken"></a> If response is truncated, Amazon SageMaker includes a token in the response. You can use this token in your subsequent request to fetch next set of tokens.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code></p>
+<p>** <a href="#API_ListTags_ResponseSyntax">Tags</a> ** <a name="SageMaker-ListTags-response-Tags"></a> An array of <code>Tag</code> objects, each with a tag key and a value.<br />
+Type: Array of <a href="API_Tag.md">Tag</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 50 items.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/ListTags">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/ListTags">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ListTags">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ListTags">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ListTags">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ListTags">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/ListTags">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/ListTags">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/ListTags">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ListTags">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

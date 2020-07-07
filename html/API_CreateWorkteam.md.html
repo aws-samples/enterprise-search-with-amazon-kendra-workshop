@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateWorkteam</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateWorkteam<a name="API_CreateWorkteam"></a></h1>
+</header>
+<p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p>
+<p>You cannot create more than 25 work teams in an account and region.</p>
+<pre><code>{
+   &quot;[Description](#SageMaker-CreateWorkteam-request-Description)&quot;: &quot;string&quot;,
+   &quot;[MemberDefinitions](#SageMaker-CreateWorkteam-request-MemberDefinitions)&quot;: [ 
+      { 
+         &quot;[CognitoMemberDefinition](API_MemberDefinition.md#SageMaker-Type-MemberDefinition-CognitoMemberDefinition)&quot;: { 
+            &quot;[ClientId](API_CognitoMemberDefinition.md#SageMaker-Type-CognitoMemberDefinition-ClientId)&quot;: &quot;string&quot;,
+            &quot;[UserGroup](API_CognitoMemberDefinition.md#SageMaker-Type-CognitoMemberDefinition-UserGroup)&quot;: &quot;string&quot;,
+            &quot;[UserPool](API_CognitoMemberDefinition.md#SageMaker-Type-CognitoMemberDefinition-UserPool)&quot;: &quot;string&quot;
+         }
+      }
+   ],
+   &quot;[NotificationConfiguration](#SageMaker-CreateWorkteam-request-NotificationConfiguration)&quot;: { 
+      &quot;[NotificationTopicArn](API_NotificationConfiguration.md#SageMaker-Type-NotificationConfiguration-NotificationTopicArn)&quot;: &quot;string&quot;
+   },
+   &quot;[Tags](#SageMaker-CreateWorkteam-request-Tags)&quot;: [ 
+      { 
+         &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+         &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[WorkteamName](#SageMaker-CreateWorkteam-request-WorkteamName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateWorkteam_RequestSyntax">Description</a> ** <a name="SageMaker-CreateWorkteam-request-Description"></a> A description of the work team.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 200.<br />
+Pattern: <code>.+</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateWorkteam_RequestSyntax">MemberDefinitions</a> ** <a name="SageMaker-CreateWorkteam-request-MemberDefinitions"></a> A list of <code>MemberDefinition</code> objects that contains objects that identify the Amazon Cognito user pool that makes up the work team. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html">Amazon Cognito User Pools</a>.<br />
+All of the <code>CognitoMemberDefinition</code> objects that make up the member definition must have the same <code>ClientId</code> and <code>UserPool</code> values.<br />
+Type: Array of <a href="API_MemberDefinition.md">MemberDefinition</a> objects<br />
+Array Members: Minimum number of 1 item. Maximum number of 10 items.<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateWorkteam_RequestSyntax">NotificationConfiguration</a> ** <a name="SageMaker-CreateWorkteam-request-NotificationConfiguration"></a> Configures notification of workers regarding available or expiring work items.<br />
+Type: <a href="API_NotificationConfiguration.md">NotificationConfiguration</a> object<br />
+Required: No</p>
+<p>** <a href="#API_CreateWorkteam_RequestSyntax">Tags</a> ** <a name="SageMaker-CreateWorkteam-request-Tags"></a> Type: Array of <a href="API_Tag.md">Tag</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 50 items.<br />
+Required: No</p>
+<p>** <a href="#API_CreateWorkteam_RequestSyntax">WorkteamName</a> ** <a name="SageMaker-CreateWorkteam-request-WorkteamName"></a> The name of the work team. Use this name to identify the work team.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[WorkteamArn](#SageMaker-CreateWorkteam-response-WorkteamArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateWorkteam_ResponseSyntax">WorkteamArn</a> ** <a name="SageMaker-CreateWorkteam-response-WorkteamArn"></a> The Amazon Resource Name (ARN) of the work team. You can use this ARN to identify the work team.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:workteam/.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceInUse</strong><br />
+Resource being accessed is in use.<br />
+HTTP Status Code: 400</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateWorkteam">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateWorkteam">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

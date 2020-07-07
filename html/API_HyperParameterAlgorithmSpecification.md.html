@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>HyperParameterAlgorithmSpecification</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">HyperParameterAlgorithmSpecification<a name="API_HyperParameterAlgorithmSpecification"></a></h1>
+</header>
+<p>Specifies which training algorithm to use for training jobs that a hyperparameter tuning job launches and the metrics to monitor.</p>
+<p><strong>AlgorithmName</strong> <a name="SageMaker-Type-HyperParameterAlgorithmSpecification-AlgorithmName"></a> The name of the resource algorithm to use for the hyperparameter tuning job. If you specify a value for this parameter, do not specify a value for <code>TrainingImage</code>.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 170.<br />
+Pattern: <code>(arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:[a-z\-]*\/)?([a-zA-Z0-9]([a-zA-Z0-9-]){0,62})(?&lt;!-)$</code><br />
+Required: No</p>
+<p><strong>MetricDefinitions</strong> <a name="SageMaker-Type-HyperParameterAlgorithmSpecification-MetricDefinitions"></a> An array of <a href="API_MetricDefinition.md">MetricDefinition</a> objects that specify the metrics that the algorithm emits.<br />
+Type: Array of <a href="API_MetricDefinition.md">MetricDefinition</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 20 items.<br />
+Required: No</p>
+<p><strong>TrainingImage</strong> <a name="SageMaker-Type-HyperParameterAlgorithmSpecification-TrainingImage"></a> The registry path of the Docker image that contains the training algorithm. For information about Docker registry paths for built-in algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Algorithms Provided by Amazon SageMaker: Common Parameters</a>. Amazon SageMaker supports both <code>registry/repository[:tag]</code> and <code>registry/repository[@digest]</code> image path formats. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>.<br />
+Type: String<br />
+Length Constraints: Maximum length of 255.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p><strong>TrainingInputMode</strong> <a name="SageMaker-Type-HyperParameterAlgorithmSpecification-TrainingInputMode"></a> The input mode that the algorithm supports: File or Pipe. In File input mode, Amazon SageMaker downloads the training data from Amazon S3 to the storage volume that is attached to the training instance and mounts the directory to the Docker volume for the training container. In Pipe input mode, Amazon SageMaker streams data directly from Amazon S3 to the container.<br />
+If you specify File mode, make sure that you provision the storage volume that is attached to the training instance with enough capacity to accommodate the training data downloaded from Amazon S3, the model artifacts, and intermediate information.<br />
+For more information about input modes, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>.<br />
+Type: String<br />
+Valid Values:<code>Pipe | File</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/HyperParameterAlgorithmSpecification">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/HyperParameterAlgorithmSpecification">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/HyperParameterAlgorithmSpecification">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/HyperParameterAlgorithmSpecification">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/HyperParameterAlgorithmSpecification">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

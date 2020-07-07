@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>HyperParameterTrainingJobDefinition</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">HyperParameterTrainingJobDefinition<a name="API_HyperParameterTrainingJobDefinition"></a></h1>
+</header>
+<p>Defines the training jobs launched by a hyperparameter tuning job.</p>
+<p><strong>AlgorithmSpecification</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-AlgorithmSpecification"></a> The <a href="API_HyperParameterAlgorithmSpecification.md">HyperParameterAlgorithmSpecification</a> object that specifies the resource algorithm to use for the training jobs that the tuning job launches.<br />
+Type: <a href="API_HyperParameterAlgorithmSpecification.md">HyperParameterAlgorithmSpecification</a> object<br />
+Required: Yes</p>
+<p><strong>EnableInterContainerTrafficEncryption</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-EnableInterContainerTrafficEncryption"></a> To encrypt all communications between ML compute instances in distributed training, choose <code>True</code>. Encryption provides greater security for distributed training, but training might take longer. How long it takes depends on the amount of communication between compute instances, especially if you use a deep learning algorithm in distributed training.<br />
+Type: Boolean<br />
+Required: No</p>
+<p><strong>EnableNetworkIsolation</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-EnableNetworkIsolation"></a> Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If network isolation is used for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.<br />
+The Semantic Segmentation built-in algorithm does not support network isolation. Type: Boolean<br />
+Required: No</p>
+<p><strong>InputDataConfig</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-InputDataConfig"></a> An array of <a href="API_Channel.md">Channel</a> objects that specify the input for the training jobs that the tuning job launches.<br />
+Type: Array of <a href="API_Channel.md">Channel</a> objects<br />
+Array Members: Minimum number of 1 item. Maximum number of 20 items.<br />
+Required: No</p>
+<p><strong>OutputDataConfig</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-OutputDataConfig"></a> Specifies the path to the Amazon S3 bucket where you store model artifacts from the training jobs that the tuning job launches.<br />
+Type: <a href="API_OutputDataConfig.md">OutputDataConfig</a> object<br />
+Required: Yes</p>
+<p><strong>ResourceConfig</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-ResourceConfig"></a> The resources, including the compute instances and storage volumes, to use for the training jobs that the tuning job launches.<br />
+Storage volumes store model artifacts and incremental states. Training algorithms might also use storage volumes for scratch space. If you want Amazon SageMaker to use the storage volume to store the training data, choose <code>File</code> as the <code>TrainingInputMode</code> in the algorithm specification. For distributed training algorithms, specify an instance count greater than 1.<br />
+Type: <a href="API_ResourceConfig.md">ResourceConfig</a> object<br />
+Required: Yes</p>
+<p><strong>RoleArn</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-RoleArn"></a> The Amazon Resource Name (ARN) of the IAM role associated with the training jobs that the tuning job launches.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code><br />
+Required: Yes</p>
+<p><strong>StaticHyperParameters</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-StaticHyperParameters"></a> Specifies the values of hyperparameters that do not change for the tuning job.<br />
+Type: String to string map<br />
+Key Length Constraints: Maximum length of 256.<br />
+Key Pattern: <code>.*</code><br />
+Value Length Constraints: Maximum length of 256.<br />
+Value Pattern: <code>.*</code><br />
+Required: No</p>
+<p><strong>StoppingCondition</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-StoppingCondition"></a> Specifies a limit to how long a model hyperparameter training job can run. When the job reaches the time limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.<br />
+Type: <a href="API_StoppingCondition.md">StoppingCondition</a> object<br />
+Required: Yes</p>
+<p><strong>VpcConfig</strong> <a name="SageMaker-Type-HyperParameterTrainingJobDefinition-VpcConfig"></a> The <a href="API_VpcConfig.md">VpcConfig</a> object that specifies the VPC that you want the training jobs that this hyperparameter tuning job launches to connect to. Control access to and from your training container by configuring the VPC. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html">Protect Training Jobs by Using an Amazon Virtual Private Cloud</a>.<br />
+Type: <a href="API_VpcConfig.md">VpcConfig</a> object<br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/HyperParameterTrainingJobDefinition">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/HyperParameterTrainingJobDefinition">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/HyperParameterTrainingJobDefinition">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/HyperParameterTrainingJobDefinition">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/HyperParameterTrainingJobDefinition">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ListLabelingJobs</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ListLabelingJobs<a name="API_ListLabelingJobs"></a></h1>
+</header>
+<p>Gets a list of labeling jobs.</p>
+<pre><code>{
+   &quot;[CreationTimeAfter](#SageMaker-ListLabelingJobs-request-CreationTimeAfter)&quot;: number,
+   &quot;[CreationTimeBefore](#SageMaker-ListLabelingJobs-request-CreationTimeBefore)&quot;: number,
+   &quot;[LastModifiedTimeAfter](#SageMaker-ListLabelingJobs-request-LastModifiedTimeAfter)&quot;: number,
+   &quot;[LastModifiedTimeBefore](#SageMaker-ListLabelingJobs-request-LastModifiedTimeBefore)&quot;: number,
+   &quot;[MaxResults](#SageMaker-ListLabelingJobs-request-MaxResults)&quot;: number,
+   &quot;[NameContains](#SageMaker-ListLabelingJobs-request-NameContains)&quot;: &quot;string&quot;,
+   &quot;[NextToken](#SageMaker-ListLabelingJobs-request-NextToken)&quot;: &quot;string&quot;,
+   &quot;[SortBy](#SageMaker-ListLabelingJobs-request-SortBy)&quot;: &quot;string&quot;,
+   &quot;[SortOrder](#SageMaker-ListLabelingJobs-request-SortOrder)&quot;: &quot;string&quot;,
+   &quot;[StatusEquals](#SageMaker-ListLabelingJobs-request-StatusEquals)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">CreationTimeAfter</a> ** <a name="SageMaker-ListLabelingJobs-request-CreationTimeAfter"></a> A filter that returns only labeling jobs created after the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">CreationTimeBefore</a> ** <a name="SageMaker-ListLabelingJobs-request-CreationTimeBefore"></a> A filter that returns only labeling jobs created before the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">LastModifiedTimeAfter</a> ** <a name="SageMaker-ListLabelingJobs-request-LastModifiedTimeAfter"></a> A filter that returns only labeling jobs modified after the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">LastModifiedTimeBefore</a> ** <a name="SageMaker-ListLabelingJobs-request-LastModifiedTimeBefore"></a> A filter that returns only labeling jobs modified before the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">MaxResults</a> ** <a name="SageMaker-ListLabelingJobs-request-MaxResults"></a> The maximum number of labeling jobs to return in each page of the response.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1. Maximum value of 100.<br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">NameContains</a> ** <a name="SageMaker-ListLabelingJobs-request-NameContains"></a> A string in the labeling job name. This filter returns only labeling jobs whose name contains the specified string.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>[a-zA-Z0-9\-]+</code><br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">NextToken</a> ** <a name="SageMaker-ListLabelingJobs-request-NextToken"></a> If the result of the previous <code>ListLabelingJobs</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of labeling jobs, use the token in the next request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">SortBy</a> ** <a name="SageMaker-ListLabelingJobs-request-SortBy"></a> The field to sort results by. The default is <code>CreationTime</code>.<br />
+Type: String<br />
+Valid Values:<code>Name | CreationTime | Status</code><br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">SortOrder</a> ** <a name="SageMaker-ListLabelingJobs-request-SortOrder"></a> The sort order for results. The default is <code>Ascending</code>.<br />
+Type: String<br />
+Valid Values:<code>Ascending | Descending</code><br />
+Required: No</p>
+<p>** <a href="#API_ListLabelingJobs_RequestSyntax">StatusEquals</a> ** <a name="SageMaker-ListLabelingJobs-request-StatusEquals"></a> A filter that retrieves only labeling jobs with a specific status.<br />
+Type: String<br />
+Valid Values:<code>InProgress | Completed | Failed | Stopping | Stopped</code><br />
+Required: No</p>
+<pre><code>{
+   &quot;[LabelingJobSummaryList](#SageMaker-ListLabelingJobs-response-LabelingJobSummaryList)&quot;: [ 
+      { 
+         &quot;[AnnotationConsolidationLambdaArn](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-AnnotationConsolidationLambdaArn)&quot;: &quot;string&quot;,
+         &quot;[CreationTime](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-CreationTime)&quot;: number,
+         &quot;[FailureReason](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-FailureReason)&quot;: &quot;string&quot;,
+         &quot;[InputConfig](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-InputConfig)&quot;: { 
+            &quot;[DataAttributes](API_LabelingJobInputConfig.md#SageMaker-Type-LabelingJobInputConfig-DataAttributes)&quot;: { 
+               &quot;[ContentClassifiers](API_LabelingJobDataAttributes.md#SageMaker-Type-LabelingJobDataAttributes-ContentClassifiers)&quot;: [ &quot;string&quot; ]
+            },
+            &quot;[DataSource](API_LabelingJobInputConfig.md#SageMaker-Type-LabelingJobInputConfig-DataSource)&quot;: { 
+               &quot;[S3DataSource](API_LabelingJobDataSource.md#SageMaker-Type-LabelingJobDataSource-S3DataSource)&quot;: { 
+                  &quot;[ManifestS3Uri](API_LabelingJobS3DataSource.md#SageMaker-Type-LabelingJobS3DataSource-ManifestS3Uri)&quot;: &quot;string&quot;
+               }
+            }
+         },
+         &quot;[LabelCounters](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-LabelCounters)&quot;: { 
+            &quot;[FailedNonRetryableError](API_LabelCounters.md#SageMaker-Type-LabelCounters-FailedNonRetryableError)&quot;: number,
+            &quot;[HumanLabeled](API_LabelCounters.md#SageMaker-Type-LabelCounters-HumanLabeled)&quot;: number,
+            &quot;[MachineLabeled](API_LabelCounters.md#SageMaker-Type-LabelCounters-MachineLabeled)&quot;: number,
+            &quot;[TotalLabeled](API_LabelCounters.md#SageMaker-Type-LabelCounters-TotalLabeled)&quot;: number,
+            &quot;[Unlabeled](API_LabelCounters.md#SageMaker-Type-LabelCounters-Unlabeled)&quot;: number
+         },
+         &quot;[LabelingJobArn](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-LabelingJobArn)&quot;: &quot;string&quot;,
+         &quot;[LabelingJobName](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-LabelingJobName)&quot;: &quot;string&quot;,
+         &quot;[LabelingJobOutput](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-LabelingJobOutput)&quot;: { 
+            &quot;[FinalActiveLearningModelArn](API_LabelingJobOutput.md#SageMaker-Type-LabelingJobOutput-FinalActiveLearningModelArn)&quot;: &quot;string&quot;,
+            &quot;[OutputDatasetS3Uri](API_LabelingJobOutput.md#SageMaker-Type-LabelingJobOutput-OutputDatasetS3Uri)&quot;: &quot;string&quot;
+         },
+         &quot;[LabelingJobStatus](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-LabelingJobStatus)&quot;: &quot;string&quot;,
+         &quot;[LastModifiedTime](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-LastModifiedTime)&quot;: number,
+         &quot;[PreHumanTaskLambdaArn](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-PreHumanTaskLambdaArn)&quot;: &quot;string&quot;,
+         &quot;[WorkteamArn](API_LabelingJobSummary.md#SageMaker-Type-LabelingJobSummary-WorkteamArn)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[NextToken](#SageMaker-ListLabelingJobs-response-NextToken)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_ListLabelingJobs_ResponseSyntax">LabelingJobSummaryList</a> ** <a name="SageMaker-ListLabelingJobs-response-LabelingJobSummaryList"></a> An array of <code>LabelingJobSummary</code> objects, each describing a labeling job.<br />
+Type: Array of <a href="API_LabelingJobSummary.md">LabelingJobSummary</a> objects</p>
+<p>** <a href="#API_ListLabelingJobs_ResponseSyntax">NextToken</a> ** <a name="SageMaker-ListLabelingJobs-response-NextToken"></a> If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of labeling jobs, use it in the subsequent request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/ListLabelingJobs">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ListLabelingJobs">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

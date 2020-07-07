@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DeployedImage</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DeployedImage<a name="API_DeployedImage"></a></h1>
+</header>
+<p>Gets the Amazon EC2 Container Registry path of the docker image of the model that is hosted in this <a href="API_ProductionVariant.md">ProductionVariant</a>.</p>
+<p>If you used the <code>registry/repository[:tag]</code> form to specify the image path of the primary container when you created the model hosted in this <code>ProductionVariant</code>, the path resolves to a path of the form <code>registry/repository[@digest]</code>. A digest is a hash value that identifies a specific version of an image. For information about Amazon ECR paths, see <a href="http://docs.aws.amazon.com//AmazonECR/latest/userguide/docker-pull-ecr-image.html">Pulling an Image</a> in the <em>Amazon ECR User Guide</em>.</p>
+<p><strong>ResolutionTime</strong> <a name="SageMaker-Type-DeployedImage-ResolutionTime"></a> The date and time when the image path for the model resolved to the <code>ResolvedImage</code><br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>ResolvedImage</strong> <a name="SageMaker-Type-DeployedImage-ResolvedImage"></a> The specific digest path of the image hosted in this <code>ProductionVariant</code>.<br />
+Type: String<br />
+Length Constraints: Maximum length of 255.<br />
+Pattern: <code>[\S]+</code><br />
+Required: No</p>
+<p><strong>SpecifiedImage</strong> <a name="SageMaker-Type-DeployedImage-SpecifiedImage"></a> The image path you specified when you created the model.<br />
+Type: String<br />
+Length Constraints: Maximum length of 255.<br />
+Pattern: <code>[\S]+</code><br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DeployedImage">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DeployedImage">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DeployedImage">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DeployedImage">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DeployedImage">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

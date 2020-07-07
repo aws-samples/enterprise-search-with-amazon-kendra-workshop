@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ListCompilationJobs</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ListCompilationJobs<a name="API_ListCompilationJobs"></a></h1>
+</header>
+<p>Lists model compilation jobs that satisfy various filters.</p>
+<p>To create a model compilation job, use <a href="API_CreateCompilationJob.md">CreateCompilationJob</a>. To get information about a particular model compilation job you have created, use <a href="API_DescribeCompilationJob.md">DescribeCompilationJob</a>.</p>
+<pre><code>{
+   &quot;[CreationTimeAfter](#SageMaker-ListCompilationJobs-request-CreationTimeAfter)&quot;: number,
+   &quot;[CreationTimeBefore](#SageMaker-ListCompilationJobs-request-CreationTimeBefore)&quot;: number,
+   &quot;[LastModifiedTimeAfter](#SageMaker-ListCompilationJobs-request-LastModifiedTimeAfter)&quot;: number,
+   &quot;[LastModifiedTimeBefore](#SageMaker-ListCompilationJobs-request-LastModifiedTimeBefore)&quot;: number,
+   &quot;[MaxResults](#SageMaker-ListCompilationJobs-request-MaxResults)&quot;: number,
+   &quot;[NameContains](#SageMaker-ListCompilationJobs-request-NameContains)&quot;: &quot;string&quot;,
+   &quot;[NextToken](#SageMaker-ListCompilationJobs-request-NextToken)&quot;: &quot;string&quot;,
+   &quot;[SortBy](#SageMaker-ListCompilationJobs-request-SortBy)&quot;: &quot;string&quot;,
+   &quot;[SortOrder](#SageMaker-ListCompilationJobs-request-SortOrder)&quot;: &quot;string&quot;,
+   &quot;[StatusEquals](#SageMaker-ListCompilationJobs-request-StatusEquals)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">CreationTimeAfter</a> ** <a name="SageMaker-ListCompilationJobs-request-CreationTimeAfter"></a> A filter that returns the model compilation jobs that were created after a specified time.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">CreationTimeBefore</a> ** <a name="SageMaker-ListCompilationJobs-request-CreationTimeBefore"></a> A filter that returns the model compilation jobs that were created before a specified time.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">LastModifiedTimeAfter</a> ** <a name="SageMaker-ListCompilationJobs-request-LastModifiedTimeAfter"></a> A filter that returns the model compilation jobs that were modified after a specified time.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">LastModifiedTimeBefore</a> ** <a name="SageMaker-ListCompilationJobs-request-LastModifiedTimeBefore"></a> A filter that returns the model compilation jobs that were modified before a specified time.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">MaxResults</a> ** <a name="SageMaker-ListCompilationJobs-request-MaxResults"></a> The maximum number of model compilation jobs to return in the response.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1. Maximum value of 100.<br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">NameContains</a> ** <a name="SageMaker-ListCompilationJobs-request-NameContains"></a> A filter that returns the model compilation jobs whose name contains a specified string.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>[a-zA-Z0-9\-]+</code><br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">NextToken</a> ** <a name="SageMaker-ListCompilationJobs-request-NextToken"></a> If the result of the previous <code>ListCompilationJobs</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of model compilation jobs, use the token in the next request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">SortBy</a> ** <a name="SageMaker-ListCompilationJobs-request-SortBy"></a> The field by which to sort results. The default is <code>CreationTime</code>.<br />
+Type: String<br />
+Valid Values:<code>Name | CreationTime | Status</code><br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">SortOrder</a> ** <a name="SageMaker-ListCompilationJobs-request-SortOrder"></a> The sort order for results. The default is <code>Ascending</code>.<br />
+Type: String<br />
+Valid Values:<code>Ascending | Descending</code><br />
+Required: No</p>
+<p>** <a href="#API_ListCompilationJobs_RequestSyntax">StatusEquals</a> ** <a name="SageMaker-ListCompilationJobs-request-StatusEquals"></a> A filter that retrieves model compilation jobs with a specific <a href="API_DescribeCompilationJob.md#SageMaker-DescribeCompilationJob-response-CompilationJobStatus">DescribeCompilationJob:CompilationJobStatus</a> status.<br />
+Type: String<br />
+Valid Values:<code>INPROGRESS | COMPLETED | FAILED | STARTING | STOPPING | STOPPED</code><br />
+Required: No</p>
+<pre><code>{
+   &quot;[CompilationJobSummaries](#SageMaker-ListCompilationJobs-response-CompilationJobSummaries)&quot;: [ 
+      { 
+         &quot;[CompilationEndTime](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CompilationEndTime)&quot;: number,
+         &quot;[CompilationJobArn](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CompilationJobArn)&quot;: &quot;string&quot;,
+         &quot;[CompilationJobName](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CompilationJobName)&quot;: &quot;string&quot;,
+         &quot;[CompilationJobStatus](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CompilationJobStatus)&quot;: &quot;string&quot;,
+         &quot;[CompilationStartTime](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CompilationStartTime)&quot;: number,
+         &quot;[CompilationTargetDevice](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CompilationTargetDevice)&quot;: &quot;string&quot;,
+         &quot;[CreationTime](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-CreationTime)&quot;: number,
+         &quot;[LastModifiedTime](API_CompilationJobSummary.md#SageMaker-Type-CompilationJobSummary-LastModifiedTime)&quot;: number
+      }
+   ],
+   &quot;[NextToken](#SageMaker-ListCompilationJobs-response-NextToken)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_ListCompilationJobs_ResponseSyntax">CompilationJobSummaries</a> ** <a name="SageMaker-ListCompilationJobs-response-CompilationJobSummaries"></a> An array of <a href="API_CompilationJobSummary.md">CompilationJobSummary</a> objects, each describing a model compilation job.<br />
+Type: Array of <a href="API_CompilationJobSummary.md">CompilationJobSummary</a> objects</p>
+<p>** <a href="#API_ListCompilationJobs_ResponseSyntax">NextToken</a> ** <a name="SageMaker-ListCompilationJobs-response-NextToken"></a> If the response is truncated, Amazon SageMaker returns this <code>NextToken</code>. To retrieve the next set of model compilation jobs, use this token in the next request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/ListCompilationJobs">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ListCompilationJobs">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

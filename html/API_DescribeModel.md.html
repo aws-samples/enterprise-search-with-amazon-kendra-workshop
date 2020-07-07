@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeModel</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeModel<a name="API_DescribeModel"></a></h1>
+</header>
+<p>Describes a model that you created using the <code>CreateModel</code> API.</p>
+<pre><code>{
+   &quot;[ModelName](#SageMaker-DescribeModel-request-ModelName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeModel_RequestSyntax">ModelName</a> ** <a name="SageMaker-DescribeModel-request-ModelName"></a> The name of the model.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[Containers](#SageMaker-DescribeModel-response-Containers)&quot;: [ 
+      { 
+         &quot;[ContainerHostname](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-ContainerHostname)&quot;: &quot;string&quot;,
+         &quot;[Environment](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-Environment)&quot;: { 
+            &quot;string&quot; : &quot;string&quot; 
+         },
+         &quot;[Image](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-Image)&quot;: &quot;string&quot;,
+         &quot;[ModelDataUrl](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-ModelDataUrl)&quot;: &quot;string&quot;,
+         &quot;[ModelPackageName](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-ModelPackageName)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[CreationTime](#SageMaker-DescribeModel-response-CreationTime)&quot;: number,
+   &quot;[EnableNetworkIsolation](#SageMaker-DescribeModel-response-EnableNetworkIsolation)&quot;: boolean,
+   &quot;[ExecutionRoleArn](#SageMaker-DescribeModel-response-ExecutionRoleArn)&quot;: &quot;string&quot;,
+   &quot;[ModelArn](#SageMaker-DescribeModel-response-ModelArn)&quot;: &quot;string&quot;,
+   &quot;[ModelName](#SageMaker-DescribeModel-response-ModelName)&quot;: &quot;string&quot;,
+   &quot;[PrimaryContainer](#SageMaker-DescribeModel-response-PrimaryContainer)&quot;: { 
+      &quot;[ContainerHostname](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-ContainerHostname)&quot;: &quot;string&quot;,
+      &quot;[Environment](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-Environment)&quot;: { 
+         &quot;string&quot; : &quot;string&quot; 
+      },
+      &quot;[Image](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-Image)&quot;: &quot;string&quot;,
+      &quot;[ModelDataUrl](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-ModelDataUrl)&quot;: &quot;string&quot;,
+      &quot;[ModelPackageName](API_ContainerDefinition.md#SageMaker-Type-ContainerDefinition-ModelPackageName)&quot;: &quot;string&quot;
+   },
+   &quot;[VpcConfig](#SageMaker-DescribeModel-response-VpcConfig)&quot;: { 
+      &quot;[SecurityGroupIds](API_VpcConfig.md#SageMaker-Type-VpcConfig-SecurityGroupIds)&quot;: [ &quot;string&quot; ],
+      &quot;[Subnets](API_VpcConfig.md#SageMaker-Type-VpcConfig-Subnets)&quot;: [ &quot;string&quot; ]
+   }
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">Containers</a> ** <a name="SageMaker-DescribeModel-response-Containers"></a> The containers in the inference pipeline.<br />
+Type: Array of <a href="API_ContainerDefinition.md">ContainerDefinition</a> objects<br />
+Array Members: Maximum number of 5 items.</p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">CreationTime</a> ** <a name="SageMaker-DescribeModel-response-CreationTime"></a> A timestamp that shows when the model was created.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">EnableNetworkIsolation</a> ** <a name="SageMaker-DescribeModel-response-EnableNetworkIsolation"></a> If <code>True</code>, no inbound or outbound network calls can be made to or from the model container.<br />
+The Semantic Segmentation built-in algorithm does not support network isolation. Type: Boolean</p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">ExecutionRoleArn</a> ** <a name="SageMaker-DescribeModel-response-ExecutionRoleArn"></a> The Amazon Resource Name (ARN) of the IAM role that you specified for the model.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code></p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">ModelArn</a> ** <a name="SageMaker-DescribeModel-response-ModelArn"></a> The Amazon Resource Name (ARN) of the model.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:model/.*</code></p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">ModelName</a> ** <a name="SageMaker-DescribeModel-response-ModelName"></a> Name of the Amazon SageMaker model.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code></p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">PrimaryContainer</a> ** <a name="SageMaker-DescribeModel-response-PrimaryContainer"></a> The location of the primary inference code, associated artifacts, and custom environment map that the inference code uses when it is deployed in production.<br />
+Type: <a href="API_ContainerDefinition.md">ContainerDefinition</a> object</p>
+<p>** <a href="#API_DescribeModel_ResponseSyntax">VpcConfig</a> ** <a name="SageMaker-DescribeModel-response-VpcConfig"></a> A <a href="API_VpcConfig.md">VpcConfig</a> object that specifies the VPC that this model has access to. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html">Protect Endpoints by Using an Amazon Virtual Private Cloud</a><br />
+Type: <a href="API_VpcConfig.md">VpcConfig</a> object</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeModel">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeModel">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeModel">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeModel">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeModel">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeModel">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeModel">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeModel">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeModel">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeModel">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

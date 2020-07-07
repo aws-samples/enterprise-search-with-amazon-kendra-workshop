@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateNotebookInstanceLifecycleConfig</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateNotebookInstanceLifecycleConfig<a name="API_CreateNotebookInstanceLifecycleConfig"></a></h1>
+</header>
+<p>Creates a lifecycle configuration that you can associate with a notebook instance. A <em>lifecycle configuration</em> is a collection of shell scripts that run when you create or start a notebook instance.</p>
+<p>Each lifecycle configuration script has a limit of 16384 characters.</p>
+<p>The value of the <code>$PATH</code> environment variable that is available to both scripts is <code>/sbin:bin:/usr/sbin:/usr/bin</code>.</p>
+<p>View CloudWatch Logs for notebook instance lifecycle configurations in log group <code>/aws/sagemaker/NotebookInstances</code> in log stream <code>[notebook-instance-name]/[LifecycleConfigHook]</code>.</p>
+<p>Lifecycle configuration scripts cannot run for longer than 5 minutes. If a script runs for longer than 5 minutes, it fails and the notebook instance is not created or started.</p>
+<p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
+<pre><code>{
+   &quot;[NotebookInstanceLifecycleConfigName](#SageMaker-CreateNotebookInstanceLifecycleConfig-request-NotebookInstanceLifecycleConfigName)&quot;: &quot;string&quot;,
+   &quot;[OnCreate](#SageMaker-CreateNotebookInstanceLifecycleConfig-request-OnCreate)&quot;: [ 
+      { 
+         &quot;[Content](API_NotebookInstanceLifecycleHook.md#SageMaker-Type-NotebookInstanceLifecycleHook-Content)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[OnStart](#SageMaker-CreateNotebookInstanceLifecycleConfig-request-OnStart)&quot;: [ 
+      { 
+         &quot;[Content](API_NotebookInstanceLifecycleHook.md#SageMaker-Type-NotebookInstanceLifecycleHook-Content)&quot;: &quot;string&quot;
+      }
+   ]
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateNotebookInstanceLifecycleConfig_RequestSyntax">NotebookInstanceLifecycleConfigName</a> ** <a name="SageMaker-CreateNotebookInstanceLifecycleConfig-request-NotebookInstanceLifecycleConfigName"></a> The name of the lifecycle configuration.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateNotebookInstanceLifecycleConfig_RequestSyntax">OnCreate</a> ** <a name="SageMaker-CreateNotebookInstanceLifecycleConfig-request-OnCreate"></a> A shell script that runs only once, when you create a notebook instance. The shell script must be a base64-encoded string.<br />
+Type: Array of <a href="API_NotebookInstanceLifecycleHook.md">NotebookInstanceLifecycleHook</a> objects<br />
+Array Members: Maximum number of 1 item.<br />
+Required: No</p>
+<p>** <a href="#API_CreateNotebookInstanceLifecycleConfig_RequestSyntax">OnStart</a> ** <a name="SageMaker-CreateNotebookInstanceLifecycleConfig-request-OnStart"></a> A shell script that runs every time you start a notebook instance, including when you create the notebook instance. The shell script must be a base64-encoded string.<br />
+Type: Array of <a href="API_NotebookInstanceLifecycleHook.md">NotebookInstanceLifecycleHook</a> objects<br />
+Array Members: Maximum number of 1 item.<br />
+Required: No</p>
+<pre><code>{
+   &quot;[NotebookInstanceLifecycleConfigArn](#SageMaker-CreateNotebookInstanceLifecycleConfig-response-NotebookInstanceLifecycleConfigArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateNotebookInstanceLifecycleConfig_ResponseSyntax">NotebookInstanceLifecycleConfigArn</a> ** <a name="SageMaker-CreateNotebookInstanceLifecycleConfig-response-NotebookInstanceLifecycleConfigArn"></a> The Amazon Resource Name (ARN) of the lifecycle configuration.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateNotebookInstanceLifecycleConfig">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

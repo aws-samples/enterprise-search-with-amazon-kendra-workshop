@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeEndpoint</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeEndpoint<a name="API_DescribeEndpoint"></a></h1>
+</header>
+<p>Returns the description of an endpoint.</p>
+<pre><code>{
+   &quot;[EndpointName](#SageMaker-DescribeEndpoint-request-EndpointName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeEndpoint_RequestSyntax">EndpointName</a> ** <a name="SageMaker-DescribeEndpoint-request-EndpointName"></a> The name of the endpoint.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[CreationTime](#SageMaker-DescribeEndpoint-response-CreationTime)&quot;: number,
+   &quot;[EndpointArn](#SageMaker-DescribeEndpoint-response-EndpointArn)&quot;: &quot;string&quot;,
+   &quot;[EndpointConfigName](#SageMaker-DescribeEndpoint-response-EndpointConfigName)&quot;: &quot;string&quot;,
+   &quot;[EndpointName](#SageMaker-DescribeEndpoint-response-EndpointName)&quot;: &quot;string&quot;,
+   &quot;[EndpointStatus](#SageMaker-DescribeEndpoint-response-EndpointStatus)&quot;: &quot;string&quot;,
+   &quot;[FailureReason](#SageMaker-DescribeEndpoint-response-FailureReason)&quot;: &quot;string&quot;,
+   &quot;[LastModifiedTime](#SageMaker-DescribeEndpoint-response-LastModifiedTime)&quot;: number,
+   &quot;[ProductionVariants](#SageMaker-DescribeEndpoint-response-ProductionVariants)&quot;: [ 
+      { 
+         &quot;[CurrentInstanceCount](API_ProductionVariantSummary.md#SageMaker-Type-ProductionVariantSummary-CurrentInstanceCount)&quot;: number,
+         &quot;[CurrentWeight](API_ProductionVariantSummary.md#SageMaker-Type-ProductionVariantSummary-CurrentWeight)&quot;: number,
+         &quot;[DeployedImages](API_ProductionVariantSummary.md#SageMaker-Type-ProductionVariantSummary-DeployedImages)&quot;: [ 
+            { 
+               &quot;[ResolutionTime](API_DeployedImage.md#SageMaker-Type-DeployedImage-ResolutionTime)&quot;: number,
+               &quot;[ResolvedImage](API_DeployedImage.md#SageMaker-Type-DeployedImage-ResolvedImage)&quot;: &quot;string&quot;,
+               &quot;[SpecifiedImage](API_DeployedImage.md#SageMaker-Type-DeployedImage-SpecifiedImage)&quot;: &quot;string&quot;
+            }
+         ],
+         &quot;[DesiredInstanceCount](API_ProductionVariantSummary.md#SageMaker-Type-ProductionVariantSummary-DesiredInstanceCount)&quot;: number,
+         &quot;[DesiredWeight](API_ProductionVariantSummary.md#SageMaker-Type-ProductionVariantSummary-DesiredWeight)&quot;: number,
+         &quot;[VariantName](API_ProductionVariantSummary.md#SageMaker-Type-ProductionVariantSummary-VariantName)&quot;: &quot;string&quot;
+      }
+   ]
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">CreationTime</a> ** <a name="SageMaker-DescribeEndpoint-response-CreationTime"></a> A timestamp that shows when the endpoint was created.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">EndpointArn</a> ** <a name="SageMaker-DescribeEndpoint-response-EndpointArn"></a> The Amazon Resource Name (ARN) of the endpoint.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:endpoint/.*</code></p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">EndpointConfigName</a> ** <a name="SageMaker-DescribeEndpoint-response-EndpointConfigName"></a> The name of the endpoint configuration associated with this endpoint.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code></p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">EndpointName</a> ** <a name="SageMaker-DescribeEndpoint-response-EndpointName"></a> Name of the endpoint.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code></p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">EndpointStatus</a> ** <a name="SageMaker-DescribeEndpoint-response-EndpointStatus"></a> The status of the endpoint.<br />
++ <code>OutOfService</code>: Endpoint is not available to take incoming requests. + <code>Creating</code>: <a href="API_CreateEndpoint.md">CreateEndpoint</a> is executing. + <code>Updating</code>: <a href="API_UpdateEndpoint.md">UpdateEndpoint</a> or <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> is executing. + <code>SystemUpdating</code>: Endpoint is undergoing maintenance and cannot be updated or deleted or re-scaled until it has completed. This maintenance operation does not change any customer-specified values such as VPC config, KMS encryption, model, instance type, or instance count. + <code>RollingBack</code>: Endpoint fails to scale up or down or change its variant weight and is in the process of rolling back to its previous configuration. Once the rollback completes, endpoint returns to an <code>InService</code> status. This transitional status only applies to an endpoint that has autoscaling enabled and is undergoing variant weight or capacity changes as part of an <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> call or when the <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> operation is called explicitly. + <code>InService</code>: Endpoint is available to process incoming requests. + <code>Deleting</code>: <a href="API_DeleteEndpoint.md">DeleteEndpoint</a> is executing. + <code>Failed</code>: Endpoint could not be created, updated, or re-scaled. Use <a href="#SageMaker-DescribeEndpoint-response-FailureReason">DescribeEndpoint:FailureReason</a> for information about the failure. <a href="API_DeleteEndpoint.md">DeleteEndpoint</a> is the only operation that can be performed on a failed endpoint. Type: String<br />
+Valid Values:<code>OutOfService | Creating | Updating | SystemUpdating | RollingBack | InService | Deleting | Failed</code></p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">FailureReason</a> ** <a name="SageMaker-DescribeEndpoint-response-FailureReason"></a> If the status of the endpoint is <code>Failed</code>, the reason why it failed.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.</p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">LastModifiedTime</a> ** <a name="SageMaker-DescribeEndpoint-response-LastModifiedTime"></a> A timestamp that shows when the endpoint was last modified.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeEndpoint_ResponseSyntax">ProductionVariants</a> ** <a name="SageMaker-DescribeEndpoint-response-ProductionVariants"></a> An array of <a href="API_ProductionVariantSummary.md">ProductionVariantSummary</a> objects, one for each model hosted behind this endpoint.<br />
+Type: Array of <a href="API_ProductionVariantSummary.md">ProductionVariantSummary</a> objects<br />
+Array Members: Minimum number of 1 item.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeEndpoint">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeEndpoint">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

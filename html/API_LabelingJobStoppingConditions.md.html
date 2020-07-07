@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>LabelingJobStoppingConditions</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LabelingJobStoppingConditions<a name="API_LabelingJobStoppingConditions"></a></h1>
+</header>
+<p>A set of conditions for stopping a labeling job. If any of the conditions are met, the job is automatically stopped. You can use these conditions to control the cost of data labeling.</p>
+<p><strong>MaxHumanLabeledObjectCount</strong> <a name="SageMaker-Type-LabelingJobStoppingConditions-MaxHumanLabeledObjectCount"></a> The maximum number of objects that can be labeled by human workers.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1.<br />
+Required: No</p>
+<p><strong>MaxPercentageOfInputDatasetLabeled</strong> <a name="SageMaker-Type-LabelingJobStoppingConditions-MaxPercentageOfInputDatasetLabeled"></a> The maximum number of input data objects that should be labeled.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1. Maximum value of 100.<br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/LabelingJobStoppingConditions">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/LabelingJobStoppingConditions">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/LabelingJobStoppingConditions">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/LabelingJobStoppingConditions">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/LabelingJobStoppingConditions">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

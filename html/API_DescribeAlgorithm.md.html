@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeAlgorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeAlgorithm<a name="API_DescribeAlgorithm"></a></h1>
+</header>
+<p>Returns a description of the specified algorithm that is in your account.</p>
+<pre><code>{
+   &quot;[AlgorithmName](#SageMaker-DescribeAlgorithm-request-AlgorithmName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeAlgorithm_RequestSyntax">AlgorithmName</a> ** <a name="SageMaker-DescribeAlgorithm-request-AlgorithmName"></a> The name of the algorithm to describe.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 170.<br />
+Pattern: <code>(arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:[a-z\-]*\/)?([a-zA-Z0-9]([a-zA-Z0-9-]){0,62})(?&lt;!-)$</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[AlgorithmArn](#SageMaker-DescribeAlgorithm-response-AlgorithmArn)&quot;: &quot;string&quot;,
+   &quot;[AlgorithmDescription](#SageMaker-DescribeAlgorithm-response-AlgorithmDescription)&quot;: &quot;string&quot;,
+   &quot;[AlgorithmName](#SageMaker-DescribeAlgorithm-response-AlgorithmName)&quot;: &quot;string&quot;,
+   &quot;[AlgorithmStatus](#SageMaker-DescribeAlgorithm-response-AlgorithmStatus)&quot;: &quot;string&quot;,
+   &quot;[AlgorithmStatusDetails](#SageMaker-DescribeAlgorithm-response-AlgorithmStatusDetails)&quot;: { 
+      &quot;[ImageScanStatuses](API_AlgorithmStatusDetails.md#SageMaker-Type-AlgorithmStatusDetails-ImageScanStatuses)&quot;: [ 
+         { 
+            &quot;[FailureReason](API_AlgorithmStatusItem.md#SageMaker-Type-AlgorithmStatusItem-FailureReason)&quot;: &quot;string&quot;,
+            &quot;[Name](API_AlgorithmStatusItem.md#SageMaker-Type-AlgorithmStatusItem-Name)&quot;: &quot;string&quot;,
+            &quot;[Status](API_AlgorithmStatusItem.md#SageMaker-Type-AlgorithmStatusItem-Status)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[ValidationStatuses](API_AlgorithmStatusDetails.md#SageMaker-Type-AlgorithmStatusDetails-ValidationStatuses)&quot;: [ 
+         { 
+            &quot;[FailureReason](API_AlgorithmStatusItem.md#SageMaker-Type-AlgorithmStatusItem-FailureReason)&quot;: &quot;string&quot;,
+            &quot;[Name](API_AlgorithmStatusItem.md#SageMaker-Type-AlgorithmStatusItem-Name)&quot;: &quot;string&quot;,
+            &quot;[Status](API_AlgorithmStatusItem.md#SageMaker-Type-AlgorithmStatusItem-Status)&quot;: &quot;string&quot;
+         }
+      ]
+   },
+   &quot;[CertifyForMarketplace](#SageMaker-DescribeAlgorithm-response-CertifyForMarketplace)&quot;: boolean,
+   &quot;[CreationTime](#SageMaker-DescribeAlgorithm-response-CreationTime)&quot;: number,
+   &quot;[InferenceSpecification](#SageMaker-DescribeAlgorithm-response-InferenceSpecification)&quot;: { 
+      &quot;[Containers](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-Containers)&quot;: [ 
+         { 
+            &quot;[ContainerHostname](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ContainerHostname)&quot;: &quot;string&quot;,
+            &quot;[Image](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-Image)&quot;: &quot;string&quot;,
+            &quot;[ImageDigest](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ImageDigest)&quot;: &quot;string&quot;,
+            &quot;[ModelDataUrl](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ModelDataUrl)&quot;: &quot;string&quot;,
+            &quot;[ProductId](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ProductId)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[SupportedContentTypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedContentTypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedRealtimeInferenceInstanceTypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedRealtimeInferenceInstanceTypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedResponseMIMETypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedResponseMIMETypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedTransformInstanceTypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedTransformInstanceTypes)&quot;: [ &quot;string&quot; ]
+   },
+   &quot;[ProductId](#SageMaker-DescribeAlgorithm-response-ProductId)&quot;: &quot;string&quot;,
+   &quot;[TrainingSpecification](#SageMaker-DescribeAlgorithm-response-TrainingSpecification)&quot;: { 
+      &quot;[MetricDefinitions](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-MetricDefinitions)&quot;: [ 
+         { 
+            &quot;[Name](API_MetricDefinition.md#SageMaker-Type-MetricDefinition-Name)&quot;: &quot;string&quot;,
+            &quot;[Regex](API_MetricDefinition.md#SageMaker-Type-MetricDefinition-Regex)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[SupportedHyperParameters](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-SupportedHyperParameters)&quot;: [ 
+         { 
+            &quot;[DefaultValue](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-DefaultValue)&quot;: &quot;string&quot;,
+            &quot;[Description](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-Description)&quot;: &quot;string&quot;,
+            &quot;[IsRequired](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-IsRequired)&quot;: boolean,
+            &quot;[IsTunable](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-IsTunable)&quot;: boolean,
+            &quot;[Name](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-Name)&quot;: &quot;string&quot;,
+            &quot;[Range](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-Range)&quot;: { 
+               &quot;[CategoricalParameterRangeSpecification](API_ParameterRange.md#SageMaker-Type-ParameterRange-CategoricalParameterRangeSpecification)&quot;: { 
+                  &quot;[Values](API_CategoricalParameterRangeSpecification.md#SageMaker-Type-CategoricalParameterRangeSpecification-Values)&quot;: [ &quot;string&quot; ]
+               },
+               &quot;[ContinuousParameterRangeSpecification](API_ParameterRange.md#SageMaker-Type-ParameterRange-ContinuousParameterRangeSpecification)&quot;: { 
+                  &quot;[MaxValue](API_ContinuousParameterRangeSpecification.md#SageMaker-Type-ContinuousParameterRangeSpecification-MaxValue)&quot;: &quot;string&quot;,
+                  &quot;[MinValue](API_ContinuousParameterRangeSpecification.md#SageMaker-Type-ContinuousParameterRangeSpecification-MinValue)&quot;: &quot;string&quot;
+               },
+               &quot;[IntegerParameterRangeSpecification](API_ParameterRange.md#SageMaker-Type-ParameterRange-IntegerParameterRangeSpecification)&quot;: { 
+                  &quot;[MaxValue](API_IntegerParameterRangeSpecification.md#SageMaker-Type-IntegerParameterRangeSpecification-MaxValue)&quot;: &quot;string&quot;,
+                  &quot;[MinValue](API_IntegerParameterRangeSpecification.md#SageMaker-Type-IntegerParameterRangeSpecification-MinValue)&quot;: &quot;string&quot;
+               }
+            },
+            &quot;[Type](API_HyperParameterSpecification.md#SageMaker-Type-HyperParameterSpecification-Type)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[SupportedTrainingInstanceTypes](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-SupportedTrainingInstanceTypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedTuningJobObjectiveMetrics](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-SupportedTuningJobObjectiveMetrics)&quot;: [ 
+         { 
+            &quot;[MetricName](API_HyperParameterTuningJobObjective.md#SageMaker-Type-HyperParameterTuningJobObjective-MetricName)&quot;: &quot;string&quot;,
+            &quot;[Type](API_HyperParameterTuningJobObjective.md#SageMaker-Type-HyperParameterTuningJobObjective-Type)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[SupportsDistributedTraining](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-SupportsDistributedTraining)&quot;: boolean,
+      &quot;[TrainingChannels](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-TrainingChannels)&quot;: [ 
+         { 
+            &quot;[Description](API_ChannelSpecification.md#SageMaker-Type-ChannelSpecification-Description)&quot;: &quot;string&quot;,
+            &quot;[IsRequired](API_ChannelSpecification.md#SageMaker-Type-ChannelSpecification-IsRequired)&quot;: boolean,
+            &quot;[Name](API_ChannelSpecification.md#SageMaker-Type-ChannelSpecification-Name)&quot;: &quot;string&quot;,
+            &quot;[SupportedCompressionTypes](API_ChannelSpecification.md#SageMaker-Type-ChannelSpecification-SupportedCompressionTypes)&quot;: [ &quot;string&quot; ],
+            &quot;[SupportedContentTypes](API_ChannelSpecification.md#SageMaker-Type-ChannelSpecification-SupportedContentTypes)&quot;: [ &quot;string&quot; ],
+            &quot;[SupportedInputModes](API_ChannelSpecification.md#SageMaker-Type-ChannelSpecification-SupportedInputModes)&quot;: [ &quot;string&quot; ]
+         }
+      ],
+      &quot;[TrainingImage](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-TrainingImage)&quot;: &quot;string&quot;,
+      &quot;[TrainingImageDigest](API_TrainingSpecification.md#SageMaker-Type-TrainingSpecification-TrainingImageDigest)&quot;: &quot;string&quot;
+   },
+   &quot;[ValidationSpecification](#SageMaker-DescribeAlgorithm-response-ValidationSpecification)&quot;: { 
+      &quot;[ValidationProfiles](API_AlgorithmValidationSpecification.md#SageMaker-Type-AlgorithmValidationSpecification-ValidationProfiles)&quot;: [ 
+         { 
+            &quot;[ProfileName](API_AlgorithmValidationProfile.md#SageMaker-Type-AlgorithmValidationProfile-ProfileName)&quot;: &quot;string&quot;,
+            &quot;[TrainingJobDefinition](API_AlgorithmValidationProfile.md#SageMaker-Type-AlgorithmValidationProfile-TrainingJobDefinition)&quot;: { 
+               &quot;[HyperParameters](API_TrainingJobDefinition.md#SageMaker-Type-TrainingJobDefinition-HyperParameters)&quot;: { 
+                  &quot;string&quot; : &quot;string&quot; 
+               },
+               &quot;[InputDataConfig](API_TrainingJobDefinition.md#SageMaker-Type-TrainingJobDefinition-InputDataConfig)&quot;: [ 
+                  { 
+                     &quot;[ChannelName](API_Channel.md#SageMaker-Type-Channel-ChannelName)&quot;: &quot;string&quot;,
+                     &quot;[CompressionType](API_Channel.md#SageMaker-Type-Channel-CompressionType)&quot;: &quot;string&quot;,
+                     &quot;[ContentType](API_Channel.md#SageMaker-Type-Channel-ContentType)&quot;: &quot;string&quot;,
+                     &quot;[DataSource](API_Channel.md#SageMaker-Type-Channel-DataSource)&quot;: { 
+                        &quot;[S3DataSource](API_DataSource.md#SageMaker-Type-DataSource-S3DataSource)&quot;: { 
+                           &quot;[AttributeNames](API_S3DataSource.md#SageMaker-Type-S3DataSource-AttributeNames)&quot;: [ &quot;string&quot; ],
+                           &quot;[S3DataDistributionType](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3DataDistributionType)&quot;: &quot;string&quot;,
+                           &quot;[S3DataType](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3DataType)&quot;: &quot;string&quot;,
+                           &quot;[S3Uri](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3Uri)&quot;: &quot;string&quot;
+                        }
+                     },
+                     &quot;[InputMode](API_Channel.md#SageMaker-Type-Channel-InputMode)&quot;: &quot;string&quot;,
+                     &quot;[RecordWrapperType](API_Channel.md#SageMaker-Type-Channel-RecordWrapperType)&quot;: &quot;string&quot;,
+                     &quot;[ShuffleConfig](API_Channel.md#SageMaker-Type-Channel-ShuffleConfig)&quot;: { 
+                        &quot;[Seed](API_ShuffleConfig.md#SageMaker-Type-ShuffleConfig-Seed)&quot;: number
+                     }
+                  }
+               ],
+               &quot;[OutputDataConfig](API_TrainingJobDefinition.md#SageMaker-Type-TrainingJobDefinition-OutputDataConfig)&quot;: { 
+                  &quot;[KmsKeyId](API_OutputDataConfig.md#SageMaker-Type-OutputDataConfig-KmsKeyId)&quot;: &quot;string&quot;,
+                  &quot;[S3OutputPath](API_OutputDataConfig.md#SageMaker-Type-OutputDataConfig-S3OutputPath)&quot;: &quot;string&quot;
+               },
+               &quot;[ResourceConfig](API_TrainingJobDefinition.md#SageMaker-Type-TrainingJobDefinition-ResourceConfig)&quot;: { 
+                  &quot;[InstanceCount](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-InstanceCount)&quot;: number,
+                  &quot;[InstanceType](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-InstanceType)&quot;: &quot;string&quot;,
+                  &quot;[VolumeKmsKeyId](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-VolumeKmsKeyId)&quot;: &quot;string&quot;,
+                  &quot;[VolumeSizeInGB](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-VolumeSizeInGB)&quot;: number
+               },
+               &quot;[StoppingCondition](API_TrainingJobDefinition.md#SageMaker-Type-TrainingJobDefinition-StoppingCondition)&quot;: { 
+                  &quot;[MaxRuntimeInSeconds](API_StoppingCondition.md#SageMaker-Type-StoppingCondition-MaxRuntimeInSeconds)&quot;: number
+               },
+               &quot;[TrainingInputMode](API_TrainingJobDefinition.md#SageMaker-Type-TrainingJobDefinition-TrainingInputMode)&quot;: &quot;string&quot;
+            },
+            &quot;[TransformJobDefinition](API_AlgorithmValidationProfile.md#SageMaker-Type-AlgorithmValidationProfile-TransformJobDefinition)&quot;: { 
+               &quot;[BatchStrategy](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-BatchStrategy)&quot;: &quot;string&quot;,
+               &quot;[Environment](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-Environment)&quot;: { 
+                  &quot;string&quot; : &quot;string&quot; 
+               },
+               &quot;[MaxConcurrentTransforms](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-MaxConcurrentTransforms)&quot;: number,
+               &quot;[MaxPayloadInMB](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-MaxPayloadInMB)&quot;: number,
+               &quot;[TransformInput](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-TransformInput)&quot;: { 
+                  &quot;[CompressionType](API_TransformInput.md#SageMaker-Type-TransformInput-CompressionType)&quot;: &quot;string&quot;,
+                  &quot;[ContentType](API_TransformInput.md#SageMaker-Type-TransformInput-ContentType)&quot;: &quot;string&quot;,
+                  &quot;[DataSource](API_TransformInput.md#SageMaker-Type-TransformInput-DataSource)&quot;: { 
+                     &quot;[S3DataSource](API_TransformDataSource.md#SageMaker-Type-TransformDataSource-S3DataSource)&quot;: { 
+                        &quot;[S3DataType](API_TransformS3DataSource.md#SageMaker-Type-TransformS3DataSource-S3DataType)&quot;: &quot;string&quot;,
+                        &quot;[S3Uri](API_TransformS3DataSource.md#SageMaker-Type-TransformS3DataSource-S3Uri)&quot;: &quot;string&quot;
+                     }
+                  },
+                  &quot;[SplitType](API_TransformInput.md#SageMaker-Type-TransformInput-SplitType)&quot;: &quot;string&quot;
+               },
+               &quot;[TransformOutput](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-TransformOutput)&quot;: { 
+                  &quot;[Accept](API_TransformOutput.md#SageMaker-Type-TransformOutput-Accept)&quot;: &quot;string&quot;,
+                  &quot;[AssembleWith](API_TransformOutput.md#SageMaker-Type-TransformOutput-AssembleWith)&quot;: &quot;string&quot;,
+                  &quot;[KmsKeyId](API_TransformOutput.md#SageMaker-Type-TransformOutput-KmsKeyId)&quot;: &quot;string&quot;,
+                  &quot;[S3OutputPath](API_TransformOutput.md#SageMaker-Type-TransformOutput-S3OutputPath)&quot;: &quot;string&quot;
+               },
+               &quot;[TransformResources](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-TransformResources)&quot;: { 
+                  &quot;[InstanceCount](API_TransformResources.md#SageMaker-Type-TransformResources-InstanceCount)&quot;: number,
+                  &quot;[InstanceType](API_TransformResources.md#SageMaker-Type-TransformResources-InstanceType)&quot;: &quot;string&quot;,
+                  &quot;[VolumeKmsKeyId](API_TransformResources.md#SageMaker-Type-TransformResources-VolumeKmsKeyId)&quot;: &quot;string&quot;
+               }
+            }
+         }
+      ],
+      &quot;[ValidationRole](API_AlgorithmValidationSpecification.md#SageMaker-Type-AlgorithmValidationSpecification-ValidationRole)&quot;: &quot;string&quot;
+   }
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">AlgorithmArn</a> ** <a name="SageMaker-DescribeAlgorithm-response-AlgorithmArn"></a> The Amazon Resource Name (ARN) of the algorithm.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:algorithm/.*</code></p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">AlgorithmDescription</a> ** <a name="SageMaker-DescribeAlgorithm-response-AlgorithmDescription"></a> A brief summary about the algorithm.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>[\p{L}\p{M}\p{Z}\p{S}\p{N}\p{P}]*</code></p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">AlgorithmName</a> ** <a name="SageMaker-DescribeAlgorithm-response-AlgorithmName"></a> The name of the algorithm being described.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code></p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">AlgorithmStatus</a> ** <a name="SageMaker-DescribeAlgorithm-response-AlgorithmStatus"></a> The current status of the algorithm.<br />
+Type: String<br />
+Valid Values:<code>Pending | InProgress | Completed | Failed | Deleting</code></p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">AlgorithmStatusDetails</a> ** <a name="SageMaker-DescribeAlgorithm-response-AlgorithmStatusDetails"></a> Details about the current status of the algorithm.<br />
+Type: <a href="API_AlgorithmStatusDetails.md">AlgorithmStatusDetails</a> object</p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">CertifyForMarketplace</a> ** <a name="SageMaker-DescribeAlgorithm-response-CertifyForMarketplace"></a> Whether the algorithm is certified to be listed in AWS Marketplace.<br />
+Type: Boolean</p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">CreationTime</a> ** <a name="SageMaker-DescribeAlgorithm-response-CreationTime"></a> A timestamp specifying when the algorithm was created.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">InferenceSpecification</a> ** <a name="SageMaker-DescribeAlgorithm-response-InferenceSpecification"></a> Details about inference jobs that the algorithm runs.<br />
+Type: <a href="API_InferenceSpecification.md">InferenceSpecification</a> object</p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">ProductId</a> ** <a name="SageMaker-DescribeAlgorithm-response-ProductId"></a> The product identifier of the algorithm.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code></p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">TrainingSpecification</a> ** <a name="SageMaker-DescribeAlgorithm-response-TrainingSpecification"></a> Details about training jobs run by this algorithm.<br />
+Type: <a href="API_TrainingSpecification.md">TrainingSpecification</a> object</p>
+<p>** <a href="#API_DescribeAlgorithm_ResponseSyntax">ValidationSpecification</a> ** <a name="SageMaker-DescribeAlgorithm-response-ValidationSpecification"></a> Details about configurations for one or more training jobs that Amazon SageMaker runs to test the algorithm.<br />
+Type: <a href="API_AlgorithmValidationSpecification.md">AlgorithmValidationSpecification</a> object</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeAlgorithm">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeAlgorithm">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

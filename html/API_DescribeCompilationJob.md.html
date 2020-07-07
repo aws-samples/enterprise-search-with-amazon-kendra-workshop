@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeCompilationJob</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeCompilationJob<a name="API_DescribeCompilationJob"></a></h1>
+</header>
+<p>Returns information about a model compilation job.</p>
+<p>To create a model compilation job, use <a href="API_CreateCompilationJob.md">CreateCompilationJob</a>. To get information about multiple model compilation jobs, use <a href="API_ListCompilationJobs.md">ListCompilationJobs</a>.</p>
+<pre><code>{
+   &quot;[CompilationJobName](#SageMaker-DescribeCompilationJob-request-CompilationJobName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeCompilationJob_RequestSyntax">CompilationJobName</a> ** <a name="SageMaker-DescribeCompilationJob-request-CompilationJobName"></a> The name of the model compilation job that you want information about.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[CompilationEndTime](#SageMaker-DescribeCompilationJob-response-CompilationEndTime)&quot;: number,
+   &quot;[CompilationJobArn](#SageMaker-DescribeCompilationJob-response-CompilationJobArn)&quot;: &quot;string&quot;,
+   &quot;[CompilationJobName](#SageMaker-DescribeCompilationJob-response-CompilationJobName)&quot;: &quot;string&quot;,
+   &quot;[CompilationJobStatus](#SageMaker-DescribeCompilationJob-response-CompilationJobStatus)&quot;: &quot;string&quot;,
+   &quot;[CompilationStartTime](#SageMaker-DescribeCompilationJob-response-CompilationStartTime)&quot;: number,
+   &quot;[CreationTime](#SageMaker-DescribeCompilationJob-response-CreationTime)&quot;: number,
+   &quot;[FailureReason](#SageMaker-DescribeCompilationJob-response-FailureReason)&quot;: &quot;string&quot;,
+   &quot;[InputConfig](#SageMaker-DescribeCompilationJob-response-InputConfig)&quot;: { 
+      &quot;[DataInputConfig](API_InputConfig.md#SageMaker-Type-InputConfig-DataInputConfig)&quot;: &quot;string&quot;,
+      &quot;[Framework](API_InputConfig.md#SageMaker-Type-InputConfig-Framework)&quot;: &quot;string&quot;,
+      &quot;[S3Uri](API_InputConfig.md#SageMaker-Type-InputConfig-S3Uri)&quot;: &quot;string&quot;
+   },
+   &quot;[LastModifiedTime](#SageMaker-DescribeCompilationJob-response-LastModifiedTime)&quot;: number,
+   &quot;[ModelArtifacts](#SageMaker-DescribeCompilationJob-response-ModelArtifacts)&quot;: { 
+      &quot;[S3ModelArtifacts](API_ModelArtifacts.md#SageMaker-Type-ModelArtifacts-S3ModelArtifacts)&quot;: &quot;string&quot;
+   },
+   &quot;[OutputConfig](#SageMaker-DescribeCompilationJob-response-OutputConfig)&quot;: { 
+      &quot;[S3OutputLocation](API_OutputConfig.md#SageMaker-Type-OutputConfig-S3OutputLocation)&quot;: &quot;string&quot;,
+      &quot;[TargetDevice](API_OutputConfig.md#SageMaker-Type-OutputConfig-TargetDevice)&quot;: &quot;string&quot;
+   },
+   &quot;[RoleArn](#SageMaker-DescribeCompilationJob-response-RoleArn)&quot;: &quot;string&quot;,
+   &quot;[StoppingCondition](#SageMaker-DescribeCompilationJob-response-StoppingCondition)&quot;: { 
+      &quot;[MaxRuntimeInSeconds](API_StoppingCondition.md#SageMaker-Type-StoppingCondition-MaxRuntimeInSeconds)&quot;: number
+   }
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">CompilationEndTime</a> ** <a name="SageMaker-DescribeCompilationJob-response-CompilationEndTime"></a> The time when the model compilation job on a compilation job instance ended. For a successful or stopped job, this is when the job’s model artifacts have finished uploading. For a failed job, this is when Amazon SageMaker detected that the job failed.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">CompilationJobArn</a> ** <a name="SageMaker-DescribeCompilationJob-response-CompilationJobArn"></a> The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker assumes to perform the model compilation job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:compilation-job/.*</code></p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">CompilationJobName</a> ** <a name="SageMaker-DescribeCompilationJob-response-CompilationJobName"></a> The name of the model compilation job.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code></p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">CompilationJobStatus</a> ** <a name="SageMaker-DescribeCompilationJob-response-CompilationJobStatus"></a> The status of the model compilation job.<br />
+Type: String<br />
+Valid Values:<code>INPROGRESS | COMPLETED | FAILED | STARTING | STOPPING | STOPPED</code></p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">CompilationStartTime</a> ** <a name="SageMaker-DescribeCompilationJob-response-CompilationStartTime"></a> The time when the model compilation job started the <code>CompilationJob</code> instances.<br />
+You are billed for the time between this timestamp and the timestamp in the <a href="#SageMaker-DescribeCompilationJob-response-CompilationEndTime">DescribeCompilationJob:CompilationEndTime</a> field. In Amazon CloudWatch Logs, the start time might be later than this time. That’s because it takes time to download the compilation job, which depends on the size of the compilation job container.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">CreationTime</a> ** <a name="SageMaker-DescribeCompilationJob-response-CreationTime"></a> The time that the model compilation job was created.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">FailureReason</a> ** <a name="SageMaker-DescribeCompilationJob-response-FailureReason"></a> If a model compilation job failed, the reason it failed.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">InputConfig</a> ** <a name="SageMaker-DescribeCompilationJob-response-InputConfig"></a> Information about the location in Amazon S3 of the input model artifacts, the name and shape of the expected data inputs, and the framework in which the model was trained.<br />
+Type: <a href="API_InputConfig.md">InputConfig</a> object</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">LastModifiedTime</a> ** <a name="SageMaker-DescribeCompilationJob-response-LastModifiedTime"></a> The time that the status of the model compilation job was last modified.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">ModelArtifacts</a> ** <a name="SageMaker-DescribeCompilationJob-response-ModelArtifacts"></a> Information about the location in Amazon S3 that has been configured for storing the model artifacts used in the compilation job.<br />
+Type: <a href="API_ModelArtifacts.md">ModelArtifacts</a> object</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">OutputConfig</a> ** <a name="SageMaker-DescribeCompilationJob-response-OutputConfig"></a> Information about the output location for the compiled model and the target device that the model runs on.<br />
+Type: <a href="API_OutputConfig.md">OutputConfig</a> object</p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">RoleArn</a> ** <a name="SageMaker-DescribeCompilationJob-response-RoleArn"></a> The Amazon Resource Name (ARN) of the model compilation job.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code></p>
+<p>** <a href="#API_DescribeCompilationJob_ResponseSyntax">StoppingCondition</a> ** <a name="SageMaker-DescribeCompilationJob-response-StoppingCondition"></a> Specifies a limit to how long a model compilation job can run. When the job reaches the time limit, Amazon SageMaker ends the compilation job. Use this API to cap model training costs.<br />
+Type: <a href="API_StoppingCondition.md">StoppingCondition</a> object</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceNotFound</strong><br />
+Resource being access is not found.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeCompilationJob">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeCompilationJob">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeNotebookInstanceLifecycleConfig</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeNotebookInstanceLifecycleConfig<a name="API_DescribeNotebookInstanceLifecycleConfig"></a></h1>
+</header>
+<p>Returns a description of a notebook instance lifecycle configuration.</p>
+<p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
+<pre><code>{
+   &quot;[NotebookInstanceLifecycleConfigName](#SageMaker-DescribeNotebookInstanceLifecycleConfig-request-NotebookInstanceLifecycleConfigName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_RequestSyntax">NotebookInstanceLifecycleConfigName</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-request-NotebookInstanceLifecycleConfigName"></a> The name of the lifecycle configuration to describe.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[CreationTime](#SageMaker-DescribeNotebookInstanceLifecycleConfig-response-CreationTime)&quot;: number,
+   &quot;[LastModifiedTime](#SageMaker-DescribeNotebookInstanceLifecycleConfig-response-LastModifiedTime)&quot;: number,
+   &quot;[NotebookInstanceLifecycleConfigArn](#SageMaker-DescribeNotebookInstanceLifecycleConfig-response-NotebookInstanceLifecycleConfigArn)&quot;: &quot;string&quot;,
+   &quot;[NotebookInstanceLifecycleConfigName](#SageMaker-DescribeNotebookInstanceLifecycleConfig-response-NotebookInstanceLifecycleConfigName)&quot;: &quot;string&quot;,
+   &quot;[OnCreate](#SageMaker-DescribeNotebookInstanceLifecycleConfig-response-OnCreate)&quot;: [ 
+      { 
+         &quot;[Content](API_NotebookInstanceLifecycleHook.md#SageMaker-Type-NotebookInstanceLifecycleHook-Content)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[OnStart](#SageMaker-DescribeNotebookInstanceLifecycleConfig-response-OnStart)&quot;: [ 
+      { 
+         &quot;[Content](API_NotebookInstanceLifecycleHook.md#SageMaker-Type-NotebookInstanceLifecycleHook-Content)&quot;: &quot;string&quot;
+      }
+   ]
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_ResponseSyntax">CreationTime</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-response-CreationTime"></a> A timestamp that tells when the lifecycle configuration was created.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_ResponseSyntax">LastModifiedTime</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-response-LastModifiedTime"></a> A timestamp that tells when the lifecycle configuration was last modified.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_ResponseSyntax">NotebookInstanceLifecycleConfigArn</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-response-NotebookInstanceLifecycleConfigArn"></a> The Amazon Resource Name (ARN) of the lifecycle configuration.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.</p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_ResponseSyntax">NotebookInstanceLifecycleConfigName</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-response-NotebookInstanceLifecycleConfigName"></a> The name of the lifecycle configuration.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code></p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_ResponseSyntax">OnCreate</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-response-OnCreate"></a> The shell script that runs only once, when you create a notebook instance.<br />
+Type: Array of <a href="API_NotebookInstanceLifecycleHook.md">NotebookInstanceLifecycleHook</a> objects<br />
+Array Members: Maximum number of 1 item.</p>
+<p>** <a href="#API_DescribeNotebookInstanceLifecycleConfig_ResponseSyntax">OnStart</a> ** <a name="SageMaker-DescribeNotebookInstanceLifecycleConfig-response-OnStart"></a> The shell script that runs every time you start a notebook instance, including when you create the notebook instance.<br />
+Type: Array of <a href="API_NotebookInstanceLifecycleHook.md">NotebookInstanceLifecycleHook</a> objects<br />
+Array Members: Maximum number of 1 item.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeNotebookInstanceLifecycleConfig">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

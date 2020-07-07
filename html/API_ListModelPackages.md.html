@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ListModelPackages</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ListModelPackages<a name="API_ListModelPackages"></a></h1>
+</header>
+<p>Lists the model packages that have been created.</p>
+<pre><code>{
+   &quot;[CreationTimeAfter](#SageMaker-ListModelPackages-request-CreationTimeAfter)&quot;: number,
+   &quot;[CreationTimeBefore](#SageMaker-ListModelPackages-request-CreationTimeBefore)&quot;: number,
+   &quot;[MaxResults](#SageMaker-ListModelPackages-request-MaxResults)&quot;: number,
+   &quot;[NameContains](#SageMaker-ListModelPackages-request-NameContains)&quot;: &quot;string&quot;,
+   &quot;[NextToken](#SageMaker-ListModelPackages-request-NextToken)&quot;: &quot;string&quot;,
+   &quot;[SortBy](#SageMaker-ListModelPackages-request-SortBy)&quot;: &quot;string&quot;,
+   &quot;[SortOrder](#SageMaker-ListModelPackages-request-SortOrder)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">CreationTimeAfter</a> ** <a name="SageMaker-ListModelPackages-request-CreationTimeAfter"></a> A filter that returns only model packages created after the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">CreationTimeBefore</a> ** <a name="SageMaker-ListModelPackages-request-CreationTimeBefore"></a> A filter that returns only model packages created before the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">MaxResults</a> ** <a name="SageMaker-ListModelPackages-request-MaxResults"></a> The maximum number of model packages to return in the response.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1. Maximum value of 100.<br />
+Required: No</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">NameContains</a> ** <a name="SageMaker-ListModelPackages-request-NameContains"></a> A string in the model package name. This filter returns only model packages whose name contains the specified string.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>[a-zA-Z0-9\-]+</code><br />
+Required: No</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">NextToken</a> ** <a name="SageMaker-ListModelPackages-request-NextToken"></a> If the response to a previous <code>ListModelPackages</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of model packages, use the token in the next request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">SortBy</a> ** <a name="SageMaker-ListModelPackages-request-SortBy"></a> The parameter by which to sort the results. The default is <code>CreationTime</code>.<br />
+Type: String<br />
+Valid Values:<code>Name | CreationTime</code><br />
+Required: No</p>
+<p>** <a href="#API_ListModelPackages_RequestSyntax">SortOrder</a> ** <a name="SageMaker-ListModelPackages-request-SortOrder"></a> The sort order for the results. The default is <code>Ascending</code>.<br />
+Type: String<br />
+Valid Values:<code>Ascending | Descending</code><br />
+Required: No</p>
+<pre><code>{
+   &quot;[ModelPackageSummaryList](#SageMaker-ListModelPackages-response-ModelPackageSummaryList)&quot;: [ 
+      { 
+         &quot;[CreationTime](API_ModelPackageSummary.md#SageMaker-Type-ModelPackageSummary-CreationTime)&quot;: number,
+         &quot;[ModelPackageArn](API_ModelPackageSummary.md#SageMaker-Type-ModelPackageSummary-ModelPackageArn)&quot;: &quot;string&quot;,
+         &quot;[ModelPackageDescription](API_ModelPackageSummary.md#SageMaker-Type-ModelPackageSummary-ModelPackageDescription)&quot;: &quot;string&quot;,
+         &quot;[ModelPackageName](API_ModelPackageSummary.md#SageMaker-Type-ModelPackageSummary-ModelPackageName)&quot;: &quot;string&quot;,
+         &quot;[ModelPackageStatus](API_ModelPackageSummary.md#SageMaker-Type-ModelPackageSummary-ModelPackageStatus)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[NextToken](#SageMaker-ListModelPackages-response-NextToken)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_ListModelPackages_ResponseSyntax">ModelPackageSummaryList</a> ** <a name="SageMaker-ListModelPackages-response-ModelPackageSummaryList"></a> An array of <code>ModelPackageSummary</code> objects, each of which lists a model package.<br />
+Type: Array of <a href="API_ModelPackageSummary.md">ModelPackageSummary</a> objects</p>
+<p>** <a href="#API_ListModelPackages_ResponseSyntax">NextToken</a> ** <a name="SageMaker-ListModelPackages-response-NextToken"></a> If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of model packages, use it in the subsequent request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/ListModelPackages">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/ListModelPackages">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ListModelPackages">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ListModelPackages">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ListModelPackages">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ListModelPackages">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/ListModelPackages">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/ListModelPackages">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/ListModelPackages">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ListModelPackages">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

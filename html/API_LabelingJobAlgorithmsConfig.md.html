@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>LabelingJobAlgorithmsConfig</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LabelingJobAlgorithmsConfig<a name="API_LabelingJobAlgorithmsConfig"></a></h1>
+</header>
+<p>Provides configuration information for auto-labeling of your data objects. A <code>LabelingJobAlgorithmsConfig</code> object must be supplied in order to use auto-labeling.</p>
+<p><strong>InitialActiveLearningModelArn</strong> <a name="SageMaker-Type-LabelingJobAlgorithmsConfig-InitialActiveLearningModelArn"></a> At the end of an auto-label job Amazon SageMaker Ground Truth sends the Amazon Resource Nam (ARN) of the final model used for auto-labeling. You can use this model as the starting point for subsequent similar jobs by providing the ARN of the model here.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:model/.*</code><br />
+Required: No</p>
+<p><strong>LabelingJobAlgorithmSpecificationArn</strong> <a name="SageMaker-Type-LabelingJobAlgorithmsConfig-LabelingJobAlgorithmSpecificationArn"></a> Specifies the Amazon Resource Name (ARN) of the algorithm used for auto-labeling. You must select one of the following ARNs:<br />
++ <em>Image classification</em></p>
+<p><code>arn:aws:sagemaker:region:027400017018:labeling-job-algorithm-specification/image-classification</code> + <em>Text classification</em></p>
+<p><code>arn:aws:sagemaker:region:027400017018:labeling-job-algorithm-specification/text-classification</code> + <em>Object detection</em></p>
+<p><code>arn:aws:sagemaker:region:027400017018:labeling-job-algorithm-specification/object-detection</code> Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>arn:.*</code><br />
+Required: Yes</p>
+<p><strong>LabelingJobResourceConfig</strong> <a name="SageMaker-Type-LabelingJobAlgorithmsConfig-LabelingJobResourceConfig"></a> Provides configuration information for a labeling job.<br />
+Type: <a href="API_LabelingJobResourceConfig.md">LabelingJobResourceConfig</a> object<br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/LabelingJobAlgorithmsConfig">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/LabelingJobAlgorithmsConfig">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/LabelingJobAlgorithmsConfig">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/LabelingJobAlgorithmsConfig">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/LabelingJobAlgorithmsConfig">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

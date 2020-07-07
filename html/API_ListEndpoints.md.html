@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ListEndpoints</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ListEndpoints<a name="API_ListEndpoints"></a></h1>
+</header>
+<p>Lists endpoints.</p>
+<pre><code>{
+   &quot;[CreationTimeAfter](#SageMaker-ListEndpoints-request-CreationTimeAfter)&quot;: number,
+   &quot;[CreationTimeBefore](#SageMaker-ListEndpoints-request-CreationTimeBefore)&quot;: number,
+   &quot;[LastModifiedTimeAfter](#SageMaker-ListEndpoints-request-LastModifiedTimeAfter)&quot;: number,
+   &quot;[LastModifiedTimeBefore](#SageMaker-ListEndpoints-request-LastModifiedTimeBefore)&quot;: number,
+   &quot;[MaxResults](#SageMaker-ListEndpoints-request-MaxResults)&quot;: number,
+   &quot;[NameContains](#SageMaker-ListEndpoints-request-NameContains)&quot;: &quot;string&quot;,
+   &quot;[NextToken](#SageMaker-ListEndpoints-request-NextToken)&quot;: &quot;string&quot;,
+   &quot;[SortBy](#SageMaker-ListEndpoints-request-SortBy)&quot;: &quot;string&quot;,
+   &quot;[SortOrder](#SageMaker-ListEndpoints-request-SortOrder)&quot;: &quot;string&quot;,
+   &quot;[StatusEquals](#SageMaker-ListEndpoints-request-StatusEquals)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">CreationTimeAfter</a> ** <a name="SageMaker-ListEndpoints-request-CreationTimeAfter"></a> A filter that returns only endpoints with a creation time greater than or equal to the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">CreationTimeBefore</a> ** <a name="SageMaker-ListEndpoints-request-CreationTimeBefore"></a> A filter that returns only endpoints that were created before the specified time (timestamp).<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">LastModifiedTimeAfter</a> ** <a name="SageMaker-ListEndpoints-request-LastModifiedTimeAfter"></a> A filter that returns only endpoints that were modified after the specified timestamp.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">LastModifiedTimeBefore</a> ** <a name="SageMaker-ListEndpoints-request-LastModifiedTimeBefore"></a> A filter that returns only endpoints that were modified before the specified timestamp.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">MaxResults</a> ** <a name="SageMaker-ListEndpoints-request-MaxResults"></a> The maximum number of endpoints to return in the response.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1. Maximum value of 100.<br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">NameContains</a> ** <a name="SageMaker-ListEndpoints-request-NameContains"></a> A string in endpoint names. This filter returns only endpoints whose name contains the specified string.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>[a-zA-Z0-9-]+</code><br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">NextToken</a> ** <a name="SageMaker-ListEndpoints-request-NextToken"></a> If the result of a <code>ListEndpoints</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of endpoints, use the token in the next request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">SortBy</a> ** <a name="SageMaker-ListEndpoints-request-SortBy"></a> Sorts the list of results. The default is <code>CreationTime</code>.<br />
+Type: String<br />
+Valid Values:<code>Name | CreationTime | Status</code><br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">SortOrder</a> ** <a name="SageMaker-ListEndpoints-request-SortOrder"></a> The sort order for results. The default is <code>Descending</code>.<br />
+Type: String<br />
+Valid Values:<code>Ascending | Descending</code><br />
+Required: No</p>
+<p>** <a href="#API_ListEndpoints_RequestSyntax">StatusEquals</a> ** <a name="SageMaker-ListEndpoints-request-StatusEquals"></a> A filter that returns only endpoints with the specified status.<br />
+Type: String<br />
+Valid Values:<code>OutOfService | Creating | Updating | SystemUpdating | RollingBack | InService | Deleting | Failed</code><br />
+Required: No</p>
+<pre><code>{
+   &quot;[Endpoints](#SageMaker-ListEndpoints-response-Endpoints)&quot;: [ 
+      { 
+         &quot;[CreationTime](API_EndpointSummary.md#SageMaker-Type-EndpointSummary-CreationTime)&quot;: number,
+         &quot;[EndpointArn](API_EndpointSummary.md#SageMaker-Type-EndpointSummary-EndpointArn)&quot;: &quot;string&quot;,
+         &quot;[EndpointName](API_EndpointSummary.md#SageMaker-Type-EndpointSummary-EndpointName)&quot;: &quot;string&quot;,
+         &quot;[EndpointStatus](API_EndpointSummary.md#SageMaker-Type-EndpointSummary-EndpointStatus)&quot;: &quot;string&quot;,
+         &quot;[LastModifiedTime](API_EndpointSummary.md#SageMaker-Type-EndpointSummary-LastModifiedTime)&quot;: number
+      }
+   ],
+   &quot;[NextToken](#SageMaker-ListEndpoints-response-NextToken)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_ListEndpoints_ResponseSyntax">Endpoints</a> ** <a name="SageMaker-ListEndpoints-response-Endpoints"></a> An array or endpoint objects.<br />
+Type: Array of <a href="API_EndpointSummary.md">EndpointSummary</a> objects</p>
+<p>** <a href="#API_ListEndpoints_ResponseSyntax">NextToken</a> ** <a name="SageMaker-ListEndpoints-response-NextToken"></a> If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of training jobs, use it in the subsequent request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 8192.<br />
+Pattern: <code>.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/ListEndpoints">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/ListEndpoints">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ListEndpoints">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ListEndpoints">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ListEndpoints">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ListEndpoints">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/ListEndpoints">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/ListEndpoints">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/ListEndpoints">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ListEndpoints">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

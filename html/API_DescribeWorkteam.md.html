@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeWorkteam</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeWorkteam<a name="API_DescribeWorkteam"></a></h1>
+</header>
+<p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team’s Amazon Resource Name (ARN).</p>
+<pre><code>{
+   &quot;[WorkteamName](#SageMaker-DescribeWorkteam-request-WorkteamName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeWorkteam_RequestSyntax">WorkteamName</a> ** <a name="SageMaker-DescribeWorkteam-request-WorkteamName"></a> The name of the work team to return a description of.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[Workteam](#SageMaker-DescribeWorkteam-response-Workteam)&quot;: { 
+      &quot;[CreateDate](API_Workteam.md#SageMaker-Type-Workteam-CreateDate)&quot;: number,
+      &quot;[Description](API_Workteam.md#SageMaker-Type-Workteam-Description)&quot;: &quot;string&quot;,
+      &quot;[LastUpdatedDate](API_Workteam.md#SageMaker-Type-Workteam-LastUpdatedDate)&quot;: number,
+      &quot;[MemberDefinitions](API_Workteam.md#SageMaker-Type-Workteam-MemberDefinitions)&quot;: [ 
+         { 
+            &quot;[CognitoMemberDefinition](API_MemberDefinition.md#SageMaker-Type-MemberDefinition-CognitoMemberDefinition)&quot;: { 
+               &quot;[ClientId](API_CognitoMemberDefinition.md#SageMaker-Type-CognitoMemberDefinition-ClientId)&quot;: &quot;string&quot;,
+               &quot;[UserGroup](API_CognitoMemberDefinition.md#SageMaker-Type-CognitoMemberDefinition-UserGroup)&quot;: &quot;string&quot;,
+               &quot;[UserPool](API_CognitoMemberDefinition.md#SageMaker-Type-CognitoMemberDefinition-UserPool)&quot;: &quot;string&quot;
+            }
+         }
+      ],
+      &quot;[NotificationConfiguration](API_Workteam.md#SageMaker-Type-Workteam-NotificationConfiguration)&quot;: { 
+         &quot;[NotificationTopicArn](API_NotificationConfiguration.md#SageMaker-Type-NotificationConfiguration-NotificationTopicArn)&quot;: &quot;string&quot;
+      },
+      &quot;[ProductListingIds](API_Workteam.md#SageMaker-Type-Workteam-ProductListingIds)&quot;: [ &quot;string&quot; ],
+      &quot;[SubDomain](API_Workteam.md#SageMaker-Type-Workteam-SubDomain)&quot;: &quot;string&quot;,
+      &quot;[WorkteamArn](API_Workteam.md#SageMaker-Type-Workteam-WorkteamArn)&quot;: &quot;string&quot;,
+      &quot;[WorkteamName](API_Workteam.md#SageMaker-Type-Workteam-WorkteamName)&quot;: &quot;string&quot;
+   }
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeWorkteam_ResponseSyntax">Workteam</a> ** <a name="SageMaker-DescribeWorkteam-response-Workteam"></a> A <code>Workteam</code> instance that contains information about the work team.<br />
+Type: <a href="API_Workteam.md">Workteam</a> object</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeWorkteam">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeWorkteam">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

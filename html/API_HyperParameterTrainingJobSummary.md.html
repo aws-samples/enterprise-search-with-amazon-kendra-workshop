@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>HyperParameterTrainingJobSummary</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">HyperParameterTrainingJobSummary<a name="API_HyperParameterTrainingJobSummary"></a></h1>
+</header>
+<p>Specifies summary information about a training job.</p>
+<p><strong>CreationTime</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-CreationTime"></a> The date and time that the training job was created.<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>FailureReason</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-FailureReason"></a> The reason that the training job failed.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Required: No</p>
+<p><strong>FinalHyperParameterTuningJobObjectiveMetric</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-FinalHyperParameterTuningJobObjectiveMetric"></a> The <a href="API_FinalHyperParameterTuningJobObjectiveMetric.md">FinalHyperParameterTuningJobObjectiveMetric</a> object that specifies the value of the objective metric of the tuning job that launched this training job.<br />
+Type: <a href="API_FinalHyperParameterTuningJobObjectiveMetric.md">FinalHyperParameterTuningJobObjectiveMetric</a> object<br />
+Required: No</p>
+<p><strong>ObjectiveStatus</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-ObjectiveStatus"></a> The status of the objective metric for the training job:<br />
++ Succeeded: The final objective metric for the training job was evaluated by the hyperparameter tuning job and used in the hyperparameter tuning process. + Pending: The training job is in progress and evaluation of its final objective metric is pending. + Failed: The final objective metric for the training job was not evaluated, and was not used in the hyperparameter tuning process. This typically occurs when the training job failed or did not emit an objective metric. Type: String<br />
+Valid Values:<code>Succeeded | Pending | Failed</code><br />
+Required: No</p>
+<p><strong>TrainingEndTime</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TrainingEndTime"></a> Specifies the time when the training job ends on training instances. You are billed for the time interval between the value of <code>TrainingStartTime</code> and this time. For successful jobs and stopped jobs, this is the time after model artifacts are uploaded. For failed jobs, this is the time when Amazon SageMaker detects a job failure.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>TrainingJobArn</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TrainingJobArn"></a> The Amazon Resource Name (ARN) of the training job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:training-job/.*</code><br />
+Required: Yes</p>
+<p><strong>TrainingJobName</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TrainingJobName"></a> The name of the training job.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p><strong>TrainingJobStatus</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TrainingJobStatus"></a> The status of the training job.<br />
+Type: String<br />
+Valid Values:<code>InProgress | Completed | Failed | Stopping | Stopped</code><br />
+Required: Yes</p>
+<p><strong>TrainingStartTime</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TrainingStartTime"></a> The date and time that the training job started.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>TunedHyperParameters</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TunedHyperParameters"></a> A list of the hyperparameters for which you specified ranges to search.<br />
+Type: String to string map<br />
+Key Length Constraints: Maximum length of 256.<br />
+Key Pattern: <code>.*</code><br />
+Value Length Constraints: Maximum length of 256.<br />
+Value Pattern: <code>.*</code><br />
+Required: Yes</p>
+<p><strong>TuningJobName</strong> <a name="SageMaker-Type-HyperParameterTrainingJobSummary-TuningJobName"></a> The HyperParameter tuning job that launched the training job.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 32.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/HyperParameterTrainingJobSummary">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/HyperParameterTrainingJobSummary">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/HyperParameterTrainingJobSummary">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/HyperParameterTrainingJobSummary">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/HyperParameterTrainingJobSummary">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

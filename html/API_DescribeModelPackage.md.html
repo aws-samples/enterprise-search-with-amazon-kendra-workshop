@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DescribeModelPackage</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DescribeModelPackage<a name="API_DescribeModelPackage"></a></h1>
+</header>
+<p>Returns a description of the specified model package, which is used to create Amazon SageMaker models or list them on AWS Marketplace.</p>
+<p>To create models in Amazon SageMaker, buyers can subscribe to model packages listed on AWS Marketplace.</p>
+<pre><code>{
+   &quot;[ModelPackageName](#SageMaker-DescribeModelPackage-request-ModelPackageName)&quot;: &quot;string&quot;
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DescribeModelPackage_RequestSyntax">ModelPackageName</a> ** <a name="SageMaker-DescribeModelPackage-request-ModelPackageName"></a> The name of the model package to describe.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 170.<br />
+Pattern: <code>(arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:[a-z\-]*\/)?([a-zA-Z0-9]([a-zA-Z0-9-]){0,62})(?&lt;!-)$</code><br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[CertifyForMarketplace](#SageMaker-DescribeModelPackage-response-CertifyForMarketplace)&quot;: boolean,
+   &quot;[CreationTime](#SageMaker-DescribeModelPackage-response-CreationTime)&quot;: number,
+   &quot;[InferenceSpecification](#SageMaker-DescribeModelPackage-response-InferenceSpecification)&quot;: { 
+      &quot;[Containers](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-Containers)&quot;: [ 
+         { 
+            &quot;[ContainerHostname](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ContainerHostname)&quot;: &quot;string&quot;,
+            &quot;[Image](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-Image)&quot;: &quot;string&quot;,
+            &quot;[ImageDigest](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ImageDigest)&quot;: &quot;string&quot;,
+            &quot;[ModelDataUrl](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ModelDataUrl)&quot;: &quot;string&quot;,
+            &quot;[ProductId](API_ModelPackageContainerDefinition.md#SageMaker-Type-ModelPackageContainerDefinition-ProductId)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[SupportedContentTypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedContentTypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedRealtimeInferenceInstanceTypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedRealtimeInferenceInstanceTypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedResponseMIMETypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedResponseMIMETypes)&quot;: [ &quot;string&quot; ],
+      &quot;[SupportedTransformInstanceTypes](API_InferenceSpecification.md#SageMaker-Type-InferenceSpecification-SupportedTransformInstanceTypes)&quot;: [ &quot;string&quot; ]
+   },
+   &quot;[ModelPackageArn](#SageMaker-DescribeModelPackage-response-ModelPackageArn)&quot;: &quot;string&quot;,
+   &quot;[ModelPackageDescription](#SageMaker-DescribeModelPackage-response-ModelPackageDescription)&quot;: &quot;string&quot;,
+   &quot;[ModelPackageName](#SageMaker-DescribeModelPackage-response-ModelPackageName)&quot;: &quot;string&quot;,
+   &quot;[ModelPackageStatus](#SageMaker-DescribeModelPackage-response-ModelPackageStatus)&quot;: &quot;string&quot;,
+   &quot;[ModelPackageStatusDetails](#SageMaker-DescribeModelPackage-response-ModelPackageStatusDetails)&quot;: { 
+      &quot;[ImageScanStatuses](API_ModelPackageStatusDetails.md#SageMaker-Type-ModelPackageStatusDetails-ImageScanStatuses)&quot;: [ 
+         { 
+            &quot;[FailureReason](API_ModelPackageStatusItem.md#SageMaker-Type-ModelPackageStatusItem-FailureReason)&quot;: &quot;string&quot;,
+            &quot;[Name](API_ModelPackageStatusItem.md#SageMaker-Type-ModelPackageStatusItem-Name)&quot;: &quot;string&quot;,
+            &quot;[Status](API_ModelPackageStatusItem.md#SageMaker-Type-ModelPackageStatusItem-Status)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[ValidationStatuses](API_ModelPackageStatusDetails.md#SageMaker-Type-ModelPackageStatusDetails-ValidationStatuses)&quot;: [ 
+         { 
+            &quot;[FailureReason](API_ModelPackageStatusItem.md#SageMaker-Type-ModelPackageStatusItem-FailureReason)&quot;: &quot;string&quot;,
+            &quot;[Name](API_ModelPackageStatusItem.md#SageMaker-Type-ModelPackageStatusItem-Name)&quot;: &quot;string&quot;,
+            &quot;[Status](API_ModelPackageStatusItem.md#SageMaker-Type-ModelPackageStatusItem-Status)&quot;: &quot;string&quot;
+         }
+      ]
+   },
+   &quot;[SourceAlgorithmSpecification](#SageMaker-DescribeModelPackage-response-SourceAlgorithmSpecification)&quot;: { 
+      &quot;[SourceAlgorithms](API_SourceAlgorithmSpecification.md#SageMaker-Type-SourceAlgorithmSpecification-SourceAlgorithms)&quot;: [ 
+         { 
+            &quot;[AlgorithmName](API_SourceAlgorithm.md#SageMaker-Type-SourceAlgorithm-AlgorithmName)&quot;: &quot;string&quot;,
+            &quot;[ModelDataUrl](API_SourceAlgorithm.md#SageMaker-Type-SourceAlgorithm-ModelDataUrl)&quot;: &quot;string&quot;
+         }
+      ]
+   },
+   &quot;[ValidationSpecification](#SageMaker-DescribeModelPackage-response-ValidationSpecification)&quot;: { 
+      &quot;[ValidationProfiles](API_ModelPackageValidationSpecification.md#SageMaker-Type-ModelPackageValidationSpecification-ValidationProfiles)&quot;: [ 
+         { 
+            &quot;[ProfileName](API_ModelPackageValidationProfile.md#SageMaker-Type-ModelPackageValidationProfile-ProfileName)&quot;: &quot;string&quot;,
+            &quot;[TransformJobDefinition](API_ModelPackageValidationProfile.md#SageMaker-Type-ModelPackageValidationProfile-TransformJobDefinition)&quot;: { 
+               &quot;[BatchStrategy](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-BatchStrategy)&quot;: &quot;string&quot;,
+               &quot;[Environment](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-Environment)&quot;: { 
+                  &quot;string&quot; : &quot;string&quot; 
+               },
+               &quot;[MaxConcurrentTransforms](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-MaxConcurrentTransforms)&quot;: number,
+               &quot;[MaxPayloadInMB](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-MaxPayloadInMB)&quot;: number,
+               &quot;[TransformInput](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-TransformInput)&quot;: { 
+                  &quot;[CompressionType](API_TransformInput.md#SageMaker-Type-TransformInput-CompressionType)&quot;: &quot;string&quot;,
+                  &quot;[ContentType](API_TransformInput.md#SageMaker-Type-TransformInput-ContentType)&quot;: &quot;string&quot;,
+                  &quot;[DataSource](API_TransformInput.md#SageMaker-Type-TransformInput-DataSource)&quot;: { 
+                     &quot;[S3DataSource](API_TransformDataSource.md#SageMaker-Type-TransformDataSource-S3DataSource)&quot;: { 
+                        &quot;[S3DataType](API_TransformS3DataSource.md#SageMaker-Type-TransformS3DataSource-S3DataType)&quot;: &quot;string&quot;,
+                        &quot;[S3Uri](API_TransformS3DataSource.md#SageMaker-Type-TransformS3DataSource-S3Uri)&quot;: &quot;string&quot;
+                     }
+                  },
+                  &quot;[SplitType](API_TransformInput.md#SageMaker-Type-TransformInput-SplitType)&quot;: &quot;string&quot;
+               },
+               &quot;[TransformOutput](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-TransformOutput)&quot;: { 
+                  &quot;[Accept](API_TransformOutput.md#SageMaker-Type-TransformOutput-Accept)&quot;: &quot;string&quot;,
+                  &quot;[AssembleWith](API_TransformOutput.md#SageMaker-Type-TransformOutput-AssembleWith)&quot;: &quot;string&quot;,
+                  &quot;[KmsKeyId](API_TransformOutput.md#SageMaker-Type-TransformOutput-KmsKeyId)&quot;: &quot;string&quot;,
+                  &quot;[S3OutputPath](API_TransformOutput.md#SageMaker-Type-TransformOutput-S3OutputPath)&quot;: &quot;string&quot;
+               },
+               &quot;[TransformResources](API_TransformJobDefinition.md#SageMaker-Type-TransformJobDefinition-TransformResources)&quot;: { 
+                  &quot;[InstanceCount](API_TransformResources.md#SageMaker-Type-TransformResources-InstanceCount)&quot;: number,
+                  &quot;[InstanceType](API_TransformResources.md#SageMaker-Type-TransformResources-InstanceType)&quot;: &quot;string&quot;,
+                  &quot;[VolumeKmsKeyId](API_TransformResources.md#SageMaker-Type-TransformResources-VolumeKmsKeyId)&quot;: &quot;string&quot;
+               }
+            }
+         }
+      ],
+      &quot;[ValidationRole](API_ModelPackageValidationSpecification.md#SageMaker-Type-ModelPackageValidationSpecification-ValidationRole)&quot;: &quot;string&quot;
+   }
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">CertifyForMarketplace</a> ** <a name="SageMaker-DescribeModelPackage-response-CertifyForMarketplace"></a> Whether the model package is certified for listing on AWS Marketplace.<br />
+Type: Boolean</p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">CreationTime</a> ** <a name="SageMaker-DescribeModelPackage-response-CreationTime"></a> A timestamp specifying when the model package was created.<br />
+Type: Timestamp</p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">InferenceSpecification</a> ** <a name="SageMaker-DescribeModelPackage-response-InferenceSpecification"></a> Details about inference jobs that can be run with models based on this model package.<br />
+Type: <a href="API_InferenceSpecification.md">InferenceSpecification</a> object</p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">ModelPackageArn</a> ** <a name="SageMaker-DescribeModelPackage-response-ModelPackageArn"></a> The Amazon Resource Name (ARN) of the model package.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:model-package/.*</code></p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">ModelPackageDescription</a> ** <a name="SageMaker-DescribeModelPackage-response-ModelPackageDescription"></a> A brief summary of the model package.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>[\p{L}\p{M}\p{Z}\p{S}\p{N}\p{P}]*</code></p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">ModelPackageName</a> ** <a name="SageMaker-DescribeModelPackage-response-ModelPackageName"></a> The name of the model package being described.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code></p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">ModelPackageStatus</a> ** <a name="SageMaker-DescribeModelPackage-response-ModelPackageStatus"></a> The current status of the model package.<br />
+Type: String<br />
+Valid Values:<code>Pending | InProgress | Completed | Failed | Deleting</code></p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">ModelPackageStatusDetails</a> ** <a name="SageMaker-DescribeModelPackage-response-ModelPackageStatusDetails"></a> Details about the current status of the model package.<br />
+Type: <a href="API_ModelPackageStatusDetails.md">ModelPackageStatusDetails</a> object</p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">SourceAlgorithmSpecification</a> ** <a name="SageMaker-DescribeModelPackage-response-SourceAlgorithmSpecification"></a> Details about the algorithm that was used to create the model package.<br />
+Type: <a href="API_SourceAlgorithmSpecification.md">SourceAlgorithmSpecification</a> object</p>
+<p>** <a href="#API_DescribeModelPackage_ResponseSyntax">ValidationSpecification</a> ** <a name="SageMaker-DescribeModelPackage-response-ValidationSpecification"></a> Configurations for one or more transform jobs that Amazon SageMaker runs to test the model package.<br />
+Type: <a href="API_ModelPackageValidationSpecification.md">ModelPackageValidationSpecification</a> object</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DescribeModelPackage">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DescribeModelPackage">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

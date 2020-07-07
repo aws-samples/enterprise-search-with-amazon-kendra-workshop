@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Filter</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Filter<a name="API_Filter"></a></h1>
+</header>
+<p>A conditional statement for a search expression that includes a Boolean operator, a resource property, and a value.</p>
+<p>If you don’t specify an <code>Operator</code> and a <code>Value</code>, the filter searches for only the specified property. For example, defining a <code>Filter</code> for the <code>FailureReason</code> for the <code>TrainingJob</code> <code>Resource</code> searches for training job objects that have a value in the <code>FailureReason</code> field.</p>
+<p>If you specify a <code>Value</code>, but not an <code>Operator</code>, Amazon SageMaker uses the equals operator as the default.</p>
+<p>In search, there are several property types:</p>
+<p>Metrics<br />
+To define a metric filter, enter a value using the form <code>"Metrics.&lt;name&gt;"</code>, where <code>&lt;name&gt;</code> is a metric name. For example, the following filter searches for training jobs with an <code>"accuracy"</code> metric greater than <code>"0.9"</code>:<br />
+<code>{</code><br />
+<code>"Name": "Metrics.accuracy",</code><br />
+<code>"Operator": "GREATER_THAN",</code><br />
+<code>"Value": "0.9"</code><br />
+<code>}</code></p>
+<p>HyperParameters<br />
+To define a hyperparameter filter, enter a value with the form <code>"HyperParameters.&lt;name&gt;"</code>. Decimal hyperparameter values are treated as a decimal in a comparison if the specified <code>Value</code> is also a decimal value. If the specified <code>Value</code> is an integer, the decimal hyperparameter values are treated as integers. For example, the following filter is satisfied by training jobs with a <code>"learning_rate"</code> hyperparameter that is less than <code>"0.5"</code>:<br />
+<code>{</code><br />
+<code>"Name": "HyperParameters.learning_rate",</code><br />
+<code>"Operator": "LESS_THAN",</code><br />
+<code>"Value": "0.5"</code><br />
+<code>}</code></p>
+<p>Tags<br />
+To define a tag filter, enter a value with the form <code>"Tags.&lt;key&gt;"</code>.</p>
+<p><strong>Name</strong> <a name="SageMaker-Type-Filter-Name"></a> A property name. For example, <code>TrainingJobName</code>. For the list of valid property names returned in a search result for each supported resource, see <a href="API_TrainingJob.md">TrainingJob</a> properties. You must specify a valid property name for the resource.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 255.<br />
+Pattern: <code>.+</code><br />
+Required: Yes</p>
+<p><strong>Operator</strong> <a name="SageMaker-Type-Filter-Operator"></a> A Boolean binary operator that is used to evaluate the filter. The operator field contains one of the following values:<br />
+Equals<br />
+The specified resource in <code>Name</code> equals the specified <code>Value</code>.<br />
+NotEquals<br />
+The specified resource in <code>Name</code> does not equal the specified <code>Value</code>.<br />
+GreaterThan<br />
+The specified resource in <code>Name</code> is greater than the specified <code>Value</code>. Not supported for text-based properties.<br />
+GreaterThanOrEqualTo<br />
+The specified resource in <code>Name</code> is greater than or equal to the specified <code>Value</code>. Not supported for text-based properties.<br />
+LessThan<br />
+The specified resource in <code>Name</code> is less than the specified <code>Value</code>. Not supported for text-based properties.<br />
+LessThanOrEqualTo<br />
+The specified resource in <code>Name</code> is less than or equal to the specified <code>Value</code>. Not supported for text-based properties.<br />
+Contains<br />
+Only supported for text-based properties. The word-list of the property contains the specified <code>Value</code>. If you have specified a filter <code>Value</code>, the default is <code>Equals</code>.<br />
+Type: String<br />
+Valid Values:<code>Equals | NotEquals | GreaterThan | GreaterThanOrEqualTo | LessThan | LessThanOrEqualTo | Contains</code><br />
+Required: No</p>
+<p><strong>Value</strong> <a name="SageMaker-Type-Filter-Value"></a> A value used with <code>Resource</code> and <code>Operator</code> to determine if objects satisfy the filter’s condition. For numerical properties, <code>Value</code> must be an integer or floating-point decimal. For timestamp properties, <code>Value</code> must be an ISO 8601 date-time string of the following format: <code>YYYY-mm-dd'T'HH:MM:SS</code>.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 1024.<br />
+Pattern: <code>.+</code><br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/Filter">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/Filter">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/Filter">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/Filter">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/Filter">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

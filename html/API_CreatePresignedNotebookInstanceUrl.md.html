@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreatePresignedNotebookInstanceUrl</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreatePresignedNotebookInstanceUrl<a name="API_CreatePresignedNotebookInstanceUrl"></a></h1>
+</header>
+<p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p>
+<p>IAM authorization policies for this API are also enforced for every HTTP request and WebSocket frame that attempts to connect to the notebook instance.For example, you can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html">Limit Access to a Notebook Instance by IP Address</a>.</p>
+<p><strong>Note</strong><br />
+The URL that you get from a call to <a href="#API_CreatePresignedNotebookInstanceUrl">CreatePresignedNotebookInstanceUrl</a> is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p>
+<pre><code>{
+   &quot;[NotebookInstanceName](#SageMaker-CreatePresignedNotebookInstanceUrl-request-NotebookInstanceName)&quot;: &quot;string&quot;,
+   &quot;[SessionExpirationDurationInSeconds](#SageMaker-CreatePresignedNotebookInstanceUrl-request-SessionExpirationDurationInSeconds)&quot;: number
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreatePresignedNotebookInstanceUrl_RequestSyntax">NotebookInstanceName</a> ** <a name="SageMaker-CreatePresignedNotebookInstanceUrl-request-NotebookInstanceName"></a> The name of the notebook instance.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreatePresignedNotebookInstanceUrl_RequestSyntax">SessionExpirationDurationInSeconds</a> ** <a name="SageMaker-CreatePresignedNotebookInstanceUrl-request-SessionExpirationDurationInSeconds"></a> The duration of the session, in seconds. The default is 12 hours.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 1800. Maximum value of 43200.<br />
+Required: No</p>
+<pre><code>{
+   &quot;[AuthorizedUrl](#SageMaker-CreatePresignedNotebookInstanceUrl-response-AuthorizedUrl)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreatePresignedNotebookInstanceUrl_ResponseSyntax">AuthorizedUrl</a> ** <a name="SageMaker-CreatePresignedNotebookInstanceUrl-response-AuthorizedUrl"></a> A JSON object that contains the URL string.<br />
+Type: String</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreatePresignedNotebookInstanceUrl">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

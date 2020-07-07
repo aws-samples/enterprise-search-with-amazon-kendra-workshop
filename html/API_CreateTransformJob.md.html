@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateTransformJob</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateTransformJob<a name="API_CreateTransformJob"></a></h1>
+</header>
+<p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p>
+<p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p>
+<p>In the request body, you provide the following: + <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account. + <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a href="API_CreateModel.md">CreateModel</a>. + <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored. + <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job. + <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p>
+<p>For more information about how batch transformation works Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>.</p>
+<pre><code>{
+   &quot;[BatchStrategy](#SageMaker-CreateTransformJob-request-BatchStrategy)&quot;: &quot;string&quot;,
+   &quot;[DataProcessing](#SageMaker-CreateTransformJob-request-DataProcessing)&quot;: { 
+      &quot;[InputFilter](API_DataProcessing.md#SageMaker-Type-DataProcessing-InputFilter)&quot;: &quot;string&quot;,
+      &quot;[JoinSource](API_DataProcessing.md#SageMaker-Type-DataProcessing-JoinSource)&quot;: &quot;string&quot;,
+      &quot;[OutputFilter](API_DataProcessing.md#SageMaker-Type-DataProcessing-OutputFilter)&quot;: &quot;string&quot;
+   },
+   &quot;[Environment](#SageMaker-CreateTransformJob-request-Environment)&quot;: { 
+      &quot;string&quot; : &quot;string&quot; 
+   },
+   &quot;[MaxConcurrentTransforms](#SageMaker-CreateTransformJob-request-MaxConcurrentTransforms)&quot;: number,
+   &quot;[MaxPayloadInMB](#SageMaker-CreateTransformJob-request-MaxPayloadInMB)&quot;: number,
+   &quot;[ModelName](#SageMaker-CreateTransformJob-request-ModelName)&quot;: &quot;string&quot;,
+   &quot;[Tags](#SageMaker-CreateTransformJob-request-Tags)&quot;: [ 
+      { 
+         &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+         &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[TransformInput](#SageMaker-CreateTransformJob-request-TransformInput)&quot;: { 
+      &quot;[CompressionType](API_TransformInput.md#SageMaker-Type-TransformInput-CompressionType)&quot;: &quot;string&quot;,
+      &quot;[ContentType](API_TransformInput.md#SageMaker-Type-TransformInput-ContentType)&quot;: &quot;string&quot;,
+      &quot;[DataSource](API_TransformInput.md#SageMaker-Type-TransformInput-DataSource)&quot;: { 
+         &quot;[S3DataSource](API_TransformDataSource.md#SageMaker-Type-TransformDataSource-S3DataSource)&quot;: { 
+            &quot;[S3DataType](API_TransformS3DataSource.md#SageMaker-Type-TransformS3DataSource-S3DataType)&quot;: &quot;string&quot;,
+            &quot;[S3Uri](API_TransformS3DataSource.md#SageMaker-Type-TransformS3DataSource-S3Uri)&quot;: &quot;string&quot;
+         }
+      },
+      &quot;[SplitType](API_TransformInput.md#SageMaker-Type-TransformInput-SplitType)&quot;: &quot;string&quot;
+   },
+   &quot;[TransformJobName](#SageMaker-CreateTransformJob-request-TransformJobName)&quot;: &quot;string&quot;,
+   &quot;[TransformOutput](#SageMaker-CreateTransformJob-request-TransformOutput)&quot;: { 
+      &quot;[Accept](API_TransformOutput.md#SageMaker-Type-TransformOutput-Accept)&quot;: &quot;string&quot;,
+      &quot;[AssembleWith](API_TransformOutput.md#SageMaker-Type-TransformOutput-AssembleWith)&quot;: &quot;string&quot;,
+      &quot;[KmsKeyId](API_TransformOutput.md#SageMaker-Type-TransformOutput-KmsKeyId)&quot;: &quot;string&quot;,
+      &quot;[S3OutputPath](API_TransformOutput.md#SageMaker-Type-TransformOutput-S3OutputPath)&quot;: &quot;string&quot;
+   },
+   &quot;[TransformResources](#SageMaker-CreateTransformJob-request-TransformResources)&quot;: { 
+      &quot;[InstanceCount](API_TransformResources.md#SageMaker-Type-TransformResources-InstanceCount)&quot;: number,
+      &quot;[InstanceType](API_TransformResources.md#SageMaker-Type-TransformResources-InstanceType)&quot;: &quot;string&quot;,
+      &quot;[VolumeKmsKeyId](API_TransformResources.md#SageMaker-Type-TransformResources-VolumeKmsKeyId)&quot;: &quot;string&quot;
+   }
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">BatchStrategy</a> ** <a name="SageMaker-CreateTransformJob-request-BatchStrategy"></a> Specifies the number of records to include in a mini-batch for an HTTP inference request. A <em>record</em> ** is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record.<br />
+To enable the batch strategy, you must set <code>SplitType</code> to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.<br />
+To use only one record when making an HTTP invocation request to a container, set <code>BatchStrategy</code> to <code>SingleRecord</code> and <code>SplitType</code> to <code>Line</code>.<br />
+To fit as many records in a mini-batch as can fit within the <code>MaxPayloadInMB</code> limit, set <code>BatchStrategy</code> to <code>MultiRecord</code> and <code>SplitType</code> to <code>Line</code>.<br />
+Type: String<br />
+Valid Values:<code>MultiRecord | SingleRecord</code><br />
+Required: No</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">DataProcessing</a> ** <a name="SageMaker-CreateTransformJob-request-DataProcessing"></a> The data structure used to specify the data to be used for inference in a batch transform job and to associate the data that is relevant to the prediction results in the output. The input filter provided allows you to exclude input data that is not needed for inference in a batch transform job. The output filter provided allows you to include input data relevant to interpreting the predictions in the output from the job. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html">Associate Prediction Results with their Corresponding Input Records</a>.<br />
+Type: <a href="API_DataProcessing.md">DataProcessing</a> object<br />
+Required: No</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">Environment</a> ** <a name="SageMaker-CreateTransformJob-request-Environment"></a> The environment variables to set in the Docker container. We support up to 16 key and values entries in the map.<br />
+Type: String to string map<br />
+Key Length Constraints: Maximum length of 1024.<br />
+Key Pattern: <code>[a-zA-Z_][a-zA-Z0-9_]*</code><br />
+Value Length Constraints: Maximum length of 10240.<br />
+Value Pattern: <code>[\S\s]*</code><br />
+Required: No</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">MaxConcurrentTransforms</a> ** <a name="SageMaker-CreateTransformJob-request-MaxConcurrentTransforms"></a> The maximum number of parallel requests that can be sent to each instance in a transform job. If <code>MaxConcurrentTransforms</code> is set to <code>0</code> or left unset, Amazon SageMaker checks the optional execution-parameters to determine the optimal settings for your chosen algorithm. If the execution-parameters endpoint is not enabled, the default value is <code>1</code>. For more information on execution-parameters, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-batch-code.html#your-algorithms-batch-code-how-containe-serves-requests">How Containers Serve Requests</a>. For built-in algorithms, you don’t need to set a value for <code>MaxConcurrentTransforms</code>.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 0.<br />
+Required: No</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">MaxPayloadInMB</a> ** <a name="SageMaker-CreateTransformJob-request-MaxPayloadInMB"></a> The maximum allowed size of the payload, in MB. A <em>payload</em> is the data portion of a record (without metadata). The value in <code>MaxPayloadInMB</code> must be greater than, or equal to, the size of a single record. To estimate the size of a record in MB, divide the size of your dataset by the number of records. To ensure that the records fit within the maximum payload size, we recommend using a slightly larger value. The default value is <code>6</code> MB.<br />
+For cases where the payload might be arbitrarily large and is transmitted using HTTP chunked encoding, set the value to <code>0</code>. This feature works only in supported algorithms. Currently, Amazon SageMaker built-in algorithms do not support HTTP chunked encoding.<br />
+Type: Integer<br />
+Valid Range: Minimum value of 0.<br />
+Required: No</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">ModelName</a> ** <a name="SageMaker-CreateTransformJob-request-ModelName"></a> The name of the model that you want to use for the transform job. <code>ModelName</code> must be the name of an existing Amazon SageMaker model within an AWS Region in an AWS account.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">Tags</a> ** <a name="SageMaker-CreateTransformJob-request-Tags"></a> (Optional) An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <em>AWS Billing and Cost Management User Guide</em>.<br />
+Type: Array of <a href="API_Tag.md">Tag</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 50 items.<br />
+Required: No</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">TransformInput</a> ** <a name="SageMaker-CreateTransformJob-request-TransformInput"></a> Describes the input source and the way the transform job consumes it.<br />
+Type: <a href="API_TransformInput.md">TransformInput</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">TransformJobName</a> ** <a name="SageMaker-CreateTransformJob-request-TransformJobName"></a> The name of the transform job. The name must be unique within an AWS Region in an AWS account.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">TransformOutput</a> ** <a name="SageMaker-CreateTransformJob-request-TransformOutput"></a> Describes the results of the transform job.<br />
+Type: <a href="API_TransformOutput.md">TransformOutput</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateTransformJob_RequestSyntax">TransformResources</a> ** <a name="SageMaker-CreateTransformJob-request-TransformResources"></a> Describes the resources, including ML instance types and ML instance count, to use for the transform job.<br />
+Type: <a href="API_TransformResources.md">TransformResources</a> object<br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[TransformJobArn](#SageMaker-CreateTransformJob-response-TransformJobArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateTransformJob_ResponseSyntax">TransformJobArn</a> ** <a name="SageMaker-CreateTransformJob-response-TransformJobArn"></a> The Amazon Resource Name (ARN) of the transform job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:transform-job/.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceInUse</strong><br />
+Resource being accessed is in use.<br />
+HTTP Status Code: 400</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateTransformJob">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateTransformJob">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DeleteTags</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DeleteTags<a name="API_DeleteTags"></a></h1>
+</header>
+<p>Deletes the specified tags from an Amazon SageMaker resource.</p>
+<p>To list a resource’s tags, use the <code>ListTags</code> API.</p>
+<p><strong>Note</strong><br />
+When you call this API to delete tags from a hyperparameter tuning job, the deleted tags are not removed from training jobs that the hyperparameter tuning job launched before you called this API.</p>
+<pre><code>{
+   &quot;[ResourceArn](#SageMaker-DeleteTags-request-ResourceArn)&quot;: &quot;string&quot;,
+   &quot;[TagKeys](#SageMaker-DeleteTags-request-TagKeys)&quot;: [ &quot;string&quot; ]
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_DeleteTags_RequestSyntax">ResourceArn</a> ** <a name="SageMaker-DeleteTags-request-ResourceArn"></a> The Amazon Resource Name (ARN) of the resource whose tags you want to delete.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:.*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_DeleteTags_RequestSyntax">TagKeys</a> ** <a name="SageMaker-DeleteTags-request-TagKeys"></a> An array or one or more tag keys to delete.<br />
+Type: Array of strings<br />
+Array Members: Minimum number of 1 item. Maximum number of 50 items.<br />
+Length Constraints: Minimum length of 1. Maximum length of 128.<br />
+Pattern: <code>^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$</code><br />
+Required: Yes</p>
+<p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/DeleteTags">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/DeleteTags">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/DeleteTags">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/DeleteTags">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/DeleteTags">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/DeleteTags">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/DeleteTags">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/DeleteTags">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/DeleteTags">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/DeleteTags">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

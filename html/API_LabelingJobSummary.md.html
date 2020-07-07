@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>LabelingJobSummary</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LabelingJobSummary<a name="API_LabelingJobSummary"></a></h1>
+</header>
+<p>Provides summary information about a labeling job.</p>
+<p><strong>AnnotationConsolidationLambdaArn</strong> <a name="SageMaker-Type-LabelingJobSummary-AnnotationConsolidationLambdaArn"></a> The Amazon Resource Name (ARN) of the Lambda function used to consolidate the annotations from individual workers into a label for a data object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.<br />
+Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:lambda:[a-z]{2}-[a-z]+-\d{1}:\d{12}:function:[a-zA-Z0-9-_\.]+(:(\$LATEST|[a-zA-Z0-9-_]+))?</code><br />
+Required: No</p>
+<p><strong>CreationTime</strong> <a name="SageMaker-Type-LabelingJobSummary-CreationTime"></a> The date and time that the job was created (timestamp).<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>FailureReason</strong> <a name="SageMaker-Type-LabelingJobSummary-FailureReason"></a> If the <code>LabelingJobStatus</code> field is <code>Failed</code>, this field contains a description of the error.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Required: No</p>
+<p><strong>InputConfig</strong> <a name="SageMaker-Type-LabelingJobSummary-InputConfig"></a> Input configuration for the labeling job.<br />
+Type: <a href="API_LabelingJobInputConfig.md">LabelingJobInputConfig</a> object<br />
+Required: No</p>
+<p><strong>LabelCounters</strong> <a name="SageMaker-Type-LabelingJobSummary-LabelCounters"></a> Counts showing the progress of the labeling job.<br />
+Type: <a href="API_LabelCounters.md">LabelCounters</a> object<br />
+Required: Yes</p>
+<p><strong>LabelingJobArn</strong> <a name="SageMaker-Type-LabelingJobSummary-LabelingJobArn"></a> The Amazon Resource Name (ARN) assigned to the labeling job when it was created.<br />
+Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:labeling-job/.*</code><br />
+Required: Yes</p>
+<p><strong>LabelingJobName</strong> <a name="SageMaker-Type-LabelingJobSummary-LabelingJobName"></a> The name of the labeling job.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p><strong>LabelingJobOutput</strong> <a name="SageMaker-Type-LabelingJobSummary-LabelingJobOutput"></a> The location of the output produced by the labeling job.<br />
+Type: <a href="API_LabelingJobOutput.md">LabelingJobOutput</a> object<br />
+Required: No</p>
+<p><strong>LabelingJobStatus</strong> <a name="SageMaker-Type-LabelingJobSummary-LabelingJobStatus"></a> The current status of the labeling job.<br />
+Type: String<br />
+Valid Values:<code>InProgress | Completed | Failed | Stopping | Stopped</code><br />
+Required: Yes</p>
+<p><strong>LastModifiedTime</strong> <a name="SageMaker-Type-LabelingJobSummary-LastModifiedTime"></a> The date and time that the job was last modified (timestamp).<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>PreHumanTaskLambdaArn</strong> <a name="SageMaker-Type-LabelingJobSummary-PreHumanTaskLambdaArn"></a> The Amazon Resource Name (ARN) of a Lambda function. The function is run before each data object is sent to a worker.<br />
+Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:lambda:[a-z]{2}-[a-z]+-\d{1}:\d{12}:function:[a-zA-Z0-9-_\.]+(:(\$LATEST|[a-zA-Z0-9-_]+))?</code><br />
+Required: Yes</p>
+<p><strong>WorkteamArn</strong> <a name="SageMaker-Type-LabelingJobSummary-WorkteamArn"></a> The Amazon Resource Name (ARN) of the work team assigned to the job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:workteam/.*</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/LabelingJobSummary">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/LabelingJobSummary">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/LabelingJobSummary">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/LabelingJobSummary">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/LabelingJobSummary">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

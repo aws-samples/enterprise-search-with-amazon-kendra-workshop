@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>EndpointSummary</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">EndpointSummary<a name="API_EndpointSummary"></a></h1>
+</header>
+<p>Provides summary information for an endpoint.</p>
+<p><strong>CreationTime</strong> <a name="SageMaker-Type-EndpointSummary-CreationTime"></a> A timestamp that shows when the endpoint was created.<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>EndpointArn</strong> <a name="SageMaker-Type-EndpointSummary-EndpointArn"></a> The Amazon Resource Name (ARN) of the endpoint.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:endpoint/.*</code><br />
+Required: Yes</p>
+<p><strong>EndpointName</strong> <a name="SageMaker-Type-EndpointSummary-EndpointName"></a> The name of the endpoint.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p><strong>EndpointStatus</strong> <a name="SageMaker-Type-EndpointSummary-EndpointStatus"></a> The status of the endpoint.<br />
++ <code>OutOfService</code>: Endpoint is not available to take incoming requests. + <code>Creating</code>: <a href="API_CreateEndpoint.md">CreateEndpoint</a> is executing. + <code>Updating</code>: <a href="API_UpdateEndpoint.md">UpdateEndpoint</a> or <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> is executing. + <code>SystemUpdating</code>: Endpoint is undergoing maintenance and cannot be updated or deleted or re-scaled until it has completed. This maintenance operation does not change any customer-specified values such as VPC config, KMS encryption, model, instance type, or instance count. + <code>RollingBack</code>: Endpoint fails to scale up or down or change its variant weight and is in the process of rolling back to its previous configuration. Once the rollback completes, endpoint returns to an <code>InService</code> status. This transitional status only applies to an endpoint that has autoscaling enabled and is undergoing variant weight or capacity changes as part of an <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> call or when the <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> operation is called explicitly. + <code>InService</code>: Endpoint is available to process incoming requests. + <code>Deleting</code>: <a href="API_DeleteEndpoint.md">DeleteEndpoint</a> is executing. + <code>Failed</code>: Endpoint could not be created, updated, or re-scaled. Use <a href="API_DescribeEndpoint.md#SageMaker-DescribeEndpoint-response-FailureReason">DescribeEndpoint:FailureReason</a> for information about the failure. <a href="API_DeleteEndpoint.md">DeleteEndpoint</a> is the only operation that can be performed on a failed endpoint. To get a list of endpoints with a specified status, use the <a href="API_ListEndpoints.md#SageMaker-ListEndpoints-request-StatusEquals">ListEndpoints:StatusEquals</a> filter.<br />
+Type: String<br />
+Valid Values:<code>OutOfService | Creating | Updating | SystemUpdating | RollingBack | InService | Deleting | Failed</code><br />
+Required: Yes</p>
+<p><strong>LastModifiedTime</strong> <a name="SageMaker-Type-EndpointSummary-LastModifiedTime"></a> A timestamp that shows when the endpoint was last modified.<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/EndpointSummary">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/EndpointSummary">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/EndpointSummary">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/EndpointSummary">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/EndpointSummary">AWS SDK for Ruby V2</a></p>
+</body>
+</html>
