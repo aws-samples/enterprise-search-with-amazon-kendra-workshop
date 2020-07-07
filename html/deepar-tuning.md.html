@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune a DeepAR Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune a DeepAR Model<a name="deepar-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The DeepAR algorithm reports three metrics, which are computed during training. When tuning a model, choose one of these as the objective. For the objective, use either the forecast accuracy on a provided test channel (recommended) or the training loss. For recommendations for the training/test split for the DeepAR algorithm, see <a href="deepar.md#deepar_best_practices">Best Practices for Using the DeepAR Algorithm</a>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:RMSE</td>
+<td>The root mean square error between the forecast and the actual target computed on the test set.</td>
+<td>Minimize</td>
+</tr>
+<tr class="even">
+<td>test:mean_wQuantileLoss</td>
+<td>The average overall quantile losses computed on the test set. To control which quantiles are used, set the <code>test_quantiles</code> hyperparameter.</td>
+<td>Minimize</td>
+</tr>
+<tr class="odd">
+<td>train:final_loss</td>
+<td>The training negative log-likelihood loss averaged over the last training epoch for the model.</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>Tune a DeepAR model with the following hyperparameters. The hyperparameters that have the greatest impact, listed in order from the most to least impactful, on DeepAR objective metrics are: <code>epochs</code>, <code>context_length</code>, <code>mini_batch_size</code>, <code>learning_rate</code>, and <code>num_cells</code>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td><code>IntegerParameterRanges</code></td>
+<td>MinValue: 32, MaxValue: 1028</td>
+</tr>
+<tr class="even">
+<td>epochs</td>
+<td><code>IntegerParameterRanges</code></td>
+<td>MinValue: 1, MaxValue: 1000</td>
+</tr>
+<tr class="odd">
+<td>context_length</td>
+<td><code>IntegerParameterRanges</code></td>
+<td>MinValue: 1, MaxValue: 200</td>
+</tr>
+<tr class="even">
+<td>num_cells</td>
+<td><code>IntegerParameterRanges</code></td>
+<td>MinValue: 30, MaxValue: 200</td>
+</tr>
+<tr class="odd">
+<td>num_layers</td>
+<td><code>IntegerParameterRanges</code></td>
+<td>MinValue: 1, MaxValue: 8</td>
+</tr>
+<tr class="even">
+<td>dropout_rate</td>
+<td><code>ContinuousParameterRange</code></td>
+<td>MinValue: 0.00, MaxValue: 0.2</td>
+</tr>
+<tr class="odd">
+<td>embedding_dimension</td>
+<td><code>IntegerParameterRanges</code></td>
+<td>MinValue: 1, MaxValue: 50</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td><code>ContinuousParameterRange</code></td>
+<td>MinValue: 1e-5, MaxValue: 1e-1</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

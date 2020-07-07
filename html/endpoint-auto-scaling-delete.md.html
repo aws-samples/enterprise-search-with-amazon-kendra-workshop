@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Delete a Scaling Policy</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Delete a Scaling Policy<a name="endpoint-auto-scaling-delete"></a></h1>
+</header>
+<p>You can delete a scaling policy with the AWS Management Console, the AWS CLI, or the Application Auto Scaling API.</p>
+<p><strong>To delete an automatic scaling policy for a variant (console)</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>In the navigation pane, choose <strong>Endpoints</strong>.</p></li>
+<li><p>Choose the endpoint for which you want to delete automatic scaling.</p></li>
+<li><p>For <strong>Endpoint runtime settings</strong>, choose the variant that you want to configure.</p></li>
+<li><p>Choose <strong>Configure auto scaling</strong>.</p></li>
+<li><p>Choose <strong>Deregister auto scaling</strong>.</p></li>
+</ol>
+<p>You can use the AWS CLI or the Application Auto Scaling API to delete a scaling policy from a variant.</p>
+<p>To delete a scaling policy from a variant, use the <a href="https://docs.aws.amazon.com/cli/latest/reference/application-autoscaling/delete-scaling-policy.html">https://docs.aws.amazon.com/cli/latest/reference/application-autoscaling/delete-scaling-policy.html</a> AWS CLI command with the following parameters: + <code>--policy-name</code>—The name of the scaling policy. + <code>--resource-id</code>—The resource identifier for the variant. For this parameter, the resource type is <code>endpoint</code> and the unique identifier is the name of the variant. For example, <code>endpoint/MyEndpoint/variant/MyVariant</code>. + <code>--service-namespace</code>—Set this value to <code>sagemaker</code>. + <code>--scalable-dimension</code>—Set this value to <code>sagemaker:variant:DesiredInstanceCount</code>.</p>
+<p><strong>Example</strong><br />
+The following example deletes a target-tracking scaling policy named <code>myscalablepolicy</code> from a variant named <code>myscalablevariant</code>.</p>
+<pre><code>aws application-autoscaling delete-scaling-policy \
+    --policy-name myscalablepolicy \
+    --resource-id endpoint/MyEndpoint/variant/MyVariant \
+    --service-namespace sagemaker \
+    --scalable-dimension sagemaker:variant:DesiredInstanceCount</code></pre>
+<p>To delete a scaling policy from your variant, use the <a href="https://docs.aws.amazon.com//autoscaling/application/APIReference/API_DeleteScalingPolicy.html">https://docs.aws.amazon.com//autoscaling/application/APIReference/API_DeleteScalingPolicy.html</a> Application Auto Scaling API action with the following parameters: + <code>PolicyName</code>—The name of the scaling policy. + <code>ServiceNamespace</code>—Set this value to <code>sagemaker</code>. + <code>ResourceID</code>—The resource identifier for the variant. For this parameter, the resource type is <code>endpoint</code> and the unique identifier is the name of the variant,. For example, <code>endpoint/MyEndpoint/variant/MyVariant</code>. + <code>ScalableDimension</code>—Set this value to <code>sagemaker:variant:DesiredInstanceCount</code>.</p>
+<p><strong>Example</strong><br />
+The following example uses the Application Auto Scaling API to delete a target-tracking scaling policy named <code>myscalablepolicy</code> from a variant named <code>myscalablevariant</code>.</p>
+<pre><code>POST / HTTP/1.1
+Host: autoscaling.us-east-2.amazonaws.com
+Accept-Encoding: identity
+X-Amz-Target: AnyScaleFrontendService.DeleteScalingPolicy
+X-Amz-Date: 20160506T182145Z
+User-Agent: aws-cli/1.10.23 Python/2.7.11 Darwin/15.4.0 botocore/1.4.8
+Content-Type: application/x-amz-json-1.1
+Authorization: AUTHPARAMS
+
+{
+    &quot;PolicyName&quot;: &quot;myscalablepolicy&quot;,
+    &quot;ServiceNamespace&quot;: &quot;sagemaker&quot;,
+    &quot;ResourceId&quot;: &quot;endpoint/MyEndpoint/variant/MyVariant&quot;,
+    &quot;ScalableDimension&quot;: &quot;sagemaker:variant:DesiredInstanceCount&quot;
+}</code></pre>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DeepAR Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DeepAR Hyperparameters<a name="deepar_hyperparameters"></a></h1>
+</header>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>context_length</td>
+<td>The number of time-points that the model gets to see before making the prediction. The value for this parameter should be about the same as the <code>prediction_length</code>. The model also receives lagged inputs from the target, so <code>context_length</code> can be much smaller than typical seasonalities. For example, a daily time series can have yearly seasonality. The model automatically includes a lag of one year, so the context length can be shorter than a year. The lag values that the model picks depend on the frequency of the time series. For example, lag values for daily frequency are previous week, 2 weeks, 3 weeks, 4 weeks, and year. <strong>Required</strong> Valid values: Positive integer</td>
+</tr>
+<tr class="even">
+<td>epochs</td>
+<td>The maximum number of passes over the training data. The optimal value depends on your data size and learning rate. See also <code>early_stopping_patience</code>. Typical values range from 10 to 1000. <strong>Required</strong> Valid values: Positive integer</td>
+</tr>
+<tr class="odd">
+<td>prediction_length</td>
+<td>The number of time-steps that the model is trained to predict, also called the forecast horizon. The trained model always generates forecasts with this length. It can’t generate longer forecasts. The <code>prediction_length</code> is fixed when a model is trained and it cannot be changed later. <strong>Required</strong> Valid values: Positive integer</td>
+</tr>
+<tr class="even">
+<td>time_freq</td>
+<td>The granularity of the time series in the dataset. Use <code>time_freq</code> to select appropriate date features and lags. The model supports the following basic frequencies. It also supports multiples of these basic frequencies. For example, <code>5min</code> specifies a frequency of 5 minutes. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Required</strong> Valid values: An integer followed by <em>M</em>, <em>W</em>, <em>D</em>, <em>H</em>, or <em>min</em>. For example, <code>5min</code>.</td>
+</tr>
+<tr class="odd">
+<td>cardinality</td>
+<td>When using the categorical features (<code>cat</code>), <code>cardinality</code> is an array specifying the number of categories (groups) per categorical feature. Set this to <code>auto</code> to infer the cardinality from the data. The <code>auto</code> mode also works when no categorical features are used in the dataset. This is the recommended setting for the parameter. Set cardinality to <code>ignore</code> to force DeepAR to not use categorical features, even it they are present in the data. To perform additional data validation, it is possible to explicitly set this parameter to the actual value. For example, if two categorical features are provided where the first has 2 and the other has 3 possible values, set this to [2, 3]. For more information on how to use categorical feature, see the data-section on the main documentation page of DeepAR. <strong>Optional</strong> Valid values: <code>auto</code>, <code>ignore</code>, array of positive integers, empty string, or Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>dropout_rate</td>
+<td>The dropout rate to use during training. The model uses zoneout regularization. For each iteration, a random subset of hidden neurons are not updated. Typical values are less than 0.2. <strong>Optional</strong> Valid values: float Default value: 0.1</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_patience</td>
+<td>If this parameter is set, training stops when no progress is made within the specified number of <code>epochs</code>. The model that has the lowest loss is returned as the final model. <strong>Optional</strong> Valid values: integer</td>
+</tr>
+<tr class="even">
+<td>embedding_dimension</td>
+<td>Size of embedding vector learned per categorical feature (same value is used for all categorical features). The DeepAR model can learn group-level time series patterns when a categorical grouping feature is provided. To do this, the model learns an embedding vector of size <code>embedding_dimension</code> for each group, capturing the common properties of all time series in the group. A larger <code>embedding_dimension</code> allows the model to capture more complex patterns. However, because increasing the <code>embedding_dimension</code> increases the number of parameters in the model, more training data is required to accurately learn these parameters. Typical values for this parameter are between 10-100. <strong>Optional</strong> Valid values: positive integer Default value: 10</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>The learning rate used in training. Typical values range from 1e-4 to 1e-1. <strong>Optional</strong> Valid values: float Default value: 1e-3</td>
+</tr>
+<tr class="even">
+<td>likelihood</td>
+<td>The model generates a probabilistic forecast, and can provide quantiles of the distribution and return samples. Depending on your data, select an appropriate likelihood (noise model) that is used for uncertainty estimates. The following likelihoods can be selected: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: One of <em>gaussian</em>, <em>beta</em>, <em>negative-binomial</em>, <em>student-T</em>, or <em>deterministic-L1</em>. Default value: <code>student-T</code></td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The size of mini-batches used during training. Typical values range from 32 to 512. <strong>Optional</strong> Valid values: positive integer Default value: 128</td>
+</tr>
+<tr class="even">
+<td>num_cells</td>
+<td>The number of cells to use in each hidden layer of the RNN. Typical values range from 30 to 100. <strong>Optional</strong> Valid values: positive integer Default value: 40</td>
+</tr>
+<tr class="odd">
+<td>num_dynamic_feat</td>
+<td>The number of <code>dynamic_feat</code> provided in the data. Set this to <code>auto</code> to infer the number of dynamic features from the data. The <code>auto</code> mode also works when no dynamic features are used in the dataset. This is the recommended setting for the parameter. To force DeepAR to not use dynamic features, even it they are present in the data, set <code>num_dynamic_feat</code> to <code>ignore</code>. To perform additional data validation, it is possible to explicitly set this parameter to the actual integer value. For example, if two dynamic features are provided, set this to 2. <strong>Optional</strong> Valid values: <code>auto</code>, <code>ignore</code>, positive integer, or empty string Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>num_eval_samples</td>
+<td>The number of samples that are used per time-series when calculating test accuracy metrics. This parameter does not have any influence on the training or the final model. In particular, the model can be queried with a different number of samples. This parameter only affects the reported accuracy scores on the test channel after training. Smaller values result in faster evaluation, but then the evaluation scores are typically worse and more uncertain. When evaluating with higher quantiles, for example 0.95, it may be important to increase the number of evaluation samples. <strong>Optional</strong> Valid values: integer Default value: 100</td>
+</tr>
+<tr class="odd">
+<td>num_layers</td>
+<td>The number of hidden layers in the RNN. Typical values range from 1 to 4. <strong>Optional</strong> Valid values: positive integer Default value: 2</td>
+</tr>
+<tr class="even">
+<td>test_quantiles</td>
+<td>Quantiles for which to calculate quantile loss on the test channel. <strong>Optional</strong> Valid values: array of floats Default value: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

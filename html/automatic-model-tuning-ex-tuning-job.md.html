@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Configure and Launch a Hyperparameter Tuning Job</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Configure and Launch a Hyperparameter Tuning Job<a name="automatic-model-tuning-ex-tuning-job"></a></h1>
+</header>
+<p>To configure and launch a hyperparameter tuning job, complete the following steps.</p>
+<p><strong>Topics</strong> + <a href="#automatic-model-tuning-ex-low-tuning-config">Specify the Hyperparameter Tuning Job Settings</a> + <a href="#automatic-model-tuning-ex-low-training-def">Configure the Training Jobs</a> + <a href="#automatic-model-tuning-ex-low-launch">Name and Launch the Hyperparameter Tuning Job</a> + <a href="#automatic-model-tuning-ex-next-monitor">Next Step</a></p>
+<p>To specify settings for the hyperparameter tuning job, you define a JSON object. You pass the object as the value of the <code>HyperParameterTuningJobConfig</code> parameter to <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a> when you create the tuning job.</p>
+<p>In this JSON object, you specify: + The ranges of hyperparameters that you want to tune. For more information, see <a href="automatic-model-tuning-define-ranges.md">Define Hyperparameter Ranges</a> + The limits of the resource that the hyperparameter tuning job can consume. + The objective metric for the hyperparameter tuning job. An <em>objective metric</em> is the metric that the hyperparameter tuning job uses to evaluate the training job that it launches. <strong>Note</strong><br />
+To use your own algorithm for hyperparameter tuning, you need to define metrics for your algorithm. For information,see <a href="automatic-model-tuning-define-metrics.md">Define Metrics</a>.</p>
+<p>The hyperparameter tuning job defines ranges for the <code>eta</code>, <code>alpha</code>, <code>min_child_weight</code>, and <code>max_depth</code> hyperparameters of the <a href="xgboost.md">XGBoost Algorithm</a> built-in algorithm. The objective metric for the hyperparameter tuning job maximizes the <code>validation:auc</code> metric that the algorithm sends to CloudWatch Logs.</p>
+<pre><code>tuning_job_config = {
+    &quot;ParameterRanges&quot;: {
+      &quot;CategoricalParameterRanges&quot;: [],
+      &quot;ContinuousParameterRanges&quot;: [
+        {
+          &quot;MaxValue&quot;: &quot;1&quot;,
+          &quot;MinValue&quot;: &quot;0&quot;,
+          &quot;Name&quot;: &quot;eta&quot;
+        },
+        {
+          &quot;MaxValue&quot;: &quot;2&quot;,
+          &quot;MinValue&quot;: &quot;0&quot;,
+          &quot;Name&quot;: &quot;alpha&quot;
+        },
+        {
+          &quot;MaxValue&quot;: &quot;10&quot;,
+          &quot;MinValue&quot;: &quot;1&quot;,
+          &quot;Name&quot;: &quot;min_child_weight&quot;
+        }
+      ],
+      &quot;IntegerParameterRanges&quot;: [
+        {
+          &quot;MaxValue&quot;: &quot;10&quot;,
+          &quot;MinValue&quot;: &quot;1&quot;,
+          &quot;Name&quot;: &quot;max_depth&quot;
+        }
+      ]
+    },
+    &quot;ResourceLimits&quot;: {
+      &quot;MaxNumberOfTrainingJobs&quot;: 20,
+      &quot;MaxParallelTrainingJobs&quot;: 3
+    },
+    &quot;Strategy&quot;: &quot;Bayesian&quot;,
+    &quot;HyperParameterTuningJobObjective&quot;: {
+      &quot;MetricName&quot;: &quot;validation:auc&quot;,
+      &quot;Type&quot;: &quot;Maximize&quot;
+    }
+  }</code></pre>
+<p>To configure the training jobs that the tuning job launches, define a JSON object that you pass as the value of the <code>TrainingJobDefinition</code> parameter of the <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a> call.</p>
+<p>In this JSON object, you specify: + Optional—Metrics that the training jobs emit. <strong>Note</strong><br />
+Define metrics only when you use a custom training algorithm. Because this example uses a built-in algorithm, you don’t specify metrics. For information about defining metrics, see <a href="automatic-model-tuning-define-metrics.md">Define Metrics</a>. + The container image that specifies the training algorithm. + The input configuration for your training and test data. + The storage location for the algorithm’s output. Specify the S3 bucket where you want to store the output of the training jobs. + The values of algorithm hyperparameters that are not tuned in the tuning job. + The type of instance to use for the training jobs. + The stopping condition for the training jobs. This is the maximum duration for each training job.</p>
+<p>In this example, we set static values for the <code>eval_metric</code>, <code>num_round</code>, <code>objective</code>, <code>rate_drop</code>, and <code>tweedie_variance_power</code> parameters of the <a href="xgboost.md">XGBoost Algorithm</a> built-in algorithm.</p>
+<pre><code>from sagemaker.amazon.amazon_estimator import get_image_uri
+training_image = get_image_uri(boto3.Session().region_name, &#39;xgboost&#39;)
+
+s3_input_train = &#39;s3://{}/{}/train&#39;.format(bucket, prefix)
+s3_input_validation =&#39;s3://{}/{}/validation/&#39;.format(bucket, prefix)
+     
+training_job_definition = {
+    &quot;AlgorithmSpecification&quot;: {
+      &quot;TrainingImage&quot;: training_image,
+      &quot;TrainingInputMode&quot;: &quot;File&quot;
+    },
+    &quot;InputDataConfig&quot;: [
+      {
+        &quot;ChannelName&quot;: &quot;train&quot;,
+        &quot;CompressionType&quot;: &quot;None&quot;,
+        &quot;ContentType&quot;: &quot;csv&quot;,
+        &quot;DataSource&quot;: {
+          &quot;S3DataSource&quot;: {
+            &quot;S3DataDistributionType&quot;: &quot;FullyReplicated&quot;,
+            &quot;S3DataType&quot;: &quot;S3Prefix&quot;,
+            &quot;S3Uri&quot;: s3_input_train
+          }
+        }
+      },
+      {
+        &quot;ChannelName&quot;: &quot;validation&quot;,
+        &quot;CompressionType&quot;: &quot;None&quot;,
+        &quot;ContentType&quot;: &quot;csv&quot;,
+        &quot;DataSource&quot;: {
+          &quot;S3DataSource&quot;: {
+            &quot;S3DataDistributionType&quot;: &quot;FullyReplicated&quot;,
+            &quot;S3DataType&quot;: &quot;S3Prefix&quot;,
+            &quot;S3Uri&quot;: s3_input_validation
+          }
+        }
+      }
+    ],
+    &quot;OutputDataConfig&quot;: {
+      &quot;S3OutputPath&quot;: &quot;s3://{}/{}/output&quot;.format(bucket,prefix)
+    },
+    &quot;ResourceConfig&quot;: {
+      &quot;InstanceCount&quot;: 2,
+      &quot;InstanceType&quot;: &quot;ml.c4.2xlarge&quot;,
+      &quot;VolumeSizeInGB&quot;: 10
+    },
+    &quot;RoleArn&quot;: role,
+    &quot;StaticHyperParameters&quot;: {
+      &quot;eval_metric&quot;: &quot;auc&quot;,
+      &quot;num_round&quot;: &quot;100&quot;,
+      &quot;objective&quot;: &quot;binary:logistic&quot;,
+      &quot;rate_drop&quot;: &quot;0.3&quot;,
+      &quot;tweedie_variance_power&quot;: &quot;1.4&quot;
+    },
+    &quot;StoppingCondition&quot;: {
+      &quot;MaxRuntimeInSeconds&quot;: 43200
+    }
+}</code></pre>
+<p>Now you can provide a name for the hyperparameter tuning job and then launch it by calling the <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a> API. Pass <code>tuning_job_config</code>, and <code>training_job_definition</code> that you created in previous steps as the values of the parameters.</p>
+<pre><code>tuning_job_name = &quot;MyTuningJob&quot;
+smclient.create_hyper_parameter_tuning_job(HyperParameterTuningJobName = tuning_job_name,
+                                           HyperParameterTuningJobConfig = tuning_job_config,
+                                           TrainingJobDefinition = training_job_definition)</code></pre>
+<p><a href="automatic-model-tuning-monitor.md">Monitor the Progress of a Hyperparameter Tuning Job</a></p>
+</body>
+</html>

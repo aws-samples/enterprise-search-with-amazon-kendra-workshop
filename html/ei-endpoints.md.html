@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Use EI on Amazon SageMaker Hosted Endpoints</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Use EI on Amazon SageMaker Hosted Endpoints<a name="ei-endpoints"></a></h1>
+</header>
+<p>To use Elastic Inference (EI) in Amazon SageMaker with a hosted endpoint for real-time inference, specify an EI accelerator when you create the deployable model to be hosted at that endpoint. You can do this in one of the following ways: + Use the Amazon SageMaker Python SDK versions of either the TensorFlow or MXNet and the Amazon SageMaker pre-built containers for TensorFlow and MXNet + Build your own container, and use the low-level Amazon SageMaker API (Boto 3). You will need to import the EI-enabled version of either TensorFlow or MXNet from the provided Amazon S3 locations into your container, and use one of those versions to write your training script. + Use either the <a href="image-classification.md">Image Classification Algorithm</a> or <a href="object-detection.md">Object Detection Algorithm</a> build-in algorithms, and use Boto 3 to run your training job and create your deployable model and hosted endpoint.</p>
+<p><strong>Topics</strong> + <a href="#ei-endpoints-tensorflow">Use EI with an Amazon SageMaker TensorFlow Container</a> + <a href="#ei-endpoints-mxnet">Use EI with an Amazon SageMaker MXNet Container</a> + <a href="#ei-endpoints-boto3">Use EI with Your Own Container</a></p>
+<p>To use TensorFlow with EI in Amazon SageMaker, you need to call the <code>deploy</code> method of either the <a href="https://sagemaker.readthedocs.io/en/latest/sagemaker.tensorflow.html#tensorflow-estimator">Estimator</a> or <a href="https://sagemaker.readthedocs.io/en/latest/sagemaker.tensorflow.html#tensorflow-model">Model</a> objects. You then specify an accelerator type using the accelerator_type input argument. For information on using TensorFlow in the Amazon SageMaker Python SDK, see: <a href="https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/tensorflow/README.rst">https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/tensorflow/README.rst</a>.</p>
+<p>Amazon SageMaker provides default model training and inference code for your convenience. For custom file formats, you might need to implement custom model training and inference code.</p>
+<p>To use an estimator object with EI, include the <code>accelerator_type</code> input argument when you use the deploy method. The estimator returns a predictor object which we call its deploy method as shown in the example code:</p>
+<pre><code># Deploy an estimator using EI (using the accelerator_type input argument)
+predictor = estimator.deploy(initial_instance_count=1,
+                             instance_type=&#39;ml.m4.xlarge&#39;,
+                             accelerator_type=&#39;ml.eia1.medium&#39;)</code></pre>
+<p>To use a model object with EI, include the <code>accelerator_type</code> input argument when you use the deploy method. The estimator returns a predictor object which we call its deploy method as shown in the example code:</p>
+<pre><code># Deploy a model using EI (using the accelerator_type input argument)
+predictor = model.deploy(initial_instance_count=1,
+                             instance_type=&#39;ml.m4.xlarge&#39;,
+                             accelerator_type=&#39;ml.eia1.medium&#39;)</code></pre>
+<p>To use MXNet with EI in Amazon SageMaker, you need to call the <code>deploy</code> method of either the <a href="https://sagemaker.readthedocs.io/en/latest/sagemaker.mxnet.html#mxnet-estimator">Estimator</a> or <a href="https://sagemaker.readthedocs.io/en/latest/sagemaker.mxnet.html#mxnet-model">Model</a> objects. You then specify an accelerator type using the accelerator_type input argument. For information on using MXNet in the Amazon SageMaker Python SDK, see <a href="https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/mxnet/README.rst">https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/mxnet/README.rst</a></p>
+<p>Amazon SageMaker provides default model training and inference code for your convenience. For custom file formats, you might need to implement custom model training and inference code.</p>
+<p>To use an estimator object with EI, include the <code>accelerator_type</code> input argument when you use the deploy method. The estimator returns a predictor object which we call its deploy method as shown in the example code:</p>
+<pre><code># Deploy an estimator using EI (using the accelerator_type input argument)
+predictor = estimator.deploy(initial_instance_count=1,
+                             instance_type=&#39;ml.m4.xlarge&#39;,
+                             accelerator_type=&#39;ml.eia1.medium&#39;)</code></pre>
+<p>To use a model object with EI, include the <code>accelerator_type</code> input argument when you use the deploy method. The estimator returns a predictor object which we call its deploy method as shown in the example code:</p>
+<pre><code># Deploy a model using EI (using the accelerator_type input argument)
+predictor = model.deploy(initial_instance_count=1,
+                             instance_type=&#39;ml.m4.xlarge&#39;,
+                             accelerator_type=&#39;ml.eia1.medium&#39;)</code></pre>
+<p>For a complete example of using EI with MXNet in Amazon SageMaker, see the sample notebook at <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker-python-sdk/mxnet_mnist/mxnet_mnist_elastic_inference.ipynb">https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker-python-sdk/mxnet_mnist/mxnet_mnist_elastic_inference.ipynb</a></p>
+<p>To use EI with a model in a custom container that you build, use the low-level Amazon SageMaker SDK for Python (Boto 3). download and import the AWS EI-enabled versions of TensorFlow or Apache MXNet machine learning frameworks, and write your training script using those frameworks.</p>
+<p>To use EI with your own container, you need to import either the Amazon EI TensorFlow Serving library or the Amazon EI Apache MXNet library into your container. The EI-enabled versions of TensorFlow and MXNet are currently available as binary files stored in Amazon S3 locations. You can download the EI-enabled binary for TensorFlow from the Amazon S3 bucket at <a href="https://s3.console.aws.amazon.com/s3/buckets/amazonei-tensorflow">https://s3.console.aws.amazon.com/s3/buckets/amazonei-tensorflow</a>. For information about building a container that uses the EI-enabled version of TensorFlow, see <a href="https://github.com/aws/sagemaker-tensorflow-container#building-the-sagemaker-elastic-inference-tensorflow-serving-container">https://github.com/aws/sagemaker-tensorflow-container#building-the-sagemaker-elastic-inference-tensorflow-serving-container</a>. You can download the EI-enabled binary for Apache MXNet from the public Amazon S3 bucket at <a href="https://s3.console.aws.amazon.com/s3/buckets/amazonei-apachemxnet">https://s3.console.aws.amazon.com/s3/buckets/amazonei-apachemxnet</a>. For information about building a container that uses the EI-enabled version of MXNet, see <a href="https://github.com/aws/sagemaker-mxnet-container#building-the-sagemaker-elastic-inference-mxnet-container">https://github.com/aws/sagemaker-mxnet-container#building-the-sagemaker-elastic-inference-mxnet-container</a>.</p>
+<p>To create an endpoint by using Boto 3, you first create an endpoint configuration. The endpoint configuration specifies one or more models (called production variants) that you want to host at the endpoint. To attach EI to one or more of the production variants hosted at the endpoint, you specify one of the EI instance types as the <code>AcceleratorType</code> field for that <code>ProductionVariant</code>. You then pass that endpoint configuration when you create the endpoint.</p>
+<p>To use EI, you need to specify an accelerator type in the endpoint configuration:</p>
+<pre><code># Create Endpoint Configuration
+from time import gmtime, strftime
+
+endpoint_config_name = &#39;ImageClassificationEndpointConfig-&#39; + strftime(&quot;%Y-%m-%d-%H-%M-%S&quot;, gmtime())
+print(endpoint_config_name)
+create_endpoint_config_response = sagemaker.create_endpoint_config(
+    EndpointConfigName = endpoint_config_name,
+    ProductionVariants=[{
+        &#39;InstanceType&#39;:&#39;ml.m4.xlarge&#39;,
+        &#39;InitialInstanceCount&#39;:1,
+        &#39;ModelName&#39;:model_name,
+        &#39;VariantName&#39;:&#39;AllTraffic&#39;,
+        &#39;AcceleratorType&#39;:&#39;ml.eia1.medium&#39;}])
+
+print(&quot;Endpoint Config Arn: &quot; + create_endpoint_config_response[&#39;EndpointConfigArn&#39;])</code></pre>
+<p>After you create an endpoint configuration with an accelerator type, you can proceed to create an endpoint.</p>
+<pre><code>endpoint_name = &#39;ImageClassificationEndpoint-&#39; + strftime(&quot;%Y-%m-%d-%H-%M-%S&quot;, gmtime())
+endpoint_response = sagemaker.create_endpoint(
+    EndpointName=endpoint_name,
+    EndpointConfigName=endpoint_config_name)</code></pre>
+<p>After the endpoint is created you can invoke it using the invoke_endpoint method in a boto3 runtime object as you would any other endpoint.</p>
+</body>
+</html>

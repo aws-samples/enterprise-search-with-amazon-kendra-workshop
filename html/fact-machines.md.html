@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Factorization Machines Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Factorization Machines Algorithm<a name="fact-machines"></a></h1>
+</header>
+<p>A factorization machine is a general-purpose supervised learning algorithm that you can use for both classification and regression tasks. It is an extension of a linear model that is designed to capture interactions between features within high dimensional sparse datasets economically. For example, in a click prediction system, the factorization machine model can capture click rate patterns observed when ads from a certain ad-category are placed on pages from a certain page-category. Factorization machines are a good choice for tasks dealing with high dimensional sparse datasets, such as click prediction and item recommendation.</p>
+<p><strong>Note</strong><br />
+The Amazon SageMaker implementation of factorization machines considers only pair-wise (2nd order) interactions between features.</p>
+<p><strong>Topics</strong> + <a href="#fm-inputoutput">Input/Output Interface for the Factorization Machines Algorithm</a> + <a href="#fm-instances">EC2 Instance Recommendation for the Factorization Machines Algorithm</a> + <a href="#fm-sample-notebooks">Factorization Machines Sample Notebooks</a> + <a href="fact-machines-howitworks.md">How Factorization Machines Work</a> + <a href="fact-machines-hyperparameters.md">Factorization Machines Hyperparameters</a> + <a href="fm-tuning.md">Tune a Factorization Machines Model</a> + <a href="fm-in-formats.md">Factorization Machine Response Formats</a></p>
+<p>The factorization machine algorithm can be run in either in binary classification mode or regression mode. In each mode, a dataset can be provided to the <strong>test</strong> channel along with the train channel dataset. The scoring depends on the mode used. In regression mode, the testing dataset is scored using Root Mean Square Error (RMSE). In binary classification mode, the test dataset is scored using Binary Cross Entropy (Log Loss), Accuracy (at threshold=0.5) and F1 Score (at threshold =0.5).</p>
+<p>For <strong>training</strong>, the factorization machines algorithm currently supports only the <code>recordIO-protobuf</code> format with <code>Float32</code> tensors. Because their use case is predominantly on sparse data, <code>CSV</code> is not a good candidate. Both File and Pipe mode training are supported for recordIO-wrapped protobuf.</p>
+<p>For <strong>inference</strong>, factorization machines support the <code>application/json</code> and <code>x-recordio-protobuf</code> formats. + For the <strong>binary classification</strong> problem, the algorithm predicts a score and a label. The label is a number and can be either <code>0</code> or <code>1</code>. The score is a number that indicates how strongly the algorithm believes that the label should be <code>1</code>. The algorithm computes score first and then derives the label from the score value. If the score is greater than or equal to 0.5, the label is <code>1</code>. + For the <strong>regression</strong> problem, just a score is returned and it is the predicted value. For example, if Factorization Machines is used to predict a movie rating, score is the predicted rating value.</p>
+<p>Please see <a href="#fm-sample-notebooks">Factorization Machines Sample Notebooks</a> for more details on training and inference file formats.</p>
+<p>The Amazon SageMaker Factorization Machines algorithm is highly scalable and can train across distributed instances. We recommend training and inference with CPU instances for both sparse and dense datasets. In some circumstances, training with one or more GPUs on dense data might provide some benefit. Training with GPUs is available only on dense data. Use CPU instances for sparse data.</p>
+<p>For a sample notebook that uses the Amazon SageMaker factorization machine learning algorithm to analyze the images of handwritten digits from zero to nine in the MNIST dataset, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/factorization_machines_mnist/factorization_machines_mnist.ipynb">An Introduction to Factorization Machines with MNIST</a>. For instructions how to create and access Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. Once you have created a notebook instance and opened it, select the <strong>SageMaker Examples</strong> tab to see a list of all the Amazon SageMaker samples. The topic modeling example notebooks using the NTM algorithms are located in the <strong>Introduction to Amazon algorithms</strong> section. To open a notebook, click on its <strong>Use</strong> tab and select <strong>Create copy</strong>.</p>
+</body>
+</html>

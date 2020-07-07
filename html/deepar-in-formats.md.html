@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DeepAR Inference Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DeepAR Inference Formats<a name="deepar-in-formats"></a></h1>
+</header>
+<p>Query a trained model by using the model’s endpoint. The endpoint takes the following JSON request format.</p>
+<p>In the request, the <code>instances</code> field corresponds to the time series that should be forecast by the model.</p>
+<p>If the model was trained with categories, you must provide a <code>cat</code> for each instance. If the model was trained without the <code>cat</code> field, it should be omitted.</p>
+<p>If the model was trained with a custom feature time series (<code>dynamic_feat</code>), you have to provide the same number of <code>dynamic_feat</code>values for each instance. Each of them should have a length given by <code>length(target) + prediction_length</code>, where the last <code>prediction_length</code> values correspond to the time points in the future that will be predicted. If the model was trained without custom feature time series, the field should not be included in the request.</p>
+<pre><code>{
+    &quot;instances&quot;: [
+        {
+            &quot;start&quot;: &quot;2009-11-01 00:00:00&quot;,
+            &quot;target&quot;: [4.0, 10.0, &quot;NaN&quot;, 100.0, 113.0],
+            &quot;cat&quot;: [0, 1],
+            &quot;dynamic_feat&quot;: [[1.0, 1.1, 2.1, 0.5, 3.1, 4.1, 1.2, 5.0, ...]]
+        },
+        {
+            &quot;start&quot;: &quot;2012-01-30&quot;,
+            &quot;target&quot;: [1.0],
+            &quot;cat&quot;: [2, 1],
+            &quot;dynamic_feat&quot;: [[2.0, 3.1, 4.5, 1.5, 1.8, 3.2, 0.1, 3.0, ...]]
+        },
+        {
+            &quot;start&quot;: &quot;1999-01-30&quot;,
+            &quot;target&quot;: [2.0, 1.0],
+            &quot;cat&quot;: [1, 3],
+            &quot;dynamic_feat&quot;: [[1.0, 0.1, -2.5, 0.3, 2.0, -1.2, -0.1, -3.0, ...]]
+        }
+    ],
+    &quot;configuration&quot;: {
+         &quot;num_samples&quot;: 50,
+         &quot;output_types&quot;: [&quot;mean&quot;, &quot;quantiles&quot;, &quot;samples&quot;],
+         &quot;quantiles&quot;: [&quot;0.5&quot;, &quot;0.9&quot;]
+    }
+}</code></pre>
+<p>The <code>configuration</code> field is optional. <code>configuration.num_samples</code> sets the number of sample paths that the model generates to estimate the mean and quantiles. <code>configuration.output_types</code> describes the information that will be returned in the request. Valid values are <code>"mean"</code> <code>"quantiles"</code> and <code>"samples"</code>. If you specify <code>"quantiles"</code>, each of the quantile values in <code>configuration.quantiles</code> is returned as a time series. If you specify <code>"samples"</code>, the model also returns the raw samples used to calculate the other outputs.</p>
+<p>The following is the format of a response, where <code>[...]</code> are arrays of numbers:</p>
+<pre><code>{
+    &quot;predictions&quot;: [
+        {
+            &quot;quantiles&quot;: {
+                &quot;0.9&quot;: [...],
+                &quot;0.5&quot;: [...]
+            },
+            &quot;samples&quot;: [...],
+            &quot;mean&quot;: [...]
+        },
+        {
+            &quot;quantiles&quot;: {
+                &quot;0.9&quot;: [...],
+                &quot;0.5&quot;: [...]
+            },
+            &quot;samples&quot;: [...],
+            &quot;mean&quot;: [...]
+        },
+        {
+            &quot;quantiles&quot;: {
+                &quot;0.9&quot;: [...],
+                &quot;0.5&quot;: [...]
+            },
+            &quot;samples&quot;: [...],
+            &quot;mean&quot;: [...]
+        }
+    ]
+}</code></pre>
+<p>DeepAR has a response timeout of 60 seconds. When passing multiple time series in a single request, the forecasts are generated sequentially. Because the forecast for each time series typically takes about 300 to 1000 milliseconds or longer, depending on the model size, passing too many time series in a single request can cause time outs. It’s better to send fewer time series per request and send more requests. Because the DeepAR algorithm uses multiple workers per instance, you can achieve much higher throughput by sending multiple requests in parallel.</p>
+<p>By default, DeepAR uses one worker per CPU for inference, if there is sufficient memory per CPU. If the model is large and there isn’t enough memory to run a model on each CPU, the number of workers is reduced. The number of workers used for inference can be overwritten using the environment variable <code>MODEL_SERVER_WORKERS</code> For example, by setting <code>MODEL_SERVER_WORKERS=1</code>) when calling the Amazon SageMaker <a href="API_CreateModel.md">CreateModel</a> API.</p>
+<p>DeepAR forecasting supports getting inferences by using batch transform from data using the JSON Lines format. In this format, each record is represented on a single line as a JSON object, and lines are separated by newline characters. The format is identical to the JSON Lines format used for model training. For information, see <a href="deepar.md#deepar-inputoutput">Input/Output Interface for the DeepAR Algorithm</a>. For example:</p>
+<pre><code>{&quot;start&quot;: &quot;2009-11-01 00:00:00&quot;, &quot;target&quot;: [4.3, &quot;NaN&quot;, 5.1, ...], &quot;cat&quot;: [0, 1], &quot;dynamic_feat&quot;: [[1.1, 1.2, 0.5, ..]]}
+{&quot;start&quot;: &quot;2012-01-30 00:00:00&quot;, &quot;target&quot;: [1.0, -5.0, ...], &quot;cat&quot;: [2, 3], &quot;dynamic_feat&quot;: [[1.1, 2.05, ...]]}
+{&quot;start&quot;: &quot;1999-01-30 00:00:00&quot;, &quot;target&quot;: [2.0, 1.0], &quot;cat&quot;: [1, 4], &quot;dynamic_feat&quot;: [[1.3, 0.4]]}</code></pre>
+<p><strong>Note</strong><br />
+When creating the transformation job with <a href="API_CreateTransformJob.md">CreateTransformJob</a>, set the <code>BatchStrategy</code> value to <code>SingleRecord</code> and set the <code>SplitType</code> value in the <a href="API_TransformInput.md">TransformInput</a> configuration to <code>Line</code>, as the default values currently cause runtime failures.</p>
+<p>Similar to the hosted endpoint inference request format, the <code>cat</code> and the <code>dynamic_feat</code> fields for each instance are required if both of the following are true: + The model is trained on a dataset that contained both the <code>cat</code> and the <code>dynamic_feat</code> fields. + The corresponding <code>cardinality</code> and <code>num_dynamic_feat</code> values used in the training job are not set to <code>"".</code></p>
+<p>Unlike hosted endpoint inference, the configuration field is set once for the entire batch inference job using an environment variable named <code>DEEPAR_INFERENCE_CONFIG</code>. The value of <code>DEEPAR_INFERENCE_CONFIG</code> can be passed when the model is created by calling <a href="API_CreateTransformJob.md">CreateTransformJob</a> API. If <code>DEEPAR_INFERENCE_CONFIG</code> is missing in the container environment, the inference container uses the following default:</p>
+<pre><code>{
+    &quot;num_samples&quot;: 100,
+    &quot;output_types&quot;: [&quot;mean&quot;, &quot;quantiles&quot;],
+    &quot;quantiles&quot;: [&quot;0.1&quot;, &quot;0.2&quot;, &quot;0.3&quot;, &quot;0.4&quot;, &quot;0.5&quot;, &quot;0.6&quot;, &quot;0.7&quot;, &quot;0.8&quot;, &quot;0.9&quot;]
+}</code></pre>
+<p>The output is also in JSON Lines format, with one line per prediction, in an order identical to the instance order in the corresponding input file. Predictions are encoded as objects identical to the ones returned by responses in online inference mode. For example:</p>
+<pre><code>{ &quot;quantiles&quot;: { &quot;0.1&quot;: [...], &quot;0.2&quot;: [...] }, &quot;samples&quot;: [...], &quot;mean&quot;: [...] }</code></pre>
+<p>Note that in the <a href="API_TransformInput.md">TransformInput</a> configuration of the Amazon SageMaker <a href="API_CreateTransformJob.md">CreateTransformJob</a> request clients must explicitly set the <code>AssembleWith</code> value to <code>Line</code>, as the default value <code>None</code> concatenates all JSON objects on the same line.</p>
+<p>For example, here is an Amazon SageMaker <a href="API_CreateTransformJob.md">CreateTransformJob</a> request for a DeepAR job with a custom <code>DEEPAR_INFERENCE_CONFIG</code>:</p>
+<pre><code>{
+   &quot;BatchStrategy&quot;: &quot;SingleRecord&quot;,
+   &quot;Environment&quot;: { 
+      &quot;DEEPAR_INFERENCE_CONFIG&quot; : &quot;{ \&quot;num_samples\&quot;: 200, \&quot;output_types\&quot;: [\&quot;mean\&quot;] }&quot;,
+      ...
+   },
+   &quot;TransformInput&quot;: {
+      &quot;SplitType&quot;: &quot;Line&quot;,
+      ...
+   },
+   &quot;TransformOutput&quot;: { 
+      &quot;AssembleWith&quot;: &quot;Line&quot;,
+      ...
+   },
+   ...
+}</code></pre>
+</body>
+</html>

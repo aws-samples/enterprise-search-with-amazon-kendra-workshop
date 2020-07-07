@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 1: Create an Amazon S3 Bucket</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 1: Create an Amazon S3 Bucket<a name="gs-config-permissions"></a></h1>
+</header>
+<p>Training a model produces the following + The model training data + Model artifacts, which Amazon SageMaker generates during model training</p>
+<p>You save these in an Amazon Simple Storage Service (Amazon S3) bucket: You can store datasets that you use as your training data and model artifacts that are the output of a training job in a single bucket or in two separate buckets. For this exercise and others in this guide, one bucket is sufficient. If you already have S3 buckets, you can use them, or you can create new ones.</p>
+<p>To create a bucket, follow the instructions in <a href="http://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-bucket.html">Create a Bucket</a> in the <em>Amazon Simple Storage Service Console User Guide</em>. Include <code>sagemaker</code> in the bucket name. For example, <code>sagemaker-``datetime</code>.</p>
+<p><strong>Note</strong><br />
+Amazon SageMaker needs permission to access these buckets. You grant permission with an IAM role, which you create in the next step when you create an Amazon SageMaker notebook instance. This IAM role automatically gets permissions to access any bucket that has <code>sagemaker</code> in the name. It gets these permissions through the <code>AmazonSageMakerFullAccess</code> policy, which Amazon SageMaker attaches to the role. If you add a policy to the role that grants the SageMaker service principal <code>S3FullAccess</code> permission, the name of the bucket does not need to contain <strong>sagemaker</strong>.</p>
+<p><a href="gs-setup-working-env.md">Step 2: Create an Amazon SageMaker Notebook Instance</a></p>
+</body>
+</html>

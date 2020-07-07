@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 5: Train a Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 5: Train a Model<a name="ex1-train-model"></a></h1>
+</header>
+<p>To train, deploy, and validate a model in Amazon SageMaker, you can use either the Amazon SageMaker Python SDK or the AWS SDK for Python (Boto 3). (You can also use the console, but for this exercise, you will use the notebook instance and one of the SDKs.) This exercise provides code examples for each library.</p>
+<p>The Amazon SageMaker Python SDK abstracts several implementation details, and is easy to use. If you’re a first-time Amazon SageMaker user, we recommend that you use it to train, deploy, and validate the model. For more information, see <a href="https://sagemaker.readthedocs.io/en/stable/overview.html">https://sagemaker.readthedocs.io/en/stable/overview.html</a>.</p>
+<p><strong>Topics</strong> + <a href="#ex1-train-model-select-algorithm">Choose the Training Algorithm</a> + <a href="#ex1-train-model-sdk">Create and Run a Training Job (Amazon SageMaker Python SDK)</a> + <a href="#ex1-train-model-create-training-job">Create and Run a Training Job (AWS SDK for Python (Boto 3))</a></p>
+<p>To choose the right algorithm for your model, you typically follow an evaluation process. For this exercise, you use the <a href="xgboost.md">XGBoost Algorithm</a> provided by Amazon SageMaker, so no evaluation is required. For information about choosing algorithms, see <a href="algos.md">Use Amazon SageMaker Built-in Algorithms</a>.</p>
+<p>The Amazon SageMaker Python SDK includes the <code>sagemaker.estimator.Estimator</code> estimator. You can use this class, in the <code>sagemaker.estimator</code> module, with any algorithm. For more information, see <a href="https://sagemaker.readthedocs.io/en/stable/estimators.html#sagemaker.estimator.Estimator">https://sagemaker.readthedocs.io/en/stable/estimators.html#sagemaker.estimator.Estimator</a>.</p>
+<p><strong>To run a model training job (Amazon SageMaker Python SDK)</strong></p>
+<ol type="1">
+<li><p>Import the Amazon SageMaker Python SDK and get the XGBoost container.</p>
+<pre><code>import sagemaker
+
+from sagemaker.amazon.amazon_estimator import get_image_uri
+
+container = get_image_uri(boto3.Session().region_name, &#39;xgboost&#39;)</code></pre></li>
+<li><p>Download the training and validation data from the Amazon S3 location where you uploaded it in <a href="ex1-preprocess-data-transform.md">Step 4.3: Transform the Training Dataset and Upload It to Amazon S3</a>, and set the location where you store the training output.</p>
+<pre><code>train_data = &#39;s3://{}/{}/{}&#39;.format(bucket, prefix, &#39;train&#39;)
+
+validation_data = &#39;s3://{}/{}/{}&#39;.format(bucket, prefix, &#39;validation&#39;)
+
+s3_output_location = &#39;s3://{}/{}/{}&#39;.format(bucket, prefix, &#39;xgboost_model_sdk&#39;)
+print(train_data)</code></pre></li>
+<li><p>Create an instance of the <code>sagemaker.estimator.Estimator</code> class.</p>
+<pre><code>xgb_model = sagemaker.estimator.Estimator(container,
+                                         role, 
+                                         train_instance_count=1, 
+                                         train_instance_type=&#39;ml.m4.xlarge&#39;,
+                                         train_volume_size = 5,
+                                         output_path=s3_output_location,
+                                         sagemaker_session=sagemaker.Session())</code></pre>
+<p>In the constructor, you specify the following parameters:</p>
+<ul>
+<li><code>role</code> – The AWS Identity and Access Management (IAM) role that Amazon SageMaker can assume to perform tasks on your behalf (for example, reading training results, called model artifacts, from the S3 bucket and writing training results to Amazon S3). This is the role that you got in <a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a>.</li>
+<li><code>train_instance_count</code> and <code>train_instance_type</code> – The type and number of ML compute instances to use for model training. For this exercise, you use only a single training instance.</li>
+<li><code>train_volume_size</code> – The size, in GB, of the Amazon Elastic Block Store (Amazon EBS) storage volume to attach to the training instance. This must be large enough to store training data if you use <code>File</code> mode (<code>File</code> mode is the default).</li>
+<li><code>output_path</code> – The path to the S3 bucket where Amazon SageMaker stores the training results.</li>
+<li><code>sagemaker_session</code> – The session object that manages interactions with Amazon SageMaker APIs and any other AWS service that the training job uses.</li>
+</ul></li>
+<li><p>Set the hyperparameter values for the XGBoost training job by calling the <code>set_hyperparameters</code> method of the estimator. For a description of XGBoost hyperparameters, see <a href="xgboost_hyperparameters.md">XGBoost Hyperparameters</a>.</p>
+<pre><code>xgb_model.set_hyperparameters(max_depth = 5,
+                              eta = .2,
+                              gamma = 4,
+                              min_child_weight = 6,
+                              silent = 0,
+                              objective = &quot;multi:softmax&quot;,
+                              num_class = 10,
+                              num_round = 10)</code></pre></li>
+<li><p>Create the training channels to use for the training job. For this example, we use both <code>train</code> and <code>validation</code> channels.</p>
+<pre><code>train_channel = sagemaker.session.s3_input(train_data, content_type=&#39;text/csv&#39;)
+valid_channel = sagemaker.session.s3_input(validation_data, content_type=&#39;text/csv&#39;)
+
+data_channels = {&#39;train&#39;: train_channel, &#39;validation&#39;: valid_channel}</code></pre></li>
+<li><p>To start model training, call the estimator’s <code>fit</code> method.</p>
+<pre><code>xgb_model.fit(inputs=data_channels,  logs=True)</code></pre>
+<p>This is a synchronous operation. The method displays progress logs and waits until training completes before returning. For more information about model training, see <a href="how-it-works-training.md">Train a Model with Amazon SageMaker</a>.</p>
+<p>Model training for this exercise can take up to 15 minutes.</p></li>
+</ol>
+<p><strong>Next Step</strong><br />
+<a href="ex1-model-deployment.md">Step 6: Deploy the Model to Amazon SageMaker</a></p>
+<p>To train a model, Amazon SageMaker uses the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> API. The AWS SDK for Python (Boto 3) provides the corresponding <code>create_training_job</code> method.</p>
+<p>When using this method, you provide the following information: + The training algorithm – Specify the registry path of the Docker image that contains the training code. For the registry paths for the algorithms provided by Amazon SageMaker, see <a href="sagemaker-algo-docker-registry-paths.md">Common Parameters for Built-In Algorithms</a>. + Algorithm-specific hyperparameters – Specify algorithm-specific hyperparameters to influence the final quality of the model. For information, see <a href="xgboost_hyperparameters.md">XGBoost Hyperparameters</a>. + The input and output configuration – Provide the S3 bucket where training data is stored and where Amazon SageMaker saves the results of model training (the model artifacts).</p>
+<p><strong>To run a model training job (AWS SDK for Python (Boto 3))</strong></p>
+<ol type="1">
+<li><p>Import the <code>get_image_url</code> utility function Amazon SageMaker Python SDK and get the location of the XGBoost container.</p>
+<pre><code>import sagemaker
+
+from sagemaker.amazon.amazon_estimator import get_image_uri
+
+container = get_image_uri(boto3.Session().region_name, &#39;xgboost&#39;)</code></pre></li>
+<li><p>Set up the training information for the job. You pass this information when you call <code>create_training_job</code>. For more information about the information that you need to send to a training job, see <a href="API_CreateTrainingJob.md">CreateTrainingJob</a>.</p>
+<pre><code>#Ensure that the train and validation data folders generated above are reflected in the &quot;InputDataConfig&quot; parameter below.
+common_training_params = \
+{
+    &quot;AlgorithmSpecification&quot;: {
+        &quot;TrainingImage&quot;: container,
+        &quot;TrainingInputMode&quot;: &quot;File&quot;
+    },
+    &quot;RoleArn&quot;: role,
+    &quot;OutputDataConfig&quot;: {
+        &quot;S3OutputPath&quot;: bucket_path + &quot;/&quot;+ prefix + &quot;/xgboost&quot;
+    },
+    &quot;ResourceConfig&quot;: {
+        &quot;InstanceCount&quot;: 1,   
+        &quot;InstanceType&quot;: &quot;ml.m4.xlarge&quot;,
+        &quot;VolumeSizeInGB&quot;: 5
+    },
+    &quot;HyperParameters&quot;: {
+        &quot;max_depth&quot;:&quot;5&quot;,
+        &quot;eta&quot;:&quot;0.2&quot;,
+        &quot;gamma&quot;:&quot;4&quot;,
+        &quot;min_child_weight&quot;:&quot;6&quot;,
+        &quot;silent&quot;:&quot;0&quot;,
+        &quot;objective&quot;: &quot;multi:softmax&quot;,
+        &quot;num_class&quot;: &quot;10&quot;,
+        &quot;num_round&quot;: &quot;10&quot;
+    },
+    &quot;StoppingCondition&quot;: {
+        &quot;MaxRuntimeInSeconds&quot;: 86400
+    },
+    &quot;InputDataConfig&quot;: [
+        {
+            &quot;ChannelName&quot;: &quot;train&quot;,
+            &quot;DataSource&quot;: {
+                &quot;S3DataSource&quot;: {
+                    &quot;S3DataType&quot;: &quot;S3Prefix&quot;,
+                    &quot;S3Uri&quot;: bucket_path + &quot;/&quot;+ prefix+ &#39;/train/&#39;,
+                    &quot;S3DataDistributionType&quot;: &quot;FullyReplicated&quot; 
+                }
+            },
+            &quot;ContentType&quot;: &quot;text/csv&quot;,
+            &quot;CompressionType&quot;: &quot;None&quot;
+        },
+        {
+            &quot;ChannelName&quot;: &quot;validation&quot;,
+            &quot;DataSource&quot;: {
+                &quot;S3DataSource&quot;: {
+                    &quot;S3DataType&quot;: &quot;S3Prefix&quot;,
+                    &quot;S3Uri&quot;: bucket_path + &quot;/&quot;+ prefix+ &#39;/validation/&#39;,
+                    &quot;S3DataDistributionType&quot;: &quot;FullyReplicated&quot;
+                }
+            },
+            &quot;ContentType&quot;: &quot;text/csv&quot;,
+            &quot;CompressionType&quot;: &quot;None&quot;
+        }
+    ]
+}</code></pre></li>
+<li><p>Name your training job, and finish configuring the parameters that you send to it.</p>
+<pre><code>#training job params
+training_job_name = &#39;xgboost-mnist&#39; + strftime(&quot;%Y-%m-%d-%H-%M-%S&quot;, gmtime())
+print(&quot;Job name is:&quot;, training_job_name)
+
+training_job_params = copy.deepcopy(common_training_params)
+training_job_params[&#39;TrainingJobName&#39;] = training_job_name
+training_job_params[&#39;ResourceConfig&#39;][&#39;InstanceCount&#39;] = 1</code></pre></li>
+<li><p>Call <code>create_training_job</code> to start the training job, and wait for it to complete. If the training job fails, print the reason that it failed.</p>
+<pre><code>%%time
+
+region = boto3.Session().region_name
+sm = boto3.Session().client(&#39;sagemaker&#39;)
+
+sm.create_training_job(**training_job_params)
+
+
+status = sm.describe_training_job(TrainingJobName=training_job_name)[&#39;TrainingJobStatus&#39;]
+print(status)
+sm.get_waiter(&#39;training_job_completed_or_stopped&#39;).wait(TrainingJobName=training_job_name)
+status = sm.describe_training_job(TrainingJobName=training_job_name)[&#39;TrainingJobStatus&#39;]
+print(&quot;Training job ended with status: &quot; + status)
+if status == &#39;Failed&#39;:
+    message = sm.describe_training_job(TrainingJobName=training_job_name)[&#39;FailureReason&#39;]
+    print(&#39;Training failed with the following error: {}&#39;.format(message))
+    raise Exception(&#39;Training job failed&#39;)</code></pre></li>
+</ol>
+<p>You now have a trained model. Amazon SageMaker stores the resulting artifacts in your S3 bucket.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-model-deployment.md">Step 6: Deploy the Model to Amazon SageMaker</a></p>
+</body>
+</html>

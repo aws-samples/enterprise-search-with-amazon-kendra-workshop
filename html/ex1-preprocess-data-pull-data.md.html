@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 4.1: Download the MNIST Dataset</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 4.1: Download the MNIST Dataset<a name="ex1-preprocess-data-pull-data"></a></h1>
+</header>
+<p>To download the MNIST dataset, copy and paste the following code into the notebook and run it:.</p>
+<pre><code>%%time 
+import pickle, gzip, urllib.request, json
+import numpy as np
+
+# Load the dataset
+urllib.request.urlretrieve(&quot;http://deeplearning.net/data/mnist/mnist.pkl.gz&quot;, &quot;mnist.pkl.gz&quot;)
+with gzip.open(&#39;mnist.pkl.gz&#39;, &#39;rb&#39;) as f:
+    train_set, valid_set, test_set = pickle.load(f, encoding=&#39;latin1&#39;)
+print(train_set[0].shape)</code></pre>
+<p>The code does the following:</p>
+<ol type="1">
+<li><p>Downloads the MNIST dataset (<code>mnist.pkl.gz</code>) from the MNIST Database website to your notebook.</p></li>
+<li><p>Unzips the file and reads the following datasets into the notebook’s memory:</p>
+<ul>
+<li><code>train_set</code> – You use these images of handwritten numbers to train a model.</li>
+<li><code>valid_set</code> – The <a href="xgboost.md">XGBoost Algorithm</a> uses these images to evaluate the progress of the model during training.</li>
+<li><code>test_set</code> – You use this set to get inferences to test the deployed model.</li>
+</ul></li>
+</ol>
+<p><strong>Next Step</strong><br />
+<a href="ex1-preprocess-data-inspect.md">Step 4.2: Explore the Training Dataset</a></p>
+</body>
+</html>

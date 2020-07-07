@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Common Data Formats for Inference</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Common Data Formats for Inference<a name="cdf-inference"></a></h1>
+</header>
+<p>Amazon SageMaker algorithms accept and produce several different MIME types for the http payloads used in retrieving online and mini-batch predictions. You can use various AWS services to transform or preprocess records prior to running inference. At a minimum, you need to convert the data for the following: + Inference request serialization (handled by you) + Inference request deserialization (handled by the algorithm) + Inference response serialization (handled by the algorithm) + Inference response deserialization (handled by you)</p>
+<p>Content type options for Amazon SageMaker algorithm inference requests include: <code>text/csv</code>, <code>application/json</code>, and <code>application/x-recordio-protobuf</code>. Algorithms that don’t support these types, such as XGBoost, which is incompatible, support other types, such as <code>text/x-libsvm</code>.</p>
+<p>For <code>text/csv</code> the value for the Body argument to <code>invoke_endpoint</code> should be a string with commas separating the values for each feature. For example, a record for a model with four features might look like: <code>1.5,16.0,14,23.0</code>. Any transformations performed on the training data should also be performed on the data before obtaining inference. The order of the features matters, and must remain unchanged.</p>
+<p><code>application/json</code> is significantly more flexible and provides multiple possible formats for developers to use in their applications. At a high level, in JavaScript, the payload might look like:</p>
+<pre><code>let request = {
+  // Instances might contain multiple rows that predictions are sought for.
+  &quot;instances&quot;: [
+    {
+      // Request and algorithm specific inference parameters.
+      &quot;configuration&quot;: {},
+      // Data in the specific format required by the algorithm.
+      &quot;data&quot;: {
+         &quot;&lt;field name&gt;&quot;: dataElement
+       }
+    }
+  ]
+}</code></pre>
+<p>You have the following options for specifying the <code>dataElement</code>:</p>
+<p>Protocol buffers equivalent:</p>
+<pre><code>// Has the same format as the protocol buffers implementation described for training.
+let dataElement = {
+  &quot;keys&quot;: [],
+  &quot;values&quot;: [],
+  &quot;shape&quot;: []
+}</code></pre>
+<p>Simple numeric vector:</p>
+<pre><code>// An array containing numeric values is treated as an instance containing a
+// single dense vector.
+let dataElement = [1.5, 16.0, 14.0, 23.0]
+
+// It will be converted to the following representation by the SDK.
+let converted = {
+  &quot;features&quot;: {
+    &quot;values&quot;: dataElement
+  }
+}</code></pre>
+<p>And, for multiple records:</p>
+<pre><code>let request = {
+  &quot;instances&quot;: [
+    // First instance.
+    {
+      &quot;features&quot;: [ 1.5, 16.0, 14.0, 23.0 ]
+    },
+    // Second instance.
+    {
+      &quot;features&quot;: [ -2.0, 100.2, 15.2, 9.2 ]
+    }
+  ]
+}</code></pre>
+<p>Amazon SageMaker algorithms return JSON in several layouts. At a high level, the structure is:</p>
+<pre><code>let response = {
+  &quot;predictions&quot;: [{
+    // Fields in the response object are defined on a per algorithm-basis.
+  }]
+}</code></pre>
+<p>The fields that are included in predictions differ across algorithms. The following are examples of output for the k-means algorithm.</p>
+<p>Single-record inference:</p>
+<pre><code>let response = {
+  &quot;predictions&quot;: [{
+    &quot;closest_cluster&quot;: 5,
+    &quot;distance_to_cluster&quot;: 36.5
+  }]
+}</code></pre>
+<p>Multi-record inference:</p>
+<pre><code>let response = {
+  &quot;predictions&quot;: [
+    // First instance prediction.
+    {
+      &quot;closest_cluster&quot;: 5,
+      &quot;distance_to_cluster&quot;: 36.5
+    },
+    // Second instance prediction.
+    {
+      &quot;closest_cluster&quot;: 2,
+      &quot;distance_to_cluster&quot;: 90.3
+    }
+  ]
+}</code></pre>
+<p>Multi-record inference with protobuf input:</p>
+<pre><code>{ 
+  &quot;features&quot;: [],
+  &quot;label&quot;: {
+    &quot;closest_cluster&quot;: {
+      &quot;values&quot;: [ 5.0 ] // e.g. the closest centroid/cluster was 1.0
+    },
+    &quot;distance_to_cluster&quot;: {
+      &quot;values&quot;: [ 36.5 ]
+    }
+  },
+  &quot;uid&quot;: &quot;abc123&quot;,
+  &quot;metadata&quot;: &quot;{ &quot;created_at&quot;: &#39;2017-06-03&#39; }&quot;
+}</code></pre>
+<p>Amazon SageMaker algorithms also support jsonlines format, where the per-record response content is same as that in JSON format. The multi-record structure is a concatenation of per-record response objects separated by newline characters. The response content for the built-in KMeans algorithm for 2 input data points is:</p>
+<pre><code>{&quot;distance_to_cluster&quot;: 23.40593910217285, &quot;closest_cluster&quot;: 0.0}
+{&quot;distance_to_cluster&quot;: 27.250282287597656, &quot;closest_cluster&quot;: 0.0}</code></pre>
+<p>While running batch transform, it is recommended to use <code>jsonlines</code> response type by setting the <code>Accept</code> field in the <code>CreateTransformJobRequest</code> to <code>application/jsonlines</code>.</p>
+<p>Most algorithms use several of the following inference request formats.</p>
+<p>Content-type: application/json</p>
+<p>Dense Format</p>
+<pre><code>let request =   {
+    &quot;instances&quot;:    [
+        {
+            &quot;features&quot;: [1.5, 16.0, 14.0, 23.0]
+        }
+    ]
+}
+
+
+let request =   {
+    &quot;instances&quot;:    [
+        {
+            &quot;data&quot;: {
+                &quot;features&quot;: {
+                    &quot;values&quot;: [ 1.5, 16.0, 14.0, 23.0]
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>Sparse Format</p>
+<pre><code>{
+    &quot;instances&quot;: [
+        {&quot;data&quot;: {&quot;features&quot;: {
+                    &quot;keys&quot;: [26, 182, 232, 243, 431],
+                    &quot;shape&quot;: [2000],
+                    &quot;values&quot;: [1, 1, 1, 4, 1]
+                }
+            }
+        },
+        {&quot;data&quot;: {&quot;features&quot;: {
+                    &quot;keys&quot;: [0, 182, 232, 243, 431],
+                    &quot;shape&quot;: [2000],
+                    &quot;values&quot;: [13, 1, 1, 4, 1]
+                }
+            }
+        },
+    ]
+}</code></pre>
+<p>Content-type: application/jsonlines</p>
+<p>Dense Format</p>
+<p>A single record in dense format can be represented as either:</p>
+<pre><code>{ &quot;features&quot;: [1.5, 16.0, 14.0, 23.0] }</code></pre>
+<p>or:</p>
+<pre><code>{ &quot;data&quot;: { &quot;features&quot;: { &quot;values&quot;: [ 1.5, 16.0, 14.0, 23.0] } }</code></pre>
+<p>Sparse Format</p>
+<p>A single record in sparse format is represented as:</p>
+<pre><code>{&quot;data&quot;: {&quot;features&quot;: { &quot;keys&quot;: [26, 182, 232, 243, 431], &quot;shape&quot;: [2000], &quot;values&quot;: [1, 1, 1, 4, 1] } } }</code></pre>
+<p>Multiple records are represented as a concatenation of the above single-record representations, separated by newline characters:</p>
+<pre><code>{&quot;data&quot;: {&quot;features&quot;: { &quot;keys&quot;: [0, 1, 3], &quot;shape&quot;: [4], &quot;values&quot;: [1, 4, 1] } } }
+{ &quot;data&quot;: { &quot;features&quot;: { &quot;values&quot;: [ 1.5, 16.0, 14.0, 23.0] } }
+{ &quot;features&quot;: [1.5, 16.0, 14.0, 23.0] }</code></pre>
+<p>Content-type: text/csv;label_size=0</p>
+<p><strong>Note</strong><br />
+CSV support is not available for factorization machines.</p>
+<p>Content-type: application/x-recordio-protobuf</p>
+<p>While running batch transform, it’s recommended to use jsonlines response type instead of JSON, if supported by the algorithm. This is accomplished by setting the <code>Accept</code> field in the <code>CreateTransformJobRequest</code> to <code>application/jsonlines</code>.</p>
+<p>When you create a transform job, the <code>SplitType</code> must be set according to the <code>ContentType</code> of the input data. Similarly, depending on the <code>Accept</code> field in the <code>CreateTransformJobRequest</code>, <code>AssembleWith</code> must be set accordingly. Please use the following table to help appropriately set these fields:</p>
+<table>
+<thead>
+<tr class="header">
+<th>ContentType</th>
+<th>Recommended SplitType</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Accept</td>
+<td>Recommended AssembleWith</td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>application/x-recordio-protobuf</td>
+<td>RecordIO</td>
+</tr>
+<tr class="even">
+<td>text/csv</td>
+<td>Line</td>
+</tr>
+<tr class="odd">
+<td>application/jsonlines</td>
+<td>Line</td>
+</tr>
+<tr class="even">
+<td>application/json</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>application/x-image</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>image/*</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>application/x-recordio-protobuf</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>application/json</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>application/jsonlines</td>
+<td>Line</td>
+</tr>
+</tbody>
+</table>
+<p>For more information on response formats for specific algorithms, see the following: + <a href="PCA-in-formats.md">PCA Response Formats</a> + <a href="LL-in-formats.md">Linear Learner Response Formats</a> + <a href="ntm-in-formats.md">NTM Response Formats</a> + <a href="km-in-formats.md">K-Means Response Formats</a> + <a href="fm-in-formats.md">Factorization Machine Response Formats</a></p>
+</body>
+</html>

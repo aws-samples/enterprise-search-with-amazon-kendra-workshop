@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Clean up</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Clean up<a name="automatic-model-tuning-ex-cleanup"></a></h1>
+</header>
+<p>To avoid incurring unnecessary charges, when you are done with the example, use the AWS Management Console to delete the resources that you created for it.</p>
+<p><strong>Note</strong><br />
+If you plan to explore other examples, you might want to keep some of these resources, such as your notebook instance, S3 bucket, and IAM role.</p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a> and delete the notebook instance. Stop the instance before deleting it.</p></li>
+<li><p>Open the Amazon S3 console at <a href="https://console.aws.amazon.com/s3/">https://console.aws.amazon.com/s3/</a> and delete the bucket that you created to store model artifacts and the training dataset.</p></li>
+<li><p>Open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a> and delete the IAM role. If you created permission policies, you can delete them, too.</p></li>
+<li><p>Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and delete all of the log groups that have names starting with <code>/aws/sagemaker/</code>.</p></li>
+</ol>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BlazingText Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">BlazingText Algorithm<a name="blazingtext"></a></h1>
+</header>
+<p>The Amazon SageMaker BlazingText algorithm provides highly optimized implementations of the Word2vec and text classification algorithms. The Word2vec algorithm is useful for many downstream natural language processing (NLP) tasks, such as sentiment analysis, named entity recognition, machine translation, etc. Text classification is an important task for applications that perform web searches, information retrieval, ranking, and document classification.</p>
+<p>The Word2vec algorithm maps words to high-quality distributed vectors. The resulting vector representation of a word is called a <em>word embedding</em>. Words that are semantically similar correspond to vectors that are close together. That way, word embeddings capture the semantic relationships between words.</p>
+<p>Many natural language processing (NLP) applications learn word embeddings by training on large collections of documents. These pretrained vector representations provide information about semantics and word distributions that typically improves the generalizability of other models that are later trained on a more limited amount of data. Most implementations of the Word2vec algorithm are optimized for multi-core CPU architectures. This makes it difficult to scale to large datasets.</p>
+<p>With the BlazingText algorithm, you can scale to large datasets easily. Similar to Word2vec, it provides the Skip-gram and continuous bag-of-words (CBOW) training architectures. BlazingText’s implementation of the supervised multi-class, multi-label text classification algorithm extends the fastText text classifier to use GPU acceleration with custom <a href="https://docs.nvidia.com/cuda/index.html">CUDA</a> kernels. You can train a model on more than a billion words in a couple of minutes using a multi-core CPU or a GPU. And, you achieve performance on par with the state-of-the-art deep learning text classification algorithms.</p>
+<p>The Amazon SageMaker BlazingText algorithms provides the following features: + Accelerated training of the fastText text classifier on multi-core CPUs or a GPU and Word2Vec on GPUs using highly optimized CUDA kernels. For more information, see <a href="https://dl.acm.org/citation.cfm?doid=3146347.3146354">BlazingText: Scaling and Accelerating Word2Vec using Multiple GPUs</a>. + <a href="https://arxiv.org/abs/1607.04606">Enriched Word Vectors with Subword Information</a> by learning vector representations for character n-grams. This approach enables BlazingText to generate meaningful vectors for out-of-vocabulary (OOV) words by representing their vectors as the sum of the character n-gram (subword) vectors. + A <code>batch_skipgram</code> <code>mode</code> for the Word2Vec algorithm that allows faster training and distributed computation across multiple CPU nodes. The <code>batch_skipgram</code> <code>mode</code> does mini-batching using the Negative Sample Sharing strategy to convert level-1 BLAS operations into level-3 BLAS operations. This efficiently leverages the multiply-add instructions of modern architectures. For more information, see <a href="https://arxiv.org/pdf/1604.04661.pdf">Parallelizing Word2Vec in Shared and Distributed Memory</a>.</p>
+<p>To summarize, the following modes are supported by BlazingText on different types instances:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modes</th>
+<th>Word2Vec (Unsupervised Learning)</th>
+<th>Text Classification (Supervised Learning)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Single CPU instance</td>
+<td><code>cbow</code> <code>Skip-gram</code> <code>Batch Skip-gram</code></td>
+<td><code>supervised</code></td>
+</tr>
+<tr class="even">
+<td>Single GPU instance (with 1 or more GPUs)</td>
+<td><code>cbow</code> <code>Skip-gram</code></td>
+<td><code>supervised</code> with one GPU</td>
+</tr>
+<tr class="odd">
+<td>Multiple CPU instances</td>
+<td>Batch Skip-gram</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>For more information about the mathematics behind BlazingText, see <a href="https://dl.acm.org/citation.cfm?doid=3146347.3146354">BlazingText: Scaling and Accelerating Word2Vec using Multiple GPUs</a>.</p>
+<p><strong>Topics</strong> + <a href="#bt-inputoutput">Input/Output Interface for the BlazingText Algorithm</a> + <a href="#blazingtext-instances">EC2 Instance Recommendation for the BlazingText Algorithm</a> + <a href="#blazingtext-sample-notebooks">BlazingText Sample Notebooks</a> + <a href="blazingtext_hyperparameters.md">BlazingText Hyperparameters</a> + <a href="blazingtext-tuning.md">Tune a BlazingText Model</a></p>
+<p>The BlazingText algorithm expects a single preprocessed text file with space-separated tokens. Each line in the file should contain a single sentence. If you need to train on multiple text files, concatenate them into one file and upload the file in the respective channel.</p>
+<p>For Word2Vec training, upload the file under the <em>train</em> channel. No other channels are supported. The file should contain a training sentence per line.</p>
+<p>For supervised mode, you can train with file mode or with the augmented manifest text format.</p>
+<p>For <code>supervised</code> mode, the training/validation file should contain a training sentence per line along with the labels. Labels are words that are prefixed by the string <em>__label__</em>. Here is an example of a training/validation file:</p>
+<pre><code>__label__4  linux ready for prime time , intel says , despite all the linux hype , the open-source movement has yet to make a huge splash in the desktop market . that may be about to change , thanks to chipmaking giant intel corp .
+
+__label__2  bowled by the slower one again , kolkata , november 14 the past caught up with sourav ganguly as the indian skippers return to international cricket was short lived .</code></pre>
+<p><strong>Note</strong><br />
+The order of labels within the sentence doesn’t matter.</p>
+<p>Upload the training file under the train channel, and optionally upload the validation file under the validation channel.</p>
+<p>The supervised mode also supports the augmented manifest format, which enables you to do training in pipe mode without needing to create RecordIO files. While using the format, an S3 manifest file needs to be generated that contains the list of sentences and their corresponding labels. The manifest file format should be in <a href="http://jsonlines.org/">JSON Lines</a> format in which each line represents one sample. The sentences are specified using the <code>source</code> tag and the label can be specified using the <code>label</code> tag. Both <code>source</code> and <code>label</code> tags should be provided under the <code>AttributeNames</code> parameter value as specified in the request.</p>
+<pre><code>{&quot;source&quot;:&quot;linux ready for prime time , intel says , despite all the linux hype&quot;, &quot;label&quot;:1}
+{&quot;source&quot;:&quot;bowled by the slower one again , kolkata , november 14 the past caught up with sourav ganguly&quot;, &quot;label&quot;:2}</code></pre>
+<p>For more information on augmented manifest files, see <a href="augmented-manifest.md">Provide Dataset Metadata to Training Jobs with an Augmented Manifest File</a>.</p>
+<p>For Word2Vec training, the model artifacts consist of <em>vectors.txt</em>, which contains words-to-vectors mapping, and <em>vectors.bin</em>, a binary used by BlazingText for hosting, inference, or both. <em>vectors.txt</em> stores the vectors in a format that is compatible with other tools like Gensim and Spacy. For example, a Gensim user can run the following commands to load the vectors.txt file:</p>
+<pre><code>from gensim.models import KeyedVectors
+word_vectors = KeyedVectors.load_word2vec_format(&#39;vectors.txt&#39;, binary=False)
+word_vectors.most_similar(positive=[&#39;woman&#39;, &#39;king&#39;], negative=[&#39;man&#39;])
+word_vectors.doesnt_match(&quot;breakfast cereal dinner lunch&quot;.split())</code></pre>
+<p>If the evaluation parameter is set to <code>True</code>, an additional file, <em>eval.json</em>, is created. This file contains the similarity evaluation results (using Spearman’s rank correlation coefficients) on <a href="https://www.cs.technion.ac.il/~gabr/resources/data/wordsim353/">WS-353 dataset</a>. The number of words from the WS-353 dataset that aren’t there in the training corpus are reported.</p>
+<p>For inference requests, the model accepts a JSON file containing a list of strings and returns a list of vectors. If the word is not found in vocabulary, inference returns a vector of zeros. If subwords is set to <code>True</code> during training, the model is able to generate vectors for out-of-vocabulary (OOV) words.</p>
+<p>Mime-type:<code>application/json</code></p>
+<pre><code>{
+&quot;instances&quot;: [&quot;word1&quot;, &quot;word2&quot;, &quot;word3&quot;]
+}</code></pre>
+<p>Training with supervised outputs creates a <em>model.bin</em> file that can be consumed by BlazingText hosting. For inference, the BlazingText model accepts a JSON file containing a list of sentences and returns a list of corresponding predicted labels and probability scores. Each sentence is expected to be a string with space-separated tokens, words, or both.</p>
+<p>Mime-type:<code>application/json</code></p>
+<pre><code>{
+ &quot;instances&quot;: [&quot;the movie was excellent&quot;, &quot;i did not like the plot .&quot;]
+}</code></pre>
+<p>By default, the server returns only one prediction, the one with the highest probability. For retrieving the top <em>k</em> predictions, you can set <em>k</em> in the configuration, as follows:</p>
+<pre><code>{
+ &quot;instances&quot;: [&quot;the movie was excellent&quot;, &quot;i did not like the plot .&quot;],
+ &quot;configuration&quot;: {&quot;k&quot;: 2}
+}</code></pre>
+<p>For BlazingText, the<code>content-type</code> and <code>accept</code> parameters must be equal. For batch transform, they both need to be <code>application/jsonlines</code>. If they differ, the <code>Accept</code> field is ignored. The format for input follows:</p>
+<pre><code>content-type: application/jsonlines
+
+{&quot;source&quot;: &quot;source_0&quot;}
+{&quot;source&quot;: &quot;source_1&quot;}
+
+if you need to pass the value of k for top-k, then you can do it in the following way:
+
+{&quot;source&quot;: &quot;source_0&quot;, &quot;k&quot;: 2}
+{&quot;source&quot;: &quot;source_1&quot;, &quot;k&quot;: 3}</code></pre>
+<p>The format for output follows:</p>
+<pre><code>accept: application/jsonlines
+
+
+{&quot;prob&quot;: [prob_1], &quot;label&quot;: [&quot;__label__1&quot;]}
+{&quot;prob&quot;: [prob_1], &quot;label&quot;: [&quot;__label__1&quot;]}
+                    
+If you have passed the value of k to be more than 1, then response will be in this format:
+
+{&quot;prob&quot;: [prob_1, prob_2], &quot;label&quot;: [&quot;__label__1&quot;, &quot;__label__2&quot;]}
+{&quot;prob&quot;: [prob_1, prob_2], &quot;label&quot;: [&quot;__label__1&quot;, &quot;__label__2&quot;]}</code></pre>
+<p>For both supervised (text classification) and unsupervised (Word2Vec) modes, the binaries (<em>*.bin</em>) produced by BlazingText can be cross-consumed by fastText and vice versa. You can use binaries produced by BlazingText by fastText. Likewise, you can host the model binaries created with fastText using BlazingText.</p>
+<p>For more details on dataset formats and model hosting, see the example notebooks <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/blazingtext_text_classification_dbpedia/blazingtext_text_classification_dbpedia.ipynb">Text Classification with the BlazingText Algorithm</a>, <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/blazingtext_hosting_pretrained_fasttext/blazingtext_hosting_pretrained_fasttext.ipynb">FastText Models</a>, and <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/blazingtext_word2vec_subwords_text8/blazingtext_word2vec_subwords_text8.ipynb">Generating Subword Embeddings with the Word2Vec Algorithm</a>.</p>
+<p>For <code>cbow</code> and <code>skipgram</code> modes, BlazingText supports single CPU and single GPU instances. Both of these modes support learning of <code>subwords</code> embeddings. To achieve the highest speed without compromising accuracy, we recommend that you use an ml.p3.2xlarge instance.</p>
+<p>For <code>batch_skipgram</code> mode, BlazingText supports single or multiple CPU instances. When training on multiple instances, set the value of the <code>S3DataDistributionType</code> field of the <code>[S3DataSource](API_S3DataSource.md)</code> object that you pass to <code>[CreateTrainingJob](API_CreateTrainingJob.md)</code> to <code>FullyReplicated</code>. BlazingText takes care of distributing data across machines.</p>
+<p>For the supervised text classification mode, a C5 instance is recommended if the training dataset is less than 2 GB. For larger datasets, use an instance with a single GPU (ml.p2.xlarge or ml.p3.2xlarge).</p>
+<p>For a sample notebook that uses the Amazon SageMaker BlazingText algorithm to train and deploy supervised binary and multiclass classification models, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/blazingtext_text_classification_dbpedia/blazingtext_text_classification_dbpedia.ipynb">Blazing Text classification on the DBPedia dataset</a>. For instructions for creating and accessing Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. After creating and opening a notebook instance, choose the <strong>SageMaker Examples</strong> tab to see a list of all the Amazon SageMaker examples. The topic modeling example notebooks that use the Blazing Text are located in the <strong>Introduction to Amazon algorithms</strong> section. To open a notebook, choose its <strong>Use</strong> tab, then choose <strong>Create copy</strong>.</p>
+</body>
+</html>

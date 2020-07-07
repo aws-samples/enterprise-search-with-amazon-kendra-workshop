@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Monitor the Progress of a Hyperparameter Tuning Job</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Monitor the Progress of a Hyperparameter Tuning Job<a name="automatic-model-tuning-monitor"></a></h1>
+</header>
+<p>To monitor the progress of a hyperparameter tuning job and the training jobs that it launches, use the Amazon SageMaker console.</p>
+<p><strong>Topics</strong> + <a href="#automatic-model-tuning-monitor-tuning">View the Status of the Hyperparameter Tuning Job</a> + <a href="#automatic-model-tuning-monitor-training">View the Status of the Training Jobs</a> + <a href="#automatic-model-tuning-best-training-job">View the Best Training Job</a></p>
+<p><strong>To view the status of the hyperparameter tuning job</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a></p></li>
+<li><p>Choose <strong>Hyperparameter tuning jobs</strong>.<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/console-tuning-jobs.png" alt="[Image NOT FOUND]" /></p></li>
+<li><p>In the list of hyperparameter tuning jobs, check the status of the hyperparameter tuning job you launched. A tuning job can be:</p>
+<ul>
+<li><code>Completed</code>—The hyperparameter tuning job successfully completed.</li>
+<li><code>InProgress</code>—The hyperparameter tuning job is in progress. One or more training jobs are still running.</li>
+<li><code>Failed</code>—The hyperparameter tuning job failed.</li>
+<li><code>Stopped</code>—The hyperparameter tuning job was manually stopped before it completed. All training jobs that the hyperparameter tuning job launched are stopped.</li>
+<li><code>Stopping</code>—The hyperparameter tuning job is in the process of stopping.</li>
+</ul></li>
+</ol>
+<p><strong>To view the status of the training jobs that the hyperparameter tuning job launched</strong></p>
+<ol type="1">
+<li><p>In the list of hyperparameter tuning jobs, choose the job that you launched.</p></li>
+<li><p>Choose <strong>Training jobs</strong>.<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/hyperparameter-training-jobs.png" alt="[Image NOT FOUND]" /></p></li>
+<li><p>View the status of each training job. To see more details about a job, choose it in the list of training jobs. To view a summary of the status of all of the training jobs that the hyperparameter tuning job launched, see <strong>Training job status counter</strong>.</p>
+<p>A training job can be:</p>
+<ul>
+<li><code>Completed</code>—The training job successfully completed.</li>
+<li><code>InProgress</code>—The training job is in progress.</li>
+<li><code>Stopped</code>—The training job was manually stopped before it completed.</li>
+<li><code>Failed (Retriable)</code>—The training job failed, but can be retried. A failed training job can be retried only if it failed because an internal service error occurred.</li>
+<li><code>Failed (Non-retriable)</code>—The training job failed and can’t be retried. A failed training job can’t be retried when a client error occurs.</li>
+</ul></li>
+</ol>
+<p>A hyperparameter tuning job uses the objective metric that each training job returns to evaluate training jobs. While the hyperparameter tuning job is in progress, the best training job is the one that has returned the best objective metric so far. After the hyperparameter tuning job is complete, the best training job is the one that returned the best objective metric.</p>
+<p>To view the best training job, choose <strong>Best training job</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/best-training-job.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p>To deploy the best training job as a model that you can host at an Amazon SageMaker endpoint, choose <strong>Create model</strong>.</p>
+<p><a href="automatic-model-tuning-ex-cleanup.md">Clean up</a></p>
+</body>
+</html>

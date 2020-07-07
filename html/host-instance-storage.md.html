@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Hosting Instance Storage Volumes</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Hosting Instance Storage Volumes<a name="host-instance-storage"></a></h1>
+</header>
+<p>When you create an endpoint, Amazon SageMaker attaches an Amazon EBS storage volume to each ML compute instance that hosts the endpoint. The size of the storage volume depends on the instance type. The following table shows the size of the storage volume that Amazon SageMaker attaches for each instance type.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Instance Type</th>
+<th>Storage Volume in GB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ml.t2.medium</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>ml.t2.large</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>ml.t2.xlarge</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>ml.t2.2xlarge</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>ml.m4.xlarge</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>ml.m4.2xlarge</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>ml.m4.4xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.m4.10xlarge</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>ml.m4.16xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.m5.large</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>ml.m5.xlarge</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>ml.m5.2xlarge</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>ml.m5.4xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.m5.12xlarge</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>ml.m5.24xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.c4.large</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>ml.c4.xlarge</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>ml.c4.2xlarge</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>ml.c4.4xlarge</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>ml.c4.8xlarge</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>ml.c5.large</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>ml.c5.xlarge</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>ml.c5.2xlarge</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>ml.c5.4xlarge</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>ml.c5.9xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.c5.18xlarge</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>ml.p2.xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.p2.8xlarge</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>ml.p2.16xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.p3.2xlarge</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>ml.p3.8xlarge</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>ml.p3.16xlarge</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Get Inferences for an Entire Dataset with Batch Transform</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Get Inferences for an Entire Dataset with Batch Transform<a name="how-it-works-batch"></a></h1>
+</header>
+<p>To get inferences for an entire dataset, use batch transform. With batch transform, you create a batch transform job using a trained model and the dataset, which must be stored in Amazon S3. Amazon SageMaker saves the inferences in an S3 bucket that you specify when you create the batch transform job. Batch transform manages all of the compute resources required to get inferences. This includes launching instances and deleting them after the batch transform job has completed. Batch transform manages interactions between the data and the model with an object within the instance node called an agent.</p>
+<p>Use batch transform when you: + Want to get inferences for an entire dataset and index them to serve inferences in real time + Don’t need a persistent endpoint that applications (for example, web or mobile apps) can call to get inferences + Don’t need the subsecond latency that Amazon SageMaker hosted endpoints provide</p>
+<p>You can also use batch transform to preprocess your data before using it to train a new model or generate inferences.</p>
+<p>The following diagram shows the workflow of a batch transform job:</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/batch-transform-v2.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p>To perform a batch transform, create a batch transform job using either the Amazon SageMaker console or the API. Provide the following: + The path to the S3 bucket where you’ve stored the data that you want to transform. + The compute resources that you want Amazon SageMaker to use for the transform job. <em>Compute resources</em> are machine learning (ML) compute instances that are managed by Amazon SageMaker. + The path to the S3 bucket where you want to store the output of the job. + The name of the Amazon SageMaker model that you want to use to create inferences. You must use a model that you have already created either with the <a href="API_CreateModel.md">CreateModel</a> operation or the console.</p>
+<p>The following is an example of what a dataset file might look like.</p>
+<pre><code>An example of input file content:
+                Record1-Attribute1, Record1-Attribute2, Record1-Attribute3, ..., Record1-AttributeM
+                Record2-Attribute1, Record2-Attribute2, Record2-Attribute3, ..., Record2-AttributeM
+                Record3-Attribute1, Record3-Attribute2, Record3-Attribute3, ..., Record3-AttributeM
+                ...
+                RecordN-Attribute1, RecordN-Attribute2, RecordN-Attribute3, ..., RecordN-AttributeM</code></pre>
+<p>A record is a single input data unit, for information on how to delimit records for batch transform jobs, see <code>SplitType</code> in <a href="API_TransformInput.md">TransformInput</a>.</p>
+<p>For an example of how to use batch transform, see <a href="ex1-batch-transform.md">Step 6.2: Deploy the Model with Batch Transform</a>.</p>
+<p><a href="how-it-works-model-validation.md">Validate a Machine Learning Model</a></p>
+</body>
+</html>

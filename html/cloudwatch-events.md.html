@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>React to Amazon SageMaker Job Status Changes with CloudWatch Events</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">React to Amazon SageMaker Job Status Changes with CloudWatch Events<a name="cloudwatch-events"></a></h1>
+</header>
+<p>To react to a status change in a Amazon SageMaker training, hyperparameter tuning, or batch transform job, create a rule in CloudWatch Events that use the <strong>SageMaker Training Job State Change</strong>, <strong>SageMaker Hyperparameter Tuning Job State Change</strong>, or <strong>SageMaker Transform Job State Change</strong> event type as the event source for the rule.</p>
+<p>Every time the status of a Amazon SageMaker job changes, it triggers an event that CloudWatch Events monitors, and you can create a rule that calls a AWS Lambda function when the status changes. For information about the status values and meanings for Amazon SageMaker jobs, see the following: + <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeTrainingJob.html#SageMaker-DescribeTrainingJob-response-TrainingJobStatus">TrainingJobStatus</a> + <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeHyperParameterTuningJob.html#SageMaker-DescribeHyperParameterTuningJob-response-HyperParameterTuningJobStatus">HyperParameterTuningJobStatus</a> + <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeTransformJob.html#SageMaker-DescribeTransformJob-response-TransformJobStatus">TransformJobStatus</a></p>
+<p>For information about creating CloudWatch Events rules, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/Create-CloudWatch-Events-Rule.html">Creating a CloudWatch Events Rule That Triggers on an Event</a> in the <em>CloudWatch Events User Guide</em>. For detailed information about the format of the Amazon SageMaker events that CloudWatch Events monitors, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/EventTypes.html#sagemaker_event_types">Amazon SageMaker Events</a>.</p>
+</body>
+</html>

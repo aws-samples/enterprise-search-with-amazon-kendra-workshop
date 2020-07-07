@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 4.3: Transform the Training Dataset and Upload It to Amazon S3</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 4.3: Transform the Training Dataset and Upload It to Amazon S3<a name="ex1-preprocess-data-transform"></a></h1>
+</header>
+<p>The <a href="xgboost.md">XGBoost Algorithm</a> expects comma-separated values (CSV) for its training input. The format of the training dataset is numpy.array. Transform the dataset from numpy.array format to the CSV format. Then upload it to the Amazon S3 bucket that you created in <a href="gs-config-permissions.md">Step 1: Create an Amazon S3 Bucket</a></p>
+<p><strong>To convert the dataset to CSV format and upload it</strong> + Type the following code into a cell in your notebook and then run the cell.</p>
+<pre><code>%%time
+
+import struct
+import io
+import csv
+import boto3
+        
+def convert_data():
+    data_partitions = [(&#39;train&#39;, train_set), (&#39;validation&#39;, valid_set), (&#39;test&#39;, test_set)]
+    for data_partition_name, data_partition in data_partitions:
+        print(&#39;{}: {} {}&#39;.format(data_partition_name, data_partition[0].shape, data_partition[1].shape))
+        labels = [t.tolist() for t in data_partition[1]]
+        features = [t.tolist() for t in data_partition[0]]
+        
+        if data_partition_name != &#39;test&#39;:
+            examples = np.insert(features, 0, labels, axis=1)
+        else:
+            examples = features
+        #print(examples[50000,:])
+        
+        
+        np.savetxt(&#39;data.csv&#39;, examples, delimiter=&#39;,&#39;)
+        
+        
+        
+        key = &quot;{}/{}/examples&quot;.format(prefix,data_partition_name)
+        url = &#39;s3://{}/{}&#39;.format(bucket, key)
+        boto3.Session().resource(&#39;s3&#39;).Bucket(bucket).Object(key).upload_file(&#39;data.csv&#39;)
+        print(&#39;Done writing to {}&#39;.format(url))
+        
+convert_data()</code></pre>
+<p>After it converts the dataset to the CSV format, ,the code uploads the CSV file to the S3 bucket.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-train-model.md">Step 5: Train a Model</a></p>
+</body>
+</html>

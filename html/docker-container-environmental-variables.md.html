@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Reference: Amazon SageMaker Containers Environmental Variables</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Reference: Amazon SageMaker Containers Environmental Variables<a name="docker-container-environmental-variables"></a></h1>
+</header>
+<p>The following build-time environment `<code>variables are also defined by default when you use the [Amazon SageMaker Containers](https://github.com/aws/sagemaker-containers)\. +</code>SM_NUM_CPUS`</p>
+<pre><code>SM_NUM_CPUS=32</code></pre>
+<p>The <code>SM_NUM_CPUS</code> environment variable contains the number of CPUs available in the current container.</p>
+<p>Example:</p>
+<pre><code># Using it in argparse
+parser.add_argument(&#39;num_cpus&#39;, type=int, default=os.environ[&#39;SM_NUM_CPUS&#39;])
+
+# Using it as a variable
+num_cpus = int(os.environ[&#39;SM_NUM_CPUS&#39;])</code></pre>
+<ul>
+<li><p><code>SM_LOG_LEVEL</code></p>
+<pre><code>SM_LOG_LEVEL=20</code></pre>
+<p>The <code>SM_LOG_LEVEL</code> environment variable contains the current log level in the container.</p>
+<p>Example:</p>
+<pre><code>import logging
+
+logger = logging.getLogger(__name__)
+
+logger.setLevel(int(os.environ.get(&#39;SM_LOG_LEVEL&#39;, logging.INFO)))</code></pre></li>
+<li><p><code>SM_NETWORK_INTERFACE_NAME</code></p>
+<pre><code>SM_NETWORK_INTERFACE_NAME=ethwe</code></pre>
+<p>The <code>SM_NETWORK_INTERFACE_NAME</code> environment variable contains the name of the network interface, which is used for distributed training.</p>
+<p>Example:</p>
+<pre><code># Using it in argparse
+parser.add_argument(&#39;network_interface&#39;, type=str, default=os.environ[&#39;SM_NETWORK_INTERFACE_NAME&#39;])
+
+# Using it as a variable
+network_interface = os.environ[&#39;SM_NETWORK_INTERFACE_NAME&#39;]</code></pre></li>
+<li><p><code>SM_USER_ARGS</code></p>
+<pre><code>SM_USER_ARGS=&#39;[&quot;--batch-size&quot;,&quot;256&quot;,&quot;--learning_rate&quot;,&quot;0.0001&quot;,&quot;--communicator&quot;,&quot;pure_nccl&quot;]&#39;</code></pre>
+<p>The <code>SM_INPUT_DIR</code> environment variable contains a JSON-encoded list of the script arguments provided for training.</p></li>
+<li><p><code>SM_INPUT_DIR</code></p>
+<pre><code>SM_INPUT_DIR=/opt/ml/input/</code></pre>
+<p>The <code>SM_INPUT_DIR</code> environment variable contains the path of the input directory, <code>/opt/ml/input/</code>. This is the directory where Amazon SageMaker saves input data and configuration files before and during training.</p></li>
+<li><p><code>SM_INPUT_CONFIG_DIR</code></p>
+<pre><code>SM_INPUT_DIR=/opt/ml/input/config</code></pre>
+<p>The <code>SM_INPUT_CONFIG_DIR</code> environment variable contains the path of the input config directory, <code>/opt/ml/input/config/</code>. This is the directory where standard Amazon SageMaker configuration files are located.</p>
+<p>When training starts, Amazon SageMaker creates the following files in this directory:</p>
+<ul>
+<li><code>hyperparameters.json</code> – Contains the hyperparameters specified in the <code>CreateTrainingJob</code> request.</li>
+<li><code>inputdataconfig.json</code> – Contains the data channel information that you specified in the <code>InputDataConfig</code> parameter in a <code>CreateTrainingJob</code> request.</li>
+<li><code>resourceconfig.json</code> – Contains the name of the current host and all host containers used in the training.</li>
+</ul>
+<p>For more information, see: <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo.html">Using Your Own Training Algorithms</a>.</p></li>
+<li><p><code>SM_OUTPUT_DATA_DIR</code></p>
+<pre><code>SM_OUTPUT_DATA_DIR=/opt/ml/output/data/algo-1</code></pre>
+<p>The <code>SM_OUTPUT_DATA_DIR</code> environment variable contains the directory where the algorithm writes non-model training artifacts, such as evaluation results. Amazon SageMaker retains these artifacts. As it runs in a container, your algorithm generates output, including the status of the training job and model, and the output artifacts. Your algorithm should write this information to this directory.</p></li>
+<li><p><code>SM_RESOURCE_CONFIG</code></p>
+<pre><code>SM_RESOURCE_CONFIG=&#39;{&quot;current_host&quot;:&quot;algo-1&quot;,&quot;hosts&quot;:[&quot;algo-1&quot;,&quot;algo-2&quot;]}&#39;</code></pre>
+<p>The <code>SM_RESOURCE_CONFIG</code> environment variable contains the contents of the <code>resourceconfig.json</code> file located in the <code>/opt/ml/input/config/</code> directory. It has the following keys:</p>
+<ul>
+<li><code>current_host</code> – The name of the current container on the container network. For example, <code>"algo-1"</code>.</li>
+<li><code>hosts</code> – The list of names of all of the containers on the container network, sorted lexicographically. For example, <code>["algo-1", "algo-2", "algo-3"]</code> for a three-node cluster.</li>
+</ul>
+<p>For more information about the <code>resourceconfig.json</code> file, see: <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo.html#your-algorithms-training-algo-running-container-dist-training">Distributed Training Configuration</a>.</p></li>
+<li><p><code>SM_INPUT_DATA_CONFIG</code></p>
+<pre><code>SM_INPUT_DATA_CONFIG=&#39;{
+    &quot;testing&quot;: {
+        &quot;RecordWrapperType&quot;: &quot;None&quot;,
+        &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;,
+        &quot;TrainingInputMode&quot;: &quot;File&quot;
+    },
+    &quot;training&quot;: {
+        &quot;RecordWrapperType&quot;: &quot;None&quot;,
+        &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;,
+        &quot;TrainingInputMode&quot;: &quot;File&quot;
+    }
+}&#39;</code></pre>
+<p>The <code>SM_INPUT_DATA_CONFIG</code> environment variable contains the input data configuration of the <code>inputdataconfig.json</code> file located in the <code>/opt/ml/input/config/</code> directory.</p>
+<p>For more information about the <code>resourceconfig.json</code> file, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo.html#your-algorithms-training-algo-running-container-dist-training">Distributed Training Configuration</a>.</p></li>
+<li><p><code>SM_TRAINING_ENV</code></p>
+<pre><code>SM_TRAINING_ENV=&#39;
+{
+    &quot;channel_input_dirs&quot;: {
+        &quot;test&quot;: &quot;/opt/ml/input/data/testing&quot;,
+        &quot;train&quot;: &quot;/opt/ml/input/data/training&quot;
+    },
+    &quot;current_host&quot;: &quot;algo-1&quot;,
+    &quot;framework_module&quot;: &quot;sagemaker_chainer_container.training:main&quot;,
+    &quot;hosts&quot;: [
+        &quot;algo-1&quot;,
+        &quot;algo-2&quot;
+    ],
+    &quot;hyperparameters&quot;: {
+        &quot;batch-size&quot;: 10000,
+        &quot;epochs&quot;: 1
+    },
+    &quot;input_config_dir&quot;: &quot;/opt/ml/input/config&quot;,
+    &quot;input_data_config&quot;: {
+        &quot;test&quot;: {
+            &quot;RecordWrapperType&quot;: &quot;None&quot;,
+            &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;,
+            &quot;TrainingInputMode&quot;: &quot;File&quot;
+        },
+        &quot;train&quot;: {
+            &quot;RecordWrapperType&quot;: &quot;None&quot;,
+            &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;,
+            &quot;TrainingInputMode&quot;: &quot;File&quot;
+        }
+    },
+    &quot;input_dir&quot;: &quot;/opt/ml/input&quot;,
+    &quot;job_name&quot;: &quot;preprod-chainer-2018-05-31-06-27-15-511&quot;,
+    &quot;log_level&quot;: 20,
+    &quot;model_dir&quot;: &quot;/opt/ml/model&quot;,
+    &quot;module_dir&quot;: &quot;s3://sagemaker-{aws-region}-{aws-id}/{training-job-name}/source/sourcedir.tar.gz&quot;,
+    &quot;module_name&quot;: &quot;user_script&quot;,
+    &quot;network_interface_name&quot;: &quot;ethwe&quot;,
+    &quot;num_cpus&quot;: 4,
+    &quot;num_gpus&quot;: 1,
+    &quot;output_data_dir&quot;: &quot;/opt/ml/output/data/algo-1&quot;,
+    &quot;output_dir&quot;: &quot;/opt/ml/output&quot;,
+    &quot;resource_config&quot;: {
+        &quot;current_host&quot;: &quot;algo-1&quot;,
+        &quot;hosts&quot;: [
+            &quot;algo-1&quot;,
+            &quot;algo-2&quot;
+        ]
+    }
+}&#39;</code></pre>
+<p>The <code>SM_TRAINING_ENV</code> environment variable provides all of the training information as a JSON-encoded dictionary.</p></li>
+</ul>
+</body>
+</html>

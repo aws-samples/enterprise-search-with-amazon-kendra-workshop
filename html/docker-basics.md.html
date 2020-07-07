@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Docker Container Basics</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Docker Container Basics<a name="docker-basics"></a></h1>
+</header>
+<p>Docker containers provide isolation, portability, and security. They simplify the creation of highly distributed systems and save money by improving resource utilization. Docker relies on Linux kernel functionality to provide a lightweight virtualization to package applications into an image that is totally self-contained. Docker uses a file, called a Dockerfile, to specify how the image is assembled. When you have an image, you use Docker to build and run a container based on that image.</p>
+<p>You can build your Docker images from scratch or base them on other Docker images that you or others have built. Images are stored in repositories that are indexed and maintained by registries. An image can be pushed into or pulled out of a repository using its registry address, which is similar to a URL. Docker Hub is a registry hosted by Docker, Inc. that provides publicly available repositories. AWS provides the <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html">Amazon Elastic Container Service (Amazon ECS)</a>, a highly scalable, fast container management service. With Amazon ECS, you can deploy any kind of code in Amazon SageMaker. You can also create a logical division of labor by creating a deployment team that handles DevOps and infrastructure, and that maintains the container, and a data science team that creates the algorithms and models that are later added to a container.</p>
+<p>Docker builds images by reading the instructions from a Dockerfile text file that contains all of the commands, in order, that are needed to build the image. A Dockerfile adheres to a specific format and set of instructions. For move information, see <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a>. Dockerfiles used in Amazon SageMaker must also satisfy additional requirements regarding the environmental variables, directory structure, timeouts, and other common functionality. For information, see <a href="your-algorithms-training-algo.md">Use Your Own Training Algorithms</a> and <a href="your-algorithms-inference-main.md">Use Your Own Inference Code</a>.</p>
+<p>For general information about Docker containers managed by Amazon ECS, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html">Docker Basics for Amazon ECS</a> in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
+<p>For more information about writing Dockerfiles to build images, see <a href="https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/#the-dockerfile-instructions">Best practices for writing Dockerfiles</a>.</p>
+<p>For general information about Docker, see the following: + <a href="http://www.docker.com">Docker home page</a> + <a href="https://docs.docker.com/engine/docker-overview/">Docker overview</a> + <a href="http://www.docker.com/get-started">Getting Started with Docker</a> + <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a></p>
+</body>
+</html>

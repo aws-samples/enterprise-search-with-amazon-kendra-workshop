@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Document History for Amazon SageMaker</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Document History for Amazon SageMaker<a name="doc-history"></a></h1>
+</header>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Change</th>
+<th>Description</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html">New features re:Invent 2018</a></td>
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html">Amazon SageMaker Ground Truth</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-marketplace.html">Amazon SageMaker Resources in AWS Marketplace</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipelines.html">Amazon SageMaker Inference Pipelines</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/Neo.html">Amazon SageMaker Neo</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/search.html">Manage Machine Learning Experiments with Search</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/reinforcement-learning.html">Use Reinforcement Learning in Amazon SageMaker</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/semantic-segmentation.html">Semantic Segmentation</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/augmented-manifest.html">Using Augmented Manifest Files in TrainingJobs</a></td>
+<td>November 28, 2018</td>
+</tr>
+<tr class="even">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Configuring notebook instances</a></td>
+<td>You can use shell scripts to configure notebook instances when you create or start them. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Customize a Notebook Instance</a>.</td>
+<td>May 1, 2018</td>
+</tr>
+<tr class="odd">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/appendix-additional-considerations.html#appendix-notebook-and-internet-access">Disable direct internet access</a></td>
+<td>You can now disable direct internet access for notebook instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/appendix-additional-considerations.html#appendix-notebook-and-internet-access">Notebook Instances Are Enabled with Internet Access by Default</a>.</td>
+<td>March 15, 2018</td>
+</tr>
+<tr class="even">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling.html">Application Auto Scaling support</a></td>
+<td>Amazon SageMaker now supports Application Auto Scaling for production variants. For information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling.html">Automatically Scaling Amazon SageMaker SageMaker Models</a></td>
+<td>February 28, 2018</td>
+</tr>
+<tr class="odd">
+<td><a href="#doc-history">TensorFlow 1.5 and MXNet 1.0 support</a></td>
+<td>Amazon SageMaker Deep Learning containers now support TensorFlow 1.5 and Apache MXNet 1.0.</td>
+<td>February 27, 2018</td>
+</tr>
+<tr class="even">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/blazingtext.html">BlazingText algorithm</a></td>
+<td>Amazon SageMaker now supports the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/blazingtext.html">BlazingText</a> algorithm.</td>
+<td>January 18, 2018</td>
+</tr>
+<tr class="odd">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">KMS encryption support for training and hosting</a></td>
+<td>Amazon SageMaker now supports KMS encryption for hosting instances and training model artifacts at rest. You can specify a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to a hosting endpoint by using the <code>KmsKeyId</code> request parameter in a call to <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a>. You can specify an AWS KMS key that Amazon SageMaker uses to encrypt training model artifacts at rest by setting the <code>KmsKeyId</code> field of the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_OutputDataConfig.html">OutputDataConfig</a> object you use to configure your training job.</td>
+<td>January 17, 2018</td>
+</tr>
+<tr class="even">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html">CloudTrail support</a></td>
+<td>Amazon SageMaker now supports <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html">logging with AWS CloudTrail</a>.</td>
+<td>January 11, 2018</td>
+</tr>
+<tr class="odd">
+<td><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html">DeepAR Forecasting algorithm</a></td>
+<td>Amazon SageMaker now supports the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html">DeepAR</a> algorithm for time series forecasting.</td>
+<td>January 8, 2018</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

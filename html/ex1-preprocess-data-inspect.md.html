@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 4.2: Explore the Training Dataset</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 4.2: Explore the Training Dataset<a name="ex1-preprocess-data-inspect"></a></h1>
+</header>
+<p>Typically, you explore training data to determine what you need to clean up and which transformations to apply to improve model training. For this exercise, you don’t need to clean up the MNIST dataset.</p>
+<p><strong>To explore the dataset</strong> + Type the following code in a cell in your notebook and run the cell to display the first 10 images in <code>train_set</code>:.</p>
+<pre><code>%matplotlib inline
+import matplotlib.pyplot as plt
+
+plt.rcParams[&quot;figure.figsize&quot;] = (2,10)
+
+for i in range(0, 10):
+    img = train_set[0][i]
+    label = train_set[1][i]
+    img_reshape = img.reshape((28,28))
+    imgplot = plt.imshow(img_reshape, cmap=&#39;gray&#39;)
+    print(&#39;This is a {}&#39;.format(label))
+    plt.show()</code></pre>
+<p><code>train_set</code> contains the following structures: + <code>train_set[0]</code> – Contains images. + <code>train_set[1]</code> – Contains labels.</p>
+<p>The code uses the <code>matplotlib</code> library to get and display the first 10 images from the training dataset.<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/sagemaker-10-images.png" alt="[Image NOT FOUND]" /></p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-preprocess-data-transform.md">Step 4.3: Transform the Training Dataset and Upload It to Amazon S3</a></p>
+</body>
+</html>

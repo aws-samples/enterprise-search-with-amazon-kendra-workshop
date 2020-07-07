@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 6.2: Deploy the Model with Batch Transform</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 6.2: Deploy the Model with Batch Transform<a name="ex1-batch-transform"></a></h1>
+</header>
+<p>To get inference for an entire dataset, use batch transform. Amazon SageMaker stores the results in Amazon S3.</p>
+<p>For information about batch transforms, see <a href="how-it-works-batch.md">Get Inferences for an Entire Dataset with Batch Transform</a>. For an example that uses batch transform, see the batch transform sample notebook at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/sagemaker_batch_transform/introduction_to_batch_transform">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/sagemaker_batch_transform/introduction_to_batch_transform</a>.</p>
+<p><strong>Topics</strong> + <a href="#ex1-batch-transform-api-high-level">Deploy a Model with Batch Transform (Amazon SageMaker High-level Python Library)</a> + <a href="#ex1-batch-transform-api-low-level">Deploy a Model with Batch Transform (SDK for Python (Boto 3))</a></p>
+<p>The following code creates a <code>sagemaker.transformer.Transformer</code> object from the model that you trained in <a href="ex1-train-model.md#ex1-train-model-sdk">Create and Run a Training Job (Amazon SageMaker Python SDK)</a>. Then it calls that object’s <code>transform</code> method to create a transform job. When you create the <code>sagemaker.transformer.Transformer</code> object, you specify the number and type of ML instances to use to perform the batch transform job, and the location in Amazon S3 where you want to store the inferences.</p>
+<p>Paste the following code in a cell in the Jupyter notebook you created in <a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a> and run the cell.</p>
+<pre><code>batch_input =
+                &#39;s3://{}/{}/test/examples&#39;.format(bucket, prefix) # The location of the test dataset
+
+batch_output = &#39;s3://{}/{}/batch-inference&#39;.format(bucket, prefix) # The location to store the
+results of the batch transform job
+
+transformer = xgb_model.transformer(instance_count=1, instance_type=&#39;ml.m4.xlarge&#39;, output_path=batch_output)
+
+transformer.transform(data=batch_input, data_type=&#39;S3Prefix&#39;, content_type=&#39;text/csv&#39;, split_type=&#39;Line&#39;)
+
+transformer.wait()</code></pre>
+<p>For more information, see <a href="https://sagemaker.readthedocs.io/en/stable/transformer.html">https://sagemaker.readthedocs.io/en/stable/transformer.html</a>.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-test-model.md">Step 7: Validate the Model</a></p>
+<p>To run a batch transform job, call the <code>create_transform_job</code>. method using the model that you trained in <a href="ex1-train-model.md#ex1-train-model-create-training-job">Create and Run a Training Job (AWS SDK for Python (Boto 3))</a>.</p>
+<p><strong>To create a batch transform job (SDK for Python (Boto 3))</strong></p>
+<p>For each of the following steps, paste the code in a cell in the Jupyter notebook you created in <a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a> and run the cell.</p>
+<ol type="1">
+<li><p>Name the batch transform job and specify where the input data (the test dataset) is stored and where to store the job’s output.</p>
+<pre><code>batch_job_name = &#39;xgboost-mnist-batch&#39; + strftime(&quot;%Y-%m-%d-%H-%M-%S&quot;, gmtime())
+
+batch_input = &#39;s3://{}/{}/test/examples&#39;.format(bucket, prefix)
+print(batch_input)
+
+batch_output = &#39;s3://{}/{}/batch-inference&#39;.format(bucket, prefix)</code></pre></li>
+<li><p>Configure the parameters that you pass when you call the <code>create_transform_job</code> method.</p>
+<pre><code>request = \
+{
+    &quot;TransformJobName&quot;: batch_job_name,
+    &quot;ModelName&quot;: model_name,
+    &quot;BatchStrategy&quot;: &quot;MultiRecord&quot;,
+    &quot;TransformOutput&quot;: {
+        &quot;S3OutputPath&quot;: batch_output
+    },
+    &quot;TransformInput&quot;: {
+        &quot;DataSource&quot;: {
+            &quot;S3DataSource&quot;: {
+                &quot;S3DataType&quot;: &quot;S3Prefix&quot;,
+                &quot;S3Uri&quot;: batch_input 
+            }
+        },
+        &quot;ContentType&quot;: &quot;text/csv&quot;,
+        &quot;SplitType&quot;: &quot;Line&quot;,
+        &quot;CompressionType&quot;: &quot;None&quot;
+    },
+    &quot;TransformResources&quot;: {
+            &quot;InstanceType&quot;: &quot;ml.m4.xlarge&quot;,
+            &quot;InstanceCount&quot;: 1
+    }
+}</code></pre>
+<p>For more information about the parameters, see <a href="API_CreateTransformJob.md">CreateTransformJob</a>.</p></li>
+<li><p>Call the <code>create_transform_job</code> method, passing in the parameters that you configured in the previous step. Then call the <code>describe_transform_job</code> method in a loop until it completes.</p>
+<p>Paste the following code in a cell in the Jupyter notebook you created in <a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a> and run the cell.</p>
+<pre><code>sm.create_transform_job(**request)
+
+while(True):
+    response = sm.describe_transform_job(TransformJobName=batch_job_name)
+    status = response[&#39;TransformJobStatus&#39;]
+    if  status == &#39;Completed&#39;:
+        print(&quot;Transform job ended with status: &quot; + status)
+        break
+    if status == &#39;Failed&#39;:
+        message = response[&#39;FailureReason&#39;]
+        print(&#39;Transform failed with the following error: {}&#39;.format(message))
+        raise Exception(&#39;Transform job failed&#39;) 
+    print(&quot;Transform job is still in status: &quot; + status)    
+    time.sleep(30)</code></pre></li>
+</ol>
+<p><strong>Next Step</strong><br />
+<a href="ex1-test-model.md">Step 7: Validate the Model</a></p>
+</body>
+</html>

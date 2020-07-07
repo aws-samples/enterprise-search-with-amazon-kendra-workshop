@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 2: Create an IAM Administrator User and Group</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 2: Create an IAM Administrator User and Group<a name="gs-account-user"></a></h1>
+</header>
+<p>When you create an AWS account, you get a single sign-in identity that has complete access to all of the AWS services and resources in the account. This identity is called the AWS account <em>root user</em>. Signing in to the AWS console using the email address and password that you used to create the account gives you complete access to all of the AWS resources in your account.</p>
+<p>We strongly recommend that you <em>not</em> use the root user for everyday tasks, even the administrative ones. Instead, adhere to the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#create-iam-users">Create Individual IAM Users</a>, an AWS Identity and Access Management (IAM) administrator user. Then securely lock away the root user credentials and use them to perform only a few account and service management tasks.</p>
+<p><strong>To create an administrator user and sign in to the console</strong></p>
+<ol type="1">
+<li><p>Create an administrator user in your AWS account. For instructions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html">Creating Your First IAM User and Administrators Group</a> in the <em>IAM User Guide</em>. <strong>Note</strong><br />
+We assume that you use administrator user credentials for the exercises and procedures in this guide. If you choose to create and use another IAM user, grant that user minimum permissions. For more information, see <a href="authentication-and-access-control.md">Authentication and Access Control for Amazon SageMaker</a>.</p></li>
+<li><p>Sign in to the AWS Management Console.</p>
+<p>To sign in to the AWS console as a IAM user, you must use a special URL. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_how-users-sign-in.html">How Users Sign In to Your Account</a> in the <em>IAM User Guide</em>.</p></li>
+</ol>
+<p><strong>Next Step</strong><br />
+<a href="gs-config-permissions.md">Step 1: Create an Amazon S3 Bucket</a></p>
+</body>
+</html>

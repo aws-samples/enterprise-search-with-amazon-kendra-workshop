@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Environmental Variables used by Amazon SageMaker Containers Important for Running User Scripts</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Environmental Variables used by Amazon SageMaker Containers Important for Running User Scripts<a name="docker-container-environmental-variables-user-scripts"></a></h1>
+</header>
+<p>When you write a script to run in a container, you are likely to use the following build-time environment variables. <a href="https://github.com/aws/sagemaker-containers">Amazon SageMaker Containers</a> sets some of these variable values by default. + <code>SM_MODEL_DIR</code></p>
+<pre><code>SM_MODEL_DIR=/opt/ml/model</code></pre>
+<p>When the training job finishes, Amazon SageMaker deletes the container, including its file system, except for the files in the <code>/opt/ml/model</code> and <code>/opt/ml/output</code> folders. Use <code>/opt/ml/mode</code>l to save the model checkpoints. Amazon SageMaker uploads these checkpoints to the default S3 bucket. Examples:</p>
+<pre><code># Using it in argparse
+parser.add_argument(&#39;model_dir&#39;, type=str, default=os.environ[&#39;SM_MODEL_DIR&#39;])
+
+# Using it as a variable
+model_dir = os.environ[&#39;SM_MODEL_DIR&#39;]
+
+# Saving checkpoints to the model directory in Chainer
+serializers.save_npz(os.path.join(os.environ[&#39;SM_MODEL_DIR&#39;], &#39;model.npz&#39;), model)</code></pre>
+<p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo.html#your-algorithms-training-algo-envvariables">How Amazon SageMaker Processes Training Output</a>. + <code>SM_CHANNELS</code></p>
+<pre><code>SM_CHANNELS=&#39;[&quot;testing&quot;,&quot;training&quot;]&#39;</code></pre>
+<p>The <code>SM_CHANNELS</code> environmental variable contains the list of input data channels for the container. When you train a model, you can partition your training data into different logical “channels”. Common channels are: training, testing,and evaluation, or images and labels. <code>SM_CHANNELS</code> includes the name of the channels that are in the container as a JSON encoded list.</p>
+<p>Examples:</p>
+<pre><code>import json
+
+# Using it in argparse
+parser.add_argument(&#39;channel_names&#39;, type=int, default=json.loads(os.environ[&#39;SM_CHANNELS&#39;])))
+
+# Using it as a variable
+channel_names = json.loads(os.environ[&#39;SM_CHANNELS&#39;]))</code></pre>
+<ul>
+<li><p><code>SM_CHANNEL_{channel_name}</code></p>
+<pre><code>SM_CHANNEL_TRAINING=&#39;/opt/ml/input/data/training&#39;
+SM_CHANNEL_TESTING=&#39;/opt/ml/input/data/testing&#39;</code></pre>
+<p>The <code>SM_CHANNEL_{channel_name}</code> environmental variable contains the directory where the channel named <code>channel_name</code> is located in the container.</p>
+<p>Examples:</p>
+<pre><code>import json
+
+parser.add_argument(&#39;--train&#39;, type=str, default=os.environ[&#39;SM_CHANNEL_TRAINING&#39;])
+parser.add_argument(&#39;--test&#39;, type=str, default=os.environ[&#39;SM_CHANNEL_TESTING&#39;])
+
+
+args = parser.parse_args()
+
+train_file = np.load(os.path.join(args.train, &#39;train.npz&#39;))
+test_file = np.load(os.path.join(args.test, &#39;test.npz&#39;))</code></pre></li>
+<li><p><code>SM_HPS</code></p>
+<pre><code>SM_HPS=&#39;{&quot;batch-size&quot;: &quot;256&quot;, &quot;learning-rate&quot;: &quot;0.0001&quot;,&quot;communicator&quot;: &quot;pure_nccl&quot;}&#39;</code></pre>
+<p>The <code>SM_HPS</code> environmental variable contains a JSON encoded dictionary with the hyperparameters that you have provided.</p>
+<p>Example:</p>
+<pre><code>import json
+
+hyperparameters = json.loads(os.environ[&#39;SM_HPS&#39;]))
+# {&quot;batch-size&quot;: 256, &quot;learning-rate&quot;: 0.0001, &quot;communicator&quot;: &quot;pure_nccl&quot;}</code></pre></li>
+<li><p><code>SM_HP_ {hyperparameter_name}</code></p>
+<pre><code>SM_HP_LEARNING-RATE=0.0001
+SM_HP_BATCH-SIZE=10000
+SM_HP_COMMUNICATOR=pure_nccl</code></pre>
+<p>The <code>SM_HP_ {hyperparameter_name</code> environmental variable contains the value of the hyperparameter named <code>hyperparameter_name</code>.</p>
+<p>Examples:</p>
+<pre><code>learning_rate = float(os.environ[&#39;SM_HP_LEARNING-RATE&#39;])
+batch_size = int(os.environ[&#39;SM_HP_BATCH-SIZE&#39;])
+comminicator = os.environ[&#39;SM_HP_COMMUNICATOR&#39;]</code></pre></li>
+<li><p><code>SM_CURRENT_HOST</code></p>
+<pre><code>SM_CURRENT_HOST=algo-1</code></pre>
+<p>The <code>SM_CURRENT HOST</code> contains the name of the current container on the container network.</p>
+<p>Examples:</p>
+<pre><code># Using it in argparse
+parser.add_argument(&#39;current_host&#39;, type=str, default=os.environ[&#39;SM_CURRENT_HOST&#39;])
+
+# Using it as a variable
+current_host = os.environ[&#39;SM_CURRENT_HOST&#39;]</code></pre></li>
+<li><p><code>SM_HOSTS</code></p>
+<pre><code>SM_HOSTS=&#39;[&quot;algo-1&quot;,&quot;algo-2&quot;]&#39;</code></pre>
+<p>The <code>SM_HOSTS</code> environmental variable contains a JSON-encoded list of all of the hosts.</p>
+<p>Example:</p>
+<pre><code>import json
+
+# Using it in argparse
+parser.add_argument(&#39;hosts&#39;, type=nargs, default=json.loads(os.environ[&#39;SM_HOSTS&#39;]))
+
+# Using it as variable
+hosts = json.loads(os.environ[&#39;SM_HOSTS&#39;])</code></pre></li>
+<li><p><code>SM_NUM_GPUS</code></p>
+<pre><code>SM_NUM_GPUS=1</code></pre>
+<p>The <code>SM_NUM_GPUS</code> environmental variable contains the number of GPUs available in the current container.</p>
+<p>Examples:</p>
+<pre><code># Using it in argparse
+parser.add_argument(&#39;num_gpus&#39;, type=int, default=os.environ[&#39;SM_NUM_GPUS&#39;])
+
+# Using it as a variable
+num_gpus = int(os.environ[&#39;SM_NUM_GPUS&#39;])</code></pre></li>
+</ul>
+</body>
+</html>

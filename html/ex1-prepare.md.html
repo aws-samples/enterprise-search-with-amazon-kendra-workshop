@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 3: Create a Jupyter Notebook</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 3: Create a Jupyter Notebook<a name="ex1-prepare"></a></h1>
+</header>
+<p>Create a Jupyter notebook in the notebook instance you created in <a href="gs-setup-working-env.md">Step 2: Create an Amazon SageMaker Notebook Instance</a>, and create a cell that gets the IAM role that your notebook needs to run Amazon SageMaker APIs and specifies the name of the Amazon S3 bucket that you will use to store the datasets that you use for your training data and the model artifacts that a Amazon SageMaker training job outputs.</p>
+<p><strong>To create a Jupyter notebook</strong></p>
+<ol type="1">
+<li><p>Open the notebook instance.</p>
+<ol type="1">
+<li><p>Sign in to the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Open the notebook instance, by choosing either <strong>Open Jupyter</strong> for classic Juypter view or <strong>Open JupyterLab</strong> for JupyterLab view next to the name of the notebook instance. The Jupyter notebook server page appears:</p></li>
+</ol></li>
+<li><p>Create a notebook.</p>
+<ol type="1">
+<li><p>If you opened the notebook in Jupyter classic view, on the <strong>Files</strong> tab, choose <strong>New</strong>, and <strong>conda_python3</strong>. This preinstalled environment includes the default Anaconda installation and Python 3.</p></li>
+<li><p>If you opened the notebook in JupyterLab view, on the <strong>File</strong> menu, choose <strong>New</strong>, and then choose <strong>Notebook.</strong>. For <strong>Select Kernel</strong>, choose <strong>conda_python3</strong>. This preinstalled environment includes the default Anaconda installation and Python 3.</p></li>
+</ol></li>
+<li><p>In the Jupyter notebook, choose <strong>File</strong> and <strong>Save as</strong>, and name the notebook.</p></li>
+<li><p>Copy the following Python code and paste it into the first cell in your notebook. Add the name of the S3 bucket that you created in <a href="gs-set-up.md">Set Up Amazon SageMaker</a>, and run the code. The <code>get_execution_role</code> function retrieves the IAM role you created when you created your notebook instance.</p>
+<pre><code>import os
+import boto3
+import re
+import copy
+import time
+from time import gmtime, strftime
+from sagemaker import get_execution_role
+
+role = get_execution_role()
+
+region = boto3.Session().region_name
+
+bucket=&#39;bucket-name&#39; # Replace with your s3 bucket name
+prefix = &#39;sagemaker/xgboost-mnist&#39; # Used as part of the path in the bucket where you store data
+bucket_path = &#39;https://s3-{}.amazonaws.com/{}&#39;.format(region,bucket) # The URL to access the bucket</code></pre></li>
+</ol>
+<p><strong>Next Step</strong><br />
+<a href="ex1-preprocess-data.md">Step 4: Download, Explore, and Transform the Training Data</a></p>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 2: Create an Amazon SageMaker Notebook Instance</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 2: Create an Amazon SageMaker Notebook Instance<a name="gs-setup-working-env"></a></h1>
+</header>
+<p>An Amazon SageMaker notebook instance is a fully managed machine learning (ML) Amazon Elastic Compute Cloud (Amazon EC2) compute instance that runs the Jupyter Notebook App. You use the notebook instance to create and manage Jupyter notebooks that you can use to prepare and process data and to train and deploy machine learning models. For more information, see <a href="how-it-works-notebooks-instances.md">Explore and Preprocess Data</a>.</p>
+<p><strong>Note</strong><br />
+If necessary, you can change the notebook instance settings, including the ML compute instance type, later.</p>
+<p><strong>To create an Amazon SageMaker notebook instance</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Notebook instances</strong>, then choose <strong>Create notebook instance</strong>.</p></li>
+<li><p>On the <strong>Create notebook instance</strong> page, provide the following information (if a field is not mentioned, leave the default values):</p>
+<ol type="1">
+<li><p>For <strong>Notebook instance name</strong>, type a name for your notebook instance.</p></li>
+<li><p>For <strong>Instance type</strong>, choose <code>ml.t2.medium</code>. This is the least expensive instance type that notebook instances support, and it suffices for this exercise.</p></li>
+<li><p>For <strong>IAM role</strong>, choose <strong>Create a new role</strong>, then choose <strong>Create role</strong>.</p></li>
+<li><p>Choose <strong>Create notebook instance</strong>.</p>
+<p>In a few minutes, Amazon SageMaker launches an ML compute instance—in this case, a notebook instance—and attaches an ML storage volume to it. The notebook instance has a preconfigured Jupyter notebook server and a set of Anaconda libraries.</p></li>
+</ol></li>
+</ol>
+<p><a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a>.</p>
+</body>
+</html>

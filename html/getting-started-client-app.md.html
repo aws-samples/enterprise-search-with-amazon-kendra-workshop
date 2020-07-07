@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 9: Integrating Amazon SageMaker Endpoints into Internet-facing Applications</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 9: Integrating Amazon SageMaker Endpoints into Internet-facing Applications<a name="getting-started-client-app"></a></h1>
+</header>
+<p>In a production environment, you might have an internet-facing application sending requests to the endpoint for inference. The following high-level example shows how to integrate your model endpoint into your application.</p>
+<ol type="1">
+<li><p>Create an IAM role that the AWS Lambda service principal can assume. Give the role permissions to call the Amazon SageMaker <code>InvokeEndpoint</code> API.</p></li>
+<li><p>Create a Lambda function that calls the Amazon SageMaker <code>InvokeEndpoint</code> API.</p></li>
+<li><p>Call the Lambda function from a mobile application. For an example of how to call a Lambda function from a mobile application using Amazon Cognito for credentials, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-android-example.html">Tutorial: Using AWS Lambda as Mobile Application Backend</a>.</p></li>
+</ol>
+</body>
+</html>

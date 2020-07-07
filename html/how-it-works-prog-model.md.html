@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>The Amazon SageMaker Programming Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">The Amazon SageMaker Programming Model<a name="how-it-works-prog-model"></a></h1>
+</header>
+<p>Amazon SageMaker provides APIs that you can use to create and manage notebook instances and train and deploy models. For more information, see <a href="API_Reference.md">API Reference</a>.</p>
+<p>Making API calls directly from code is cumbersome, and requires you to write code to authenticate your requests. Amazon SageMaker provides the following alternatives: + <strong>Use the Amazon SageMaker console</strong>—With the console, you don’t write any code. You use the console UI to start model training or deploy a model. The console works well for simple jobs, where you use a built-in training algorithm and you don’t need to preprocess training data.</p>
+<p>  + <strong>Modify the example Jupyter notebooks</strong>—Amazon SageMaker provides several Jupyter notebooks that train and deploy models using specific algorithms and datasets. Start with a notebook that has a suitable algorithm and modify it to accommodate your data source and specific needs.</p>
+<p>  + <strong>Write model training and inference code from scratch</strong>—Amazon SageMaker provides both an AWS SDK and a high-level Python library that you can use in your code to start model training jobs and deploy the resulting models.</p>
+<p>  + <strong>The high-level Python library</strong>—The Python library simplifies model training and deployment. In addition to authenticating your requests, the library abstracts platform specifics by providing simple methods and default parameters. For example:</p>
+<pre><code> 
++ To deploy your model, you call only the `deploy()` method\. The method creates an Amazon SageMaker model, an endpoint configuration, and an endpoint\.
+
+   
++ If you use a custom framework script for model training, you call the `fit()` method\. The method creates a \.gzip file of your script, uploads it to an Amazon S3 location, and then runs it for model training, and other tasks\. For more information, see [Use Machine Learning Frameworks with Amazon SageMaker](frameworks.md)\.
+
+   </code></pre>
+<ul>
+<li><p><strong>The AWS SDK</strong> —The SDKs provide methods that correspond to the Amazon SageMaker API (see <a href="API_Operations.md">Actions</a>). Use the SDKs to programmatically start a model training job and host the model in Amazon SageMaker. SDK clients authenticate your requests by using your access keys, so you don’t need to write authentication code. They are available in multiple languages and platforms. For more information, see <a href="https://aws.amazon.com/tools/">SDKs</a>.</p>
+<p> </p></li>
+</ul>
+<p>In <a href="gs.md">Get Started</a>, you train and deploy a model using an algorithm provided by Amazon SageMaker. That exercise shows how to use both of these libraries. For more information, see <a href="gs.md">Get Started</a>.</p>
+<p>  + <strong>Integrate Amazon SageMaker into your Apache Spark workflow</strong>—Amazon SageMaker provides a library for calling its APIs from Apache Spark. With it, you can use Amazon SageMaker-based estimators in an Apache Spark pipeline. For more information, see <a href="apache-spark.md">Use Apache Spark with Amazon SageMaker</a>.</p>
+<p><a href="gs.md">Get Started</a></p>
+</body>
+</html>

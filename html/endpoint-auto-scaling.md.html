@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Automatically Scale Amazon SageMaker Models</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Automatically Scale Amazon SageMaker Models<a name="endpoint-auto-scaling"></a></h1>
+</header>
+<p>Amazon SageMaker supports automatic scaling for production variants. <em>Automatic scaling</em> dynamically adjusts the number of instances provisioned for a production variant in response to changes in your workload. When the workload increases, automatic scaling brings more instances online. When the workload decreases, automatic scaling removes unnecessary instances so that you don’t pay for provisioned variant instances that you aren’t using.</p>
+<p>To use automatic scaling for a production variant, you define and apply a scaling policy that uses Amazon CloudWatch metrics and target values that you assign. Automatic scaling uses the policy to adjust the number of instances up or down in response to actual workloads.</p>
+<p>You can use the AWS Management Console to apply a scaling policy based on a predefined metric. A <em>predefined metric</em> is defined in an enumeration so that you can specify it by name in code or use it in the AWS Management Console. Alternatively, you can use either the AWS Command Line Interface (AWS CLI) or the Application Auto Scaling API to apply a scaling policy based on a predefined or custom metric. We strongly recommend that you load test your automatic scaling configuration to ensure that it works correctly before using it to manage production traffic.</p>
+<p>For information about deploying trained models as endpoints, see <a href="ex1-deploy-model.md">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p>
+<p><strong>Topics</strong> + <a href="#endpoint-auto-scaling-policy">Automatic Scaling Components</a> + <a href="#endpoint-auto-scaling-target-byb">Before You Begin</a> + <a href="#w4aac24c32c21">Related Topics</a> + <a href="endpoint-auto-scaling-add-policy.md">Configure Automatic Scaling for a Production Variant</a> + <a href="endpoint-auto-scaling-edit.md">Edit a Scaling Policy</a> + <a href="endpoint-auto-scaling-delete.md">Delete a Scaling Policy</a> + <a href="endpoint-scaling-update.md">Update Endpoints that Use Automatic Scaling</a> + <a href="endpoint-scaling-loadtest.md">Load Testing for Production Variant Automatic Scaling</a> + <a href="endpoint-auto-scaling-considerations.md">Best Practices for Configuring Automatic Scaling</a></p>
+<p>To adjust the number of instances hosting a production variant, Amazon SageMaker automatic scaling uses a scaling policy . Automatic scaling has the following components: + Required permissions—Permissions that are required to perform automatic scaling actions. + A service-linked role—An AWS Identity and Access Management (IAM) role that is linked to a specific AWS service. A service-linked role includes all of the permissions that the service requires to call other AWS services on your behalf. Amazon SageMaker automatic scaling automatically generates this role, <code>AWSServiceRoleForApplicationAutoScaling_SageMakerEndpoint</code>, for you. + A target metric—The Amazon CloudWatch metric that Amazon SageMaker automatic scaling uses to determine when and how much to scale. + Minimum and maximum capacity—The minimum and maximum number of instances to use for scaling the variant. + A cool down period—The amount of time, in seconds, after a scale-in or scale-out activity completes before another scale-out activity can start.</p>
+<p>The <code>SagemakerFullAccessPolicy</code> IAM policy has all of the permissions required to perform automatic scaling actions. For more information about Amazon SageMaker IAM roles, see <a href="sagemaker-roles.md">Amazon SageMaker Roles</a>.</p>
+<p>If you are using a custom permission policy, you must include the following permissions:</p>
+<pre><code>{ 
+    &quot;Effect&quot;: &quot;Allow&quot;, 
+    &quot;Action&quot;: [ 
+        &quot;sagemaker:DescribeEndpoint&quot;, 
+        &quot;sagemaker:DescribeEndpointConfig&quot;, 
+        &quot;sagemaker:UpdateEndpointWeightsAndCapacities&quot; 
+    ], 
+    &quot;Resource&quot;: &quot;*&quot;  
+}
+                {
+    &quot;Action&quot;: [
+        &quot;application-autoscaling:*&quot;
+    ],
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Resource&quot;: &quot;*&quot;
+}
+
+{
+    &quot;Action&quot;: &quot;iam:CreateServiceLinkedRole&quot;,
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Resource&quot;:
+    &quot;arn:aws:iam::*:role/aws-service-role/sagemaker.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_SageMakerEndpoint&quot;,
+    &quot;Condition&quot;: {
+        &quot;StringLike&quot;: { &quot;iam:AWSServiceName&quot;: &quot;sagemaker.application-autoscaling.amazonaws.com&quot; }
+    }
+}
+
+{ 
+    &quot;Effect&quot;: &quot;Allow&quot;, 
+    &quot;Action&quot;: [ 
+        &quot;cloudwatch:PutMetricAlarm&quot;, 
+        &quot;cloudwatch:DescribeAlarms&quot;, 
+        &quot;cloudwatch:DeleteAlarms&quot; 
+    ], 
+    &quot;Resource&quot;: &quot;*&quot; 
+}</code></pre>
+<p>A service-linked role is a unique type of IAM role that is linked directly to an AWS service. Service-linked roles are predefined by the service and include all of the permissions that the service requires to call other AWS services on your behalf. Automatic scaling uses the <code>AWSServiceRoleForApplicationAutoScaling_SageMakerEndpoint</code> service-linked role. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-service-linked-roles.html">Service-Linked Roles for Application Auto Scaling</a> in the <em>Application Auto Scaling User Guide</em>.</p>
+<p>Amazon SageMaker automatic scaling uses target-tracking scaling policies. You configure the <em>target-tracking scaling policy</em> by specifying a predefined or custom metric and a target value for the metric . For more information, see <a href="https://docs.aws.amazon.com//autoscaling/application/userguide/application-auto-scaling-target-tracking.html">Target Tracking Scaling Policies</a>.</p>
+<p>Amazon CloudWatch alarms trigger the scaling policy , which calculate how to adjust scaling based on the metric and target value that you set. The scaling policy adds or removes endpoint instances as required to keep the metric at, or close to, the specified target value. In addition, a target-tracking scaling policy also adjusts to fluctuations in the metric when a workload changes. The policy minimizes rapid fluctuations in the number of available instances for your variant.</p>
+<p>For example, a scaling policy that uses the predefined <code>InvocationsPerInstance</code> metric with a target value of 70 can keep <code>InvocationsPerInstance</code> at, or close to 70.</p>
+<p>You can specify the maximum number of endpoint instances that Application Auto Scaling manages for the variant. The maximum value must be equal to or greater than the value specified for the minimum number of endpoint instances. Amazon SageMaker automatic scaling does not enforce a limit for this value.</p>
+<p>You can also specify the minimum number of instances that Application Auto Scaling manages for the variant. This value must be at least 1, and equal to or less than the value specified for the maximum number of variant instances.</p>
+<p>To determine the minimum and maximum number of instances that you need for typical traffic, test your automatic scaling configuration with the expected rate of traffic to your variant.</p>
+<p>Tune the responsiveness of a target-tracking scaling policy by adding a cooldown period. A <em>cooldown period</em> controls when your variant is scaled in and out by blocking subsequent scale-in or scale-out requests until the period expires. This slows the deletion of variant instances for scale-in requests, and the creation of variant instances for scale-out requests. A cooldown period helps to ensure that it doesn’t launch or terminate additional instances before the previous scaling activity takes effect. After automatic scaling dynamically scales using a scaling policy, it waits for the cooldown period to complete before resuming scaling activities.</p>
+<p>You configure the cooldown period in your automatic scaling policy. You can specify the following cooldown periods: + A scale-in activity reduces the number of variant instances. A scale-in cooldown period specifies the amount of time, in seconds, after a scale-in activity completes before another scale-in activity can start. + A scale-out activity increases the number of variant instances. A scale-out cooldown period specifies the amount of time, in seconds, after a scale-out activity completes before another scale-out activity can start.</p>
+<p>If you don’t specify a scale-in or a scale-out cooldown period automatic scaling use the default, which is 300 seconds for each.</p>
+<p>If instances are being added or removed too quickly when you test your automatic scaling configuration, consider increasing this value. You can see this behavior if the traffic to your variant has a lot of spikes, or if you have multiple automatic scaling policies defined for a variant.</p>
+<p>If instances are not being added quickly enough to address increased traffic, consider decreasing this value.</p>
+<p>Before you can use automatically scaled model deployment, create an Amazon SageMaker model deployment. For more information about deploying a model endpoint, see <a href="ex1-deploy-model.md">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p>
+<p>When automatic scaling adds a new variant instance, it is the same instance class as the one used by the primary instance.</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com//autoscaling/application/userguide/what-is-application-auto-scaling.html">What Is Application Auto Scaling?</a></li>
+</ul>
+</body>
+</html>

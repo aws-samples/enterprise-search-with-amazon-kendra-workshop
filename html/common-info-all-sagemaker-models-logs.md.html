@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Logs for Built-In Algorithms</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Logs for Built-In Algorithms<a name="common-info-all-sagemaker-models-logs"></a></h1>
+</header>
+<p>Amazon SageMaker algorithms produce Amazon CloudWatch logs, which provide detailed information on the training process. To see the logs, in the AWS management console, choose <strong>CloudWatch</strong>, choose <strong>Logs</strong>, and then choose the /aws/sagemaker/TrainingJobs <strong>log group</strong>. Each training job has one log stream per node that it was trained on. The log stream’s name begins with the value specified in the <code>TrainingJobName</code> parameter when the job was created.</p>
+<p><strong>Note</strong><br />
+If a job fails and logs do not appear in CloudWatch, it’s likely that an error occurred before the start of training. Reasons include specifying the wrong training image or S3 location.</p>
+<p>The contents of logs vary by algorithms. However, you can typically find the following information: + Confirmation of arguments provided at the beginning of the log + Errors that occurred during training + Measurement of an algorithms accuracy or numerical performance + Timings for the algorithm, and any major stages within the algorithm</p>
+<p>If a training job fails, some details about the failure are provided by the <code>FailureReason</code> return value in the training job description, as follows:</p>
+<pre><code>sage = boto3.client(&#39;sagemaker&#39;)
+sage.describe_training_job(TrainingJobName=job_name)[&#39;FailureReason&#39;]</code></pre>
+<p>Others are reported only in the CloudWatch logs. Common errors include the following:</p>
+<ol type="1">
+<li><p>Misspecifying a hyperparameter or specifying a hyperparameter that is invalid for the algorithm.</p>
+<p>From the CloudWatch Log:</p>
+<pre><code>[10/16/2017 23:45:17 ERROR 139623806805824 train.py:48] 
+Additional properties are not allowed (u&#39;mini_batch_siz&#39; was 
+unexpected)</code></pre></li>
+<li><p>Specifying an invalid value for a hyperparameter.</p>
+<p>FailureReason:</p>
+<pre><code>AlgorithmError: u&#39;abc&#39; is not valid under any of the given
+schemas\n\nFailed validating u&#39;oneOf&#39; in
+schema[u&#39;properties&#39;][u&#39;feature_dim&#39;]:\n    {u&#39;oneOf&#39;:
+[{u&#39;pattern&#39;: u&#39;^([1-9][0-9]*)$&#39;, u&#39;type&#39;: u&#39;string&#39;},\n
+{u&#39;minimum&#39;: 1, u&#39;type&#39;: u&#39;integer&#39;}]}\</code></pre>
+<p>FailureReason:</p>
+<pre><code>[10/16/2017 23:57:17 ERROR 140373086025536 train.py:48] u&#39;abc&#39;
+is not valid under any of the given schemas</code></pre></li>
+<li><p>Inaccurate protobuf file format.</p>
+<p>From the CloudWatch log:</p>
+<pre><code>[10/17/2017 18:01:04 ERROR 140234860816192 train.py:48] cannot
+                   copy sequence with size 785 to array axis with dimension 784</code></pre></li>
+</ol>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Give Amazon SageMaker Hosted Endpoints Access to Resources in Your Amazon VPC</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Give Amazon SageMaker Hosted Endpoints Access to Resources in Your Amazon VPC<a name="host-vpc"></a></h1>
+</header>
+<p>Amazon SageMaker hosts models in an Amazon Virtual Private Cloud by default. However, models access AWS resources—such as the Amazon S3 buckets where you store training data and model artifacts—over the internet.</p>
+<p>To avoid making your data and model containers accessible over the internet, we recommend that you create a private VPC and configure it to control access to them. For information about creating and configuring a VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/getting-started-ipv4.html">Getting Started With Amazon VPC</a> in the <em>Amazon VPC User Guide</em>. Using a VPC helps to protect your training containers and data because you can configure your VPC so that it is not connected to the internet. Using a VPC also allows you to monitor all network traffic in and out of your training containers by using VPC flow logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html">VPC Flow Logs</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p>You specify your private VPC configuration when you create a model by specifying subnets and security groups. When you specify the subnets and security groups, Amazon SageMaker creates <em>elastic network interfaces</em> (ENIs) that are associated with your security groups in one of the subnets. ENIs allow your model containers to connect to resources in your VPC. For information about ENIs, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ElasticNetworkInterfaces.html">Elastic Network Interfaces</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p>To specify subnets and security groups in your private VPC, use the <code>VpcConfig</code> request parameter of the <a href="API_CreateModel.md">CreateModel</a> API, or provide this information when you create a model in the Amazon SageMaker console. Amazon SageMaker uses this information to create ENIs and attach them to your model containers. The ENIs provide your model containers with a network connection within your VPC that is not connected to the internet. They also enable your model to connect to resources in your private VPC.</p>
+<p><strong>Note</strong><br />
+You must create at least two subnets in different availability zones in your private VPC, even if you have only one hosting instance.</p>
+<p>The following is an example of the <code>VpcConfig</code> parameter that you include in your call to <code>CreateModel</code>:</p>
+<pre><code>VpcConfig: {
+      &quot;Subnets&quot;: [
+          &quot;subnet-0123456789abcdef0&quot;,
+          &quot;subnet-0123456789abcdef1&quot;,
+          &quot;subnet-0123456789abcdef2&quot;
+          ],
+          &quot;SecurityGroupIds&quot;: [
+              &quot;sg-0123456789abcdef0&quot;
+              ]
+            }</code></pre>
+<p>When configuring the private VPC for your Amazon SageMaker models, use the following guidelines. For information about setting up a VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/working-with-vpcs.html">Working with VPCs and Subnets</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p><strong>Topics</strong> + <a href="#host-vpc-ip">Ensure That Subnets Have Enough IP Addresses</a> + <a href="#host-vpc-s3">Create an Amazon S3 VPC Endpoint</a> + <a href="#host-vpc-policy">Use a Custom Endpoint Policy to Restrict Access to Amazon S3</a> + <a href="#host-vpc-endpoints">Add Permissions for Endpoint Access for Containers Running in a VPC to Custom IAM Policies</a> + <a href="#host-vpc-route-table">Configure Route Tables</a> + <a href="#model-vpc-nat">Connect to Resources Outside Your VPC</a></p>
+<p>Your VPC subnets should have at least two private IP addresses for each model instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#vpc-sizing-ipv4">VPC and Subnet Sizing for IPv4</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p>If you configure your VPC so that model containers don’t have access to the internet, they can’t connect to the Amazon S3 buckets that contain your data unless you create a VPC endpoint that allows access. By creating a VPC endpoint, you allow your model containers to access the buckets where you store your data and model artifacts . We recommend that you also create a custom policy that allows only requests from your private VPC to access to your S3 buckets. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints-s3.html">Endpoints for Amazon S3</a>.</p>
+<p><strong>To create an Amazon S3 VPC endpoint:</strong></p>
+<ol type="1">
+<li><p>Open the Amazon VPC console at <a href="https://console.aws.amazon.com/vpc/">https://console.aws.amazon.com/vpc/</a>.</p></li>
+<li><p>In the navigation pane, choose <strong>Endpoints</strong>, then choose <strong>Create Endpoint</strong></p></li>
+<li><p>For <strong>Service Name</strong>, choose <strong>com.amazonaws.<em>region</em>.s3</strong>, where <em>region</em> is the name of the AWS Region where your VPC resides.</p></li>
+<li><p>For <strong>VPC</strong>, choose the VPC that you want to use for this endpoint.</p></li>
+<li><p>For <strong>Configure route tables</strong>, choose the route tables that the endpoint will use. The VPC service automatically adds a route to each route table that you choose that points Amazon S3 traffic to the new endpoint.</p></li>
+<li><p>For <strong>Policy</strong>, choose <strong>Full Access</strong> to allow full access to the Amazon S3 service by any user or service within the VPC. To restrict access further, choose <strong>Custom</strong>. For more information, see <a href="#host-vpc-policy">Use a Custom Endpoint Policy to Restrict Access to Amazon S3</a>.</p></li>
+</ol>
+<p>The default endpoint policy allows full access to Amazon Simple Storage Service (Amazon S3) for any user or service in your VPC. To further restrict access to Amazon S3, create a custom endpoint policy. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints-s3.html#vpc-endpoints-policies-s3">Using Endpoint Policies for Amazon S3</a>.</p>
+<p>You can also use a bucket policy to restrict access to your S3 buckets to only traffic that comes from your Amazon VPC. For information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints-s3.html#vpc-endpoints-s3-bucket-policies">Using Amazon S3 Bucket Policies</a>.</p>
+<p>The default endpoint policy allows users to install packages from the Amazon Linux and Amazon Linux 2 repositories on the model container. If you don’t want users to install packages from those repositories, create a custom endpoint policy that explicitly denies access to the Amazon Linux and Amazon Linux 2 repositories. The following is an example of a policy that denies access to these repositories:</p>
+<pre><code>{ 
+    &quot;Statement&quot;: [ 
+      { 
+        &quot;Sid&quot;: &quot;AmazonLinuxAMIRepositoryAccess&quot;,
+        &quot;Principal&quot;: &quot;*&quot;,
+        &quot;Action&quot;: [ 
+            &quot;s3:GetObject&quot; 
+        ],
+        &quot;Effect&quot;: &quot;Deny&quot;,
+        &quot;Resource&quot;: [
+            &quot;arn:aws:s3:::packages.*.amazonaws.com/*&quot;,
+            &quot;arn:aws:s3:::repo.*.amazonaws.com/*&quot;
+        ] 
+      } 
+    ] 
+} 
+
+{ 
+    &quot;Statement&quot;: [ 
+        { &quot;Sid&quot;: &quot;AmazonLinux2AMIRepositoryAccess&quot;,
+          &quot;Principal&quot;: &quot;*&quot;,
+          &quot;Action&quot;: [ 
+              &quot;s3:GetObject&quot; 
+              ],
+          &quot;Effect&quot;: &quot;Deny&quot;,
+          &quot;Resource&quot;: [
+              &quot;arn:aws:s3:::amazonlinux.*.amazonaws.com/*&quot; 
+              ] 
+         } 
+    ] 
+}</code></pre>
+<p>The <code>SageMakerFullAccess</code> managed policy includes the permissions that you need to use models configured for Amazon VPC access with an endpoint. These permissions allow Amazon SageMaker to create an elastic network interface and attach it to model containers running in a VPC. If you use your own IAM policy, you must add the following permissions to that policy to use models configured for VPC access.</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;ec2:DescribeVpcEndpoints&quot;,
+                &quot;ec2:DescribeDhcpOptions&quot;,
+                &quot;ec2:DescribeVpcs&quot;,
+                &quot;ec2:DescribeSubnets&quot;,
+                &quot;ec2:DescribeSecurityGroups&quot;,
+                &quot;ec2:DescribeNetworkInterfaces&quot;,
+                &quot;ec2:DeleteNetworkInterfacePermission&quot;,
+                &quot;ec2:DeleteNetworkInterface&quot;,
+                &quot;ec2:CreateNetworkInterfacePermission&quot;,
+                &quot;ec2:CreateNetworkInterface&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        }
+}</code></pre>
+<p>For more information about the <code>SageMakerFullAccess</code> managed policy, see <a href="sagemaker-roles.md#sagemaker-roles-amazonsagemakerfullaccess-policy">AmazonSageMakerFullAccess Policy</a>.</p>
+<p>Use default DNS settings for your endpoint route table, so that standard Amazon S3 URLs (for example, <code>http://s3-aws-region.amazonaws.com/MyBucket</code>) resolve. If you don’t use default DNS settings, ensure that the URLs that you use to specify the locations of the data in your models resolve by configuring the endpoint route tables. For information about VPC endpoint route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-gateway.html#vpc-endpoints-routing">Routing for Gateway Endpoints</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p>If you configure your VPC so that it doesn’t have internet access, models that use that VPC do not have access to resources outside your VPC. If your model needs access to resources outside your VPC, provide access with one of the following options: + If your model needs access to an AWS service that supports interface VPC endpoints, create an endpoint to connect to that service. For a list of services that support interface endpoints, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <em>Amazon VPC User Guide</em>. For information about creating an interface VPC endpoint, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-interface.html">Interface VPC Endpoints (AWS PrivateLink)</a> in the <em>Amazon VPC User Guide</em>. + If your model needs access to an AWS service that doesn’t support interface VPC endpoints or to a resource outside of AWS, create a NAT gateway and configure your security groups to allow outbound connections. For information about setting up a NAT gateway for your VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html">Scenario 2: VPC with Public and Private Subnets (NAT)</a> in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
+</body>
+</html>

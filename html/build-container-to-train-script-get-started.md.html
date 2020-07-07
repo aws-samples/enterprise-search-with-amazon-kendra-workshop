@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Get Started: Use Amazon SageMaker Containers to Run a Python Script</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Get Started: Use Amazon SageMaker Containers to Run a Python Script<a name="build-container-to-train-script-get-started"></a></h1>
+</header>
+<p>To run an arbitrary script-based program in a Docker container using the Amazon SageMaker Containers, build a Docker container with an Amazon SageMaker notebook instance, as follows:</p>
+<ol type="1">
+<li><p>Create the notebook instance.</p></li>
+<li><p>Create and upload the Dockerfile and Python scripts.</p></li>
+<li><p>Build the container.</p></li>
+<li><p>Test the container locally.</p></li>
+<li><p>Clean up the resources.</p></li>
+</ol>
+<p><strong>To create an Amazon SageMaker notebook instance</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Notebook</strong> , <strong>Notebook instances</strong>, and <strong>Create notebook instance</strong>.</p></li>
+<li><p>On the <strong>Create notebook instance</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Notebook instance name</strong>, enter <strong>RunScriptNotebookInstance</strong>.</p></li>
+<li><p>For <strong>Notebook Instance type</strong>, choose <strong>ml.t2.medium</strong>.</p></li>
+<li><p>For <strong>IAM role</strong>, choose <strong>Create a new role</strong>.</p>
+<ol type="1">
+<li><p>Choose <strong>Create a new role</strong>.</p></li>
+<li><p>On the <strong>Create an IAM role</strong> page, choose <strong>Specific S3 buckets</strong>, specify an S3 bucket named <strong>sagemaker-run-script</strong>,. and then choose <strong>Create role</strong>.</p>
+<p>Amazon SageMaker creates an IAM role named <code>AmazonSageMaker-ExecutionRole-YYYYMMDDTHHmmSS</code>. For example, <code>AmazonSageMaker-ExecutionRole-20190429T110788</code>. Record the role name because you’ll need it later.</p></li>
+</ol></li>
+<li><p>For <strong>Root Access</strong>, accept the default, <strong>Enabled</strong>.</p></li>
+<li><p>Choose <strong>Create notebook instance</strong>.</p>
+<p>It takes a few minutes for Amazon SageMaker to launch an ML compute instance—in this case, a notebook instance—and attach an ML storage volume to it. The notebook instance has a preconfigured Jupyter notebook server and a set of Anaconda libraries. For more information, see the <a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a> API.</p></li>
+</ol></li>
+<li><p>When the status of the notebook instance is <code>InService</code>, from <strong>Actions</strong>, choose <strong>Open Jupyter</strong>.</p>
+<p>For <strong>New</strong>, choose <strong>conda_tensorflw_p36</strong>. This is the kernel you need.</p></li>
+<li><p>To name the notebook, choose <strong>File</strong>, <strong>Rename</strong>, enter t<strong>Run-Python-Script</strong>, and then choose <strong>Rename</strong>.</p></li>
+</ol>
+<p><strong>To create and upload the Dockerfile and Python scripts</strong></p>
+<ol type="1">
+<li><p>In the editor of your choice, create the following Dockerfile text file locally and save it with the file name “Dockerfile” without an extension. The <code>docker build</code> command expects by default to find a file with precisely this name in the dockerfile directory. For example, in Notepad, you can save a text file without an extension by choosing <strong>File</strong>, <strong>Save As</strong> and choosing <strong>All types(*.*)</strong>.</p>
+<pre><code>FROM tensorflow/tensorflow:2.0.0a0
+
+RUN pip install sagemaker-containers
+
+# Copies the training code inside the container
+COPY train.py /opt/ml/code/train.py
+
+# Defines train.py as script entrypoint
+ENV SAGEMAKER_PROGRAM train.py</code></pre>
+<p>The Dockerfile script performs the following tasks:</p>
+<ul>
+<li><code>FROM tensorflow/tensorflow:2.0.0a0</code> downloads the TensorFlow library used to run the Python script.</li>
+<li><code>RUN pip install sagemaker-containers</code><a href="https://github.com/aws/sagemaker-containers">Amazon SageMaker Containers</a> contains the common functionality necessary to create a container compatible with Amazon SageMaker.</li>
+<li><code>COPY train.py /opt/ml/code/train.py</code> copies the script to the location inside the container that is expected by Amazon SageMaker. The script must be located in this folder.</li>
+<li><code>ENV SAGEMAKER_PROGRAM train.py</code> defines train.py as the name of the entrypoint script that is located in the /opt/ml/code folder for the container. This is the only environmental variable that you must specify when, you are using your own container.</li>
+</ul></li>
+<li><p>In the editor of your choice, create and save the following <code>train.py</code> text file locally.</p>
+<pre><code>import tensorflow as tf
+
+mnist = tf.keras.datasets.mnist
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(128, activation=&#39;relu&#39;),
+    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dense(10, activation=&#39;softmax&#39;)
+])
+
+model.compile(optimizer=&#39;adam&#39;,
+     loss=&#39;sparse_categorical_crossentropy&#39;,
+     metrics=[&#39;accuracy&#39;])
+
+model.fit(x_train, y_train, epochs=1)
+
+model.evaluate(x_test, y_test)</code></pre></li>
+<li><p>To upload the Dockerfile to a dockerfile directory, choose <strong>Open JupyterLab</strong>, choose the <strong>File Browser</strong> icon, and then choose the <strong>New Folder</strong> icon. This creates a new directory named <strong>dockerfile</strong>.</p></li>
+<li><p>Double-click the new <code>dockerfile</code> folder, choose the <strong>Upload Files</strong> icon, navigate to where you saved your Dockerfile and <code>train.py</code> script files, and upload them to the <code>dockerfile</code> folder.</p></li>
+</ol>
+<p><strong>To build the container</strong></p>
+<ol type="1">
+<li><p>The Jupyter Notebook opens in the SageMaker directory. The Docker build command must be run from the<code>dockerfile</code> directory you created. Run the following command to change into the <code>dockerfile</code> directory:</p>
+<pre><code>cd dockerfile</code></pre>
+<p>This returns your current directory: <code>/home/ec2-user/SageMaker/dockerfile</code></p></li>
+<li><p>To build the Docker container, run the following Docker build command, including the final period.</p>
+<pre><code>!docker build -t tf-2.0 .</code></pre></li>
+</ol>
+<p><strong>To test the container locally</strong></p>
+<ol type="1">
+<li><p>Use Local Mode the test the container locally. Replace the <code>'SageMakerRole'</code> value with the ARN for the role with the IAM role you created when configuring the notebook instance. The ARN should look like:<code>'arn:aws:iam::109225375568:role/service-role/AmazonSageMaker-ExecutionRole-20190429T110788'</code>.</p>
+<pre><code>from sagemaker.estimator import Estimator 
+
+estimator = Estimator(image_name=&#39;tf-2.0&#39;,
+           role=&#39;SageMakerRole&#39;,
+           train_instance_count=1,
+           train_instance_type=&#39;local&#39;)
+
+estimator.fit()</code></pre>
+<p>This test outputs the training environment configuration, the values used for the environmental variables, the source of the data, and the loss and accuracy obtained during training.</p></li>
+<li><p>After using Local Mode, you can push the image to Amazon Elastic Container Registry and use it to run training jobs. For an example that shows how to complete these tasks, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/advanced_functionality/tensorflow_bring_your_own/tensorflow_bring_your_own.ipynb">Building Your Own TensorFlow Container</a></p></li>
+</ol>
+<p><strong>To clean up resources when done with the get started example</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>, stop and then delete the notebook instance.</p></li>
+<li><p>Open the Amazon S3console at <a href="https://console.aws.amazon.com/s3/">https://console.aws.amazon.com/s3</a> and delete the bucket that you created for storing model artifacts and the training dataset.</p></li>
+<li><p>Open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a> and delete the IAM role. If you created permission policies, you can delete them, too. <strong>Note</strong><br />
+The Docker container shuts down automatically after it has run. You don’t need to delete it.</p></li>
+</ol>
+</body>
+</html>

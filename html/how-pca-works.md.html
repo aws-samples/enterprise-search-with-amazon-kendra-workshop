@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How PCA Works</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How PCA Works<a name="how-pca-works"></a></h1>
+</header>
+<p>Principal Component Analysis (PCA) is a learning algorithm that reduces the dimensionality (number of features) within a dataset while still retaining as much information as possible.</p>
+<p>PCA reduces dimensionality by finding a new set of features called <em>components</em>, which are composites of the original features, but are uncorrelated with one another. The first component accounts for the largest possible variability in the data, the second component the second most variability, and so on.</p>
+<p>It is an unsupervised dimensionality reduction algorithm. In unsupervised learning, labels that might be associated with the objects in the training dataset aren’t used.</p>
+<p>Given the input of a matrix with rows <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-39b.png" alt="[x_1,…,x_n]" /> each of dimension <code>1 * d</code>, the data is partitioned into mini-batches of rows and distributed among the training nodes (workers). Each worker then computes a summary of its data. The summaries of the different workers are then unified into a single solution at the end of the computation.</p>
+<p><strong>Modes</strong></p>
+<p>The Amazon SageMaker PCA algorithm uses either of two modes to calculate these summaries, depending on the situation: + <strong>regular</strong>: for datasets with sparse data and a moderate number of observations and features. + <strong>randomized</strong>: for datasets with both a large number of observations and features. This mode uses an approximation algorithm.</p>
+<p>As the algorithm’s last step, it performs the singular value decomposition on the unified solution, from which the principal components are then derived.</p>
+<p>The workers jointly compute both <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-1b.png" alt="[x_i^T x_i]" /> and <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-2b.png" alt="[x_i]" /> .</p>
+<p><strong>Note</strong><br />
+Because <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-3b.png" alt="[x_i]" /> are <code>1 * d</code> row vectors, <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-4b.png" alt="[x_i^T x_i]" /> is a matrix (not a scalar). Using row vectors within the code allows us to obtain efficient caching.</p>
+<p>The covariance matrix is computed as <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-32b.png" alt="[x_i^T x_i - (1/n) (x_i)^T x_i]" /> , and its top <code>num_components</code> singular vectors form the model.</p>
+<p><strong>Note</strong><br />
+If <code>subtract_mean</code> is <code>False</code>, we avoid computing and subtracting <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-2b.png" alt="[x_i]" /> .</p>
+<p>Use this algorithm when the dimension <code>d</code> of the vectors is small enough so that <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-7b.png" alt="[d^2]" /> can fit in memory.</p>
+<p>When the number of features in the input dataset is large, we use a method to approximate the covariance metric. For every mini-batch <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-23b.png" alt="[X_t]" /> of dimension <code>b * d</code>, we randomly initialize a <code>(num_components + extra_components) * b</code> matrix that we multiply by each mini-batch, to create a <code>(num_components + extra_components) * d</code> matrix. The sum of these matrices is computed by the workers, and the servers perform SVD on the final <code>(num_components + extra_components) * d</code> matrix. The top right <code>num_components</code> singular vectors of it are the approximation of the top singular vectors of the input matrix.</p>
+<p>Let <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-38b.png" alt="[]" /> <code>= num_components + extra_components</code>. Given a mini-batch <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-23b.png" alt="[X_t]" /> of dimension <code>b * d</code>, the worker draws a random matrix <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-24b.png" alt="[H_t]" /> of dimension <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-38.png" alt="[b]" /> . Depending on whether the environment uses a GPU or CPU and the dimension size, the matrix is either a random sign matrix where each entry is <code>+-1</code> or a <em>FJLT</em> (fast Johnson Lindenstrauss transform; for information, see <a href="https://www.cs.princeton.edu/~chazelle/pubs/FJLT-sicomp09.pdf">FJLT Transforms</a> and the follow-up papers). The worker then computes <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-26b.png" alt="[H_t X_t]" /> and maintains <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-27b.png" alt="[B = H_t X_t]" /> . The worker also maintains <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-28b.png" alt="[h^T]" /> , the sum of columns of <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-29b.png" alt="[H_1,..,H_T]" /> (<code>T</code> being the total number of mini-batches), and <code>s</code>, the sum of all input rows. After processing the entire shard of data, the worker sends the server <code>B</code>, <code>h</code>, <code>s</code>, and <code>n</code> (the number of input rows).</p>
+<p>Denote the different inputs to the server as <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-30b.png" alt="[B^1, h^1, s^1, n^1,…]" /> The server computes <code>B</code>, <code>h</code>, <code>s</code>, <code>n</code> the sums of the respective inputs. It then computes <img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/PCA-31b.png" alt="[C = B – (1/n) h^T s]" /> , and finds its singular value decomposition. The top-right singular vectors and singular values of <code>C</code> are used as the approximate solution to the problem.</p>
+</body>
+</html>

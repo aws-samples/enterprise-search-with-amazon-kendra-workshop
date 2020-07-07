@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How the DeepAR Algorithm Works</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How the DeepAR Algorithm Works<a name="deepar_how-it-works"></a></h1>
+</header>
+<p>During training, DeepAR accepts a training dataset and an optional test dataset. It uses the test dataset to evaluate the trained model. In general, the datasets don’t have to contain the same set of time series. You can use a model trained on a given training set to generate forecasts for the future of the time series in the training set, and for other time series. Both the training and the test datasets consist of one or, preferably, more target time series. Each target time series can optionally be associated with a vector of feature time series and a vector of categorical features. For more information, see <a href="deepar.md#deepar-inputoutput">Input/Output Interface for the DeepAR Algorithm</a>.</p>
+<p>For example, the following is an element of a training set indexed by <em>i</em> which consists of a target time series, <em>Zi,t</em>, and two associated feature time series, <em>Xi,1,t</em> and <em>Xi,2,t</em>:</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/ts-full-159.base.png" alt="" /><figcaption>[Figure 1: Target time series and associated feature time series]</figcaption>
+</figure>
+<p>The target time series might contain missing values, which are represented by line breaks in the time series. DeepAR supports only feature time series that are known in the future. This allows you to run “what if?” scenarios. What happens, for example, if I change the price of a product in some way?</p>
+<p>Each target time series can also be associated with a number of categorical features. You can use these features to encode which groupings a time series belongs to. Categorical features allow the model to learn typical behavior for groups, which it can use to increase model accuracy. DeepAR implements this by learning an embedding vector for each group that captures the common properties of all time series in the group.</p>
+<p>To facilitate learning time-dependent patterns, such as spikes during weekends, DeepAR automatically creates feature time series based on the frequency of the target time series. For example, DeepAR creates two feature time series (day of the month and day of the year) for a weekly time series frequency. It uses these derived feature time series with the custom feature time series that you provide during training and inference. The following figure shows two of these derived time series features: <em>ui,1,t</em> represents the hour of the day and <em>ui,2,t</em> the day of the week.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/ts-full-159.derived.png" alt="" /><figcaption>[Figure 2: Derived time series]</figcaption>
+</figure>
+<p>The DeepAR algorithm automatically generates these feature time series. The following table lists the derived features for the supported basic time frequencies.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Frequency of the Time Series</th>
+<th>Derived Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Minute</td>
+<td><code>minute-of-hour</code>, <code>hour-of-day</code>, <code>day-of-week</code>, <code>day-of-month</code>, <code>day-of-year</code></td>
+</tr>
+<tr class="even">
+<td>Hour</td>
+<td><code>hour-of-day</code>, <code>day-of-week</code>, <code>day-of-month</code>, <code>day-of-year</code></td>
+</tr>
+<tr class="odd">
+<td>Day</td>
+<td><code>day-of-week</code>, <code>day-of-month</code>, <code>day-of-year</code></td>
+</tr>
+<tr class="even">
+<td>Week</td>
+<td><code>day-of-month</code>, <code>week-of-year</code></td>
+</tr>
+<tr class="odd">
+<td>Month</td>
+<td>month-of-year</td>
+</tr>
+</tbody>
+</table>
+<p>DeepAR trains a model by randomly sampling several training examples from each of the time series in the training dataset. Each training example consists of a pair of adjacent context and prediction windows with fixed predefined lengths. The <code>context_length</code> hyperparameter controls how far in the past the network can see, and the <code>prediction_length</code> hyperparameter controls how far in the future predictions can be made. During training, the algorithm ignores training set elements containing time series that are shorter than a specified prediction length. The following figure represents five samples with context lengths of 12 hours and prediction lengths of 6 hours drawn from element <em>i</em>. For brevity, we’ve omitted the feature time series <em>xi,1,t</em> and <em>ui,2,t</em>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/ts-full-159.sampled.png" alt="" /><figcaption>[Figure 3: Sampled time series]</figcaption>
+</figure>
+<p>To capture seasonality patterns, DeepAR also automatically feeds lagged values from the target time series. In the example with hourly frequency, for each time index, <em>t = T</em>, the model exposes the <em>zi,t</em> values, which occurred approximately one, two, and three days in the past.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/ts-full-159.lags.png" alt="" /><figcaption>[Figure 4: Lagged time series]</figcaption>
+</figure>
+<p>For inference, the trained model takes as input target time series, which might or might not have been used during training, and forecasts a probability distribution for the next <code>prediction_length</code> values. Because DeepAR is trained on the entire dataset, the forecast takes into account patterns learned from similar time series.</p>
+<p>For information on the mathematics behind DeepAR, see <a href="https://arxiv.org/abs/1704.04110">DeepAR: Probabilistic Forecasting with Autoregressive Recurrent Networks</a>.</p>
+</body>
+</html>

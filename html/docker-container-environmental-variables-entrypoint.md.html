@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Environmental Variables used by Amazon SageMaker Containers to Define Entry Points</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Environmental Variables used by Amazon SageMaker Containers to Define Entry Points<a name="docker-container-environmental-variables-entrypoint"></a></h1>
+</header>
+<p>When creating a Dockerfile, you must define an entry point that specifies the location of the code to run when the container starts. Amazon SageMaker Containers does this by setting an <code>ENV</code> environment variable. The environment variable that you need to set depends on the job you want to do: + To run a script,specify the <code>SAGEMAKER_PROGRAM</code> <code>ENV</code> variable. + To train an algorithm, specify the <code>SAGEMAKER_TRAINING_MODULE</code> <code>ENV</code> variable. + To host a model, specify the <code>SAGEMAKER_SERVING_MODULE</code> <code>ENV</code> variable.</p>
+<p>You can use the Amazon SageMaker containers SDK package to set environment variables.</p>
+<p><code>SAGEMAKER_PROGRAM</code></p>
+<p>Train scripts similar to those you would use outside Amazon SageMaker using Amazon SageMaker Script Mode. It supports Python and Shell scripts: Amazon SageMaker uses the Python interpreter for any script with the <code>.py</code> suffix.Amazon SageMaker uses the Shell interpreter to execute any other script.</p>
+<p>When running a program to specify the entry point for Script Mode, set the <code>SAGEMAKER_PROGRAM</code> environmental variable. The script must be located in the <code>/opt/ml/code</code> folder.</p>
+<p>For example, the container used in the example in <a href="build-container-to-train-script-get-started.md">Get Started: Use Amazon SageMaker Containers to Run a Python Script</a> sets this <code>ENV</code> as follows.</p>
+<pre><code>ENV SAGEMAKER_PROGRAM train.py</code></pre>
+<p>The Amazon SageMaker PyTorch container sets the <code>ENV</code> variable as follows.</p>
+<pre><code>ENV SAGEMAKER_PROGRAM cifar10.py</code></pre>
+<p>In the example, cifar10.py is the program that implements the training algorithm and handles loading the model for inferences. For more information, see the <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/advanced_functionality/pytorch_extending_our_containers/pytorch_extending_our_containers.ipynb">Extending our PyTorch containers</a> notebook.</p>
+<p><code>SAGEMAKER_TRAINING_MODULE</code></p>
+<p>When training an algorithm, specify the location of the module that contains the training logic by setting the <code>SAGEMAKER_TRAINING_MODULE</code> environment variable. An Amazon SageMaker container invokes this module when the container starts training. For example, you set this environment variable in MXNet as follows.</p>
+<pre><code>ENV SAGEMAKER_TRAINING_MODULE sagemaker_mxnet_container.training:main</code></pre>
+<p>For <a href="https://github.com/aws/sagemaker-tensorflow-container/blob/script-mode/docker/1.12.0/Dockerfile.cpu#92">TensorFlow</a>, set this <code>environmant variable</code> as follows.</p>
+<pre><code>ENV SAGEMAKER_TRAINING_MODULE sagemaker_tensorflow_container.training:main</code></pre>
+<p>The code that implements this logic is in <a href="https://github.com/aws/sagemaker-containers/blob/master/src/sagemaker_containers/_trainer.py">Amazon SageMaker Containers</a>.</p>
+<p><code>SAGEMAKER_SERVING_MODULE</code></p>
+<p>To locate the module that contains the hosting logic when deploying a model, set the <code>SAGEMAKER_SERVING_MODULE</code> environmental variable. An Amazon SageMaker container invokes this module when it starts hosting. For <a href="https://github.com/aws/sagemaker-mxnet-container/blob/master/docker/1.3.0/final/Dockerfile">MXNet</a>, set this environment as follows.</p>
+<pre><code>ENV SAGEMAKER_SERVING_MODULE sagemaker_mxnet_container.serving:main</code></pre>
+<p>The code that implements this logic is in the: <a href="https://github.com/aws/sagemaker-containers/blob/master/src/sagemaker_containers/_server.py">Amazon SageMaker Containers</a>.</p>
+</body>
+</html>

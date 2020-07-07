@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Associate Prediction Results with their Corresponding Input Records</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Associate Prediction Results with their Corresponding Input Records<a name="batch-transform-data-processing"></a></h1>
+</header>
+<p>When making predictions on a large dataset, attributes that are not needed for prediction can be excluded. After the predictions have been made, you often want to associate some of the excluded attributes with those predictions or with other input data in your report. Amazon SageMaker Batch Tranform enables these data processing steps, often eliminating the need for any additional pre-processing or post-processing. The feature supports JSON and CSV formatted input files.</p>
+<p><strong>Topics</strong> + <a href="#batch-transform-data-processing-workflow">Data Processing Workflow for a Batch Transform Job</a> + <a href="#batch-transform-data-processing-steps">Use Data Processing in Batch Transform Jobs</a> + <a href="#data-processing-operators">Supported JSONPath Operators</a> + <a href="#batch-transform-data-processing-examples">Examples</a></p>
+<p>The following diagram shows the data processing workflow for a batch transform job.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/batch-transform-data-processing.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p>To join the prediction results with the input data, there are three main steps: + Filter the input data that is not needed for inference before passing it to the batch transform job. Use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-Type-DataProcessing-InputFilter">InputFilter</a> parameter to determine which attributes to use as input for the model. + Associate the input data with the inference results. Use <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-Type-DataProcessing-JoinSource">JoinSource</a> to combine the input data with the inference. + Filter the joined data to retain the inputs needed to provide context for interpreting the predictions in the reports. Use <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-Type-DataProcessing-OutputFilter">OutputFilter</a> to store the specified portion of the joined dataset in the output file.</p>
+<p>To process the data when creating a batch transform job with <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html">CreateTransformJob</a>:</p>
+<ol type="1">
+<li><p>Specify the portion of the input to pass to the model with the <code>InputFilter</code> parameter in the <code>DataProcessing</code> data structure.</p></li>
+<li><p>Join the raw input data with the transformed data with the <code>JoinSource</code> parameter.</p></li>
+<li><p>Specify which portion of the joined input and transformed data from the batch transform job to include in the output file with the <code>OutputFilter</code> parameter.</p></li>
+<li><p>Choose either JSON- or CSV-formatted files for input:</p></li>
+</ol>
+<ul>
+<li>For JSON- or JSON Lines-formatted inputs, Amazon SageMaker either adds <code>SageMakerOutput</code> attribute to the input file or creates a new JSON output file with the attributes <code>SageMakerInput</code> and <code>SageMakerOutput</code>. For more information, see <a href="API_DataProcessing.md">DataProcessing</a>.</li>
+<li>For CSV-formatted input files, the joined input data is followed by the transformed data and the output is a CSV file.</li>
+</ul>
+<p>If you use an algorithm with the DataProcessing structure, it must support your chosen format for <em>both</em> input and output files. For example, with the <a href="API_TransformOutput.md">TransformOutput</a> field of the <code>CreateTransformJob</code> API, you must set both the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_TransformInput.html#SageMaker-Type-TransformInput-ContentType">ContentType</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_TransformOutput.html#SageMaker-Type-TransformOutput-Accept">Accept</a> parameters to one of the following values: <code>text/csv</code>, <code>application/json</code>, or <code>application/jsonlines</code>. The syntax for specifying columns in a CSV file and specifying attributes in a JSON file are different. Using the wrong syntax causes an error. For more information, see <a href="#batch-transform-data-processing-examples">Examples</a> For more information about input and output file formats for build-in algorithms, see <a href="algos.md">Use Amazon SageMaker Built-in Algorithms</a>.</p>
+<p>The record delimiters for the input and output must also be consistent with the your chosen file input. The <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_TransformInput.html#SageMaker-Type-TransformInput-SplitType">SplitType</a> parameter indicates how to split the records in the input dataset. The <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_TransformOutput.html#SageMaker-Type-TransformOutput-AssembleWith">AssembleWith</a> parameter indicates how to reassemble the records for the output. If you set input and output formats to <code>text/csv</code>, you must also set the <code>SplitType</code> and <code>AssemblyType</code> parameters to <code>line</code>. If you set the input and output formats to <code>application/jsonlines</code>, you can set both <code>SplitType</code> and <code>AssemblyType</code> to either <code>none</code> or <code>line</code>.</p>
+<p>For JSON files, the attribute name <code>SageMakerOutput</code> is reserved for output. The JSON input file can’t have an attribute with this name. If it does, the data in the input file might be overwritten.</p>
+<p>To filter and join the input data and inference, use a JSONPath subexpression. The following table lists the supported JSONPath operators.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>JSONPath Operator</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>$</td>
+<td>The root element to a query. This operator is required at the beginning of all path expressions.</td>
+<td>“<span class="math inline">$" | | \.&lt;name&gt; | A dot\-notated child element\. | `"$</span>.id”<code>|  | \* |  A wildcard\. Use in place of an attribute name or numeric value\.  |</code>“<span class="math inline">$.id.*"` | | \['&lt;name&gt;' \(,'&lt;name&gt;'\)\] | A bracket\-notated element or multiple child elements\. | `"$</span>[‘id’,‘SageMakerOutput’]”<code>|  | \[&lt;number&gt; \(,&lt;number&gt;\)\] |  An index or array of indexes\. Negative index values are also supported\. A</code>-1<code>index refers to the last element in an array\.  |</code><span class="math inline">$[1]` , `$</span>[1,3,5]<code>|  | \[&lt;start&gt;:&lt;end&gt;\] |  An array slice operator\. If you omit *&lt;start&gt;*, Amazon SageMaker uses the first element of the array\. If you omit *&lt;end&gt;*, Amazon SageMaker uses the last element of the array\.  |</code><span class="math inline">$[2:5]`, `$</span>[:5]<code>,</code>$[2:]`</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note</strong><br />
+Amazon SageMaker supports only a subset of the defined JSONPath operators. For more information about JSONPath operators, see <a href="https://github.com/json-path/JsonPath">JsonPath</a>.</p>
+<p>The following examples show some common ways to join input data with prediction results.</p>
+<p><strong>Topics</strong> + <a href="#batch-transform-data-processing-example-default">Output Only Inference Results</a> + <a href="#batch-transform-data-processing-example-all">Output a Combination of Input Data and Results</a> + <a href="#batch-transform-data-processing-example-select-csv">Output an ID Column with Results and Exclude the ID Column from the Input (CSV)</a> + <a href="#batch-transform-data-processing-example-select-json">Output an ID Attribute with Results and Exclude the ID Attribute from the Input (JSON)</a></p>
+<p>By default, the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-CreateTransformJob-request-DataProcessing">DataProcessing</a> parameter doesn’t join results with input and only outputs the inference results.</p>
+<p>If you want to explicity specify in code not to join results with input, use the Amazon SageMaker Python SDK and specify these settings in a transformer call.</p>
+<pre><code>sm_transformer = sagemaker.transformer.Transformer(…)
+sm_transformer.transform(…, input_filter=&quot;$&quot;, join_source= &quot;None&quot;, output_filter=&quot;$&quot;)</code></pre>
+<p>The following code shows the default behavior. To output an inference only using the AWS SDK for Python, add it to your CreateTransformJob request:</p>
+<pre><code>{
+    &quot;DataProcessing&quot;: {
+        &quot;InputFilter&quot;: &quot;$&quot;,
+        &quot;JoinSource&quot;: &quot;None&quot;,
+        &quot;OutputFilter&quot;: &quot;$&quot;
+    }
+}</code></pre>
+<p>If you are using the Amazon SageMaker Python SDK, combine the input data with the inference in the output file, specify <code>"Input"</code> for the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-Type-DataProcessing-JoinSource">JoinSource</a> parameter in a transformer call.</p>
+<pre><code>sm_transformer = sagemaker.transformer.Transformer(…)
+sm_transformer.transform(…, join_source= &quot;Input&quot;)</code></pre>
+<p>If you are using the AWS SDK for Python (Boto 3), join all input data with the inference by adding the following code to your <a href="API_CreateTransformJob.md">CreateTransformJob</a> request.</p>
+<pre><code>{
+    &quot;DataProcessing&quot;:
+    {
+        &quot;JoinSource&quot;: &quot;Input&quot;
+    }
+}</code></pre>
+<p>For JSON or JSON Lines, the results are in the <code>SageMakerOutput</code> key in the input JSON file. For example, if the input is a JSON file that contains the key-value pair <code>{"key":1}</code>, the the data transform result might be <code>{"label":1}</code>.</p>
+<p>Amazon SageMaker stores both in the input file under <code>SageMakerInput</code> key.</p>
+<pre><code>{
+    &quot;key&quot;:1,
+    &quot;SageMakerOutput&quot;:{&quot;label&quot;:1}
+}</code></pre>
+<p><strong>Note</strong><br />
+The joined result for JSON must be a key-value pair object. If the input is not a key-value pair object, Amazon SageMaker creates a new JSON file. In the new JSON file, the input data is stored in the <code>SageMakerInput</code> key and the results are stored as the <code>SageMakerOutput</code> value.</p>
+<p>For a CSV file, for example, if the record is <code>[1,2,3]</code>, and the label result is <code>[1]</code>, then the output file would contain <code>[1,2,3,1]</code>.</p>
+<p>If you are using the Amazon SageMaker Python SDK, to include results or an ID column in the output, specify indexes of the joined dataset in a transformer call. For example, if your data includes five columns an the first one is the ID column, use the following transformer request.</p>
+<pre><code>sm_transformer = sagemaker.transformer.Transformer(…)
+sm_transformer.transform(…, input_filter=&quot;$[1:]&quot;, join_source= &quot;Input&quot;, output_filter=&quot;$[0,5:]&quot;)</code></pre>
+<p>If you are using the AWS SDK for Python (Boto 3), add the following code to your <a href="API_CreateTransformJob.md">CreateTransformJob</a> request.</p>
+<pre><code>{
+    &quot;DataProcessing&quot;: {
+        &quot;InputFilter&quot;: &quot;$[1:]&quot;,
+        &quot;JoinSource&quot;: &quot;Input&quot;,
+        &quot;OutputFilter&quot;: &quot;$[0,5:]&quot;
+    }
+}</code></pre>
+<p>To specify columns in Amazon SageMaker, index the array elements. The first column is 0, the second column is 1, and the sixth column is 5. To exclude the first column from the input, set <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-Type-DataProcessing-InputFilter">InputFilter</a> to <code>"$[1:]"</code>.</p>
+<p>The <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTransformJob.html#SageMaker-Type-DataProcessing-OutputFilter">OutputFilter</a> parameter applies to the joined input and output. To index correctly, you must know the sizes of the input data combined with the inference. To include the first three columns from the input data with the output, set the <code>OutputFilter</code> to <code>"$[0:2, 5:]"</code>. The colon <code>‘:’</code> tells Amazon SageMaker to include all of the elements between two values. For example, 0:2 specifies the first three columns. If you omit the number after the colon, for example, <code>"[0, 5:]"</code>, the subset ends at the last column in the joined data.</p>
+<p>If you are using the Amazon SageMaker Python SDK, include results or an ID attribute in the output by specifying it in a transformer call. For example, if you store data under the <code>features</code> attribute and the record ID under the <code>ID</code> attribute, you would use the following transformer request.</p>
+<pre><code>sm_transformer = sagemaker.transformer.Transformer(…)
+sm_transformer.transform(…, input_filter=&quot;$.features&quot;, join_source= &quot;Input&quot;, output_filter=&quot;$[&#39;id&#39;,&#39;SageMakerOutput&#39;]&quot;)</code></pre>
+<p>If you are using the AWS SDK for Python (Boto 3), join all input data with the inference by adding the following code to your <a href="API_CreateTransformJob.md">CreateTransformJob</a> request.</p>
+<pre><code>{
+    &quot;DataProcessing&quot;: {
+        &quot;InputFilter&quot;: &quot;$.features&quot;,
+        &quot;JoinSource&quot;: &quot;Input&quot;,
+        &quot;OutputFilter&quot;: &quot;$[&#39;id&#39;,&#39;SageMakerOutput&#39;]&quot;
+    }
+}</code></pre>
+<p><strong>Warning</strong><br />
+The attribute name <code>SageMakerOutput</code> is reserved for the JSON output file. The JSON input file must not have an attribute with this name. If it does, the input file values might be overwritten with the inference.</p>
+</body>
+</html>

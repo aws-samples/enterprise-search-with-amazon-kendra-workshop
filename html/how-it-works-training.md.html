@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Train a Model with Amazon SageMaker</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Train a Model with Amazon SageMaker<a name="how-it-works-training"></a></h1>
+</header>
+<p>The following diagram shows how you train and deploy a model with Amazon SageMaker:</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/sagemaker-architecture.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p>The area labeled Amazon SageMaker highlights the two components of Amazon SageMaker: model training and model deployment.</p>
+<p>To train a model in Amazon SageMaker, you create a training job. The training job includes the following information: + The URL of the Amazon Simple Storage Service (Amazon S3) bucket where you’ve stored the training data. + The compute resources that you want Amazon SageMaker to use for model training. Compute resources are ML compute instances that are managed by Amazon SageMaker. + The URL of the S3 bucket where you want to store the output of the job. + The Amazon Elastic Container Registry path where the training code is stored. For more information, see <a href="sagemaker-algo-docker-registry-paths.md">Common Parameters for Built-In Algorithms</a>.</p>
+<p>You have the following options for a training algorithm: + <strong>Use an algorithm provided by Amazon SageMaker</strong>—Amazon SageMaker provides training algorithms. If one of these meets your needs, it’s a great out-of-the-box solution for quick model training. For a list of algorithms provided by Amazon SageMaker, see <a href="algos.md">Use Amazon SageMaker Built-in Algorithms</a>. To try an exercise that uses an algorithm provided by Amazon SageMaker, see <a href="gs.md">Get Started</a>. + <strong>Use Apache Spark with Amazon SageMaker</strong>—Amazon SageMaker provides a library that you can use in Apache Spark to train models with Amazon SageMaker. Using the library provided by Amazon SageMaker is similar to using Apache Spark MLLib. For more information, see <a href="apache-spark.md">Use Apache Spark with Amazon SageMaker</a>. + <strong>Submit custom code to train with deep learning frameworks</strong>—You can submit custom Python code that uses TensorFlow or Apache MXNet for model training. For more information, see <a href="tf.md">Use TensorFlow with Amazon SageMaker</a> and <a href="mxnet.md">Use Apache MXNet with Amazon SageMaker</a>. + <strong>Use your own custom algorithms</strong>—Put your code together as a Docker image and specify the registry path of the image in an Amazon SageMaker <code>CreateTrainingJob</code> API call. For more information, see <a href="your-algorithms.md">Use Your Own Algorithms or Models with Amazon SageMaker</a>. + <strong>Use an algorithm that you subscribe to from AWS Marketplace</strong>—For information, see <a href="sagemaker-mkt-find-subscribe.md">Find and Subscribe to Algorithms and Model Packages on AWS Marketplace</a>.</p>
+<p>After you create the training job, Amazon SageMaker launches the ML compute instances and uses the training code and the training dataset to train the model. It saves the resulting model artifacts and other output in the S3 bucket you specified for that purpose.</p>
+<p>You can create a training job with the Amazon SageMaker console or the API. For information about creating a training job with the API, see the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> API.</p>
+<p>When you create a training job with the API, Amazon SageMaker replicates the entire dataset on ML compute instances by default. To make Amazon SageMaker replicate a subset of the data on each ML compute instance, you must set the <code>S3DataDistributionType</code> field to <code>ShardedByS3Key</code>. You can set this field using the low-level SDK. For more information, see <code>S3DataDistributionType</code> in <a href="API_S3DataSource.md">S3DataSource</a>.</p>
+<p><strong>Important</strong><br />
+To prevent your algorithm container from contending for memory, you should reserve some memory for Amazon SageMaker critical system processes on your ML compute instances. If the algorithm container is allowed to use memory needed for system processes, it can trigger a system failure.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/sagemaker-architecture-training-2.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p><a href="how-it-works-deployment.md">Deploy a Model in Amazon SageMaker</a></p>
+</body>
+</html>

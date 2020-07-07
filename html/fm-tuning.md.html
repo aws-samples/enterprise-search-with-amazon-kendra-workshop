@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune a Factorization Machines Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune a Factorization Machines Model<a name="fm-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The factorization machines algorithm has both binary classification and regression predictor types. The predictor type determines which metric you can use for automatic model tuning. The algorithm reports a <code>test:rmse</code> regressor metric, which is computed during training. When tuning the model for regression tasks, choose this metric as the objective.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:rmse</td>
+<td>Root Mean Square Error</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>The factorization machines algorithm reports three binary classification metrics, which are computed during training. When tuning the model for binary classification tasks, choose one of these as the objective.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:binary_classification_accuracy</td>
+<td>Accuracy</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>test:binary_classification_cross_entropy</td>
+<td>Cross Entropy</td>
+<td>Minimize</td>
+</tr>
+<tr class="odd">
+<td>test:binary_f_beta</td>
+<td>Beta</td>
+<td>Maximize</td>
+</tr>
+</tbody>
+</table>
+<p>You can tune the following hyperparameters for the factorization machines algorithm. The initialization parameters that contain the terms bias, linear, and factorization depend on their initialization method. There are three initialization methods: <code>uniform</code>, <code>normal</code>, and <code>constant</code>. These initialization methods are not themselves tunable. The parameters that are tunable are dependent on this choice of the initialization method. For example, if the initialization method is <code>uniform</code>, then only the <code>scale</code> parameters are tunable. Specifically, if <code>bias_init_method==uniform</code>, then <code>bias_init_scale</code>, <code>linear_init_scale</code>, and <code>factors_init_scale</code> are tunable. Similarly, if the initialization method is <code>normal</code>, then only <code>sigma</code> parameters are tunable. If the initialization method is <code>constant</code>, then only <code>value</code> parameters are tunable. These dependencies are listed in the following table.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+<th>Dependency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>bias_init_scale</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==uniform</td>
+</tr>
+<tr class="even">
+<td>bias_init_sigma</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==normal</td>
+</tr>
+<tr class="odd">
+<td>bias_init_value</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==constant</td>
+</tr>
+<tr class="even">
+<td>bias_lr</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>bias_wd</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>epoch</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 1000</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>factors_init_scale</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==uniform</td>
+</tr>
+<tr class="even">
+<td>factors_init_sigma</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==normal</td>
+</tr>
+<tr class="odd">
+<td>factors_init_value</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==constant</td>
+</tr>
+<tr class="even">
+<td>factors_lr</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>factors_wd</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512]</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>linear_init_scale</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==uniform</td>
+</tr>
+<tr class="odd">
+<td>linear_init_sigma</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==normal</td>
+</tr>
+<tr class="even">
+<td>linear_init_value</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>bias_init_method==constant</td>
+</tr>
+<tr class="odd">
+<td>linear_lr</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>linear_wd</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-8, MaxValue: 512</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 100, MaxValue: 10000</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

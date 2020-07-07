@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Load Testing for Production Variant Automatic Scaling</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Load Testing for Production Variant Automatic Scaling<a name="endpoint-scaling-loadtest"></a></h1>
+</header>
+<p>Perform load tests to choose an automatic scaling configuration that works the way you want.</p>
+<p>For an example of load testing to optimize automatic scaling for a Amazon SageMaker endpoint, see <a href="https://aws.amazon.com//blogs/machine-learning/load-test-and-optimize-an-amazon-sagemaker-endpoint-using-automatic-scaling/">Load test and optimize an Amazon SageMaker endpoint using automatic scaling</a>.</p>
+<p>The following guidelines for load testing assume you are using an automatic scaling policy that uses the predefined target metric <code>SageMakerVariantInvocationsPerInstance</code>.</p>
+<p><strong>Topics</strong> + <a href="#endpoint-scaling-loadtest-variant">Determine the Performance Characteristics of a Production Variant</a> + <a href="#endpoint-scaling-loadtest-calc">Calculate the Target SageMakerVariantInvocationsPerInstance</a></p>
+<p>Perform load testing to find the peak <code>InvocationsPerInstance</code> that your variant instance can handle, and the latency of requests, as concurrency increases.</p>
+<p>This value depends on the instance type chosen, payloads that clients of your variant typically send, and the performance of any external dependencies your variant has.</p>
+<p><strong>To find the peak requests-per-second (RPS) your variant can handle and latency of requests</strong></p>
+<ol type="1">
+<li><p>Set up an endpoint with your variant using a single instance. For information about how to set up an endpoint, see <a href="ex1-deploy-model.md">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p></li>
+<li><p>Use a load testing tool to generate an increasing number of parallel requests, and monitor the RPS and model latency in the out put of the load testing tool. <strong>Note</strong><br />
+You can also monitor requests-per-minute instead of RPS. In that case don’t multiply by 60 in the equation to calculate <code>SageMakerVariantInvocationsPerInstance</code> shown below.</p>
+<p>When the model latency increases or the proportion of successful transactions decreases, this is the peak RPS that your variant can handle.</p></li>
+</ol>
+<p>After you find the performance characteristics of the variant, you can determine the maximum RPS we should allow to be sent to an instance. The threshold used for scaling must be less than this maximum value. Use the following equation in combination with load testing to determine the correct value for the <code>SageMakerVariantInvocationsPerInstance</code> target metric in your automatic scaling configuration.</p>
+<pre><code>SageMakerVariantInvocationsPerInstance = (MAX_RPS * SAFETY_FACTOR) * 60</code></pre>
+<p>Where <code>MAX_RPS</code> is the maximum RPS that you determined previously, and <code>SAFETY_FACTOR</code> is the safety factor that you chose to ensure that your clients don’t exceed the maximum RPS. Multiply by 60 to convert from RPS to invocations-per-minute to match the per-minute CloudWatch metric that Amazon SageMaker uses to implement automatic scaling (you don’t need to do this if you measured requests-per-minute instead of requests-per-second).</p>
+<p><strong>Note</strong><br />
+Amazon SageMaker recommends that you start testing with a <code>SAFETY_FACTOR</code> of 0.5. Test your automatic scaling configuration to ensure it operates in the way you expect with your model for both increasing and decreasing customer traffic on your endpoint.</p>
+</body>
+</html>

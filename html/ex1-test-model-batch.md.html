@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 7.2: Validate a Model Deployed with Batch Transform</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 7.2: Validate a Model Deployed with Batch Transform<a name="ex1-test-model-batch"></a></h1>
+</header>
+<p>You now have a file in Amazon S3 that contains inferences that you got by running a batch transform job in <a href="ex1-batch-transform.md">Step 6.2: Deploy the Model with Batch Transform</a>. To validate the model, check a subset of the inferences from the file to see whether they match the actual numbers from the test dataset.</p>
+<p><strong>To validate the batch transform inferences</strong></p>
+<ol type="1">
+<li><p>Download the test data from Amazon S3.</p>
+<pre><code>s3 = boto3.resource(&#39;s3&#39;)
+
+test_key = &quot;{}/test/examples&quot;.format(prefix)
+
+s3.Bucket(bucket).download_file(test_key, &#39;test_data&#39;)</code></pre></li>
+<li><p>Plot the first 10 images from the test dataset with their labels.</p>
+<pre><code>%matplotlib inline
+
+for i in range (0, 10):
+    img = test_set[0][i]
+    label = test_set[1][i]
+    img_reshape = img.reshape((28,28))
+    imgplot = plt.imshow(img_reshape, cmap=&#39;gray&#39;)
+    print(&#39;This is a {}&#39;.format(label))
+    plt.show()</code></pre>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/test-digits.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure></li>
+<li><p>Download the output from the batch transform job from Amazon S3 to a local file.</p>
+<pre><code>s3.Bucket(bucket).download_file(prefix + &#39;/batch-inference/examples.out&#39;,  &#39;batch_results&#39;)</code></pre></li>
+<li><p>Get the first 10 results from the batch transform job.</p>
+<pre><code>with open(&#39;batch_results&#39;) as f:
+    results = f.readlines()
+for j in range (0, 10):
+    print(results[j])</code></pre></li>
+<li><p>To see if the batch transform job made accurate predictions, check the output from this step against the numbers that you plotted from the test data.</p></li>
+</ol>
+<p>You have now trained, deployed, and validated your first model in Amazon SageMaker.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-cleanup.md">Step 8: Clean Up</a></p>
+</body>
+</html>

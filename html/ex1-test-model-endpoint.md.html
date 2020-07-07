@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 7.1: Validate a Model Deployed to Amazon SageMaker Hosting Services</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 7.1: Validate a Model Deployed to Amazon SageMaker Hosting Services<a name="ex1-test-model-endpoint"></a></h1>
+</header>
+<p>If you deployed a model to Amazon SageMaker hosting services in <a href="ex1-deploy-model.md">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>, you now have an endpoint that you can invoke to get inferences in real time. To validate the model, invoke the endpoint with example images from the test dataset and check whether the inferences you get match the actual labels of the images.</p>
+<p><strong>Topics</strong> + <a href="#ex1-test-model-endpoint-sdk">Validate a Model Deployed to Amazon SageMaker Hosting Services (Amazon SageMaker Python SDK)</a> + <a href="#ex1-test-model-endpoint-boto">Validate a Model Deployed to Amazon SageMaker Hosting Services (AWS SDK for Python (Boto 3))</a></p>
+<p>To validate the model by using the Amazon SageMaker Python SDK, use the <code>sagemaker.predictor.RealTimePredictor</code> object that you created in <a href="ex1-deploy-model.md#ex1-deploy-model-sdk">Deploy the Model to Amazon SageMaker Hosting Services (Amazon SageMaker Python SDK)</a>. For information, see <a href="https://sagemaker.readthedocs.io/en/stable/predictors.html#sagemaker.predictor.RealTimePredictor">https://sagemaker.readthedocs.io/en/stable/predictors.html#sagemaker.predictor.RealTimePredictor</a>.</p>
+<p><strong>To validate the model (Amazon SageMaker Python SDK)</strong></p>
+<ol type="1">
+<li><p>Download the test data from Amazon S3.</p>
+<pre><code>s3 = boto3.resource(&#39;s3&#39;)
+
+test_key = &quot;{}/test/examples&quot;.format(prefix)
+
+s3.Bucket(bucket).download_file(test_key, &#39;test_data&#39;)</code></pre></li>
+<li><p>Plot the first 10 images from the test dataset with their labels.</p>
+<pre><code>%matplotlib inline
+
+for i in range (0, 10):
+    img = test_set[0][i]
+    label = test_set[1][i]
+    img_reshape = img.reshape((28,28))
+    imgplot = plt.imshow(img_reshape, cmap=&#39;gray&#39;)
+    print(&#39;This is a {}&#39;.format(label))
+    plt.show()</code></pre>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/test-digits.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure></li>
+<li><p>To get inferences for the first 10 examples in the test dataset, call the <code>predict</code> method of the <code>sagemaker.predictor.RealTimePredictor</code> object.</p>
+<pre><code>with open(&#39;test_data&#39;, &#39;r&#39;) as f:
+    for j in range(0,10):
+        single_test = f.readline()
+        result = xgb_predictor.predict(single_test)
+        print(result)</code></pre>
+<p>To see if the model is making accurate predictions, check the output from this step against the numbers that you plotted in the previous step.</p></li>
+</ol>
+<p>You have now trained, deployed, and validated your first model in Amazon SageMaker.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-cleanup.md">Step 8: Clean Up</a></p>
+<p>To use the AWS SDK for Python (Boto 3) to validate the model, call the <code>invoke_endpoint</code> method. This method corresponds to the <a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a> API provided by the Amazon SageMaker runtime.</p>
+<p><strong>To validate the model (AWS SDK for Python (Boto 3))</strong></p>
+<ol type="1">
+<li><p>Download the test data from Amazon S3.</p>
+<pre><code>s3 = boto3.resource(&#39;s3&#39;)
+
+test_key = &quot;{}/test/examples&quot;.format(prefix)
+
+s3.Bucket(bucket).download_file(test_key, &#39;test_data&#39;)</code></pre></li>
+<li><p>Plot the first 10 images from the test dataset with their labels.</p>
+<pre><code>%matplotlib inline
+
+for i in range (0, 10):
+    img = test_set[0][i]
+    label = test_set[1][i]
+    img_reshape = img.reshape((28,28))
+    imgplot = plt.imshow(img_reshape, cmap=&#39;gray&#39;)
+    print(&#39;This is a {}&#39;.format(label))
+    plt.show()</code></pre>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/test-digits.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure></li>
+<li><p>Get the Amazon SageMaker runtime client, which provides the <code>invoke_endpoint</code> method.</p>
+<pre><code>runtime_client = boto3.client(&#39;runtime.sagemaker&#39;)</code></pre></li>
+<li><p>Get inferences from the first 10 examples in the test dataset by calling <code>invoke_endpoint</code>.</p>
+<pre><code>with open(&#39;test_data&#39;, &#39;r&#39;) as f:
+
+    for i in range(0,10):
+        single_test = f.readline()
+        response = runtime_client.invoke_endpoint(EndpointName = endpoint_name,
+                                         ContentType = &#39;text/csv&#39;,
+                                         Body = single_test)
+        result = response[&#39;Body&#39;].read().decode(&#39;ascii&#39;)
+        print(&#39;Predicted label is {}.&#39;.format(result))</code></pre></li>
+<li><p>To see if the model is making accurate predictions, check the output from this step against the numbers you plotted in the previous step.</p></li>
+</ol>
+<p>You have now trained, deployed, and validated your first model in Amazon SageMaker.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-cleanup.md">Step 8: Clean Up</a></p>
+</body>
+</html>

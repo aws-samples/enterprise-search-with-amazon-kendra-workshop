@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Set Up to Use EI</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Set Up to Use EI<a name="ei-setup"></a></h1>
+</header>
+<p>Use the instructions in this topic only if one of the following applies to you: + You want to use a customized role or permission policy. + You want to use a VPC for your hosted model or notebook instance.</p>
+<p><strong>Note</strong><br />
+If you already have an execution role that has the <code>AmazonSageMakerFullAccess</code> managed policy attached (this is true for any IAM role that you create when you create a notebook instance, training job, or model in the console) and you are not connecting to an EI model or notebook instance in a VPC, you do not need to make any of these changes to use EI in Amazon SageMaker.</p>
+<p><strong>Topics</strong> + <a href="#ei-setup-permissions">Set Up Required Permissions</a> + <a href="#ei-setup-custom-vpc">Use a Custom VPC to Connect to EI</a></p>
+<p>To use EI in Amazon SageMaker, the role that you use to open a notebook instance or create a deployable model must have a policy with the required permissions attached. You can attach the <code>AmazonSageMakerFullAccess</code> managed policy, which contains the required permissions, to the role, or you can add a custom policy that has the required permissions. For information about creating an IAM role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html#roles-creatingrole-service-console">Creating a Role for an AWS Service (Console)</a> in the <em>AWS Identity and Access Management User Guide</em>. For information about attaching a policy to a role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Adding and Removing IAM Policies</a> .</p>
+<p>Add these permissions specifically for connecting EI in an IAM policy:</p>
+<pre><code>{
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Action&quot;: [
+        &quot;elastic-inference:Connect&quot;,
+        &quot;ec2:DescribeVpcEndpoints&quot;
+    ],
+    &quot;Resource&quot;: &quot;*&quot;
+}</code></pre>
+<p>The following IAM policy is the complete list of required permissions to use EI in Amazon SageMaker:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;elastic-inference:Connect&quot;,
+                &quot;ec2:DescribeVpcEndpoints&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;sagemaker:*&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;ecr:GetAuthorizationToken&quot;,
+                &quot;ecr:GetDownloadUrlForLayer&quot;,
+                &quot;ecr:BatchGetImage&quot;,
+                &quot;ecr:BatchCheckLayerAvailability&quot;,
+                &quot;cloudwatch:PutMetricData&quot;,
+                &quot;cloudwatch:PutMetricAlarm&quot;,
+                &quot;cloudwatch:DescribeAlarms&quot;,
+                &quot;cloudwatch:DeleteAlarms&quot;,
+                &quot;ec2:CreateNetworkInterface&quot;,
+                &quot;ec2:CreateNetworkInterfacePermission&quot;,
+                &quot;ec2:DeleteNetworkInterface&quot;,
+                &quot;ec2:DeleteNetworkInterfacePermission&quot;,
+                &quot;ec2:DescribeNetworkInterfaces&quot;,
+                &quot;ec2:DescribeVpcs&quot;,
+                &quot;ec2:DescribeDhcpOptions&quot;,
+                &quot;ec2:DescribeSubnets&quot;,
+                &quot;ec2:DescribeSecurityGroups&quot;,
+                &quot;application-autoscaling:DeleteScalingPolicy&quot;,
+                &quot;application-autoscaling:DeleteScheduledAction&quot;,
+                &quot;application-autoscaling:DeregisterScalableTarget&quot;,
+                &quot;application-autoscaling:DescribeScalableTargets&quot;,
+                &quot;application-autoscaling:DescribeScalingActivities&quot;,
+                &quot;application-autoscaling:DescribeScalingPolicies&quot;,
+                &quot;application-autoscaling:DescribeScheduledActions&quot;,
+                &quot;application-autoscaling:PutScalingPolicy&quot;,
+                &quot;application-autoscaling:PutScheduledAction&quot;,
+                &quot;application-autoscaling:RegisterScalableTarget&quot;,
+                &quot;logs:CreateLogGroup&quot;,
+                &quot;logs:CreateLogStream&quot;,
+                &quot;logs:DescribeLogStreams&quot;,
+                &quot;logs:GetLogEvents&quot;,
+                &quot;logs:PutLogEvents&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;s3:GetObject&quot;,
+                &quot;s3:PutObject&quot;,
+                &quot;s3:DeleteObject&quot;
+            ],
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::*SageMaker*&quot;,
+                &quot;arn:aws:s3:::*Sagemaker*&quot;,
+                &quot;arn:aws:s3:::*sagemaker*&quot;
+            ]
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;s3:CreateBucket&quot;,
+                &quot;s3:GetBucketLocation&quot;,
+                &quot;s3:ListBucket&quot;,
+                &quot;s3:ListAllMyBuckets&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;s3:GetObject&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;StringEqualsIgnoreCase&quot;: {
+                    &quot;s3:ExistingObjectTag/SageMaker&quot;: &quot;true&quot;
+                }
+            }
+        },
+        {
+            &quot;Action&quot;: &quot;iam:CreateServiceLinkedRole&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:iam::*:role/aws-service-role/sagemaker.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_SageMakerEndpoint&quot;,
+            &quot;Condition&quot;: {
+                &quot;StringLike&quot;: {
+                    &quot;iam:AWSServiceName&quot;: &quot;sagemaker.application-autoscaling.amazonaws.com&quot;
+                }
+            }
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;iam:PassRole&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;StringEquals&quot;: {
+                    &quot;iam:PassedToService&quot;: &quot;sagemaker.amazonaws.com&quot;
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>To use EI with Amazon SageMaker in a VPC, you need to create and configure two security groups, and set up a PrivateLink VPC interface endpoint. EI uses VPC interface endpoint to communicate with Amazon SageMaker endpoints in your VPC. The security groups you create are used to connect to the VPC interface endpoint.</p>
+<p>To use EI within a VPC, you need to create two security groups: + A security group to control access to the VPC interface endpoint that you will set up for EI. + A security group that allows Amazon SageMaker to call into the first security group.</p>
+<p>Complete the following steps to configure the two security groups:</p>
+<ol type="1">
+<li><p>Create a security group with no outbound connections. You will attach this to the VPC endpoint interface you create in the next section.</p></li>
+<li><p>Create a second security group with no inbound connections, but with an outbound connection to the first security group.</p></li>
+<li><p>Edit the first security group to allow inbound connections only to the second security group an all outbound connections.</p></li>
+</ol>
+<p>For more information about VPC security groups, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
+<p>To use EI with Amazon SageMaker in a custom VPC, you need to set up a VPC interface endpoint (PrivateLink) for the EI service. + Set up a VPC interface endpoint (PrivateLink) for the EI. Follow the instructions at <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpce-interface.html#create-interface-endpoint">Creating an Interface Endpoint</a>. In the list of services, choose <strong>com.amazonaws.<region>.elastic-inference.runtime</strong>. For <strong>Security group</strong>, make sure you select the first security group you created in the previous section to the endpoint. + When you set up the interface endpoint, choose all of the Availability Zones where EI is available. EI fails if you do not set up at least two Availability Zones. For information about VPC subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">VPCs and Subnets</a>.</p>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune a BlazingText Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune a BlazingText Model<a name="blazingtext-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The BlazingText Word2Vec algorithm (<code>skipgram</code>, <code>cbow</code>, and <code>batch_skipgram</code> modes) reports on a single metric during training: <code>train:mean_rho</code>. This metric is computed on <a href="https://www.cs.technion.ac.il/~gabr/resources/data/wordsim353/">WS-353 word similarity datasets</a>. When tuning the hyperparameter values for the Word2Vec algorithm, use this metric as the objective.</p>
+<p>The BlazingText Text Classification algorithm (<code>supervised</code> mode), also reports on a single metric during training: the <code>validation:accuracy</code>. When tuning the hyperparameter values for the text classification algorithm, use these metrics as the objective.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>train:mean_rho</td>
+<td>The mean rho (Spearman’s rank correlation coefficient) on <a href="https://www.cs.technion.ac.il/~gabr/resources/data/wordsim353/">WS-353 word similarity datasets</a></td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:accuracy</td>
+<td>The classification accuracy on the user-specified validation dataset</td>
+<td>Maximize</td>
+</tr>
+</tbody>
+</table>
+<p>Tune an Amazon SageMaker BlazingText Word2Vec model with the following hyperparameters. The hyperparameters that have the greatest impact on Word2Vec objective metrics are: <code>mode</code>, <code>learning_rate</code>, <code>window_size</code>, <code>vector_dim</code>, and <code>negative_samples</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges or Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>batch_size</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[8-32]</td>
+</tr>
+<tr class="even">
+<td>epochs</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[5-15]</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td><code>ContinuousParameterRange</code></td>
+<td>MinValue: 0.005, MaxValue: 0.01</td>
+</tr>
+<tr class="even">
+<td>min_count</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[0-100]</td>
+</tr>
+<tr class="odd">
+<td>mode</td>
+<td><code>CategoricalParameterRange</code></td>
+<td>[<code>'batch_skipgram'</code>, <code>'skipgram'</code>, <code>'cbow'</code>]</td>
+</tr>
+<tr class="even">
+<td>negative_samples</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[5-25]</td>
+</tr>
+<tr class="odd">
+<td>sampling_threshold</td>
+<td><code>ContinuousParameterRange</code></td>
+<td>MinValue: 0.0001, MaxValue: 0.001</td>
+</tr>
+<tr class="even">
+<td>vector_dim</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[32-300]</td>
+</tr>
+<tr class="odd">
+<td>window_size</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[1-10]</td>
+</tr>
+</tbody>
+</table>
+<p>Tune an Amazon SageMaker BlazingText text classification model with the following hyperparameters.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges or Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>buckets</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[1000000-10000000]</td>
+</tr>
+<tr class="even">
+<td>epochs</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[5-15]</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td><code>ContinuousParameterRange</code></td>
+<td>MinValue: 0.005, MaxValue: 0.01</td>
+</tr>
+<tr class="even">
+<td>min_count</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[0-100]</td>
+</tr>
+<tr class="odd">
+<td>mode</td>
+<td><code>CategoricalParameterRange</code></td>
+<td>[<code>'supervised'</code>]</td>
+</tr>
+<tr class="even">
+<td>vector_dim</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[32-300]</td>
+</tr>
+<tr class="odd">
+<td>word_ngrams</td>
+<td><code>IntegerParameterRange</code></td>
+<td>[1-3]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BlazingText Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">BlazingText Hyperparameters<a name="blazingtext_hyperparameters"></a></h1>
+</header>
+<p>When you start a training job with a <code>CreateTrainingJob</code> request, you specify a training algorithm. You can also specify algorithm-specific hyperparameters as string-to-string maps. The hyperparameters for the BlazingText algorithm depend on which mode you use: Word2Vec (unsupervised) and Text Classification (supervised).</p>
+<p>The following table lists the hyperparameters for the BlazingText Word2Vec training algorithm provided by Amazon SageMaker.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mode</td>
+<td>The Word2vec architecture used for training. <strong>Required</strong> Valid values: <code>batch_skipgram</code>, <code>skipgram</code>, or <code>cbow</code></td>
+</tr>
+<tr class="even">
+<td>batch_size</td>
+<td>The size of each batch when <code>mode</code> is set to <code>batch_skipgram</code>. Set to a number between 10 and 20. <strong>Optional</strong> Valid values: Positive integer Default value: 11</td>
+</tr>
+<tr class="odd">
+<td>buckets</td>
+<td>The number of hash buckets to use for subwords. <strong>Optional</strong> Valid values: positive integer Default value: 2000000</td>
+</tr>
+<tr class="even">
+<td>epochs</td>
+<td>The number of complete passes through the training data. <strong>Optional</strong> Valid values: Positive integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>evaluation</td>
+<td>Whether the trained model is evaluated using the <a href="https://www.cs.technion.ac.il/~gabr/resources/data/wordsim353/">WordSimilarity-353 Test</a>. <strong>Optional</strong> Valid values: (Boolean) <code>True</code> or <code>False</code> Default value: <code>True</code></td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>The step size used for parameter updates. <strong>Optional</strong> Valid values: Positive float Default value: 0.05</td>
+</tr>
+<tr class="odd">
+<td>min_char</td>
+<td>The minimum number of characters to use for subwords/character n-grams. <strong>Optional</strong> Valid values: positive integer Default value: 3</td>
+</tr>
+<tr class="even">
+<td>min_count</td>
+<td>Words that appear less than <code>min_count</code> times are discarded. <strong>Optional</strong> Valid values: Non-negative integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>max_char</td>
+<td>The maximum number of characters to use for subwords/character n-grams <strong>Optional</strong> Valid values: positive integer Default value: 6</td>
+</tr>
+<tr class="even">
+<td>negative_samples</td>
+<td>The number of negative samples for the negative sample sharing strategy. <strong>Optional</strong> Valid values: Positive integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>sampling_threshold</td>
+<td>The threshold for the occurrence of words. Words that appear with higher frequency in the training data are randomly down-sampled. <strong>Optional</strong> Valid values: Positive fraction. The recommended range is (0, 1e-3] Default value: 0.0001</td>
+</tr>
+<tr class="even">
+<td>subwords</td>
+<td>Whether to learn subword embeddings on not. <strong>Optional</strong> Valid values: (Boolean) <code>True</code> or <code>False</code> Default value: <code>False</code></td>
+</tr>
+<tr class="odd">
+<td>vector_dim</td>
+<td>The dimension of the word vectors that the algorithm learns. <strong>Optional</strong> Valid values: Positive integer Default value: 100</td>
+</tr>
+<tr class="even">
+<td>window_size</td>
+<td>The size of the context window. The context window is the number of words surrounding the target word used for training. <strong>Optional</strong> Valid values: Positive integer Default value: 5</td>
+</tr>
+</tbody>
+</table>
+<p>The following table lists the hyperparameters for the Text Classification training algorithm provided by Amazon SageMaker.</p>
+<p><strong>Note</strong><br />
+Although some of the parameters are common between the Text Classification and Word2Vec modes, they might have different meanings depending on the context.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mode</td>
+<td>The training mode. <strong>Required</strong> Valid values: <code>supervised</code></td>
+</tr>
+<tr class="even">
+<td>buckets</td>
+<td>The number of hash buckets to use for word n-grams. <strong>Optional</strong> Valid values: Positive integer Default value: 2000000</td>
+</tr>
+<tr class="odd">
+<td>early_stopping</td>
+<td>Whether to stop training if validation accuracy doesn’t improve after a <code>patience</code> number of epochs. <strong>Optional</strong> Valid values: (Boolean) <code>True</code> or <code>False</code> Default value: <code>False</code></td>
+</tr>
+<tr class="even">
+<td>epochs</td>
+<td>The maximum number of complete passes through the training data. <strong>Optional</strong> Valid values: Positive integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>The step size used for parameter updates. <strong>Optional</strong> Valid values: Positive float Default value: 0.05</td>
+</tr>
+<tr class="even">
+<td>min_count</td>
+<td>Words that appear less than <code>min_count</code> times are discarded. <strong>Optional</strong> Valid values: Non-negative integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>min_epochs</td>
+<td>The minimum number of epochs to train before early stopping logic is invoked. <strong>Optional</strong> Valid values: Positive integer Default value: 5</td>
+</tr>
+<tr class="even">
+<td>patience</td>
+<td>The number of epochs to wait before applying early stopping when no progress is made on the validation set. Used only when <code>early_stopping</code> is <code>True</code>. <strong>Optional</strong> Valid values: Positive integer Default value: 4</td>
+</tr>
+<tr class="odd">
+<td>vector_dim</td>
+<td>The dimension of the embedding layer. <strong>Optional</strong> Valid values: Positive integer Default value: 100</td>
+</tr>
+<tr class="even">
+<td>word_ngrams</td>
+<td>The number of word n-gram features to use. <strong>Optional</strong> Valid values: Positive integer Default value: 2</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

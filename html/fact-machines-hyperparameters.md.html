@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Factorization Machines Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Factorization Machines Hyperparameters<a name="fact-machines-hyperparameters"></a></h1>
+</header>
+<p>The following table contains the hyperparameters for the factorization machines algorithm. These are parameters that are set by users to facilitate the estimation of model parameters from data. The required hyperparameters that must be set are listed first, in alphabetical order. The optional hyperparameters that can be set are listed next, also in alphabetical order.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature_dim</td>
+<td>The dimension of the input feature space. This could be very high with sparse input. <strong>Required</strong> Valid values: Positive integer. Suggested value range: [10000,10000000]</td>
+</tr>
+<tr class="even">
+<td>num_factors</td>
+<td>The dimensionality of factorization. <strong>Required</strong> Valid values: Positive integer. Suggested value range: [2,1000], 64 is usually optimal.</td>
+</tr>
+<tr class="odd">
+<td>predictor_type</td>
+<td>The type of predictor. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Required</strong> Valid values: String: <code>binary_classifier</code> or <code>regressor</code></td>
+</tr>
+<tr class="even">
+<td>bias_init_method</td>
+<td>The initialization method for the bias term: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>uniform</code>, <code>normal</code>, or <code>constant</code> Default value: <code>normal</code></td>
+</tr>
+<tr class="odd">
+<td>bias_init_scale</td>
+<td>Range for initialization of the bias term. Takes effect if <code>bias_init_method</code> is set to <code>uniform</code>. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: None</td>
+</tr>
+<tr class="even">
+<td>bias_init_sigma</td>
+<td>The standard deviation for initialization of the bias term. Takes effect if <code>bias_init_method</code> is set to <code>normal</code>. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.01</td>
+</tr>
+<tr class="odd">
+<td>bias_init_value</td>
+<td>The initial value of the bias term. Takes effect if <code>bias_init_method</code> is set to <code>constant</code>. <strong>Optional</strong> Valid values: Float. Suggested value range: [1e-8, 512]. Default value: None</td>
+</tr>
+<tr class="even">
+<td>bias_lr</td>
+<td>The learning rate for the bias term. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.1</td>
+</tr>
+<tr class="odd">
+<td>bias_wd</td>
+<td>The weight decay for the bias term. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.01</td>
+</tr>
+<tr class="even">
+<td>clip_gradient</td>
+<td>Gradient clipping optimizer parameter. Clips the gradient by projecting onto the interval [-<code>clip_gradient</code>, +<code>clip_gradient</code>]. <strong>Optional</strong> Valid values: Float Default value: None</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The number of training epochs to run. <strong>Optional</strong> Valid values: Positive integer Default value: 1</td>
+</tr>
+<tr class="even">
+<td>eps</td>
+<td>Epsilon parameter to avoid division by 0. <strong>Optional</strong> Valid values: Float. Suggested value: small. Default value: None</td>
+</tr>
+<tr class="odd">
+<td>factors_init_method</td>
+<td>The initialization method for factorization terms: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>uniform</code>, <code>normal</code>, or <code>constant</code>. Default value: <code>normal</code></td>
+</tr>
+<tr class="even">
+<td>factors_init_scale</td>
+<td>The range for initialization of factorization terms. Takes effect if <code>factors_init_method</code> is set to <code>uniform</code>. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: None</td>
+</tr>
+<tr class="odd">
+<td>factors_init_sigma</td>
+<td>The standard deviation for initialization of factorization terms. Takes effect if <code>factors_init_method</code> is set to <code>normal</code>. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.001</td>
+</tr>
+<tr class="even">
+<td>factors_init_value</td>
+<td>The initial value of factorization terms. Takes effect if <code>factors_init_method</code> is set to <code>constant</code>. <strong>Optional</strong> Valid values: Float. Suggested value range: [1e-8, 512]. Default value: None</td>
+</tr>
+<tr class="odd">
+<td>factors_lr</td>
+<td>The learning rate for factorization terms. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.0001</td>
+</tr>
+<tr class="even">
+<td>factors_wd</td>
+<td>The weight decay for factorization terms. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.00001</td>
+</tr>
+<tr class="odd">
+<td>linear_lr</td>
+<td>The learning rate for linear terms. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.001</td>
+</tr>
+<tr class="even">
+<td>linear_init_method</td>
+<td>The initialization method for linear terms: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>uniform</code>, <code>normal</code>, or <code>constant</code>. Default value: <code>normal</code></td>
+</tr>
+<tr class="odd">
+<td>linear_init_scale</td>
+<td>Range for initialization of linear terms. Takes effect if <code>linear_init_method</code> is set to <code>uniform</code>. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: None</td>
+</tr>
+<tr class="even">
+<td>linear_init_sigma</td>
+<td>The standard deviation for initialization of linear terms. Takes effect if <code>linear_init_method</code> is set to <code>normal</code>. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.01</td>
+</tr>
+<tr class="odd">
+<td>linear_init_value</td>
+<td>The initial value of linear terms. Takes effect if <code>linear_init_method</code> is set to <em>constant</em>. <strong>Optional</strong> Valid values: Float. Suggested value range: [1e-8, 512]. Default value: None</td>
+</tr>
+<tr class="even">
+<td>linear_wd</td>
+<td>The weight decay for linear terms. <strong>Optional</strong> Valid values: Non-negative float. Suggested value range: [1e-8, 512]. Default value: 0.001</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The size of mini-batch used for training. <strong>Optional</strong> Valid values: Positive integer Default value: 1000</td>
+</tr>
+<tr class="even">
+<td>rescale_grad</td>
+<td>Gradient rescaling optimizer parameter. If set, multiplies the gradient with <code>rescale_grad</code> before updating. Often choose to be 1.0/<code>batch_size</code>. <strong>Optional</strong> Valid values: Float Default value: None</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

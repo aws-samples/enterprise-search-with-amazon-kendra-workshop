@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services<a name="ex1-deploy-model"></a></h1>
+</header>
+<p>To deploy a model in Amazon SageMaker, hosting services, you can use either the Amazon SageMaker Python SDK or the AWS SDK for Python (Boto 3). This exercise provides code examples for both libraries.</p>
+<p>The Amazon SageMaker Python SDK abstracts several implementation details, and is easy to use. If you’re a first-time Amazon SageMaker user, we recommend that you use it. For more information, see <a href="https://sagemaker.readthedocs.io/en/stable/overview.html">https://sagemaker.readthedocs.io/en/stable/overview.html</a>.</p>
+<p><strong>Topics</strong> + <a href="#ex1-deploy-model-sdk">Deploy the Model to Amazon SageMaker Hosting Services (Amazon SageMaker Python SDK)</a> + <a href="#ex1-deploy-model-boto">Deploy the Model to Amazon SageMaker Hosting Services (AWS SDK for Python (Boto 3).)</a></p>
+<p>Deploy the model that you trained in <a href="ex1-train-model.md#ex1-train-model-sdk">Create and Run a Training Job (Amazon SageMaker Python SDK)</a> by calling the <code>deploy</code> method of the <code>sagemaker.estimator.Estimator</code> object. This is the same object that you used to train the model. When you call the <code>deploy</code> method, specify the number and type of ML instances that you want to use to host the endpoint.</p>
+<pre><code>xgb_predictor = xgb_model.deploy(initial_instance_count=1,
+                                instance_type=&#39;ml.m4.xlarge&#39;,
+                                )</code></pre>
+<p>The <code>deploy</code> method creates the deployable model, configures the Amazon SageMaker hosting services endpoint, and launches the endpoint to host the model. For more information, see <a href="https://sagemaker.readthedocs.io/en/stable/estimators.html#sagemaker.estimator.Estimator.deploy">https://sagemaker.readthedocs.io/en/stable/estimators.html#sagemaker.estimator.Estimator.deploy</a>.</p>
+<p>It also returns a <code>sagemaker.predictor.RealTimePredictor</code> object, which you can use to get inferences from the model. For information, see <a href="https://sagemaker.readthedocs.io/en/stable/predictors.html#sagemaker.predictor.RealTimePredictor">https://sagemaker.readthedocs.io/en/stable/predictors.html#sagemaker.predictor.RealTimePredictor</a>.</p>
+<p><strong>Next Step</strong><br />
+<a href="ex1-test-model.md">Step 7: Validate the Model</a></p>
+<p>Deploying a model using the AWS SDK for Python (Boto 3) is a three-step process:</p>
+<ol type="1">
+<li><p>Create a model in Amazon SageMaker – Send a <a href="API_CreateModel.md">CreateModel</a> request to provide information such as the location of the S3 bucket that contains your model artifacts and the registry path of the image that contains inference code.</p></li>
+<li><p>Create an endpoint configuration – Send a <a href="API_CreateEndpointConfig.md">CreateEndpointConfig</a> request to provide the resource configuration for hosting. This includes the type and number of ML compute instances to launch to deploy the model.</p></li>
+<li><p>Create an endpoint – Send a <a href="API_CreateEndpoint.md">CreateEndpoint</a> request to create an endpoint. Amazon SageMaker launches the ML compute instances and deploys the model. Amazon SageMaker returns an endpoint. Applications can send requests for inference to this endpoint.</p></li>
+</ol>
+<p><strong>To deploy the model (AWS SDK for Python (Boto 3))</strong></p>
+<p>For each of the following steps, paste the code in a cell in the Jupyter notebook you created in <a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a> and run the cell.</p>
+<ol type="1">
+<li><p>Create a deployable model by identifying the location of model artifacts and the Docker image that contains the inference code.</p>
+<pre><code>model_name = training_job_name + &#39;-mod&#39;
+
+info = sm.describe_training_job(TrainingJobName=training_job_name)
+model_data = info[&#39;ModelArtifacts&#39;][&#39;S3ModelArtifacts&#39;]
+print(model_data)
+
+primary_container = {
+    &#39;Image&#39;: container,
+    &#39;ModelDataUrl&#39;: model_data
+}
+
+create_model_response = sm.create_model(
+    ModelName = model_name,
+    ExecutionRoleArn = role,
+    PrimaryContainer = primary_container)
+
+print(create_model_response[&#39;ModelArn&#39;])</code></pre></li>
+<li><p>Create an Amazon SageMaker endpoint configuration by specifying the ML compute instances that you want to deploy your model to.</p>
+<pre><code>endpoint_config_name = &#39;DEMO-XGBoostEndpointConfig-&#39; + strftime(&quot;%Y-%m-%d-%H-%M-%S&quot;, gmtime())
+print(endpoint_config_name)
+create_endpoint_config_response = sm.create_endpoint_config(
+    EndpointConfigName = endpoint_config_name,
+    ProductionVariants=[{
+        &#39;InstanceType&#39;:&#39;ml.m4.xlarge&#39;,
+        &#39;InitialVariantWeight&#39;:1,
+        &#39;InitialInstanceCount&#39;:1,
+        &#39;ModelName&#39;:model_name,
+        &#39;VariantName&#39;:&#39;AllTraffic&#39;}])
+
+print(&quot;Endpoint Config Arn: &quot; + create_endpoint_config_response[&#39;EndpointConfigArn&#39;])</code></pre></li>
+<li><p>Create an Amazon SageMaker endpoint.</p>
+<pre><code>%%time
+import time
+
+endpoint_name = &#39;DEMO-XGBoostEndpoint-&#39; + strftime(&quot;%Y-%m-%d-%H-%M-%S&quot;, gmtime())
+print(endpoint_name)
+create_endpoint_response = sm.create_endpoint(
+    EndpointName=endpoint_name,
+    EndpointConfigName=endpoint_config_name)
+print(create_endpoint_response[&#39;EndpointArn&#39;])
+
+resp = sm.describe_endpoint(EndpointName=endpoint_name)
+status = resp[&#39;EndpointStatus&#39;]
+print(&quot;Status: &quot; + status)
+
+while status==&#39;Creating&#39;:
+    time.sleep(60)
+    resp = sm.describe_endpoint(EndpointName=endpoint_name)
+    status = resp[&#39;EndpointStatus&#39;]
+    print(&quot;Status: &quot; + status)
+
+print(&quot;Arn: &quot; + resp[&#39;EndpointArn&#39;])
+print(&quot;Status: &quot; + status)</code></pre>
+<p>This code continuously calls the <code>describe_endpoint</code> command in a <code>while</code> loop until the endpoint either fails or is in service, and then prints the status of the endpoint. When the status changes to <code>InService</code>, the endpoint is ready to serve inference requests.</p></li>
+</ol>
+<p><strong>Next Step</strong><br />
+<a href="ex1-test-model.md">Step 7: Validate the Model</a></p>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Create a Notebook Instance</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Create a Notebook Instance<a name="howitworks-create-ws"></a></h1>
+</header>
+<p>To create a notebook instance, use either the Amazon SageMaker console or the <a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a> API.</p>
+<p>After receiving the request, Amazon SageMaker does the following: + <strong>Creates a network interface</strong>—If you choose the optional VPC configuration, it creates the network interface in your VPC. It uses the subnet ID that you provide in the request to determine which Availability Zone to create the subnet in. Amazon SageMaker associates the security group that you provide in the request with the subnet. For more information, see <a href="appendix-additional-considerations.md">Notebook Instance Security</a>. + <strong>Launches an ML compute instance</strong>—Amazon SageMaker launches an ML compute instance in an Amazon SageMaker VPC. Amazon SageMaker performs the configuration tasks that allow it to manage your notebook instance, and if you specified your VPC, it enables traffic between your VPC and the notebook instance. + <strong>Installs Anaconda packages and libraries for common deep learning platforms</strong>—Amazon SageMaker installs all of the Anaconda packages that are included in the installer. For more information, see <a href="https://docs.anaconda.com/anaconda/packages/pkg-docs">Anaconda package list</a>. In addition, Amazon SageMaker installs the TensorFlow and Apache MXNet deep learning libraries. + <strong>Attaches an ML storage volume</strong>—Amazon SageMaker attaches an ML storage volume to the ML compute instance. You can use the volume to clean up the training dataset or to temporarily store other data to work with. Choose any size between 5 GB and 16384 GB, in 1 GB increments, for the volume. The default is 5 GB. ML storage volumes are encrypted, so Amazon SageMaker can’t determine the amount of available free space on the volume. Because of this, you can increase the volume size when you update a notebook instance, but you can’t decrease the volume size. If you want to decrease the size of the ML storage volume in use, create a new notebook instance with the desired size. <strong>Important</strong><br />
+Only files and data saved within the <code>/home/ec2-user/SageMaker</code> folder persist between notebook instance sessions. Files and data that are saved outside this directory are overwritten when the notebook instance stops and restarts. <strong>Note</strong><br />
+Each notebook instance’s /tmp directory provides a minimum of 10 GB of storage in an instant store. An instance store is temporary, block-level storage that isn’t persistent. When the instance is stopped or restarted, Amazon SageMaker deletes the directory’s contents. This temporary storage is part of the root volume of the notebook instance. + <strong>Copies example Jupyter notebooks</strong>— These Python code examples illustrate model training and hosting exercises using various algorithms and training datasets.</p>
+<p><strong>To create a notebook instance:</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Notebook instances</strong>, then choose <strong>Create notebook instance</strong>.</p></li>
+<li><p>On the <strong>Create notebook instance</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Notebook instance name</strong>, type a name for your notebook instance.</p></li>
+<li><p>For <strong>Instance type</strong>, choose an instance type for your notebook instance. For a list of supported instance types, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_sagemaker">Amazon SageMaker Limits</a>.</p></li>
+<li><p>For <strong>Elastic Inference</strong>, choose an inference accelerator type to associate with the notebook instance, or choose <strong>none</strong>. For information about elastic inference, see <a href="ei.md">Amazon SageMaker Elastic Inference (EI)</a>.</p></li>
+<li><p>For <strong>IAM role</strong>, choose either an existing IAM role in your account that has the necessary permissions to access Amazon SageMaker resources or <strong>Create a new role</strong>. If you choose <strong>Create a new role</strong>, for <strong>Create an IAM role</strong>:</p>
+<ol type="1">
+<li><p>If you want to use S3 buckets other than the one you created in <a href="gs-config-permissions.md">Step 1: Create an Amazon S3 Bucket</a> to store your input data and output, choose them.</p>
+<p>The IAM role automatically has permissions to use any bucket that has <code>sagemaker</code> as part of its name. The <code>AmazonSageMakerFullAccess</code> policy, which Amazon SageMaker attaches to the role, gives the role those permissions.</p>
+<p>To give access to other S3 buckets from your notebook instance</p>
+<ul>
+<li>If you’re not concerned about users in your AWS account accessing your data, choose <strong>Any S3 bucket</strong>.</li>
+<li>If your account has sensitive data (such as Human Resources information), restrict access to certain buckets by choosing <strong>Specific S3 buckets</strong>. You can update the permissions policy attached to the role you are creating later.</li>
+<li>To explicitly control access, restrict access by choosing <strong>None</strong>. Use bucket and object names and tags as supported by the <code>AmazonSageMakerFullAccess</code> policy. For more information, see <a href="sagemaker-roles.md#sagemaker-roles-amazonsagemakerfullaccess-policy">AmazonSageMakerFullAccess Policy</a>.</li>
+</ul></li>
+<li><p>Choose <strong>Create role</strong>.</p>
+<p>Amazon SageMaker creates an IAM role named <code>AmazonSageMaker-ExecutionRole-YYYYMMDDTHHmmSS</code>. For example, <code>AmazonSageMaker-ExecutionRole-20171125T090800</code>.</p>
+<p>To see the policies that are attached to the role, use the IAM console.</p>
+<p>Open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</p>
+<p>You can see that the following policies are attached to the role:</p>
+<ul>
+<li>A trust policy that allows Amazon SageMaker to assume the role.</li>
+<li>The <code>AmazonSageMakerFullAccess</code> AWS managed policy.</li>
+<li>If you gave access to additional S3 bucket(s) when creating this role, the customer managed policy attached to the role. The name of the customer managed policy is <code>AmazonSageMaker-ExecutionPolicy-YYYYMMDDTHHmmSS</code>.</li>
+</ul>
+<p>For more information about creating your own IAM role, see <a href="sagemaker-roles.md">Amazon SageMaker Roles</a>.</p></li>
+</ol></li>
+<li><p>For <strong>Root access</strong>, to enable root access for all notebook instance users,choose <strong>Enabled</strong>. To disable root access for users, choose <strong>Disabled</strong>.If you enable root access, all notebook instance users have administrator privileges and can access and edit all files on it. <strong>Note</strong><br />
+If you disable root access, you will still be able to set up lifecycle configurations, as described later in this procedure.</p></li>
+<li><p>(Optional) Allow access to resources in your Virtual Private Cloud (VPC).</p>
+<p><strong>To access resources in your VPC from the notebook instance</strong></p>
+<ol type="1">
+<li><p>Choose the <strong>VPC</strong> and a <strong>SubnetId</strong>.</p></li>
+<li><p>For <strong>Security Group</strong>, choose your VPC’s default security group. For this exercise and others in this guide) the inbound and outbound rules of the default security group are sufficient.</p></li>
+<li><p>To allow connecting to a resource in your VPC, ensure that the resource resolves to a private IP address in your VPC. For example, to ensure that an Amazon Redshift DNS name resolves to a private IP address, do one of the following:</p>
+<ul>
+<li>Ensure that the Amazon Redshift cluster is not publicly accessible.</li>
+<li>If the Amazon Redshift cluster is publicly accessible, set the <code>DNS resolution</code> and <code>DNS hostnames</code> VPC parameters to <code>true</code>. For more information, see <a href="https://docs.aws.amazon.com//redshift/latest/mgmt/managing-clusters-vpc.html">Managing Clusters in an Amazon Virtual Private Cloud (VPC)</a></li>
+</ul></li>
+<li><p>By default, a notebook instance can’t connect to on-premises resources or to a peer VPC. You can create a lifecycle configuration that creates an entry in your route table that enables connection to on-premises resources or to a peer VPC. For information, see <a href="https://aws.amazon.com/blogs/machine-learning/understanding-amazon-sagemaker-notebook-instance-networking-configurations-and-advanced-routing-options/">Understanding Amazon SageMaker notebook instance networking configurations and advanced routing options</a>.</p></li>
+</ol></li>
+<li><p>If you allowed access to resources from your VPC, enable direct internet access. For <strong>Direct internet access</strong>, choose <strong>Enable</strong>. Without internet access, you can’t train or host models from notebooks on this notebook instance unless your VPC has a NAT gateway and your security group allows outbound connections. For more information, see <a href="appendix-additional-considerations.md#appendix-notebook-and-internet-access">Notebook Instances Are Internet-Enabled by Default</a>.</p></li>
+<li><p>(Optional) To use shell scripts that run when you create or start the instance, specify a lifecycle configuration. For information, see <a href="notebook-lifecycle-config.md">Customize a Notebook Instance</a></p></li>
+<li><p>(Optional) If you want Amazon SageMaker to use an AWS Key Management Service (AWS KMS) key to encrypt data in the ML storage volume attached to the notebook instance, specify the key.</p></li>
+<li><p>Specify the size, in GB, of the ML storage volume that is attached to the notebook instance. You can choose a size between 5 GB and 16,384 GB, in 1 GB increments. You can use the volume to clean up the training dataset when you no longer need it or to temporarily store other data to work with.</p></li>
+<li><p>(Optional) To associate Git repositories with the notebook instance, choose a default repository and up to three additional repositories. For more information, see <a href="nbi-git-repo.md">Associate Git Repositories with Amazon SageMaker Notebook Instances</a>.</p></li>
+<li><p>Choose <strong>Create notebook instance</strong>.</p>
+<p>In a few minutes, Amazon SageMaker launches an ML compute instance—in this case, a notebook instance—and attaches an ML storage volume to it. The notebook instance has a preconfigured Jupyter notebook server and a set of Anaconda libraries. For more information, see the <a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a> API.</p></li>
+</ol></li>
+<li><p>When the status of the notebook instance is <code>InService</code>, choose <strong>Open Jupyter</strong> next to its name to open the classic Jupyter dashboard, or choose <strong>Open JupyterLab</strong> to open the JupyterLab dashboard. For more information, see <a href="howitworks-access-ws.md">Access Notebook Instances</a>.</p>
+<p>The dashboard provides access to:</p>
+<ul>
+<li>Sample notebooks. Amazon SageMaker provides sample notebooks that contain complete code walkthroughs. These walkthroughs show how to use Amazon SageMaker to perform common machine learning tasks. For more information, see <a href="howitworks-nbexamples.md">Use Example Notebooks</a>.</li>
+<li>The kernels for Jupyter, including those that provide support for Python 2 and 3, Apache MXNet, TensorFlow, PySpark, and R. To create a new notebook and choose a kernel for that notebook, use the <strong>New</strong> menu.</li>
+</ul>
+<p>For more information about Jupyter notebooks, see <a href="https://jupyter-notebook.readthedocs.io/en/stable/">The Jupyter notebook</a>.</p></li>
+</ol>
+</body>
+</html>

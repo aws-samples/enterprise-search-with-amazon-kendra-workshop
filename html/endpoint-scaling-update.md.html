@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Update Endpoints that Use Automatic Scaling</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Update Endpoints that Use Automatic Scaling<a name="endpoint-scaling-update"></a></h1>
+</header>
+<p>When you update Amazon SageMaker endpoints that have automatic scaling applied, complete the following steps:</p>
+<p><strong>To update an endpoint that has automatic scaling applied</strong></p>
+<ol type="1">
+<li><p>Deregister the endpoint as a scalable target by calling <a href="https://docs.aws.amazon.com/autoscaling/application/APIReference/API_DeregisterScalableTarget.html">DeregisterScalableTarget</a>.</p></li>
+<li><p>Because you turn off automatic scaling before you update the endpoint, you might want to take the additional precaution of increasing the number of instances for your endpoint during the update. To do this, update the instance counts for the production variants hosted at the endpoint by calling <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a>.</p></li>
+<li><p>Call <a href="API_DescribeEndpoint.md">DescribeEndpoint</a> repeatedly until the value of the <code>EndpointStatus</code> field of the response is <code>InService</code>.</p></li>
+<li><p>Call <a href="API_DescribeEndpointConfig.md">DescribeEndpointConfig</a> to get the values of the current endpoint config.</p></li>
+<li><p>Create a new endpoint config by calling <a href="API_CreateEndpointConfig.md">CreateEndpointConfig</a>. For the <code>InitialInstanceCount</code> field of each production variant, specify the corresponding value of <code>DesiredInstanceCount</code> from the response to the previous call to <a href="API_DescribeEndpoint.md">DescribeEndpoint</a>. For all other values, use the values that you got as the response when you called <a href="API_DescribeEndpointConfig.md">DescribeEndpointConfig</a> in the previous step.</p></li>
+<li><p>Update the endpoint by calling <a href="API_UpdateEndpoint.md">UpdateEndpoint</a>. Specify the endpoint config you created in the previous step as the <code>EndpointConfig</code> field.</p></li>
+<li><p>Re-enable automatic scaling by calling <a href="https://docs.aws.amazon.com/autoscaling/application/APIReference/API_RegisterScalableTarget.html">RegisterScalableTarget</a>.</p></li>
+</ol>
+</body>
+</html>

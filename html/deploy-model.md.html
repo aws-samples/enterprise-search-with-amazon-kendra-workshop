@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Deploy a Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Deploy a Model<a name="deploy-model"></a></h1>
+</header>
+<p>After you build and train your model, you can deploy it to get predictions in one of two ways: + To set up a persistent endpoint to get one prediction at a time, use Amazon SageMaker hosting services. For an overview on deploying a model with Amazon SageMaker hosting services, see <a href="how-it-works-hosting.md">Deploy a Model on Amazon SageMaker Hosting Services</a>. + To get predictions for an entire dataset, use Amazon SageMaker batch transform. For an overview on deploying a model with Amazon SageMaker batch transform, see <a href="how-it-works-batch.md">Get Inferences for an Entire Dataset with Batch Transform</a>.</p>
+<p>These topics assume that you have built and trained a machine learning model and are ready to deploy it. If you are new to Amazon SageMaker and have not completed these prerequisite tasks, work through the steps in the <a href="gs.md">Get Started</a> tutorial to familiarize yourself with an example of how Amazon SageMaker manages the data science process and how it handles model deployment. For more information about building a model, see <a href="build-model.md">Build a Model</a>. For information about training a model, see <a href="train-model.md">Train a Model</a>.</p>
+<p>Amazon SageMaker provides features to manage resources and optimize inference performance when deploying machine learning models. For guidance on using inference pipelines, compiling and deploying models with Neo, Elastic Inference, and automatic model scaling, see the following topics. + To manage data processing and real-time predictions or to process batch transforms in a pipeline, see <a href="inference-pipelines.md">Deploy an Inference Pipeline</a>. + To train TensorFlow, Apache MXNet, PyTorch, ONNX, and XGBoost models once and optimize them to deploy on ARM, Intel, and Nvidia processors, see <a href="neo.md">Amazon SageMaker Neo</a>. + To preprocess entire datasets quickly or to get inferences from a trained model for large datasets when you don’t need a persistent endpoint, see <a href="batch-transform.md">Batch Transform</a>. + To speed up the throughput and decrease the latency of getting real-time inferences from your deep learning models that are deployed as Amazon SageMaker hosted models using a GPU instance for your endpoint, see <a href="ei.md">Amazon SageMaker Elastic Inference (EI)</a>. + To dynamically adjust the number of instances provisioned in response to changes in your workload, see <a href="endpoint-auto-scaling.md">Automatically Scale Amazon SageMaker Models</a>.</p>
+<p>For guidance on managing model deployments, including monitoring, troubleshooting, and best practices, and for information on storage associated with inference hosting instances: + For tools that can be used to monitor model deployments, see <a href="monitoring-overview.md">Monitor Amazon SageMaker</a>. + For troubleshooting model deployments, see <a href="deploy-model-troubleshoot.md">Troubleshoot Amazon SageMaker Model Deployments</a>. + For model deployment best practices, see <a href="best-pratices.md">Best Practices for Deploying Amazon SageMaker Models</a>. + For information about the size of storage volumes provided for different sizes of hosting instances, see <a href="host-instance-storage.md">Hosting Instance Storage Volumes</a>.</p>
+<p>For developers that need more advanced guidance on how to run your own inference code: + To run your own inference code hosting services, see <a href="your-algorithms-inference-code.md">Use Your Own Inference Code with Hosting Services</a>. + To run your own inference code for batch transforms, see <a href="your-algorithms-batch-code.md">Use Your Own Inference Code with Batch Transform</a>.</p>
+<p><a href="whatis.md">What Is Amazon SageMaker?</a></p>
+<p><strong>Topics</strong> + <a href="#deploy-model-prereqs">Prerequisites</a> + <a href="#deploy-model-tasks">What do you want to do?</a> + <a href="#deploy-model-manage">Manage Model Deployments</a> + <a href="#deploy-model-advanced">Deploy Your Own Inference Code</a> + <a href="#deploy-model-context">Guide to Amazon SageMaker</a> + <a href="inference-pipelines.md">Deploy an Inference Pipeline</a> + <a href="neo.md">Amazon SageMaker Neo</a> + <a href="batch-transform.md">Batch Transform</a> + <a href="ei.md">Amazon SageMaker Elastic Inference (EI)</a> + <a href="endpoint-auto-scaling.md">Automatically Scale Amazon SageMaker Models</a> + <a href="monitoring-overview.md">Monitor Amazon SageMaker</a> + <a href="deploy-model-troubleshoot.md">Troubleshoot Amazon SageMaker Model Deployments</a> + <a href="best-pratices.md">Best Practices for Deploying Amazon SageMaker Models</a> + <a href="host-instance-storage.md">Hosting Instance Storage Volumes</a></p>
+</body>
+</html>

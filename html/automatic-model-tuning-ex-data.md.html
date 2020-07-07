@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Download, Prepare, and Upload Training Data</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Download, Prepare, and Upload Training Data<a name="automatic-model-tuning-ex-data"></a></h1>
+</header>
+<p>For this example, you use a training dataset of information about bank customers that includes the customer’s job, marital status, and how they were contacted during the bank’s direct marketing campaign. To use a dataset for a hyperparameter tuning job, you download it, transform the data, and then upload it to an Amazon S3 bucket.</p>
+<p>For more information about the dataset and the data transformation that the example performs, see the <em>hpo_xgboost_direct_marketing_sagemaker_APIs</em> notebook in the <strong>Hyperparameter Tuning</strong> section of the <strong>SageMaker Examples</strong> tab in your notebook instance.</p>
+<p>To download and explore the dataset, run the following code in your notebook:</p>
+<pre><code>!wget -N https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank-additional.zip
+!unzip -o bank-additional.zip
+data = pd.read_csv(&#39;./bank-additional/bank-additional-full.csv&#39;, sep=&#39;;&#39;)
+pd.set_option(&#39;display.max_columns&#39;, 500)     # Make sure we can see all of the columns
+pd.set_option(&#39;display.max_rows&#39;, 5)         # Keep the output on one page
+data</code></pre>
+<p>Before creating the hyperparameter tuning job, prepare the data and upload it to an S3 bucket where the hyperparameter tuning job can access it.</p>
+<p>Run the following code in your notebook:</p>
+<pre><code>data[&#39;no_previous_contact&#39;] = np.where(data[&#39;pdays&#39;] == 999, 1, 0)                                 # Indicator variable to capture when pdays takes a value of 999
+data[&#39;not_working&#39;] = np.where(np.in1d(data[&#39;job&#39;], [&#39;student&#39;, &#39;retired&#39;, &#39;unemployed&#39;]), 1, 0)   # Indicator for individuals not actively employed
+model_data = pd.get_dummies(data)                                                                  # Convert categorical variables to sets of indicators
+model_data
+model_data = model_data.drop([&#39;duration&#39;, &#39;emp.var.rate&#39;, &#39;cons.price.idx&#39;, &#39;cons.conf.idx&#39;, &#39;euribor3m&#39;, &#39;nr.employed&#39;], axis=1)
+
+train_data, validation_data, test_data = np.split(model_data.sample(frac=1, random_state=1729), [int(0.7 * len(model_data)), int(0.9*len(model_data))])  
+
+pd.concat([train_data[&#39;y_yes&#39;], train_data.drop([&#39;y_no&#39;, &#39;y_yes&#39;], axis=1)], axis=1).to_csv(&#39;train.csv&#39;, index=False, header=False)
+pd.concat([validation_data[&#39;y_yes&#39;], validation_data.drop([&#39;y_no&#39;, &#39;y_yes&#39;], axis=1)], axis=1).to_csv(&#39;validation.csv&#39;, index=False, header=False)
+pd.concat([test_data[&#39;y_yes&#39;], test_data.drop([&#39;y_no&#39;, &#39;y_yes&#39;], axis=1)], axis=1).to_csv(&#39;test.csv&#39;, index=False, header=False)
+
+boto3.Session().resource(&#39;s3&#39;).Bucket(bucket).Object(os.path.join(prefix, &#39;train/train.csv&#39;)).upload_file(&#39;train.csv&#39;)
+boto3.Session().resource(&#39;s3&#39;).Bucket(bucket).Object(os.path.join(prefix, &#39;validation/validation.csv&#39;)).upload_file(&#39;validation.csv&#39;)</code></pre>
+<p><a href="automatic-model-tuning-ex-tuning-job.md">Configure and Launch a Hyperparameter Tuning Job</a></p>
+</body>
+</html>

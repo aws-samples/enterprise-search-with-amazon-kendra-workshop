@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Troubleshoot Amazon SageMaker Model Deployments</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Troubleshoot Amazon SageMaker Model Deployments<a name="deploy-model-troubleshoot"></a></h1>
+</header>
+<p>If you encounter an issue when deploying machine learning models in Amazon SageMaker, see the following guidance.</p>
+<p><strong>Topics</strong> + <a href="#deploy-model-troubleshoot-jvms">Detection Errors in the Active CPU Count</a></p>
+<p>If you deploy an Amazon SageMaker model with a Linux Java Virtual Machine (JVM), you might encounter detection errors that prevent using available CPU resources. This issue affects some JVMs that support Java 8 and Java 9, and most that support Java 10 and Java 11. These JVMs implement a mechanism that detects and handles the CPU count and the maximum memory available when running a model in a Docker container, and, more generally, within Linux <code>taskset</code> commands or control groups (cgroups). Amazon SageMaker deployments take advantage of some of the settings that the JVM uses for managing these resources. Currently, this causes the container to incorrectly detect the number of available CPUs.</p>
+<p>Amazon SageMaker doesn’t limit access to CPUs on an instance. However, the JVM might detect the CPU count as <code>1</code> when more CPUs are available for the container. As a result, the JVM adjusts all of its internal settings to run as if only <code>1</code> CPU core is available. These settings affect garbage collection, locks, compiler threads, and other JVM internals that negatively affect the concurrency, throughput, and latency of the container.</p>
+<p>For an example of the misdetection, in a container configured for Amazon SageMaker that is deployed with a JVM that is based on Java8_191 and that has four available CPUs on the instance, run the following command to start your JVM:</p>
+<pre><code>java -XX:+UnlockDiagnosticVMOptions -XX:+PrintActiveCpus -version</code></pre>
+<p>This generates the following output:</p>
+<pre><code>active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: determined by OSContainer: 1
+active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: determined by OSContainer: 1
+active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: determined by OSContainer: 1
+active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: determined by OSContainer: 1
+openjdk version &quot;1.8.0_191&quot;
+OpenJDK Runtime Environment (build 1.8.0_191-8u191-b12-2ubuntu0.16.04.1-b12)
+OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)</code></pre>
+<p>Many of the JVMs affected by this issue have an option to disable this behavior and reestablish full access to all of the CPUs on the instance. Disable the unwanted behaviour and establish full access to all instance CPUs by including the <code>-XX:-UseContainerSupport</code> parameter when starting Java applications. For example, run the <code>java</code> command to start your JVM as follows:</p>
+<pre><code>java -XX:-UseContainerSupport -XX:+UnlockDiagnosticVMOptions -XX:+PrintActiveCpus -version</code></pre>
+<p>This generates the following output:</p>
+<pre><code>active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: sched_getaffinity processor count: 4
+active_processor_count: sched_getaffinity processor count: 4
+openjdk version &quot;1.8.0_191&quot;
+OpenJDK Runtime Environment (build 1.8.0_191-8u191-b12-2ubuntu0.16.04.1-b12)
+OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)</code></pre>
+<p>Check whether the JVM used in your container supports the <code>-XX:-UseContainerSupport</code> parameter. If it does, always pass the parameter when you start your JVM. This provides access to all of the CPUs in your instances.</p>
+<p>You might also encounter this issue when indirectly using a JVM in Amazon SageMaker containers. For example, when using a JVM to support SparkML Scala. The <code>-XX:-UseContainerSupport</code> parameter also affects the output returned by the Java <code>Runtime.getRuntime().availableProcessors()</code> API ``.</p>
+</body>
+</html>
