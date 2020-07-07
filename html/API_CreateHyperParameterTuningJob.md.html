@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateHyperParameterTuningJob</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateHyperParameterTuningJob<a name="API_CreateHyperParameterTuningJob"></a></h1>
+</header>
+<p>Starts a hyperparameter tuning job. A hyperparameter tuning job finds the best version of a model by running many training jobs on your dataset using the algorithm you choose and values for hyperparameters within ranges that you specify. It then chooses the hyperparameter values that result in a model that performs the best, as measured by an objective metric that you choose.</p>
+<pre><code>{
+   &quot;[HyperParameterTuningJobConfig](#SageMaker-CreateHyperParameterTuningJob-request-HyperParameterTuningJobConfig)&quot;: { 
+      &quot;[HyperParameterTuningJobObjective](API_HyperParameterTuningJobConfig.md#SageMaker-Type-HyperParameterTuningJobConfig-HyperParameterTuningJobObjective)&quot;: { 
+         &quot;[MetricName](API_HyperParameterTuningJobObjective.md#SageMaker-Type-HyperParameterTuningJobObjective-MetricName)&quot;: &quot;string&quot;,
+         &quot;[Type](API_HyperParameterTuningJobObjective.md#SageMaker-Type-HyperParameterTuningJobObjective-Type)&quot;: &quot;string&quot;
+      },
+      &quot;[ParameterRanges](API_HyperParameterTuningJobConfig.md#SageMaker-Type-HyperParameterTuningJobConfig-ParameterRanges)&quot;: { 
+         &quot;[CategoricalParameterRanges](API_ParameterRanges.md#SageMaker-Type-ParameterRanges-CategoricalParameterRanges)&quot;: [ 
+            { 
+               &quot;[Name](API_CategoricalParameterRange.md#SageMaker-Type-CategoricalParameterRange-Name)&quot;: &quot;string&quot;,
+               &quot;[Values](API_CategoricalParameterRange.md#SageMaker-Type-CategoricalParameterRange-Values)&quot;: [ &quot;string&quot; ]
+            }
+         ],
+         &quot;[ContinuousParameterRanges](API_ParameterRanges.md#SageMaker-Type-ParameterRanges-ContinuousParameterRanges)&quot;: [ 
+            { 
+               &quot;[MaxValue](API_ContinuousParameterRange.md#SageMaker-Type-ContinuousParameterRange-MaxValue)&quot;: &quot;string&quot;,
+               &quot;[MinValue](API_ContinuousParameterRange.md#SageMaker-Type-ContinuousParameterRange-MinValue)&quot;: &quot;string&quot;,
+               &quot;[Name](API_ContinuousParameterRange.md#SageMaker-Type-ContinuousParameterRange-Name)&quot;: &quot;string&quot;,
+               &quot;[ScalingType](API_ContinuousParameterRange.md#SageMaker-Type-ContinuousParameterRange-ScalingType)&quot;: &quot;string&quot;
+            }
+         ],
+         &quot;[IntegerParameterRanges](API_ParameterRanges.md#SageMaker-Type-ParameterRanges-IntegerParameterRanges)&quot;: [ 
+            { 
+               &quot;[MaxValue](API_IntegerParameterRange.md#SageMaker-Type-IntegerParameterRange-MaxValue)&quot;: &quot;string&quot;,
+               &quot;[MinValue](API_IntegerParameterRange.md#SageMaker-Type-IntegerParameterRange-MinValue)&quot;: &quot;string&quot;,
+               &quot;[Name](API_IntegerParameterRange.md#SageMaker-Type-IntegerParameterRange-Name)&quot;: &quot;string&quot;,
+               &quot;[ScalingType](API_IntegerParameterRange.md#SageMaker-Type-IntegerParameterRange-ScalingType)&quot;: &quot;string&quot;
+            }
+         ]
+      },
+      &quot;[ResourceLimits](API_HyperParameterTuningJobConfig.md#SageMaker-Type-HyperParameterTuningJobConfig-ResourceLimits)&quot;: { 
+         &quot;[MaxNumberOfTrainingJobs](API_ResourceLimits.md#SageMaker-Type-ResourceLimits-MaxNumberOfTrainingJobs)&quot;: number,
+         &quot;[MaxParallelTrainingJobs](API_ResourceLimits.md#SageMaker-Type-ResourceLimits-MaxParallelTrainingJobs)&quot;: number
+      },
+      &quot;[Strategy](API_HyperParameterTuningJobConfig.md#SageMaker-Type-HyperParameterTuningJobConfig-Strategy)&quot;: &quot;string&quot;,
+      &quot;[TrainingJobEarlyStoppingType](API_HyperParameterTuningJobConfig.md#SageMaker-Type-HyperParameterTuningJobConfig-TrainingJobEarlyStoppingType)&quot;: &quot;string&quot;
+   },
+   &quot;[HyperParameterTuningJobName](#SageMaker-CreateHyperParameterTuningJob-request-HyperParameterTuningJobName)&quot;: &quot;string&quot;,
+   &quot;[Tags](#SageMaker-CreateHyperParameterTuningJob-request-Tags)&quot;: [ 
+      { 
+         &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+         &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[TrainingJobDefinition](#SageMaker-CreateHyperParameterTuningJob-request-TrainingJobDefinition)&quot;: { 
+      &quot;[AlgorithmSpecification](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-AlgorithmSpecification)&quot;: { 
+         &quot;[AlgorithmName](API_HyperParameterAlgorithmSpecification.md#SageMaker-Type-HyperParameterAlgorithmSpecification-AlgorithmName)&quot;: &quot;string&quot;,
+         &quot;[MetricDefinitions](API_HyperParameterAlgorithmSpecification.md#SageMaker-Type-HyperParameterAlgorithmSpecification-MetricDefinitions)&quot;: [ 
+            { 
+               &quot;[Name](API_MetricDefinition.md#SageMaker-Type-MetricDefinition-Name)&quot;: &quot;string&quot;,
+               &quot;[Regex](API_MetricDefinition.md#SageMaker-Type-MetricDefinition-Regex)&quot;: &quot;string&quot;
+            }
+         ],
+         &quot;[TrainingImage](API_HyperParameterAlgorithmSpecification.md#SageMaker-Type-HyperParameterAlgorithmSpecification-TrainingImage)&quot;: &quot;string&quot;,
+         &quot;[TrainingInputMode](API_HyperParameterAlgorithmSpecification.md#SageMaker-Type-HyperParameterAlgorithmSpecification-TrainingInputMode)&quot;: &quot;string&quot;
+      },
+      &quot;[EnableInterContainerTrafficEncryption](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-EnableInterContainerTrafficEncryption)&quot;: boolean,
+      &quot;[EnableNetworkIsolation](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-EnableNetworkIsolation)&quot;: boolean,
+      &quot;[InputDataConfig](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-InputDataConfig)&quot;: [ 
+         { 
+            &quot;[ChannelName](API_Channel.md#SageMaker-Type-Channel-ChannelName)&quot;: &quot;string&quot;,
+            &quot;[CompressionType](API_Channel.md#SageMaker-Type-Channel-CompressionType)&quot;: &quot;string&quot;,
+            &quot;[ContentType](API_Channel.md#SageMaker-Type-Channel-ContentType)&quot;: &quot;string&quot;,
+            &quot;[DataSource](API_Channel.md#SageMaker-Type-Channel-DataSource)&quot;: { 
+               &quot;[S3DataSource](API_DataSource.md#SageMaker-Type-DataSource-S3DataSource)&quot;: { 
+                  &quot;[AttributeNames](API_S3DataSource.md#SageMaker-Type-S3DataSource-AttributeNames)&quot;: [ &quot;string&quot; ],
+                  &quot;[S3DataDistributionType](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3DataDistributionType)&quot;: &quot;string&quot;,
+                  &quot;[S3DataType](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3DataType)&quot;: &quot;string&quot;,
+                  &quot;[S3Uri](API_S3DataSource.md#SageMaker-Type-S3DataSource-S3Uri)&quot;: &quot;string&quot;
+               }
+            },
+            &quot;[InputMode](API_Channel.md#SageMaker-Type-Channel-InputMode)&quot;: &quot;string&quot;,
+            &quot;[RecordWrapperType](API_Channel.md#SageMaker-Type-Channel-RecordWrapperType)&quot;: &quot;string&quot;,
+            &quot;[ShuffleConfig](API_Channel.md#SageMaker-Type-Channel-ShuffleConfig)&quot;: { 
+               &quot;[Seed](API_ShuffleConfig.md#SageMaker-Type-ShuffleConfig-Seed)&quot;: number
+            }
+         }
+      ],
+      &quot;[OutputDataConfig](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-OutputDataConfig)&quot;: { 
+         &quot;[KmsKeyId](API_OutputDataConfig.md#SageMaker-Type-OutputDataConfig-KmsKeyId)&quot;: &quot;string&quot;,
+         &quot;[S3OutputPath](API_OutputDataConfig.md#SageMaker-Type-OutputDataConfig-S3OutputPath)&quot;: &quot;string&quot;
+      },
+      &quot;[ResourceConfig](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-ResourceConfig)&quot;: { 
+         &quot;[InstanceCount](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-InstanceCount)&quot;: number,
+         &quot;[InstanceType](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-InstanceType)&quot;: &quot;string&quot;,
+         &quot;[VolumeKmsKeyId](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-VolumeKmsKeyId)&quot;: &quot;string&quot;,
+         &quot;[VolumeSizeInGB](API_ResourceConfig.md#SageMaker-Type-ResourceConfig-VolumeSizeInGB)&quot;: number
+      },
+      &quot;[RoleArn](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-RoleArn)&quot;: &quot;string&quot;,
+      &quot;[StaticHyperParameters](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-StaticHyperParameters)&quot;: { 
+         &quot;string&quot; : &quot;string&quot; 
+      },
+      &quot;[StoppingCondition](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-StoppingCondition)&quot;: { 
+         &quot;[MaxRuntimeInSeconds](API_StoppingCondition.md#SageMaker-Type-StoppingCondition-MaxRuntimeInSeconds)&quot;: number
+      },
+      &quot;[VpcConfig](API_HyperParameterTrainingJobDefinition.md#SageMaker-Type-HyperParameterTrainingJobDefinition-VpcConfig)&quot;: { 
+         &quot;[SecurityGroupIds](API_VpcConfig.md#SageMaker-Type-VpcConfig-SecurityGroupIds)&quot;: [ &quot;string&quot; ],
+         &quot;[Subnets](API_VpcConfig.md#SageMaker-Type-VpcConfig-Subnets)&quot;: [ &quot;string&quot; ]
+      }
+   },
+   &quot;[WarmStartConfig](#SageMaker-CreateHyperParameterTuningJob-request-WarmStartConfig)&quot;: { 
+      &quot;[ParentHyperParameterTuningJobs](API_HyperParameterTuningJobWarmStartConfig.md#SageMaker-Type-HyperParameterTuningJobWarmStartConfig-ParentHyperParameterTuningJobs)&quot;: [ 
+         { 
+            &quot;[HyperParameterTuningJobName](API_ParentHyperParameterTuningJob.md#SageMaker-Type-ParentHyperParameterTuningJob-HyperParameterTuningJobName)&quot;: &quot;string&quot;
+         }
+      ],
+      &quot;[WarmStartType](API_HyperParameterTuningJobWarmStartConfig.md#SageMaker-Type-HyperParameterTuningJobWarmStartConfig-WarmStartType)&quot;: &quot;string&quot;
+   }
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateHyperParameterTuningJob_RequestSyntax">HyperParameterTuningJobConfig</a> ** <a name="SageMaker-CreateHyperParameterTuningJob-request-HyperParameterTuningJobConfig"></a> The <a href="API_HyperParameterTuningJobConfig.md">HyperParameterTuningJobConfig</a> object that describes the tuning job, including the search strategy, the objective metric used to evaluate training jobs, ranges of parameters to search, and resource limits for the tuning job. For more information, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a><br />
+Type: <a href="API_HyperParameterTuningJobConfig.md">HyperParameterTuningJobConfig</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateHyperParameterTuningJob_RequestSyntax">HyperParameterTuningJobName</a> ** <a name="SageMaker-CreateHyperParameterTuningJob-request-HyperParameterTuningJobName"></a> The name of the tuning job. This name is the prefix for the names of all training jobs that this tuning job launches. The name must be unique within the same AWS account and AWS Region. The name must have { } to { } characters. Valid characters are a-z, A-Z, 0-9, and : + = @ _ % - (hyphen). The name is not case sensitive.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 32.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateHyperParameterTuningJob_RequestSyntax">Tags</a> ** <a name="SageMaker-CreateHyperParameterTuningJob-request-Tags"></a> An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.<br />
+Tags that you specify for the tuning job are also added to all training jobs that the tuning job launches.<br />
+Type: Array of <a href="API_Tag.md">Tag</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 50 items.<br />
+Required: No</p>
+<p>** <a href="#API_CreateHyperParameterTuningJob_RequestSyntax">TrainingJobDefinition</a> ** <a name="SageMaker-CreateHyperParameterTuningJob-request-TrainingJobDefinition"></a> The <a href="API_HyperParameterTrainingJobDefinition.md">HyperParameterTrainingJobDefinition</a> object that describes the training jobs that this tuning job launches, including static hyperparameters, input data configuration, output data configuration, resource configuration, and stopping condition.<br />
+Type: <a href="API_HyperParameterTrainingJobDefinition.md">HyperParameterTrainingJobDefinition</a> object<br />
+Required: No</p>
+<p>** <a href="#API_CreateHyperParameterTuningJob_RequestSyntax">WarmStartConfig</a> ** <a name="SageMaker-CreateHyperParameterTuningJob-request-WarmStartConfig"></a> Specifies the configuration for starting the hyperparameter tuning job using one or more previous tuning jobs as a starting point. The results of previous tuning jobs are used to inform which combinations of hyperparameters to search over in the new tuning job.<br />
+All training jobs launched by the new hyperparameter tuning job are evaluated by using the objective metric. If you specify <code>IDENTICAL_DATA_AND_ALGORITHM</code> as the <code>WarmStartType</code> value for the warm start configuration, the training job that performs the best in the new tuning job is compared to the best training jobs from the parent tuning jobs. From these, the training job that performs the best as measured by the objective metric is returned as the overall best training job.<br />
+All training jobs launched by parent hyperparameter tuning jobs and the new hyperparameter tuning jobs count against the limit of training jobs for the tuning job. Type: <a href="API_HyperParameterTuningJobWarmStartConfig.md">HyperParameterTuningJobWarmStartConfig</a> object<br />
+Required: No</p>
+<pre><code>{
+   &quot;[HyperParameterTuningJobArn](#SageMaker-CreateHyperParameterTuningJob-response-HyperParameterTuningJobArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateHyperParameterTuningJob_ResponseSyntax">HyperParameterTuningJobArn</a> ** <a name="SageMaker-CreateHyperParameterTuningJob-response-HyperParameterTuningJobArn"></a> The Amazon Resource Name (ARN) of the tuning job. Amazon SageMaker assigns an ARN to a hyperparameter tuning job when you create it.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:hyper-parameter-tuning-job/.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceInUse</strong><br />
+Resource being accessed is in use.<br />
+HTTP Status Code: 400</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateHyperParameterTuningJob">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

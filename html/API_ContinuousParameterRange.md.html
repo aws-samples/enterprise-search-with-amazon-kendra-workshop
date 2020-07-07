@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ContinuousParameterRange</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ContinuousParameterRange<a name="API_ContinuousParameterRange"></a></h1>
+</header>
+<p>A list of continuous hyperparameters to tune.</p>
+<p><strong>MaxValue</strong> <a name="SageMaker-Type-ContinuousParameterRange-MaxValue"></a> The maximum value for the hyperparameter. The tuning job uses floating-point values between <code>MinValue</code> value and this value for tuning.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>.*</code><br />
+Required: Yes</p>
+<p><strong>MinValue</strong> <a name="SageMaker-Type-ContinuousParameterRange-MinValue"></a> The minimum value for the hyperparameter. The tuning job uses floating-point values between this value and <code>MaxValue</code>for tuning.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>.*</code><br />
+Required: Yes</p>
+<p><strong>Name</strong> <a name="SageMaker-Type-ContinuousParameterRange-Name"></a> The name of the continuous hyperparameter to tune.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>.*</code><br />
+Required: Yes</p>
+<p><strong>ScalingType</strong> <a name="SageMaker-Type-ContinuousParameterRange-ScalingType"></a> The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="http://docs.aws.amazon.com//sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:<br />
+Auto<br />
+Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.<br />
+Linear<br />
+Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.<br />
+Logarithmic<br />
+Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.<br />
+Logarithmic scaling works only for ranges that have only values greater than 0.<br />
+ReverseLogarithmic<br />
+Hyperparemeter tuning searches the values in the hyperparameter range by using a reverse logarithmic scale.<br />
+Reverse logarithmic scaling works only for ranges that are entirely within the range 0&lt;=x&lt;1.0. Type: String<br />
+Valid Values:<code>Auto | Linear | Logarithmic | ReverseLogarithmic</code><br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ContinuousParameterRange">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ContinuousParameterRange">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ContinuousParameterRange">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ContinuousParameterRange">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ContinuousParameterRange">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

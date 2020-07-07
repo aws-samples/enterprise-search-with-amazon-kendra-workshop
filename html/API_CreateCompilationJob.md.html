@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateCompilationJob</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateCompilationJob<a name="API_CreateCompilationJob"></a></h1>
+</header>
+<p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify.</p>
+<p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p>
+<p>In the request body, you provide the following: + A name for the compilation job + Information about the input model artifacts + The output location for the compiled model and the device (target) that the model runs on + <code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code></p>
+<p>You can also provide a <code>Tag</code> to track the model compilation job’s resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p>
+<p>To stop a model compilation job, use <a href="API_StopCompilationJob.md">StopCompilationJob</a>. To get information about a particular model compilation job, use <a href="API_DescribeCompilationJob.md">DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a href="API_ListCompilationJobs.md">ListCompilationJobs</a>.</p>
+<pre><code>{
+   &quot;[CompilationJobName](#SageMaker-CreateCompilationJob-request-CompilationJobName)&quot;: &quot;string&quot;,
+   &quot;[InputConfig](#SageMaker-CreateCompilationJob-request-InputConfig)&quot;: { 
+      &quot;[DataInputConfig](API_InputConfig.md#SageMaker-Type-InputConfig-DataInputConfig)&quot;: &quot;string&quot;,
+      &quot;[Framework](API_InputConfig.md#SageMaker-Type-InputConfig-Framework)&quot;: &quot;string&quot;,
+      &quot;[S3Uri](API_InputConfig.md#SageMaker-Type-InputConfig-S3Uri)&quot;: &quot;string&quot;
+   },
+   &quot;[OutputConfig](#SageMaker-CreateCompilationJob-request-OutputConfig)&quot;: { 
+      &quot;[S3OutputLocation](API_OutputConfig.md#SageMaker-Type-OutputConfig-S3OutputLocation)&quot;: &quot;string&quot;,
+      &quot;[TargetDevice](API_OutputConfig.md#SageMaker-Type-OutputConfig-TargetDevice)&quot;: &quot;string&quot;
+   },
+   &quot;[RoleArn](#SageMaker-CreateCompilationJob-request-RoleArn)&quot;: &quot;string&quot;,
+   &quot;[StoppingCondition](#SageMaker-CreateCompilationJob-request-StoppingCondition)&quot;: { 
+      &quot;[MaxRuntimeInSeconds](API_StoppingCondition.md#SageMaker-Type-StoppingCondition-MaxRuntimeInSeconds)&quot;: number
+   }
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateCompilationJob_RequestSyntax">CompilationJobName</a> ** <a name="SageMaker-CreateCompilationJob-request-CompilationJobName"></a> A name for the model compilation job. The name must be unique within the AWS Region and within your AWS account.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateCompilationJob_RequestSyntax">InputConfig</a> ** <a name="SageMaker-CreateCompilationJob-request-InputConfig"></a> Provides information about the location of input model artifacts, the name and shape of the expected data inputs, and the framework in which the model was trained.<br />
+Type: <a href="API_InputConfig.md">InputConfig</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateCompilationJob_RequestSyntax">OutputConfig</a> ** <a name="SageMaker-CreateCompilationJob-request-OutputConfig"></a> Provides information about the output location for the compiled model and the target device the model runs on.<br />
+Type: <a href="API_OutputConfig.md">OutputConfig</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateCompilationJob_RequestSyntax">RoleArn</a> ** <a name="SageMaker-CreateCompilationJob-request-RoleArn"></a> The Amazon Resource Name (ARN) of an IAM role that enables Amazon SageMaker to perform tasks on your behalf.<br />
+During model compilation, Amazon SageMaker needs your permission to:<br />
++ Read input data from an S3 bucket + Write model artifacts to an S3 bucket + Write logs to Amazon CloudWatch Logs + Publish metrics to Amazon CloudWatch You grant permissions for all of these tasks to an IAM role. To pass this role to Amazon SageMaker, the caller of this API must have the <code>iam:PassRole</code> permission. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html">Amazon SageMaker Roles.</a><br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateCompilationJob_RequestSyntax">StoppingCondition</a> ** <a name="SageMaker-CreateCompilationJob-request-StoppingCondition"></a> Specifies a limit to how long a model compilation job can run. When the job reaches the time limit, Amazon SageMaker ends the compilation job. Use this API to cap model training costs.<br />
+Type: <a href="API_StoppingCondition.md">StoppingCondition</a> object<br />
+Required: Yes</p>
+<pre><code>{
+   &quot;[CompilationJobArn](#SageMaker-CreateCompilationJob-response-CompilationJobArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateCompilationJob_ResponseSyntax">CompilationJobArn</a> ** <a name="SageMaker-CreateCompilationJob-response-CompilationJobArn"></a> If the action is successful, the service sends back an HTTP 200 response. Amazon SageMaker returns the following data in JSON format:<br />
++ <code>CompilationJobArn</code>: The Amazon Resource Name (ARN) of the compiled job. Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:compilation-job/.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceInUse</strong><br />
+Resource being accessed is in use.<br />
+HTTP Status Code: 400</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateCompilationJob">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateCompilationJob">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

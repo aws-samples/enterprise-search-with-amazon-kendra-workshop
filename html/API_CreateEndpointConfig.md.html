@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateEndpointConfig</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateEndpointConfig<a name="API_CreateEndpointConfig"></a></h1>
+</header>
+<p>Creates an endpoint configuration that Amazon SageMaker hosting services uses to deploy models. In the configuration, you identify one or more models, created using the <code>CreateModel</code> API, to deploy and the resources that you want Amazon SageMaker to provision. Then you call the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API.</p>
+<p><strong>Note</strong><br />
+Use this API only if you want to use Amazon SageMaker hosting services to deploy models into production.</p>
+<p>In the request, you define one or more <code>ProductionVariant</code>s, each of which identifies a model. Each <code>ProductionVariant</code> parameter also describes the resources that you want Amazon SageMaker to provision. This includes the number and type of ML compute instances to deploy.</p>
+<p>If you are hosting multiple models, you also assign a <code>VariantWeight</code> to specify how much traffic you want to allocate to each model. For example, suppose that you want to host two models, A and B, and you assign traffic weight 2 for model A and 1 for model B. Amazon SageMaker distributes two-thirds of the traffic to Model A, and one-third to model B.</p>
+<pre><code>{
+   &quot;[EndpointConfigName](#SageMaker-CreateEndpointConfig-request-EndpointConfigName)&quot;: &quot;string&quot;,
+   &quot;[KmsKeyId](#SageMaker-CreateEndpointConfig-request-KmsKeyId)&quot;: &quot;string&quot;,
+   &quot;[ProductionVariants](#SageMaker-CreateEndpointConfig-request-ProductionVariants)&quot;: [ 
+      { 
+         &quot;[AcceleratorType](API_ProductionVariant.md#SageMaker-Type-ProductionVariant-AcceleratorType)&quot;: &quot;string&quot;,
+         &quot;[InitialInstanceCount](API_ProductionVariant.md#SageMaker-Type-ProductionVariant-InitialInstanceCount)&quot;: number,
+         &quot;[InitialVariantWeight](API_ProductionVariant.md#SageMaker-Type-ProductionVariant-InitialVariantWeight)&quot;: number,
+         &quot;[InstanceType](API_ProductionVariant.md#SageMaker-Type-ProductionVariant-InstanceType)&quot;: &quot;string&quot;,
+         &quot;[ModelName](API_ProductionVariant.md#SageMaker-Type-ProductionVariant-ModelName)&quot;: &quot;string&quot;,
+         &quot;[VariantName](API_ProductionVariant.md#SageMaker-Type-ProductionVariant-VariantName)&quot;: &quot;string&quot;
+      }
+   ],
+   &quot;[Tags](#SageMaker-CreateEndpointConfig-request-Tags)&quot;: [ 
+      { 
+         &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+         &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+      }
+   ]
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateEndpointConfig_RequestSyntax">EndpointConfigName</a> ** <a name="SageMaker-CreateEndpointConfig-request-EndpointConfigName"></a> The name of the endpoint configuration. You specify this name in a <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> request.<br />
+Type: String<br />
+Length Constraints: Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateEndpointConfig_RequestSyntax">KmsKeyId</a> ** <a name="SageMaker-CreateEndpointConfig-request-KmsKeyId"></a> The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance that hosts the endpoint.<br />
+Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>.*</code><br />
+Required: No</p>
+<p>** <a href="#API_CreateEndpointConfig_RequestSyntax">ProductionVariants</a> ** <a name="SageMaker-CreateEndpointConfig-request-ProductionVariants"></a> An list of <code>ProductionVariant</code> objects, one for each model that you want to host at this endpoint.<br />
+Type: Array of <a href="API_ProductionVariant.md">ProductionVariant</a> objects<br />
+Array Members: Minimum number of 1 item. Maximum number of 10 items.<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateEndpointConfig_RequestSyntax">Tags</a> ** <a name="SageMaker-CreateEndpointConfig-request-Tags"></a> A list of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the * AWS Billing and Cost Management User Guide*.<br />
+Type: Array of <a href="API_Tag.md">Tag</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 50 items.<br />
+Required: No</p>
+<pre><code>{
+   &quot;[EndpointConfigArn](#SageMaker-CreateEndpointConfig-response-EndpointConfigArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateEndpointConfig_ResponseSyntax">EndpointConfigArn</a> ** <a name="SageMaker-CreateEndpointConfig-response-EndpointConfigArn"></a> The Amazon Resource Name (ARN) of the endpoint configuration.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:endpoint-config/.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateEndpointConfig">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateEndpointConfig">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

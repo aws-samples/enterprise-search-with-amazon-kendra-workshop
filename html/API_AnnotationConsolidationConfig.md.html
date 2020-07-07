@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>AnnotationConsolidationConfig</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">AnnotationConsolidationConfig<a name="API_AnnotationConsolidationConfig"></a></h1>
+</header>
+<p>Configures how labels are consolidated across human workers.</p>
+<p><strong>AnnotationConsolidationLambdaArn</strong> <a name="SageMaker-Type-AnnotationConsolidationConfig-AnnotationConsolidationLambdaArn"></a> The Amazon Resource Name (ARN) of a Lambda function implements the logic for annotation consolidation.<br />
+For the built-in bounding box, image classification, semantic segmentation, and text classification task types, Amazon SageMaker Ground Truth provides the following Lambda functions:<br />
++ <em>Bounding box</em> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p>
+<p><code>arn:aws:lambda:us-east-1:432418664414:function:ACS-BoundingBox</code></p>
+<p><code>arn:aws:lambda:us-east-2:266458841044:function:ACS-BoundingBox</code></p>
+<p><code>arn:aws:lambda:us-west-2:081040173940:function:ACS-BoundingBox</code></p>
+<p><code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-BoundingBox</code></p>
+<p><code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-BoundingBox</code></p>
+<p><code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-BoundingBox</code> + <em>Image classification</em> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p>
+<p><code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClass</code></p>
+<p><code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClass</code></p>
+<p><code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClass</code></p>
+<p><code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClass</code></p>
+<p><code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClass</code></p>
+<p><code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClass</code> + <em>Semantic segmentation</em> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as “votes” for the correct label.</p>
+<p><code>arn:aws:lambda:us-east-1:432418664414:function:ACS-SemanticSegmentation</code></p>
+<p><code>arn:aws:lambda:us-east-2:266458841044:function:ACS-SemanticSegmentation</code></p>
+<p><code>arn:aws:lambda:us-west-2:081040173940:function:ACS-SemanticSegmentation</code></p>
+<p><code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-SemanticSegmentation</code></p>
+<p><code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-SemanticSegmentation</code></p>
+<p><code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-SemanticSegmentation</code> + <em>Text classification</em> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p>
+<p><code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClass</code></p>
+<p><code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClass</code></p>
+<p><code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClass</code></p>
+<p><code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClass</code></p>
+<p><code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClass</code></p>
+<p><code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClass</code> For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.<br />
+Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:lambda:[a-z]{2}-[a-z]+-\d{1}:\d{12}:function:[a-zA-Z0-9-_\.]+(:(\$LATEST|[a-zA-Z0-9-_]+))?</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/AnnotationConsolidationConfig">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/AnnotationConsolidationConfig">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/AnnotationConsolidationConfig">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/AnnotationConsolidationConfig">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/AnnotationConsolidationConfig">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

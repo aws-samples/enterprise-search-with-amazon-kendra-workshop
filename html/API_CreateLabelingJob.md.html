@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CreateLabelingJob</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CreateLabelingJob<a name="API_CreateLabelingJob"></a></h1>
+</header>
+<p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p>
+<p>You can select your workforce from one of three providers: + A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required. + One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. + The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p>
+<p>You can also use <em>automated data labeling</em> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <em>active learning</em> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p>
+<p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <em>manifest file</em> that describes the location of each object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p>
+<p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
+<pre><code>{
+   &quot;[HumanTaskConfig](#SageMaker-CreateLabelingJob-request-HumanTaskConfig)&quot;: { 
+      &quot;[AnnotationConsolidationConfig](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-AnnotationConsolidationConfig)&quot;: { 
+         &quot;[AnnotationConsolidationLambdaArn](API_AnnotationConsolidationConfig.md#SageMaker-Type-AnnotationConsolidationConfig-AnnotationConsolidationLambdaArn)&quot;: &quot;string&quot;
+      },
+      &quot;[MaxConcurrentTaskCount](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-MaxConcurrentTaskCount)&quot;: number,
+      &quot;[NumberOfHumanWorkersPerDataObject](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-NumberOfHumanWorkersPerDataObject)&quot;: number,
+      &quot;[PreHumanTaskLambdaArn](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-PreHumanTaskLambdaArn)&quot;: &quot;string&quot;,
+      &quot;[PublicWorkforceTaskPrice](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-PublicWorkforceTaskPrice)&quot;: { 
+         &quot;[AmountInUsd](API_PublicWorkforceTaskPrice.md#SageMaker-Type-PublicWorkforceTaskPrice-AmountInUsd)&quot;: { 
+            &quot;[Cents](API_USD.md#SageMaker-Type-USD-Cents)&quot;: number,
+            &quot;[Dollars](API_USD.md#SageMaker-Type-USD-Dollars)&quot;: number,
+            &quot;[TenthFractionsOfACent](API_USD.md#SageMaker-Type-USD-TenthFractionsOfACent)&quot;: number
+         }
+      },
+      &quot;[TaskAvailabilityLifetimeInSeconds](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-TaskAvailabilityLifetimeInSeconds)&quot;: number,
+      &quot;[TaskDescription](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-TaskDescription)&quot;: &quot;string&quot;,
+      &quot;[TaskKeywords](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-TaskKeywords)&quot;: [ &quot;string&quot; ],
+      &quot;[TaskTimeLimitInSeconds](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-TaskTimeLimitInSeconds)&quot;: number,
+      &quot;[TaskTitle](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-TaskTitle)&quot;: &quot;string&quot;,
+      &quot;[UiConfig](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-UiConfig)&quot;: { 
+         &quot;[UiTemplateS3Uri](API_UiConfig.md#SageMaker-Type-UiConfig-UiTemplateS3Uri)&quot;: &quot;string&quot;
+      },
+      &quot;[WorkteamArn](API_HumanTaskConfig.md#SageMaker-Type-HumanTaskConfig-WorkteamArn)&quot;: &quot;string&quot;
+   },
+   &quot;[InputConfig](#SageMaker-CreateLabelingJob-request-InputConfig)&quot;: { 
+      &quot;[DataAttributes](API_LabelingJobInputConfig.md#SageMaker-Type-LabelingJobInputConfig-DataAttributes)&quot;: { 
+         &quot;[ContentClassifiers](API_LabelingJobDataAttributes.md#SageMaker-Type-LabelingJobDataAttributes-ContentClassifiers)&quot;: [ &quot;string&quot; ]
+      },
+      &quot;[DataSource](API_LabelingJobInputConfig.md#SageMaker-Type-LabelingJobInputConfig-DataSource)&quot;: { 
+         &quot;[S3DataSource](API_LabelingJobDataSource.md#SageMaker-Type-LabelingJobDataSource-S3DataSource)&quot;: { 
+            &quot;[ManifestS3Uri](API_LabelingJobS3DataSource.md#SageMaker-Type-LabelingJobS3DataSource-ManifestS3Uri)&quot;: &quot;string&quot;
+         }
+      }
+   },
+   &quot;[LabelAttributeName](#SageMaker-CreateLabelingJob-request-LabelAttributeName)&quot;: &quot;string&quot;,
+   &quot;[LabelCategoryConfigS3Uri](#SageMaker-CreateLabelingJob-request-LabelCategoryConfigS3Uri)&quot;: &quot;string&quot;,
+   &quot;[LabelingJobAlgorithmsConfig](#SageMaker-CreateLabelingJob-request-LabelingJobAlgorithmsConfig)&quot;: { 
+      &quot;[InitialActiveLearningModelArn](API_LabelingJobAlgorithmsConfig.md#SageMaker-Type-LabelingJobAlgorithmsConfig-InitialActiveLearningModelArn)&quot;: &quot;string&quot;,
+      &quot;[LabelingJobAlgorithmSpecificationArn](API_LabelingJobAlgorithmsConfig.md#SageMaker-Type-LabelingJobAlgorithmsConfig-LabelingJobAlgorithmSpecificationArn)&quot;: &quot;string&quot;,
+      &quot;[LabelingJobResourceConfig](API_LabelingJobAlgorithmsConfig.md#SageMaker-Type-LabelingJobAlgorithmsConfig-LabelingJobResourceConfig)&quot;: { 
+         &quot;[VolumeKmsKeyId](API_LabelingJobResourceConfig.md#SageMaker-Type-LabelingJobResourceConfig-VolumeKmsKeyId)&quot;: &quot;string&quot;
+      }
+   },
+   &quot;[LabelingJobName](#SageMaker-CreateLabelingJob-request-LabelingJobName)&quot;: &quot;string&quot;,
+   &quot;[OutputConfig](#SageMaker-CreateLabelingJob-request-OutputConfig)&quot;: { 
+      &quot;[KmsKeyId](API_LabelingJobOutputConfig.md#SageMaker-Type-LabelingJobOutputConfig-KmsKeyId)&quot;: &quot;string&quot;,
+      &quot;[S3OutputPath](API_LabelingJobOutputConfig.md#SageMaker-Type-LabelingJobOutputConfig-S3OutputPath)&quot;: &quot;string&quot;
+   },
+   &quot;[RoleArn](#SageMaker-CreateLabelingJob-request-RoleArn)&quot;: &quot;string&quot;,
+   &quot;[StoppingConditions](#SageMaker-CreateLabelingJob-request-StoppingConditions)&quot;: { 
+      &quot;[MaxHumanLabeledObjectCount](API_LabelingJobStoppingConditions.md#SageMaker-Type-LabelingJobStoppingConditions-MaxHumanLabeledObjectCount)&quot;: number,
+      &quot;[MaxPercentageOfInputDatasetLabeled](API_LabelingJobStoppingConditions.md#SageMaker-Type-LabelingJobStoppingConditions-MaxPercentageOfInputDatasetLabeled)&quot;: number
+   },
+   &quot;[Tags](#SageMaker-CreateLabelingJob-request-Tags)&quot;: [ 
+      { 
+         &quot;[Key](API_Tag.md#SageMaker-Type-Tag-Key)&quot;: &quot;string&quot;,
+         &quot;[Value](API_Tag.md#SageMaker-Type-Tag-Value)&quot;: &quot;string&quot;
+      }
+   ]
+}</code></pre>
+<p>For information about the parameters that are common to all actions, see <a href="CommonParameters.md">Common Parameters</a>.</p>
+<p>The request accepts the following data in JSON format.</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">HumanTaskConfig</a> ** <a name="SageMaker-CreateLabelingJob-request-HumanTaskConfig"></a> Configures the information required for human workers to complete a labeling task.<br />
+Type: <a href="API_HumanTaskConfig.md">HumanTaskConfig</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">InputConfig</a> ** <a name="SageMaker-CreateLabelingJob-request-InputConfig"></a> Input data for the labeling job, such as the Amazon S3 location of the data objects and the location of the manifest file that describes the data objects.<br />
+Type: <a href="API_LabelingJobInputConfig.md">LabelingJobInputConfig</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">LabelAttributeName</a> ** <a name="SageMaker-CreateLabelingJob-request-LabelAttributeName"></a> The attribute name to use for the label in the output manifest file. This is the key for the key/value pair formed with the label that a worker assigns to the object. The name can’t end with “-metadata”. If you are running a semantic segmentation labeling job, the attribute name must end with “-ref”. If you are running any other kind of labeling job, the attribute name must not end with “-ref”.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 127.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">LabelCategoryConfigS3Uri</a> ** <a name="SageMaker-CreateLabelingJob-request-LabelCategoryConfigS3Uri"></a> The S3 URL of the file that defines the categories used to label the data objects.<br />
+The file is a JSON structure in the following format:<br />
+<code>{</code><br />
+<code>"document-version": "2018-11-28"</code><br />
+<code>"labels": [</code><br />
+<code>{</code><br />
+<code>"label": "label 1"</code><br />
+<code>},</code><br />
+<code>{</code><br />
+<code>"label": "label 2"</code><br />
+<code>},</code><br />
+<code>...</code><br />
+<code>{</code><br />
+<code>"label": "label n"</code><br />
+<code>}</code><br />
+<code>]</code><br />
+<code>}</code><br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>^(https|s3)://([^/]+)/?(.*)$</code><br />
+Required: No</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">LabelingJobAlgorithmsConfig</a> ** <a name="SageMaker-CreateLabelingJob-request-LabelingJobAlgorithmsConfig"></a> Configures the information required to perform automated data labeling.<br />
+Type: <a href="API_LabelingJobAlgorithmsConfig.md">LabelingJobAlgorithmsConfig</a> object<br />
+Required: No</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">LabelingJobName</a> ** <a name="SageMaker-CreateLabelingJob-request-LabelingJobName"></a> The name of the labeling job. This name is used to identify the job in a list of labeling jobs.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">OutputConfig</a> ** <a name="SageMaker-CreateLabelingJob-request-OutputConfig"></a> The location of the output data and the AWS Key Management Service key ID for the key used to encrypt the output data, if any.<br />
+Type: <a href="API_LabelingJobOutputConfig.md">LabelingJobOutputConfig</a> object<br />
+Required: Yes</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">RoleArn</a> ** <a name="SageMaker-CreateLabelingJob-request-RoleArn"></a> The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during data labeling. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete data labeling.<br />
+Type: String<br />
+Length Constraints: Minimum length of 20. Maximum length of 2048.<br />
+Pattern: <code>^arn:aws[a-z\-]*:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+$</code><br />
+Required: Yes</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">StoppingConditions</a> ** <a name="SageMaker-CreateLabelingJob-request-StoppingConditions"></a> A set of conditions for stopping the labeling job. If any of the conditions are met, the job is automatically stopped. You can use these conditions to control the cost of data labeling.<br />
+Type: <a href="API_LabelingJobStoppingConditions.md">LabelingJobStoppingConditions</a> object<br />
+Required: No</p>
+<p>** <a href="#API_CreateLabelingJob_RequestSyntax">Tags</a> ** <a name="SageMaker-CreateLabelingJob-request-Tags"></a> An array of key/value pairs. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <em>AWS Billing and Cost Management User Guide</em>.<br />
+Type: Array of <a href="API_Tag.md">Tag</a> objects<br />
+Array Members: Minimum number of 0 items. Maximum number of 50 items.<br />
+Required: No</p>
+<pre><code>{
+   &quot;[LabelingJobArn](#SageMaker-CreateLabelingJob-response-LabelingJobArn)&quot;: &quot;string&quot;
+}</code></pre>
+<p>If the action is successful, the service sends back an HTTP 200 response.</p>
+<p>The following data is returned in JSON format by the service.</p>
+<p>** <a href="#API_CreateLabelingJob_ResponseSyntax">LabelingJobArn</a> ** <a name="SageMaker-CreateLabelingJob-response-LabelingJobArn"></a> The Amazon Resource Name (ARN) of the labeling job. You use this ARN to identify the labeling job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 2048.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:labeling-job/.*</code></p>
+<p>For information about the errors that are common to all actions, see <a href="CommonErrors.md">Common Errors</a>.</p>
+<p><strong>ResourceInUse</strong><br />
+Resource being accessed is in use.<br />
+HTTP Status Code: 400</p>
+<p><strong>ResourceLimitExceeded</strong><br />
+You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created.<br />
+HTTP Status Code: 400</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/aws-cli/sagemaker-2017-07-24/CreateLabelingJob">AWS Command Line Interface</a> + <a href="https://docs.aws.amazon.com/goto/DotNetSDKV3/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for .NET</a> + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/AWSJavaScriptSDK/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for JavaScript</a> + <a href="https://docs.aws.amazon.com/goto/SdkForPHPV3/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for PHP V3</a> + <a href="https://docs.aws.amazon.com/goto/boto3/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for Python</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CreateLabelingJob">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

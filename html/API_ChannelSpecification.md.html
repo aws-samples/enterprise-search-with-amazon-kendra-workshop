@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ChannelSpecification</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ChannelSpecification<a name="API_ChannelSpecification"></a></h1>
+</header>
+<p>Defines a named input source, called a channel, to be used by an algorithm.</p>
+<p><strong>Description</strong> <a name="SageMaker-Type-ChannelSpecification-Description"></a> A brief description of the channel.<br />
+Type: String<br />
+Length Constraints: Maximum length of 1024.<br />
+Pattern: <code>[\p{L}\p{M}\p{Z}\p{S}\p{N}\p{P}]*</code><br />
+Required: No</p>
+<p><strong>IsRequired</strong> <a name="SageMaker-Type-ChannelSpecification-IsRequired"></a> Indicates whether the channel is required by the algorithm.<br />
+Type: Boolean<br />
+Required: No</p>
+<p><strong>Name</strong> <a name="SageMaker-Type-ChannelSpecification-Name"></a> The name of the channel.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 64.<br />
+Pattern: <code>[A-Za-z0-9\.\-_]+</code><br />
+Required: Yes</p>
+<p><strong>SupportedCompressionTypes</strong> <a name="SageMaker-Type-ChannelSpecification-SupportedCompressionTypes"></a> The allowed compression types, if data compression is used.<br />
+Type: Array of strings<br />
+Valid Values:<code>None | Gzip</code><br />
+Required: No</p>
+<p><strong>SupportedContentTypes</strong> <a name="SageMaker-Type-ChannelSpecification-SupportedContentTypes"></a> The supported MIME types for the data.<br />
+Type: Array of strings<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>.*</code><br />
+Required: Yes</p>
+<p><strong>SupportedInputModes</strong> <a name="SageMaker-Type-ChannelSpecification-SupportedInputModes"></a> The allowed input mode, either FILE or PIPE.<br />
+In FILE mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode.<br />
+In PIPE mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.<br />
+Type: Array of strings<br />
+Array Members: Minimum number of 1 item.<br />
+Valid Values:<code>Pipe | File</code><br />
+Required: Yes</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/ChannelSpecification">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/ChannelSpecification">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/ChannelSpecification">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/ChannelSpecification">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/ChannelSpecification">AWS SDK for Ruby V2</a></p>
+</body>
+</html>

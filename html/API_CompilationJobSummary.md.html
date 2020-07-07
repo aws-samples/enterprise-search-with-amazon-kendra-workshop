@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CompilationJobSummary</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CompilationJobSummary<a name="API_CompilationJobSummary"></a></h1>
+</header>
+<p>A summary of a model compilation job.</p>
+<p><strong>CompilationEndTime</strong> <a name="SageMaker-Type-CompilationJobSummary-CompilationEndTime"></a> The time when the model compilation job completed.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>CompilationJobArn</strong> <a name="SageMaker-Type-CompilationJobSummary-CompilationJobArn"></a> The Amazon Resource Name (ARN) of the model compilation job.<br />
+Type: String<br />
+Length Constraints: Maximum length of 256.<br />
+Pattern: <code>arn:aws[a-z\-]*:sagemaker:[a-z0-9\-]*:[0-9]{12}:compilation-job/.*</code><br />
+Required: Yes</p>
+<p><strong>CompilationJobName</strong> <a name="SageMaker-Type-CompilationJobSummary-CompilationJobName"></a> The name of the model compilation job that you want a summary for.<br />
+Type: String<br />
+Length Constraints: Minimum length of 1. Maximum length of 63.<br />
+Pattern: <code>^[a-zA-Z0-9](-*[a-zA-Z0-9])*$</code><br />
+Required: Yes</p>
+<p><strong>CompilationJobStatus</strong> <a name="SageMaker-Type-CompilationJobSummary-CompilationJobStatus"></a> The status of the model compilation job.<br />
+Type: String<br />
+Valid Values:<code>INPROGRESS | COMPLETED | FAILED | STARTING | STOPPING | STOPPED</code><br />
+Required: Yes</p>
+<p><strong>CompilationStartTime</strong> <a name="SageMaker-Type-CompilationJobSummary-CompilationStartTime"></a> The time when the model compilation job started.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p><strong>CompilationTargetDevice</strong> <a name="SageMaker-Type-CompilationJobSummary-CompilationTargetDevice"></a> The type of device that the model will run on after compilation has completed.<br />
+Type: String<br />
+Valid Values:<code>lambda | ml_m4 | ml_m5 | ml_c4 | ml_c5 | ml_p2 | ml_p3 | jetson_tx1 | jetson_tx2 | jetson_nano | rasp3b | deeplens | rk3399 | rk3288 | aisage | sbe_c | qcs605 | qcs603</code><br />
+Required: Yes</p>
+<p><strong>CreationTime</strong> <a name="SageMaker-Type-CompilationJobSummary-CreationTime"></a> The time when the model compilation job was created.<br />
+Type: Timestamp<br />
+Required: Yes</p>
+<p><strong>LastModifiedTime</strong> <a name="SageMaker-Type-CompilationJobSummary-LastModifiedTime"></a> The time when the model compilation job was last modified.<br />
+Type: Timestamp<br />
+Required: No</p>
+<p>For more information about using this API in one of the language-specific AWS SDKs, see the following: + <a href="https://docs.aws.amazon.com/goto/SdkForCpp/sagemaker-2017-07-24/CompilationJobSummary">AWS SDK for C++</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoV1/sagemaker-2017-07-24/CompilationJobSummary">AWS SDK for Go</a> + <a href="https://docs.aws.amazon.com/goto/SdkForGoPilot/sagemaker-2017-07-24/CompilationJobSummary">AWS SDK for Go - Pilot</a> + <a href="https://docs.aws.amazon.com/goto/SdkForJava/sagemaker-2017-07-24/CompilationJobSummary">AWS SDK for Java</a> + <a href="https://docs.aws.amazon.com/goto/SdkForRubyV2/sagemaker-2017-07-24/CompilationJobSummary">AWS SDK for Ruby V2</a></p>
+</body>
+</html>
