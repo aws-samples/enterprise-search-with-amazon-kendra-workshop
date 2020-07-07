@@ -32,13 +32,13 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Once in the S3 console, open the S3 bucket we have been using for this workshop. (e.g. gz-0206-kendra-demo-bucket)
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%203.56.41%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%203.56.41%20PM.png)
 
 - After you've browsed into the bucket, click the "Upload" button.
 
 - Drag the "metadata" folder from your workshop folder into the box.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%209.02.07%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%209.02.07%20PM.png)
 
 - Click Upload.
 
@@ -48,27 +48,27 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Type "kendra" into the search box, and select "Amazon Kendra" from the list below.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.01.40%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.01.40%20PM.png)
 
 - On the Kendra homepage, click on "Launch Amazon Kendra"
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.02.31%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.02.31%20PM.png)
 
 - Select kendra-demo-index from the list of indexes.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.53.20%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.53.20%20PM.png)
 
 - Before we can reindex our data, we will have to add the custom facet "tags" that is in our metadata files. If we try to reindex without adding the necessary facet data, it will fail.
 
 - On the left hand menu, click "Facet definition"
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.42.38%20PM%20-%20facet.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.42.38%20PM%20-%20facet.png)
 
 - Here we will be adding a custom facet "tags", and enabling the "category" facet. We will add the custom facet first.
 
 - In the "Index Fields" area, click "Add Field" on the top right.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.44.16%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.44.16%20PM.png)
 
 - In the "Field name" box, enter "tags"
 
@@ -80,7 +80,7 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 	- Searchable (allows field to participate in determining relevancy to the query)
 	- and Displayable (whether we are going to return this facey in the query response)
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.50.45%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.50.45%20PM.png)
 
 - Click Add
 
@@ -88,7 +88,7 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Inside of the "Index fields" section, find the "Field name" of "category" and check all 3 boxes next to it, similarly to what we did for our custom facet. (Facetable, Searchable, and Displayable).
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.53.17%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.53.17%20PM.png)
 
 - Click "Save" at the bottom of the section.
 
@@ -104,11 +104,11 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Enter "metadata/" or click "Browse S3" and select your bucket, check the box next to the "metadata" folder, and click "Choose"
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.00.29%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.00.29%20PM.png)
 
 - Click "Next"
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.01.20%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.01.20%20PM.png)
 
 - On the Review and Create Page, click "Confirm Changes"
 
@@ -116,33 +116,33 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Select the radio button next to demo-s3-instance, and click the "Sync now" button near the top of the section.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.03.44%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.03.44%20PM.png)
 
 - The "Current sync state" attribute will change to "Syncing". Wait for it to complete (around 1 minute).
 
 - If "Last sync status" is "Succeeded" and "Current sync state" goes to "Idle" then your synchronization job was a success.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.05.45%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.05.45%20PM.png)
 
 - Now we can go back to the search console and see our faceted search in action.
 
 - Click "Search Console" on the left hand navigation.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.42.38%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.42.38%20PM.png)
 
 - We added metadata for a few items, with 2 of them being the Machine Learning algorithms XGBoost and BlazingText. Lets try searching for "algorithms".
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.09.53%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.09.53%20PM.png)
 
 - Our search was successful, and we got a list of algorithm based results. Lets see what we have for facets.
 
 - You will notice that now on the left hand side of our results, there is a section that says "Filter search results" that we did not have previously. Click on it to expand the menu.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.10.09%20PM-2.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.10.09%20PM-2.png)
 
 - As you can see here, we have the "category" and "tags" facets that were part of our item metadata. Click on the "BlazingText" facet to filter down to just results for BlazingText.
 
-![](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.11.47%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.11.47%20PM.png)
 
 - On the following results page, we've filtered our result set down to only the items that are tagged with "BlazingText" in our item metadata. You can also see that the last article for BlazingText Hyperparameters is using our updated title metadata of "BlazingText Hyperparameters (overridden)".
 
