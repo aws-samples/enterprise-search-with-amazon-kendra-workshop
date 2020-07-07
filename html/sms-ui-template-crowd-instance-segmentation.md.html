@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-instance-segmentation</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-instance-segmentation<a name="sms-ui-template-crowd-instance-segmentation"></a></h1>
+</header>
+<p>A widget for identifying individual instances of specific objects within an image and creating a colored overlay for each labeled instance.</p>
+<p>The following attributes are supported by this element.</p>
+<p>The text to display above the image. This is typically a question or simple instruction for the worker.</p>
+<p>A JSON formatted array of strings, each of which is a label that a worker can assign to an instance of an object in the image. Workers can generate different overlay colors for each relevant instance by selecting “add instance” under the label in the tool.</p>
+<p>The name of this widget. It is used as a key for the labeling data in the form output.</p>
+<p>The URL of the image that is to be labeled.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: <a href="#instance-segmentation-regions-full-instructions">full-instructions</a>, <a href="#instance-segmentation-regions-short-instructions">short-instructions</a></p>
+<p>The following regions are supported by this element.</p>
+<p>General instructions about how to do image segmentation.</p>
+<p>Important task-specific instructions that are displayed in a prominent place.</p>
+<p>The following output is supported by this element.</p>
+<p>A JSON Object containing a Base64 encoded PNG of the labels.</p>
+<p>A JSON Array containing objects with the instance labels and colors. + <strong>color</strong> – The hexadecimal value of the label’s RGB color in the <code>labeledImage</code> PNG. + <strong>label</strong> – The label given to overlay(s) using that color. This value may repeat, because the different instances of the label are identified by their unique color.</p>
+<p>A JSON object that specifies the dimensions of the image that is being annotated by the worker. This object contains the following properties. + <strong>height</strong> – The height, in pixels, of the image. + <strong>width</strong> – The width, in pixels, of the image.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+The following is a sample of output from this element.</p>
+<pre><code>[
+  {
+    &quot;annotatedResult&quot;: {
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 533,
+        &quot;width&quot;: 800
+      },
+      &quot;instances&quot;: [
+        {
+          &quot;color&quot;: &quot;#1f77b4&quot;,
+          &quot;label&quot;: &quot;&lt;Label 1&gt;&quot;: 
+        },
+        {
+          &quot;color&quot;: &quot;#2ca02c&quot;,
+          &quot;label&quot;: &quot;&lt;Label 1&gt;&quot;: 
+        },
+        {
+          &quot;color&quot;: &quot;#ff7f0e&quot;,
+          &quot;label&quot;: &quot;&lt;Label 3&gt;&quot;: 
+        },
+      ],
+      &quot;labeledImage&quot;: {
+        &quot;pngImageData&quot;: &quot;&lt;Base-64 Encoded Data&gt;&quot;
+      }
+    }
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

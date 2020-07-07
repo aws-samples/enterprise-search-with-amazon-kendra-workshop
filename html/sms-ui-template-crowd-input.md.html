@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-input</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-input<a name="sms-ui-template-crowd-input"></a></h1>
+</header>
+<p>A box that accepts input data.</p>
+<p><strong>Cannot be self-closing</strong><br />
+Unlike the <code>input</code> element in the HTML standard, this element cannot be self-closed by putting a slash before the ending bracket, e.g. <code>&lt;crowd-input ... /&gt;</code>. It must be followed with a <code>&lt;/crowd-input&gt;</code> to close the element.</p>
+<p>The following attributes are supported by this element.</p>
+<p>A regular expression that is used with the <em>auto-validate</em> attribute to ignore non-matching characters as the worker types.</p>
+<p>When the value is set to true, the browser places focus inside the input area after loading. This way, the worker can start typing without having to select it first.</p>
+<p>A Boolean switch that, if present, turns on input validation. The behavior of the validator can be modified by the <em>error-message</em> and <em>allowed-pattern</em> attributes.</p>
+<p>A Boolean switch that, if present, displays the input area as disabled.</p>
+<p>The text to be displayed below the input field, on the left side, if validation fails.</p>
+<p>A string that is displayed inside a text field.</p>
+<p>This text shrinks and rises up above a text field when the worker starts typing in the field or when the <em>value</em> attribute is set.</p>
+<p>A maximum number of characters the input will accept. Input beyond this limit is ignored.</p>
+<p>A minimum length for the input in the field</p>
+<p>Sets the name of the input to be used in the DOM and the output of the form.</p>
+<p>A string value that is used as placeholder text, displayed until the worker starts entering data into the input, It is not used as a default value.</p>
+<p>A Boolean switch that, if present, requires the worker to provide input.</p>
+<p>Takes a string to set the HTML5 <code>input-type</code> behavior for the input. Examples include <code>file</code> and <code>date</code>.</p>
+<p>A preset that becomes the default if the worker does not provide input. The preset appears in a text field.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: none</p>
+<p>Provides a <code>name</code> string as the property name, and the text that was entered in the field as its value.</p>
+<p><strong>Example : Sample JSON Output</strong><br />
+The values for multiple elements are output in the same object, with their <code>name</code> attribute value as their property name. Elements with no input do not appear in the output. For example, let’s use three inputs:</p>
+<pre><code>&lt;crowd-input name=&quot;tag1&quot; label=&quot;Word/phrase 1&quot;&gt;&lt;/crowd-input&gt;
+&lt;crowd-input name=&quot;tag2&quot; label=&quot;Word/phrase 2&quot;&gt;&lt;/crowd-input&gt;
+&lt;crowd-input name=&quot;tag3&quot; label=&quot;Word/phrase 3&quot;&gt;&lt;/crowd-input&gt;</code></pre>
+<p>This is the output if only two have input:</p>
+<pre><code>[
+  {
+    &quot;tag1&quot;: &quot;blue&quot;,
+    &quot;tag2&quot;: &quot;red&quot;
+  }
+]</code></pre>
+<p>This means any code built to parse these results should be able to handle the presence or absence of each input in the answers.</p>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

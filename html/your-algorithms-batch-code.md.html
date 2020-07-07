@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Use Your Own Inference Code with Batch Transform</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Use Your Own Inference Code with Batch Transform<a name="your-algorithms-batch-code"></a></h1>
+</header>
+<p>This section explains how Amazon SageMaker interacts with a Docker container that runs your own inference code for batch transform. Use this information to write inference code and create a Docker image.</p>
+<p><strong>Topics</strong> + <a href="#your-algorithms-batch-code-run-image">How Amazon SageMaker Runs Your Inference Image</a> + <a href="#your-algorithms-batch-code-load-artifacts">How Amazon SageMaker Loads Your Model Artifacts</a> + <a href="#your-algorithms-batch-code-how-containe-serves-requests">How Containers Serve Requests</a> + <a href="#your-algorithms-batch-algo-ping-requests">How Your Container Should Respond to Health Check (Ping) Requests</a></p>
+<p>To configure a container to run as an executable, use an <code>ENTRYPOINT</code> instruction in a Dockerfile. Note the following: + For batch transforms, Amazon SageMaker runs the container as:</p>
+<pre><code>docker run image serve</code></pre>
+<p>Amazon SageMaker overrides default <code>CMD</code> statements in a container by specifying the <code>serve</code> argument after the image name. The <code>serve</code> argument overrides arguments that you provide with the <code>CMD</code> command in the Dockerfile.</p>
+<p>  + We recommend that you use the <code>exec</code> form of the <code>ENTRYPOINT</code> instruction:</p>
+<pre><code>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</code></pre>
+<p>For example:</p>
+<pre><code>ENTRYPOINT [&quot;python&quot;, &quot;k_means_inference.py&quot;]</code></pre>
+<p>  + Amazon SageMaker sets environment variables specified in <a href="API_CreateModel.md">CreateModel</a> and <a href="API_CreateTransformJob.md">CreateTransformJob</a> on your container. Additionally, the following environment variables will be populated: + <code>SAGEMAKER_BATCH</code> is always set to <code>true</code> when the container runs in Batch Transform. + <code>SAGEMAKER_MAX_PAYLOAD_IN_MB</code> is set to the largest size payload that will be sent to the container via HTTP. + <code>SAGEMAKER_BATCH_STRATEGY</code> will be set to <code>SINGLE_RECORD</code> when the container will be sent a single record per call to invocations and <code>MULTI_RECORD</code> when the container will get as many records as will fit in the payload. + <code>SAGEMAKER_MAX_CONCURRENT_TRANSFORMS</code> is set to the maximum number of <code>/invocations</code> requests that can be opened simultaneously. <strong>Note</strong><br />
+The last three environment variables come from the API call made by the user. If the user doesn’t set values for them, they aren’t passed. In that case, either the default values or the values requested by the algorithm (in response to the <code>/execution-parameters</code>) are used. + If you plan to use GPU devices for model inferences (by specifying GPU-based ML compute instances in your <code>CreateTransformJob</code> request), make sure that your containers are nvidia-docker compatible. Don’t bundle NVIDIA drivers with the image. For more information about nvidia-docker, see <a href="https://github.com/NVIDIA/nvidia-docker">NVIDIA/nvidia-docker</a>.</p>
+<p>  + You can’t use the <code>init</code> initializer as your entry point in Amazon SageMaker containers because it gets confused by the train and serve arguments.</p>
+<p>In a <a href="API_CreateModel.md">CreateModel</a> request, container definitions includes the <code>ModelDataUrl</code> parameter, which identifies the location in Amazon S3 where model artifacts are stored. When you use Amazon SageMaker to run inferences, it uses this information to determine where to copy the model artifacts from. It copies the artifacts to the <code>/opt/ml/model</code> directory in the Docker container for use by your inference code.</p>
+<p>The <code>ModelDataUrl</code> parameter must point to a tar.gz file. Otherwise, Amazon SageMaker can’t download the file. If you train a model in Amazon SageMaker, it saves the artifacts as a single compressed tar file in Amazon S3. If you train a model in another framework, you need to store the model artifacts in Amazon S3 as a compressed tar file. Amazon SageMaker decompresses this tar file and saves it in the <code>/opt/ml/model</code> directory in the container before the batch transform job starts.</p>
+<p>Containers must implement a web server that responds to invocations and ping requests on port 8080. For batch transforms,you have the option to set algorithms to implement execution-parameters requests to provide a dynamic runtime configuration to Amazon SageMaker. Amazon SageMaker uses the following endpoints: + <code>ping</code>—Used to periodically check the health of the container. Amazon SageMaker waits for an HTTP <code>200</code> status code and an empty body for a successful ping request before sending an invocations request. You might use a ping request to load a model into memory to generate inference when invocations requests are sent. + (Optional) <code>execution-parameters</code>—Allows the algorithm to provide the optimal tuning parameters for a job during runtime. Based on the memory and CPUs available for a container, the algorithm chooses the appropriate <code>MaxConcurrentTransforms</code>, <code>BatchStrategy</code>, and <code>MaxPayloadInMB</code> values for the job.</p>
+<p>Before calling the invocations request, Amazon SageMaker attempts to invoke the execution-parameters request. When you create a batch transform job, you can provide values for the <code>MaxConcurrentTransforms</code>, <code>BatchStrategy</code>, and <code>MaxPayloadInMB</code> parameters. Amazon SageMaker determines the values for these parameters using this order of precedence:</p>
+<ol type="1">
+<li><p>The parameter values that you provide when you create the <code>CreateTransformJob</code> request,</p></li>
+<li><p>The values that the model container returns when Amazon SageMaker invokes the execution-parameters endpoint</p></li>
+<li><p>The parameters default values, listed in the following table.<br />
+<a href="http://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-batch-code.html">[See the AWS documentation website for more details]</a></p></li>
+</ol>
+<p>The response for a <code>GET</code> execution-parameters request is a JSON object with keys for <code>MaxConcurrentTransforms</code>, <code>BatchStrategy</code>, and <code>MaxPayloadInMB</code> parameters. This is an example of a valid response:</p>
+<pre><code>{
+  “MaxConcurrentTransforms”: 8,
+  “BatchStrategy&quot;: &quot;MULTI_RECORD&quot;,
+  &quot;MaxPayloadInMB&quot;: 6
+}</code></pre>
+<p>The simplest requirement on the container is to respond with an HTTP 200 status code and an empty body. This indicates to Amazon SageMaker that the container is ready to accept inference requests at the <code>/invocations</code> endpoint.</p>
+<p>While the minimum bar is for the container to return a static 200, a container developer can use this functionality to perform deeper checks. The request timeout on <code>/ping</code> attempts is 2 seconds.</p>
+</body>
+</html>

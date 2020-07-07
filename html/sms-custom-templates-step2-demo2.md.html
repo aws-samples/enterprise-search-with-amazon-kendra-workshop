@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Demo Template: Labeling Intents with crowd-classifier</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Demo Template: Labeling Intents with <code>crowd-classifier</code><a name="sms-custom-templates-step2-demo2"></a></h1>
+</header>
+<p>If you choose a custom template, you’ll reach the <strong>Custom labeling task panel</strong>. There you can select from multiple starter templates that represent some of the more common tasks. The templates provide a starting point to work from in building your customized labeling task’s template.</p>
+<p>In this demonstration, you work with the <strong>Intent Detection</strong> template, which uses the <code>[crowd\-classifier](sms-ui-template-crowd-classifier.md)</code> element, and the AWS Lambda functions needed for processing your data before and after the task.</p>
+<p><strong>Topics</strong> + <a href="#sms-custom-templates-step2-demo2-base-template">Starter Intent Detection custom template</a> + <a href="#sms-custom-templates-step2-demo2-your-template">Your Intent Detection custom template</a> + <a href="#sms-custom-templates-step2-demo2-pre-lambda">Your pre-annotation Lambda function</a> + <a href="#sms-custom-templates-step2-demo2-post-lambda">Your post-annotation Lambda function</a> + <a href="#sms-custom-templates-step2-demo2-job-output">Your labeling job output</a></p>
+<p>This is the intent detection template that is provided as a starting point.</p>
+<pre><code>&lt;script src=&quot;https://assets.crowd.aws/crowd-html-elements.js&quot;&gt;&lt;/script&gt;
+
+&lt;crowd-form&gt;
+  &lt;crowd-classifier
+    name=&quot;intent&quot;
+    categories=&quot;{{ task.input.labels | to_json | escape }}&quot;
+    header=&quot;Pick the most relevant intention expressed by the below text&quot;
+  &gt;
+    &lt;classification-target&gt;
+      {{ task.input.utterance }}
+    &lt;/classification-target&gt;
+    
+    &lt;full-instructions header=&quot;Intent Detection Instructions&quot;&gt;
+        &lt;p&gt;Select the most relevant intention expressed by the text.&lt;/p&gt;
+        &lt;div&gt;
+           &lt;p&gt;&lt;strong&gt;Example: &lt;/strong&gt;I would like to return a pair of shoes&lt;/p&gt;
+           &lt;p&gt;&lt;strong&gt;Intent: &lt;/strong&gt;Return&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/full-instructions&gt;
+
+    &lt;short-instructions&gt;
+      Pick the most relevant intention expressed by the text
+    &lt;/short-instructions&gt;
+  &lt;/crowd-classifier&gt;
+&lt;/crowd-form&gt;</code></pre>
+<p>The custom templates use the <a href="https://shopify.github.io/liquid/">Liquid template language</a>, and each of the items between double curly braces is a variable. The pre-annotation AWS Lambda function should provide an object named <code>taskInput</code> and that object’s properties can be accessed as <code>{{ task.input.&lt;property name&gt; }}</code> in your template.</p>
+<p>In the starter template, there are two variables: the <code>task.input.labels</code> property in the <code>crowd-classifier</code> element opening tag and the <code>task.input.utterance</code> in the <code>classification-target</code> region’s content.</p>
+<p>Unless you need to offer different sets of labels with different utterances, avoiding a variable and just using text will save processing time and creates less possibility of error. The template used in this demonstration will remove that variable, but variables and filters like <code>to_json</code> are explained in more detail in the <a href=""><code>crowd-bounding-box</code> demonstration</a> article.</p>
+<p>Two parts of these custom elements that sometimes get overlooked are the <code>&lt;full-instructions&gt;</code> and <code>&lt;short-instructions&gt;</code> regions. Good instructions generate good results.</p>
+<p>In the elements that include these regions, the <code>&lt;short-instructions&gt;</code> appear automatically in the “Instructions” pane on the left of the worker’s screen. The <code>&lt;full-instructions&gt;</code> are linked from the “View full instructions” link near the top of that pane. Clicking the link opens a modal pane with more detailed instructions.</p>
+<p>You can not only use HTML, CSS, and JavaScript in these sections, you are encouraged to if you believe you can provide a strong set of instructions and examples that will help workers complete your tasks with better speed and accuracy.</p>
+<p><strong>Example Try out a sample with JSFiddle</strong><br />
+<a href="https://jsfiddle.net/MTGT_Fiddle_Manager/bjc0y1vd/35/">https://jsfiddle.net/MTGT_Fiddle_Manager/bjc0y1vd/35/</a><br />
+Try out an <a href="https://jsfiddle.net/MTGT_Fiddle_Manager/bjc0y1vd/35/">example <code>&lt;crowd-classifier&gt;</code> task</a>. The example is rendered by JSFiddle, therefore all the template variables are replaced with hard-coded values. Click the “View full instructions” link to see a set of examples with extended CSS styling. You can fork the project to experiment with your own changes to the CSS, adding sample images, or adding extended JavaScript functionality.</p>
+<p><strong>Example : Final Customized Intent Detection Template</strong><br />
+This uses the <a href="https://jsfiddle.net/MTGT_Fiddle_Manager/bjc0y1vd/35/">example <code>&lt;crowd-classifier&gt;</code> task</a>, but with a variable for the <code>&lt;classification-target&gt;</code>. If you are trying to keep a consistent CSS design among a series of different labeling jobs, you can include an external stylesheet using a <code>&lt;link rel...&gt;</code> element the same way you’d do in any other HTML document.</p>
+<pre><code>&lt;script src=&quot;https://assets.crowd.aws/crowd-html-elements.js&quot;&gt;&lt;/script&gt;
+
+&lt;crowd-form&gt;
+  &lt;crowd-classifier
+    name=&quot;intent&quot;
+    categories=&quot;[&#39;buy&#39;, &#39;eat&#39;, &#39;watch&#39;, &#39;browse&#39;, &#39;leave&#39;]&quot;
+    header=&quot;Pick the most relevant intent expressed by the text below&quot;
+  &gt;
+    &lt;classification-target&gt;
+      {{ task.input.source }}
+    &lt;/classification-target&gt;
+    
+    &lt;full-instructions header=&quot;Emotion Classification Instructions&quot;&gt;
+      &lt;p&gt;In the statements and questions provided in this exercise, what category of action is the speaker interested in doing?&lt;/p&gt;
+          &lt;table&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Example Utterance&lt;/th&gt;
+              &lt;th&gt;Good Choice&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td&gt;When is the Seahawks game on?&lt;/td&gt;
+              &lt;td&gt;
+                eat&lt;br&gt;
+                &lt;greenbg&gt;watch&lt;/greenbg&gt;
+                &lt;botchoice&gt;browse&lt;/botchoice&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Example Utterance&lt;/th&gt;
+              &lt;th&gt;Bad Choice&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td&gt;When is the Seahawks game on?&lt;/td&gt;
+              &lt;td&gt;
+                buy&lt;br&gt;
+                &lt;greenbg&gt;eat&lt;/greenbg&gt;
+                &lt;botchoice&gt;watch&lt;/botchoice&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/table&gt;
+    &lt;/full-instructions&gt;
+
+    &lt;short-instructions&gt;
+      What is the speaker expressing they would like to do next?
+    &lt;/short-instructions&gt;  
+  &lt;/crowd-classifier&gt;
+&lt;/crowd-form&gt;
+&lt;style&gt;
+  greenbg {
+    background: #feee23;
+    display: block;
+  }
+
+  table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0; 
+  }
+
+  th, tfoot, .fakehead {
+    background-color: #8888ee;
+    color: #f3f3f3;
+    font-weight: 700;
+  }
+
+  th, td, tfoot {
+      border: 1px solid blue;
+  }
+
+  th:first-child {
+    border-radius: 6px 0 0 0;
+  }
+
+  th:last-child {
+    border-radius: 0 6px 0 0;
+  }
+
+  th:only-child{
+    border-radius: 6px 6px 0 0;
+  }
+
+  tfoot:first-child {
+    border-radius: 0 0 6px 0;
+  }
+
+  tfoot:last-child {
+    border-radius: 0 0 0 6px;
+  }
+
+  tfoot:only-child{
+    border-radius: 6px 6px;
+  }
+
+  td {
+    padding-left: 15px ;
+    padding-right: 15px ;
+  }
+
+  botchoice {
+    display: block;
+    height: 17px;
+    width: 490px;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    padding-bottom: 20px;
+  }
+
+  botchoice:after {
+    position: absolute;
+    bottom: 0;
+    left: 0;  
+    height: 100%;
+    width: 100%;
+    content: &quot;&quot;;
+    background: linear-gradient(to top,
+       rgba(255,255,255, 1) 55%, 
+       rgba(255,255,255, 0) 100%
+    );
+    pointer-events: none; /* so the text is still selectable */
+  }
+&lt;/style&gt;</code></pre>
+<p><strong>Example : Your manifest file</strong><br />
+If you are preparing your manifest file manually for a text-classification task like this, have your data formatted in the following manner.</p>
+<pre><code>{&quot;source&quot;: &quot;Roses are red&quot;}
+{&quot;source&quot;: &quot;Violets are Blue&quot;}
+{&quot;source&quot;: &quot;Ground Truth is the best&quot;}
+{&quot;source&quot;: &quot;And so are you&quot;}</code></pre>
+<p>This differs from the manifest file used for the “<a href="sms-custom-templates-step2-demo1.md">Demo Template: Annotation of Images with <code>crowd-bounding-box</code></a>” demonstration in that <code>source-ref</code> was used as the property name instead of <code>source</code>. The use of <code>source-ref</code> designates S3 URIs for images or other files that must be converted to HTTP. Otherwise, <code>source</code> should be used like it is with the text strings above.</p>
+<p>As part of the job set-up, provide the ARN of an AWS Lambda that can be called to process your manifest entries and pass them to the template engine.</p>
+<p>This Lambda function is required to have one of the following four strings as part of the function name: <code>SageMaker</code>, <code>Sagemaker</code>, <code>sagemaker</code>, or <code>LabelingFunction</code>.</p>
+<p>This applies to both your pre-annotation and post-annotation Lambdas.</p>
+<p>When you’re using the console, if you have Lambdas that are owned by your account, a drop-down list of functions meeting the naming requirements will be provided to choose one.</p>
+<p>In this very basic sample, where you have only one variable, it’s primarily a pass-through function. Here’s a sample pre-labeling Lambda using Python 3.7.</p>
+<pre><code>import json
+
+def lambda_handler(event, context):
+    return {
+        &quot;taskInput&quot;:  event[&#39;dataObject&#39;]
+    }</code></pre>
+<p>The <code>dataObject</code> property of the <code>event</code> contains the properties from a data object in your manifest.</p>
+<p>In this demonstration, which is a simple pass through, you just pass that straight through as the <code>taskInput</code> value. If you add properties with those values to the <code>event['dataObject']</code> object, they will be available to your HTML template as Liquid variables with the format <code>{{ task.input.&lt;property name&gt; }}</code>.</p>
+<p>As part of the job set up, provide the ARN of an Lambda function that can be called to process the form data when a worker completes a task. This can be as simple or complex as you want. If you want to do answer-consolidation and scoring as data comes in, you can apply the scoring or consolidation algorithms of your choice. If you want to store the raw data for offline processing, that is an option.</p>
+<p><strong>Set permissions for your post-annotation Lambda function</strong><br />
+The annotation data will be in a file designated by the <code>s3Uri</code> string in the <code>payload</code> object. To process the annotations as they come in, even for a simple pass through function, you need to assign <code>S3ReadOnly</code> access to your Lambda so it can read the annotation files.<br />
+In the Console page for creating your Lambda, scroll to the <strong>Execution role</strong> panel. Select <strong>Create a new role from one or more templates</strong>. Give the role a name. From the <strong>Policy templates</strong> drop-down, choose <strong>Amazon S3 object read-only permissions</strong>. Save the Lambda and the role will be saved and selected.</p>
+<p>The following sample is for Python 3.7.</p>
+<pre><code>import json
+import boto3
+from urllib.parse import urlparse
+
+def lambda_handler(event, context):
+    consolidated_labels = []
+
+    parsed_url = urlparse(event[&#39;payload&#39;][&#39;s3Uri&#39;]);
+    s3 = boto3.client(&#39;s3&#39;)
+    textFile = s3.get_object(Bucket = parsed_url.netloc, Key = parsed_url.path[1:])
+    filecont = textFile[&#39;Body&#39;].read()
+    annotations = json.loads(filecont);
+    
+    for dataset in annotations:
+        for annotation in dataset[&#39;annotations&#39;]:
+            new_annotation = json.loads(annotation[&#39;annotationData&#39;][&#39;content&#39;])
+            label = {
+                &#39;datasetObjectId&#39;: dataset[&#39;datasetObjectId&#39;],
+                &#39;consolidatedAnnotation&#39; : {
+                &#39;content&#39;: {
+                    event[&#39;labelAttributeName&#39;]: {
+                        &#39;workerId&#39;: annotation[&#39;workerId&#39;],
+                        &#39;result&#39;: new_annotation,
+                        &#39;labeledContent&#39;: dataset[&#39;dataObject&#39;]
+                        }
+                    }
+                }
+            }
+            consolidated_labels.append(label)
+
+    return consolidated_labels</code></pre>
+<p>The post-annotation Lambda will often receive batches of task results in the event object. That batch will be the <code>payload</code> object the Lambda should iterate through.</p>
+<p>You’ll find the output of the job in a folder named after your labeling job in the target S3 bucket you specified. It will be in a subfolder named <code>manifests</code>.</p>
+<p>For an intent detection task, the output in the output manifest will look a bit like the demo below. The example has been cleaned up and spaced out to be easier for humans to read. The actual output will be more compressed for machine reading.</p>
+<p><strong>Example : JSON in your output manifest</strong></p>
+<pre><code>[
+  {
+    &quot;datasetObjectId&quot;:&quot;&lt;Number representing item&#39;s place in the manifest&gt;&quot;,
+     &quot;consolidatedAnnotation&quot;:
+     {
+       &quot;content&quot;:
+       {
+         &quot;&lt;name of labeling job&gt;&quot;:
+         {     
+           &quot;workerId&quot;:&quot;private.us-east-1.XXXXXXXXXXXXXXXXXXXXXX&quot;,
+           &quot;result&quot;:
+           {
+             &quot;intent&quot;:
+             {
+                 &quot;label&quot;:&quot;&lt;label chosen by worker&gt;&quot;
+             }
+           },
+           &quot;labeledContent&quot;:
+           {
+             &quot;content&quot;:&quot;&lt;text content that was labeled&gt;&quot;
+           }
+         }
+       }
+     }
+   },
+  &quot;datasetObjectId&quot;:&quot;&lt;Number representing item&#39;s place in the manifest&gt;&quot;,
+     &quot;consolidatedAnnotation&quot;:
+     {
+       &quot;content&quot;:
+       {
+         &quot;&lt;name of labeling job&gt;&quot;:
+         {     
+           &quot;workerId&quot;:&quot;private.us-east-1.6UDLPKQZHYWJQSCA4MBJBB7FWE&quot;,
+           &quot;result&quot;:
+           {
+             &quot;intent&quot;:
+             {
+                 &quot;label&quot;: &quot;&lt;label chosen by worker&gt;&quot;
+             }
+           },
+           &quot;labeledContent&quot;:
+           {
+             &quot;content&quot;: &quot;&lt;text content that was labeled&gt;&quot;
+           }
+         }
+       }
+     }
+   },
+     ...
+     ...
+     ...
+]</code></pre>
+<p>This should help you create and use your own custom template.</p>
+</body>
+</html>

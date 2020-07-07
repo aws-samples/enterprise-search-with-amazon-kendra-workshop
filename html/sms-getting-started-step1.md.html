@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 1: Before You Begin</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 1: Before You Begin<a name="sms-getting-started-step1"></a></h1>
+</header>
+<p>Before you begin using the Amazon SageMaker console to create a labeling job, you must set up the dataset for use. Do this:</p>
+<ol type="1">
+<li><p>Save two images at publicly available HTTP URLs. The images are used when creating instructions for completing a labeling task. The images should have an aspect ratio of around 2:1. For this exercise, the content of the images is not important.</p></li>
+<li><p>Create an Amazon S3 bucket to hold the input and output files. The bucket must be in the same Region where you are running Ground Truth. Make a note of the bucket name because you use it during step 2.</p></li>
+<li><p>Place 5–10 PNG images in the bucket.</p></li>
+<li><p>Create a manifest file for the dataset and store it in the S3 bucket. Use these steps:</p>
+<ol type="1">
+<li><p>Using a text editor, create a new text file.</p></li>
+<li><p>Add a line similar to the following for each image file in your dataset:</p>
+<pre><code>{&quot;source-ref&quot;: &quot;s3://bucket/path/imageFile.png&quot;}</code></pre>
+<p>Add one line for each PNG file in your S3 bucket.</p></li>
+<li><p>Save the file in the S3 bucket containing your source files. Record the name because you use it in step 2. <strong>Note</strong><br />
+It is not necessary to store the manifest file in the same bucket as the source file. You use the same bucket in this exercise because it is easier.</p></li>
+</ol>
+<p>For more information, see <a href="sms-data-input.md">Input Data</a>.</p></li>
+</ol>
+<p>Assign the following permissions policy to the user that is creating the labeling job:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;sagemakergroundtruth&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;cognito-idp:CreateGroup&quot;,
+                &quot;cognito-idp:CreateUserPool&quot;,
+                &quot;cognito-idp:CreateUserPoolDomain&quot;,
+                &quot;cognito-idp:AdminCreateUser&quot;,
+                &quot;cognito-idp:CreateUserPoolClient&quot;,
+                &quot;cognito-idp:AdminAddUserToGroup&quot;,
+                &quot;cognito-idp:DescribeUserPoolClient&quot;,
+                &quot;cognito-idp:DescribeUserPool&quot;,
+                &quot;cognito-idp:UpdateUserPool&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        }
+    ]
+}</code></pre>
+<p><a href="sms-getting-started-step2.md">Step 2: Create a Labeling Job</a></p>
+</body>
+</html>

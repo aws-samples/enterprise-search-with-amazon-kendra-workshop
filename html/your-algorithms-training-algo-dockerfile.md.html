@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How Amazon SageMaker Runs Your Training Image</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How Amazon SageMaker Runs Your Training Image<a name="your-algorithms-training-algo-dockerfile"></a></h1>
+</header>
+<p>To configure a Docker container to run as an executable, use an <code>ENTRYPOINT</code> instruction in a Dockerfile. Note the following: + For model training, Amazon SageMaker runs the container as follows:</p>
+<pre><code>docker run image train</code></pre>
+<p>Amazon SageMaker overrides any default <code>CMD</code> statement in a container by specifying the <code>train</code> argument after the image name. The <code>train</code> argument also overrides arguments that you provide using <code>CMD</code> in the Dockerfile.</p>
+<p>  + Use the <code>exec</code> form of the <code>ENTRYPOINT</code> instruction:</p>
+<pre><code>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;, ...]</code></pre>
+<p>For example:</p>
+<pre><code>ENTRYPOINT [&quot;python&quot;, &quot;k-means-algorithm.py&quot;]</code></pre>
+<p>The <code>exec</code> form of the <code>ENTRYPOINT</code> instruction starts the executable directly, not as a child of <code>/bin/sh</code>. This enables it to receive signals like <code>SIGTERM</code> and <code>SIGKILL</code> from Amazon SageMaker APIs. Note the following:</p>
+<p>  + The <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> API has a stopping condition that directs Amazon SageMaker to stop model training after a specific time.</p>
+<pre><code> </code></pre>
+<ul>
+<li><p>The <a href="API_StopTrainingJob.md">StopTrainingJob</a> API issues the equivalent of the <code>docker stop</code>, with a 2 minute timeout, command to gracefully stop the specified container:</p>
+<pre><code>docker stop -t120</code></pre>
+<p>The command attempts to stop the running container by sending a <code>SIGTERM</code> signal. After the 2 minute timeout, SIGKILL is sent and the containers are forcibly stopped. If the container handles the SIGTERM gracefully and exits within 120 seconds from receiving it, no SIGKILL is sent. <strong>Note</strong><br />
+If you want access to the intermediate model artifacts after Amazon SageMaker stops the training, add code to handle saving artifacts in your <code>SIGTERM</code> handler.</p></li>
+<li><p>If you plan to use GPU devices for model training, make sure that your containers are <code>nvidia-docker</code> compatible. Only the CUDA toolkit should be included on containers; don’t bundle NVIDIA drivers with the image. For more information about <code>nvidia-docker</code>, see <a href="https://github.com/NVIDIA/nvidia-docker">NVIDIA/nvidia-docker</a>.</p></li>
+<li><p>You can’t use the <code>tini</code> initializer as your entry point in Amazon SageMaker containers because it gets confused by the train and serve arguments.</p></li>
+<li><p><code>/opt/ml</code> and all sub-directories are reserved by Amazon SageMaker training. When building your algorithm’s docker image, please ensure you don’t place any data required by your algorithm under them as the data may no longer be visible during training.</p></li>
+</ul>
+</body>
+</html>

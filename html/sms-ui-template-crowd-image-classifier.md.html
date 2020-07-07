@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-image-classifier</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-image-classifier<a name="sms-ui-template-crowd-image-classifier"></a></h1>
+</header>
+<p>A widget for classifying an image, which can be a JPG, PNG, or GIF, with no size limit.</p>
+<p>The following attributes are required by this element.</p>
+<p>A JSON formatted array of strings, each of which is a category that a worker can assign to the image. You should include “other” as a category, so that the worker can provide an answer. You can specify up to 10 categories.</p>
+<p>The text to display above the image. This is typically a question or simple instruction for the worker.</p>
+<p>The name of this widget. It is used as a key for the widget’s input in the form output.</p>
+<p>The URL of the image to be classified.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: <a href="#image-classifier-regions-full-instructions">full-instructions</a>, <a href="#image-classifier-regions-short-instructions">short-instructions</a></p>
+<p>The following regions are required by this element.</p>
+<p>General instructions about how to do image classification.</p>
+<p>Important task-specific instructions that are displayed in a prominent place.</p>
+<p>The output of this element is a string that specifies one of the values defined in the <em>categories</em> attribute of the &lt;crowd-image-classifier&gt; element.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+The following is a sample of output from this element.</p>
+<pre><code>[
+  {
+    &quot;&lt;name&gt;&quot;: {
+      &quot;label&quot;: &quot;&lt;value&gt;&quot;
+    }
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Using Identity-based Policies (IAM Policies) for Amazon SageMaker</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Using Identity-based Policies (IAM Policies) for Amazon SageMaker<a name="using-identity-based-policies"></a></h1>
+</header>
+<p>This topic provides examples of identity-based policies that demonstrate how an account administrator can attach permissions policies to IAM identities (that is, users, groups, and roles) and thereby grant permissions to perform operations on Amazon SageMaker resources.</p>
+<p><strong>Important</strong><br />
+We recommend that you first review the introductory topics that explain the basic concepts and options available to manage access to your Amazon SageMaker resources. For more information, see <a href="access-control-overview.md">Overview of Managing Access Permissions to Your Amazon SageMaker Resources</a>.</p>
+<p><strong>Topics</strong> + <a href="#console-permissions">Permissions Required to Use the Amazon SageMaker Console</a> + <a href="#groundtruth-console-policy">Permissions Required to Use the Amazon SageMaker Ground Truth Console</a> + <a href="#access-policy-aws-managed-policies">AWS Managed (Predefined) Policies for Amazon SageMaker</a> + <a href="#access-tag-policy">Control Access to Amazon SageMaker Resources by Using Tags</a> + <a href="#api-access-policy">Control Access to the Amazon SageMaker API by Using Identity-based Policies</a></p>
+<p>The following is an example of a basic permissions policy:</p>
+<pre><code>{
+   &quot;Version&quot;: &quot;2012-10-17&quot;,
+   &quot;Statement&quot;: [
+      {
+      &quot;Sid&quot;: &quot;AllowCreate-Describe-Delete-Models&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+         &quot;sagemaker:CreateModel&quot;,
+         &quot;sagemaker:DescribeModel&quot;,
+         &quot;sagemaker:DeleteModel&quot;],
+      &quot;Resource&quot;: &quot;*&quot;
+      },
+      {
+      &quot;Sid&quot;: &quot;AdditionalIamPermission&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+         &quot;iam:PassRole&quot;],
+      &quot;Resource&quot;: &quot;arn:aws:iam::account-id:role/role-name&quot;
+      }
+   ]
+}</code></pre>
+<p>The policy has two statements: + The first statement grants permission for three Amazon SageMaker actions (<code>sagemaker:CreateModel</code>, <code>sagemaker:DescribeModel</code>, and <code>sagemaker:DeleteModel</code>) within an Amazon SageMaker notebook instance. Using the wildcard character (*) as the resource grants universal permissions for these actions across all AWS Regions and models owned by this account. + The second statement grants permission for the <code>iam:PassRole</code> action, which is needed for the Amazon SageMaker action <code>sagemaker:CreateModel</code>, which is allowed by the first statement.</p>
+<p>The policy doesn’t specify the <code>Principal</code> element because in an identity-based policy you don’t specify the principal who gets the permission. When you attach the policy to a user, the user is the implicit principal. When you attach a permissions policy to an IAM role, the principal identified in the role’s trust policy gets the permissions.</p>
+<p>For a table showing all of the Amazon SageMaker API operations and the resources that they apply to, see <a href="api-permissions-reference.md">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</a>.</p>
+<p>The permissions reference table lists the Amazon SageMaker API operations and shows the required permissions for each operation. For more information about Amazon SageMaker API operations, see <a href="api-permissions-reference.md">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</a>.</p>
+<p>To use the Amazon SageMaker console, you need to grant permissions for additional actions. Specifically, the console needs permissions that allow the <code>ec2</code> actions to display subnets, VPCs, and security groups. Optionally, the console needs permission to create <em>execution roles</em> for tasks such as <code>CreateNotebook</code>, <code>CreateTrainingJob</code>, and <code>CreateModel</code>. Grant these permissions with the following permissions policy:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        // SageMaker API&#39;s
+        {
+          &quot;Sid&quot;: &quot;SageMakerApis&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Action&quot;: [
+            &quot;sagemaker:*&quot;
+          ],
+          &quot;Resource&quot;: &quot;*&quot;
+        },
+        // Populate customer VPCs, Subnets, and Security Groups for Create forms
+        {
+          &quot;Sid&quot;: &quot;VpcConfigurationForCreateForms&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Action&quot;: [
+            &quot;ec2:DescribeVpcs&quot;,
+            &quot;ec2:DescribeSubnets&quot;,
+            &quot;ec2:DescribeSecurityGroups&quot;
+          ],
+          &quot;Resource&quot;: &quot;*&quot;
+        },
+        // Populate customer KMS keys for Create forms
+        {
+            &quot;Sid&quot;:&quot;KmsKeysForCreateForms&quot;,
+            &quot;Effect&quot;:&quot;Allow&quot;,
+            &quot;Action&quot;:[
+              &quot;kms:DescribeKey&quot;,
+              &quot;kms:ListAliases&quot;
+            ],
+            &quot;Resource&quot;:&quot;*&quot;
+        },
+        // View Subscriptions in AWS Marketplace for Algorithms and ModelPackages.
+        {
+          &quot;Sid&quot;: &quot;AccessAwsMarketplaceSubscritions&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Action&quot;: [
+            &quot;aws-marketplace:ViewSubscriptions&quot;
+          ],
+          &quot;Resource&quot;: &quot;*&quot;
+        },
+        // View and create CodeCommit Repositories
+        {
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Action&quot;: [
+            &quot;codecommit:BatchGetRepositories&quot;,
+            &quot;codecommit:CreateRepository&quot;,
+            &quot;codecommit:GetRepository&quot;,
+            &quot;codecommit:ListRepositories&quot;,
+            &quot;codecommit:ListBranches&quot;,
+            &quot;secretsmanager:CreateSecret&quot;,
+            &quot;secretsmanager:DescribeSecret&quot;,
+            &quot;secretsmanager:ListSecrets&quot;
+          ],
+          &quot;Resource&quot;: &quot;*&quot;
+        },
+        // List/create execution roles for Create forms
+        {
+          &quot;Sid&quot;:&quot;ListAndCreateExecutionRoles&quot;,
+          &quot;Effect&quot;:&quot;Allow&quot;,
+          &quot;Action&quot;:[
+            &quot;iam:ListRoles&quot;,
+            &quot;iam:CreateRole&quot;,
+            &quot;iam:CreateRole&quot;,
+            &quot;iam:CreatePolicy&quot;,
+            &quot;iam:AttachRolePolicy&quot;
+          ],
+          &quot;Resource&quot;:&quot;*&quot;
+        },
+        // Permissions required for ECR
+        {
+          &quot;Sid&quot;: &quot;DescribeECRMetaData&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Action&quot;: [
+              &quot;ecr:Describe*&quot;
+          ],
+          &quot;Resource&quot;: &quot;*&quot;
+        },
+        // PassRole permissions as required by CreateNotebookInstance, CreateTrainingJob, and CreateModel.
+        {
+          &quot;Sid&quot;: &quot;PassRoleForExecutionRoles&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Action&quot;: [
+            &quot;iam:PassRole&quot;
+          ],
+          &quot;Resource&quot;: &quot;*&quot;,
+          &quot;Condition&quot;: {
+            &quot;StringEquals&quot;: {
+                &quot;iam:PassedToService&quot;: &quot;sagemaker.amazonaws.com&quot;
+            }
+          }
+        }
+    ]
+}</code></pre>
+<p>To use the Amazon SageMaker Ground Truth console, you need to grant permissions for additional resources. Specifically, the console needs permissions for the AWS Marketplace to view subscriptions, Amazon Cognito operations to manage your private workforce, Amazon S3 actions for access to your input and output files, and AWS Lambda actions to list and invoke functions. Grant these permissions with the following permissions policy:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;GroundTruthConsole&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;aws-marketplace:DescribeListings&quot;,
+                &quot;aws-marketplace:ViewSubscriptions&quot;,
+                
+                &quot;cognito-idp:AdminAddUserToGroup&quot;,
+                &quot;cognito-idp:AdminCreateUser&quot;,
+                &quot;cognito-idp:AdminDeleteUser&quot;,
+                &quot;cognito-idp:AdminDisableUser&quot;,
+                &quot;cognito-idp:AdminEnableUser&quot;,
+                &quot;cognito-idp:AdminRemoveUserFromGroup&quot;,
+                &quot;cognito-idp:CreateGroup&quot;,
+                &quot;cognito-idp:CreateUserPool&quot;,
+                &quot;cognito-idp:CreateUserPoolClient&quot;,
+                &quot;cognito-idp:CreateUserPoolDomain&quot;,
+                &quot;cognito-idp:DescribeUserPool&quot;,
+                &quot;cognito-idp:DescribeUserPoolClient&quot;,
+                &quot;cognito-idp:ListGroups&quot;,
+                &quot;cognito-idp:ListIdentityProviders&quot;,
+                &quot;cognito-idp:ListUsers&quot;,
+                &quot;cognito-idp:ListUsersInGroup&quot;,
+                &quot;cognito-idp:ListUserPoolClients&quot;,
+                &quot;cognito-idp:ListUserPools&quot;,
+                &quot;cognito-idp:UpdateUserPool&quot;,
+                &quot;cognito-idp:UpdateUserPoolClient&quot;,
+                
+                &quot;groundtruthlabeling:DescribeConsoleJob&quot;,
+                &quot;groundtruthlabeling:ListDatasetObjects&quot;,
+                &quot;groundtruthlabeling:RunFilterOrSampleManifestJob&quot;,
+                &quot;groundtruthlabeling:RunGenerateManifestByCrawlingJob&quot;,
+                
+                &quot;lambda:InvokeFunction&quot;,
+                &quot;lambda:ListFunctions&quot;,
+                
+                &quot;s3:GetObject&quot;,
+                &quot;s3:PutObject&quot;,
+                &quot;s3:SelectObjectContent&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        }
+    ]
+}</code></pre>
+<p>AWS addresses many common use cases by providing standalone IAM policies that are created and administered by AWS. These AWS managed policies grant necessary permissions for common use cases so that you can avoid having to investigate which permissions are needed. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html#aws-managed-policies">AWS Managed Policies</a> in the <em>IAM User Guide</em>.</p>
+<p>The following AWS managed policies, which you can attach to users in your account, are specific to Amazon SageMaker: + <strong>AmazonSageMakerReadOnly</strong> – Grants read-only access to Amazon SageMaker resources. + <strong>AmazonSageMakerFullAccess</strong> – Grants full access to Amazon SageMaker resources and the supported operations. (This does not provide unrestricted S3 access, but supports buckets/objects with specific sagemaker tags.)</p>
+<p>The following AWS managed policies can also be attached to users in your account: + <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html#jf_administrator">AdministratorAccess</a> – Grants all actions for all AWS services and for all resources in the account. + <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html#jf_data-scientist">DataScientist</a> – Grants a wide range of permissions to cover most of the use cases (primarily for analytics and business intelligence) encountered by data scientists.</p>
+<p>You can review these permissions policies by signing in to the IAM console and searching for them.</p>
+<p>You can also create your own custom IAM policies to allow permissions for Amazon SageMaker actions and resources as you need them. You can attach these custom policies to the IAM users or groups that require them.</p>
+<p>Control access to groups of Amazon SageMaker resources by attaching tags to the resources and specifying <code>ResourceTag</code> conditions in IAM policies.</p>
+<p><strong>Note</strong><br />
+Tag-based policies do not work to restrict the following API calls:<br />
+ListAlgorithms ListCodeRepositories ListCompilationJobs ListEndpointConfigs ListEndpoints ListHyperparameterTuningJobs ListLabelingJobs ListLabelingJobsForWorkteam ListModelPackages ListModels ListNotebookInstanceLifecycleConfigs ListNotebookInstances ListSubscribedWorkteams ListTags ListTrainingJobs ListTrainingJobsForHyperParameterTuningJob ListTransformJobs ListWorkteams Search</p>
+<p>For example, suppose you’ve defined two different IAM groups, named <code>DevTeam1</code> and <code>DevTeam2</code>, in your AWS account. Suppose also that you’ve created 10 notebook instances, 5 of which are used for one project, and 5 of which are used for a second project. You want to allow members of <code>DevTeam1</code> to make API calls on notebook instances used for the first project, and members of <code>DevTeam2</code> to make API calls on notebook instances used for the second project.</p>
+<p>You can control access to API calls by completing the following steps:</p>
+<ol type="1">
+<li><p>Add a tag with the key <code>Project</code> and value <code>A</code> to the notebook instances used for the first project. For information about adding tags to Amazon SageMaker resources, see <a href="API_AddTags.md">AddTags</a>.</p></li>
+<li><p>Add a tag with the key <code>Project</code> and value <code>B</code> to the notebook instances used for the second project.</p></li>
+<li><p>Create an IAM policy with a <code>ResourceTag</code> condition that denies access to the notebook instances used for the second project, and attach that policy to <code>DevTeam1</code>. The following is an example of a policy that denies all API calls on any notebook instance that has a tag with a key of <code>Project</code> and a value of <code>B</code>:</p>
+<pre><code>{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;sagemaker:*&quot;,
+      &quot;Resource&quot;: &quot;*&quot;
+    },
+    {
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: &quot;sagemaker:*&quot;,
+      &quot;Resource&quot;: &quot;*&quot;,
+      &quot;Condition&quot;: {
+        &quot;StringEquals&quot;: {
+          &quot;sagemaker:ResourceTag/Project&quot;: &quot;B&quot;
+        }
+      }
+    },
+    {
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: [
+        &quot;sagemaker:CreateTags&quot;,
+        &quot;sagemaker:DeleteTags&quot;
+      ],
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
+}</code></pre>
+<p>For information about creating IAM policies and attaching them to identities, see <a href="https://docs.aws.amazon.com//IAM/latest/UserGuide/access_controlling.html">Controlling Access Using Policies</a> in the <em>AWS Identity and Access Management User Guide</em>.</p></li>
+<li><p>Create an IAM policy with a <code>ResourceTag</code> condition that denies access to the notebook instances used for the first project, and attach that policy to <code>DevTeam2</code>. The following is an example of a policy that denies all API calls on any notebook instance that has a tag with a key of <code>Project</code> and a value of <code>A</code>:</p>
+<pre><code>{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;*&quot;,
+      &quot;Resource&quot;: &quot;*&quot;
+    },
+    {
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: &quot;sagemaker:*&quot;,
+      &quot;Resource&quot;: &quot;*&quot;,
+      &quot;Condition&quot;: {
+        &quot;StringEquals&quot;: {
+          &quot;sagemaker:ResourceTag/Project&quot;: &quot;A&quot;
+        }
+      }
+    },
+    {
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: [
+        &quot;sagemaker:CreateTags&quot;,
+        &quot;sagemaker:DeleteTags&quot;
+      ],
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
+}</code></pre></li>
+</ol>
+<p>Require the presence or absence of specific tags or specific tag values by using <code>RequestTag</code> condition keys in an IAM policy. For example, if you want to require that every endpoint created by any member of an IAM group to be created with a tag with the key <code>environment</code> and value <code>dev</code>, create a policy as follows:</p>
+<pre><code>{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;*&quot;,
+      &quot;Resource&quot;: &quot;*&quot;
+    },
+    {
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: &quot;sagemaker:CreateEndpoint&quot;,
+      &quot;Resource&quot;: [
+        &quot;arn:aws:sagemaker:*:*:endpoint/*&quot;
+      ]
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;sagemaker:CreateEndpoint&quot;,
+      &quot;Resource&quot;: [
+        &quot;arn:aws:sagemaker:*:*:endpoint/*&quot;
+      ],
+      &quot;Condition&quot;: {
+        &quot;StringEquals&quot;: {
+          &quot;aws:RequestTag/environment&quot;: &quot;dev&quot;
+        }
+      }
+    }
+  ]
+}</code></pre>
+<p>You can add tags to a hyperparameter tuning job when you create the tuning job by specifying the tags as the <code>Tags</code> parameter when you call <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a>. If you do this, the tags you specify for the hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches.</p>
+<p>If you add tags to a hyperparameter tuning job by calling <a href="API_AddTags.md">AddTags</a>, the tags you add are also added to any training jobs that the hyperparameter tuning job launches after you call <code>AddTags</code>, but are not added to training jobs the hyperparameter tuning jobs launched before you called <code>AddTags</code>. Similarly, when you remove tags from a hyperparameter tuning job by calling <a href="API_DeleteTags.md">DeleteTags</a>, those tags are not removed from training jobs that the hyperparameter tuning job launched previously. Because of this, the tags associated with training jobs can be out of sync with the tags associated with the hyperparameter tuning job that launched them. If you use tags to control access to a hyperparameter tuning job and the training jobs it launches, you might want to keep the tags in sync. To make sure the tags associated with training jobs stay sync with the tags associated with the hyperparameter tuning job that launched them, first call <a href="API_ListTrainingJobsForHyperParameterTuningJob.md">ListTrainingJobsForHyperParameterTuningJob</a> for the hyperparameter tuning job to get a list of the training jobs that the hyperparameter tuning job launched. Then, call <code>AddTags</code> or <code>DeleteTags</code> for the hyperparameter tuning job and for each of the training jobs in the list of training jobs to add or delete the same set of tags for all of the jobs. The following Python example demonstrates this:</p>
+<pre><code>tuning_job_arn = smclient.describe_hyper_parameter_tuning_job(HyperParameterTuningJobName=&#39;MyTuningJob&#39;)[&#39;HyperParameterTuningJobArn&#39;]
+smclient.add_tags(ResourceArn=tuning_job_arn, Tags=[{&#39;Key&#39;:&#39;Env&#39;, &#39;Value&#39;:&#39;Dev&#39;}])
+training_jobs = smclient.list_training_jobs_for_hyper_parameter_tuning_job(
+    HyperParameterTuningJobName=&#39;MyTuningJob&#39;)[&#39;TrainingJobSummaries&#39;]
+    for training_job in training_jobs:
+       time.sleep(1) # Wait for 1 second between calls to avoid being throttled
+       smclient.add_tags(ResourceArn=training_job[&#39;TrainingJobArn&#39;], Tags=[{&#39;Key&#39;:&#39;Env&#39;, &#39;Value&#39;:&#39;Dev&#39;}])</code></pre>
+<p>To control access to Amazon SageMaker API calls and calls to Amazon SageMaker hosted endpoints, use identity-based IAM policies.</p>
+<p><strong>Topics</strong> + <a href="#api-access-policy-vpc">Restrict Access to Amazon SageMaker API and Runtime to Calls from Within Your VPC</a> + <a href="#api-ip-filter">Limit Access to Amazon SageMaker API and Runtime Calls by IP Address</a></p>
+<p>If you set up an interface endpoint in your VPC, individuals outside the VPC can still connect to the Amazon SageMaker API and runtime over the internet unless you attach an IAM policy that restricts access to calls coming from within the VPC to all users and groups that have access to your Amazon SageMaker resources. For information about creating a VPC interface endpoint for the Amazon SageMaker API and runtime, see <a href="interface-vpc-endpoint.md">Connect to Amazon SageMaker Through a VPC Interface Endpoint</a>.</p>
+<p><strong>Important</strong><br />
+If you apply an IAM policy similar to one of the following, users can’t access the specified Amazon SageMaker APIs through the console.</p>
+<p>To restrict access to only connections made from within your VPC, create an AWS Identity and Access Management policy that restricts access to only calls that come from within your VPC. Then add that policy to every AWS Identity and Access Management user, group, or role used to access the Amazon SageMaker API or runtime.</p>
+<p><strong>Note</strong><br />
+This policy allows connections only to callers within a subnet where you created an interface endpoint.</p>
+<pre><code>{
+    &quot;Id&quot;: &quot;api-example-1&quot;,
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Enable API Access&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;sagemaker:*
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;StringEquals&quot;: {
+                    &quot;aws:SourceVpc&quot;: &quot;vpc-111bbaaa&quot;
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>If you want to restrict access to the API to only calls made using the interface endpoint, use the <code>aws:SourceVpce</code> condition key instead of <code>aws:SourceVpc</code>:</p>
+<pre><code>{
+    &quot;Id&quot;: &quot;api-example-1&quot;,
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Enable API Access&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;sagemaker:CreatePresignedNotebookInstanceUrl&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;ForAllValues:StringEquals&quot;: {
+                    &quot;aws:sourceVpce&quot;: [
+                        &quot;vpce-111bbccc&quot;,
+                        &quot;vpce-111bbddd&quot;
+                    ]
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>To allow access to Amazon SageMaker API calls and runtime invocations only from IP addresses in a list that you specify, attach an IAM policy that denies access to the API unless the call comes from an IP address in the list to every AWS Identity and Access Management user, group, or role used to access the API or runtime. For information about creating IAM policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html">Creating IAM Policies</a> in the <em>AWS Identity and Access Management User Guide</em>. To specify the list of IP addresses that you want to have access to the API call, use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key. For information about IAM condition operators, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html">IAM JSON Policy Elements: Condition Operators</a> in the <em>AWS Identity and Access Management User Guide</em>. For information about IAM condition context keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html">AWS Global Condition Context Keys</a>.</p>
+<p>For example, the following policy allows access to the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> only from IP addresses in the ranges <code>192.0.2.0</code>-<code>192.0.2.255</code> and <code>203.0.113.0</code>-<code>203.0.113.255</code>:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Effect&quot;: &quot;Deny&quot;,
+            &quot;Action&quot;: &quot;sagemaker:CreateTrainingJob&quot;,
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;NotIpAddress&quot;: {
+                    &quot;aws:SourceIp&quot;: [
+                        &quot;192.0.2.0/24&quot;,
+                        &quot;203.0.113.0/24&quot;
+                    ]
+                }
+            }
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: &quot;sagemaker:CreateTrainingJob&quot;,
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;IpAddress&quot;: {
+                    &quot;aws:SourceIp&quot;: [
+                        &quot;192.0.2.0/24&quot;,
+                        &quot;203.0.113.0/24&quot;
+                    ]
+                }
+            }
+        }
+    ]
+}</code></pre>
+</body>
+</html>

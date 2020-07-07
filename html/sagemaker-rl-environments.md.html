@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>RL Environments in Amazon SageMaker</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">RL Environments in Amazon SageMaker<a name="sagemaker-rl-environments"></a></h1>
+</header>
+<p>Amazon SageMaker RL uses environments to mimic real-world scenarios. Given the current state of the environment and an action taken by the agent or agents, the simulator processes the impact of the action, and returns the next state and a reward. Simulators are useful in cases where it is not safe to train an agent in the real world (for example, flying a drone) or if the RL algorithm takes a long time to converge (for example, when playing chess).</p>
+<p>The following diagram shows an example of the interactions with a simulator for a car racing game.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/sagemaker-rl-flow.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p>The simulation environment consists of an agent and a simulator. Here, a convolutional neural network (CNN) consumes images from the simulator and generates actions to control the game controller. With multiple simulations, this environment generates training data of the form <code>state_t</code>, <code>action</code>, <code>state_t+1</code>, and <code>reward_t+1</code>. Defining the reward is not trivial and impacts the RL model quality. We want to provide a few examples of reward functions, but would like to make it user-configurable.</p>
+<p><strong>Topics</strong> + <a href="#sagemaker-rl-environments-gym">Use OpenAI Gym Interface for Environments in Amazon SageMaker RL</a> + <a href="#sagemaker-rl-environments-open">Use Open Source Environments</a> + <a href="#sagemaker-rl-environments-commercial">Use Commercial Environments</a></p>
+<p>To use OpenAI Gym environments in Amazon SageMaker RL, use the following API elements. For more information about OpenAI Gym, see <a href="https://gym.openai.com/docs/">https://gym.openai.com/docs/</a>. + <code>env.action_space</code>—Defines the actions the agent can take, specifies whether each action is continuous or discrete, and specifies the minimum and maximum if the action is continuous. + <code>env.observation_space</code>—Defines the observations the agent receives from the environment, as well as minimum and maximum for continuous observations. + <code>env.reset()</code>—Initializes a training episode. The <code>reset()</code> function returns the initial state of the environment, and the agent uses the initial state to take its first action. The action is then sent to the <code>step()</code> repeatedly until the episode reaches a terminal state. When <code>step()</code> returns <code>done = True</code>, the episode ends. The RL toolkit re-initializes the environment by calling <code>reset()</code>. + <code>step()</code>—Takes the agent action as input and outputs the next state of the environment, the reward, whether the episode has terminated, and an <code>info</code> dictionary to communicate debugging information. It is the responsibility of the environment to validate the inputs. + <code>env.render()</code>Used for environments that have visualization. The RL toolkit calls this function to capture visualizations of the environment after each call to the <code>step()</code> function.</p>
+<p>You can use open source environments, such as EnergyPlus and RoboSchool, in Amazon SageMaker RL by building your own container. For more information about EnergyPlus, see <a href="https://energyplus.net/">https://energyplus.net/</a>. For more information about RoboSchool, see <a href="https://github.com/openai/roboschool">https://github.com/openai/roboschool</a>. The HVAC and RoboSchool examples in the samples repository at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning</a> show how to build a custom container to use with Amazon SageMaker RL:</p>
+<p>You can use commercial environments, such as MATLAB and Simulink, in Amazon SageMaker RL by building your own container. You need to manage your own licenses.</p>
+</body>
+</html>

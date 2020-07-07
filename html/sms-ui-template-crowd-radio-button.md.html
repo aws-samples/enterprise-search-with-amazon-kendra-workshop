@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-radio-button</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-radio-button<a name="sms-ui-template-crowd-radio-button"></a></h1>
+</header>
+<p>A button that can be either checked or unchecked. When radio buttons are inside a radio group, exactly one radio button in the group can be checked at any time.</p>
+<p>The following attributes are supported by this element.</p>
+<p>A Boolean switch that, if present, displays the radio button as checked.</p>
+<p>A Boolean switch that, if present, displays the button as disabled and prevents it from being checked.</p>
+<p>A string that is used to identify the answer submitted by the worker. This value will match a key in the JSON object that specifies the answer.</p>
+<p><strong>Note</strong><br />
+If you use the buttons outside of a <a href="sms-ui-template-crowd-radio-group.md">crowd-radio-group</a> element, but with the same <code>name</code> string and different <code>value</code> strings, the <code>name</code> object in the output will contain a Boolean value for each <code>value</code> string. To ensure that only one button in a group is selected, make them children of a <a href="sms-ui-template-crowd-radio-group.md">crowd-radio-group</a> element and use different name values.</p>
+<p>A property name for the element’s boolean value. If not specified, it uses “on” as the default, e.g. <code>{ "&lt;name&gt;": { "&lt;value&gt;": &lt;true or false&gt; } }</code>.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-radio-group.md">crowd-radio-group</a> + <strong>Child elements</strong>: none</p>
+<p>Outputs an object with the following pattern: <code>{ "&lt;name&gt;": { "&lt;value&gt;": &lt;true or false&gt; } }</code>. If you use the buttons outside of a <a href="sms-ui-template-crowd-radio-group.md">crowd-radio-group</a> element, but with the same <code>name</code> string and different <code>value</code> strings, the name object will contain a Boolean value for each <code>value</code> string. To ensure that only one in a group of buttons is selected, make them children of a <a href="sms-ui-template-crowd-radio-group.md">crowd-radio-group</a> element and use different name values.</p>
+<p><strong>Example Sample output of this element</strong></p>
+<pre><code>[
+  {
+    &quot;btn1&quot;: {
+      &quot;yes&quot;: true
+    },
+    &quot;btn2&quot;: {
+      &quot;no&quot;: false
+    }
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

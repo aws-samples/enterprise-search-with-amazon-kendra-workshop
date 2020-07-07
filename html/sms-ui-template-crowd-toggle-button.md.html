@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-toggle-button</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-toggle-button<a name="sms-ui-template-crowd-toggle-button"></a></h1>
+</header>
+<p>A button that acts as an ON/OFF switch, toggling a state.</p>
+<p>The following attributes are supported by this element.</p>
+<p>A Boolean switch that, if present, displays the button switched to the ON position.</p>
+<p>A Boolean switch that, if present, displays the button as disabled and prevents toggling.</p>
+<p>When in an off position, a button using this attribute, will display in an alert color. The standard is red, but may be changed in CSS. When toggled on, the button will display in the same color as other buttons in the on position.</p>
+<p>A string that is used to identify the answer submitted by the worker. This value matches a key in the JSON object that specifies the answer.</p>
+<p>A Boolean switch that, if present, requires the worker to provide input.</p>
+<p>A value used in the output as the property name for the element’s Boolean state. Defaults to “on” if not provided.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: none</p>
+<p>This element outputs the <code>name</code> as the name of an object, containing the <code>value</code> as a property name and the element’s state as Boolean value for the property. If no value for the element is specified, the property name defaults to “on.”</p>
+<p><strong>Example Sample output for this element</strong></p>
+<pre><code>[
+  {
+    &quot;theToggler&quot;: {
+      &quot;on&quot;: true
+    }
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

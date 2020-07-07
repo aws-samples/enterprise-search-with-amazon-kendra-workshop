@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune a Sequence-to-Sequence Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune a Sequence-to-Sequence Model<a name="seq-2-seq-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The sequence to sequence algorithm reports three metrics that are computed during training. Choose one of them as an objective to optimize when tuning the hyperparameter values.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>validation:accuracy</td>
+<td>Accuracy computed on the validation dataset.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:bleu</td>
+<td><a href="https://en.wikipedia.org/wiki/BLEU">Bleu﻿</a> score computed on the validation dataset. Because BLEU computation is expensive, you can choose to compute BLEU on a random subsample of the validation dataset to speed up the overall training process. Use the <code>bleu_sample_size</code> parameter to specify the subsample.</td>
+<td>Maximize</td>
+</tr>
+<tr class="odd">
+<td>validation:perplexity</td>
+<td><a href="https://en.wikipedia.org/wiki/Perplexity">Perplexity</a>, is a loss function computed on the validation dataset. Perplexity measures the cross-entropy between an empirical sample and the distribution predicted by a model and so provides a measure of how well a model predicts the sample values, Models that are good at predicting a sample have a low perplexity.</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>You can tune the following hyperparameters for the Amazon SageMaker Sequence to Sequence algorithm. The hyperparameters that have the greatest impact on sequence to sequence objective metrics are: <code>batch_size</code>, <code>optimizer_type</code>, <code>learning_rate</code>, <code>num_layers_encoder</code>, and <code>num_layers_decoder</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_layers_encoder</td>
+<td>IntegerParameterRange</td>
+<td>[1-10]</td>
+</tr>
+<tr class="even">
+<td>num_layers_decoder</td>
+<td>IntegerParameterRange</td>
+<td>[1-10]</td>
+</tr>
+<tr class="odd">
+<td>batch_size</td>
+<td>CategoricalParameterRange</td>
+<td>[16,32,64,128,256,512,1024,2048]</td>
+</tr>
+<tr class="even">
+<td>optimizer_type</td>
+<td>CategoricalParameterRange</td>
+<td>[‘adam’, ‘sgd’, ‘rmsprop’]</td>
+</tr>
+<tr class="odd">
+<td>weight_init_type</td>
+<td>CategoricalParameterRange</td>
+<td>[‘xavier’, ‘uniform’]</td>
+</tr>
+<tr class="even">
+<td>weight_init_scale</td>
+<td>ContinuousParameterRange</td>
+<td>For the xavier type: MinValue: 2.0, MaxValue: 3.0 For the uniform type: MinValue: -1.0, MaxValue: 1.0</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.00005, MaxValue: 0.2</td>
+</tr>
+<tr class="even">
+<td>weight_decay</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 0.1</td>
+</tr>
+<tr class="odd">
+<td>momentum</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.5, MaxValue: 0.9</td>
+</tr>
+<tr class="even">
+<td>clip_gradient</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1.0, MaxValue: 5.0</td>
+</tr>
+<tr class="odd">
+<td>rnn_num_hidden</td>
+<td>CategoricalParameterRange</td>
+<td>Applicable only to recurrent neural networks (RNNs). [128,256,512,1024,2048]</td>
+</tr>
+<tr class="even">
+<td>cnn_num_hidden</td>
+<td>CategoricalParameterRange</td>
+<td>Applicable only to convolutional neural networks (CNNs). [128,256,512,1024,2048]</td>
+</tr>
+<tr class="odd">
+<td>num_embed_source</td>
+<td>IntegerParameterRange</td>
+<td>[256-512]</td>
+</tr>
+<tr class="even">
+<td>num_embed_target</td>
+<td>IntegerParameterRange</td>
+<td>[256-512]</td>
+</tr>
+<tr class="odd">
+<td>embed_dropout_source</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 0.5</td>
+</tr>
+<tr class="even">
+<td>embed_dropout_target</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 0.5</td>
+</tr>
+<tr class="odd">
+<td>rnn_decoder_hidden_dropout</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 0.5</td>
+</tr>
+<tr class="even">
+<td>cnn_hidden_dropout</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 0.5</td>
+</tr>
+<tr class="odd">
+<td>lr_scheduler_type</td>
+<td>CategoricalParameterRange</td>
+<td>[‘plateau_reduce’, ‘fixed_rate_inv_t’, ‘fixed_rate_inv_sqrt_t’]</td>
+</tr>
+<tr class="even">
+<td>plateau_reduce_lr_factor</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.1, MaxValue: 0.5</td>
+</tr>
+<tr class="odd">
+<td>plateau_reduce_lr_threshold</td>
+<td>IntegerParameterRange</td>
+<td>[1-5]</td>
+</tr>
+<tr class="even">
+<td>fixed_rate_lr_half_life</td>
+<td>IntegerParameterRange</td>
+<td>[10-30]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

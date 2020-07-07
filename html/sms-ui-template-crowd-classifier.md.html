@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-classifier</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-classifier<a name="sms-ui-template-crowd-classifier"></a></h1>
+</header>
+<p>A widget for classifying non-image content, such as audio, video, or text.</p>
+<p>The following attributes are supported by this element.</p>
+<p>A JSON formatted array of strings, each of which is a category that a worker can assign to the to the text. You should include “other” as a category, otherwise the worker my not be able to provide an answer.</p>
+<p>The text to display above the image. This is typically a question or simple instruction for the worker.</p>
+<p>The name of this widget. It is used as a key for the widget’s input in the form output.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: <a href="#crowd-classifier-regions-classification-target">classification-target</a>, <a href="#crowd-classifier-regions-full-instructions">full-instructions</a>, <a href="#crowd-classifier-regions-short-instructions">short-instructions</a></p>
+<p>The following regions are supported by this element.</p>
+<p>The content to be classified by the worker. This can be plain text or HTML. Examples of how the HTML can be used include <em>but are not limited to</em> embedding a video or audio player, embedding a PDF, or performing a comparison of two or more images.</p>
+<p>General instructions about how to do text classification.</p>
+<p>Important task-specific instructions that are displayed in a prominent place.</p>
+<p>The output of this element is an object using the specified <code>name</code> value as a property name, and a string from the <code>categories</code> as the property’s value.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+The following is a sample of output from this element.</p>
+<pre><code>[
+  {
+    &quot;&lt;name&gt;&quot;: {
+      &quot;label&quot;: &quot;&lt;value&gt;&quot;
+    }
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

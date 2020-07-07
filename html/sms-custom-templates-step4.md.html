@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Custom Workflows via the API</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Custom Workflows via the API<a name="sms-custom-templates-step4"></a></h1>
+</header>
+<p>When you have created your custom UI template (Step 2) and processing Lambda functions (Step 3), you should place the template in an Amazon S3 bucket with a file name format of: <code>&lt;FileName&gt;.liquid.html</code>.</p>
+<p>Use the <a href="API_CreateLabelingJob.md">CreateLabelingJob</a> action to configure your task. You’ll use the location of a custom template (<a href="sms-custom-templates-step2.md">Step 2: Creating your custom labeling task template</a>) stored in a <code>&lt;filename&gt;.liquid.html</code> file on S3 as the value for the <code>UiTemplateS3Uri</code> field in the <code>[UiConfig](API_UiConfig.md)</code> object within the <code>[HumanTaskConfig](API_HumanTaskConfig.md)</code> object.</p>
+<p>For the AWS Lambda tasks described in <a href="sms-custom-templates-step3.md">Step 3: Processing with AWS Lambda</a>, the post-annotation task’s ARN will be used as the value for the <code>AnnotationConsolidationLambdaArn</code> field, and the pre-annotation task will be used as the value for the <code>PreHumanTaskLambdaArn.</code></p>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>XGBoost Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">XGBoost Hyperparameters<a name="xgboost_hyperparameters"></a></h1>
+</header>
+<p>The following table contains the hyperparameters for the XGBoost algorithm. These are parameters that are set by users to facilitate the estimation of model parameters from data. The required hyperparameters that must be set are listed first, in alphabetical order. The optional hyperparameters that can be set are listed next, also in alphabetical order. The Amazon SageMaker XGBoost algorithm is an implementation of the open-source XGBoost package. Currently Amazon SageMaker supports version 0.72. For more detail about hyperparameter configuration for this version of XGBoost, see <a href="https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst">XGBoost Parameters</a>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_class</td>
+<td>The number of classes. <strong>Required</strong> if <code>objective</code> is set to <em>multi:softmax</em> or <em>multi:softprob</em>. Valid values: integer</td>
+</tr>
+<tr class="even">
+<td>num_round</td>
+<td>The number of rounds to run the training. <strong>Required</strong> Valid values: integer</td>
+</tr>
+<tr class="odd">
+<td>alpha</td>
+<td>L1 regularization term on weights. Increasing this value makes models more conservative. <strong>Optional</strong> Valid values: float Default value: 1</td>
+</tr>
+<tr class="even">
+<td>base_score</td>
+<td>The initial prediction score of all instances, global bias. <strong>Optional</strong> Valid values: float Default value: 0.5</td>
+</tr>
+<tr class="odd">
+<td>booster</td>
+<td>Which booster to use. The <code>gbtree</code> and <code>dart</code> values use a tree-based model, while <code>gblinear</code> uses a linear function. <strong>Optional</strong> Valid values: String. One of <code>gbtree</code>, <code>gblinear</code>, or <code>dart</code>. Default value: <code>gbtree</code></td>
+</tr>
+<tr class="even">
+<td>colsample_bylevel</td>
+<td>Subsample ratio of columns for each split, in each level. <strong>Optional</strong> Valid values: Float. Range: [0,1]. Default value: 1</td>
+</tr>
+<tr class="odd">
+<td>colsample_bytree</td>
+<td>Subsample ratio of columns when constructing each tree. <strong>Optional</strong> Valid values: Float. Range: [0,1]. Default value: 1</td>
+</tr>
+<tr class="even">
+<td>csv_weights</td>
+<td>When this flag is enabled, XGBoost differentiates the importance of instances for csv input by taking the second column (the column after labels) in training data as the instance weights. <strong>Optional</strong> Valid values: 0 or 1 Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_rounds</td>
+<td>The model trains until the validation score stops improving. Validation error needs to decrease at least every <code>early_stopping_rounds</code> to continue training. Amazon SageMaker hosting uses the best model for inference. <strong>Optional</strong> Valid values: integer Default value: -</td>
+</tr>
+<tr class="even">
+<td>eta</td>
+<td>Step size shrinkage used in updates to prevent overfitting. After each boosting step, you can directly get the weights of new features. The <code>eta</code> parameter actually shrinks the feature weights to make the boosting process more conservative. <strong>Optional</strong> Valid values: Float. Range: [0,1]. Default value: 0.3</td>
+</tr>
+<tr class="odd">
+<td>eval_metric</td>
+<td>Evaluation metrics for validation data. A default metric is assigned according to the objective:<a href="http://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html">[See the AWS documentation website for more details]</a> For a list of valid inputs, see <a href="https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst">XGBoost Parameters</a>. <strong>Optional</strong> Valid values: string Default value: Default according to objective.</td>
+</tr>
+<tr class="even">
+<td>gamma</td>
+<td>Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger, the more conservative the algorithm is. <strong>Optional</strong> Valid values: Float. Range: [0,∞). Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>grow_policy</td>
+<td>Controls the way that new nodes are added to the tree. Currently supported only if <code>tree_method</code> is set to <code>hist</code>. <strong>Optional</strong> Valid values: String. Either <code>depthwise</code> or <code>lossguide</code>. Default value: <code>depthwise</code></td>
+</tr>
+<tr class="even">
+<td>lambda</td>
+<td>L2 regularization term on weights. Increasing this value makes models more conservative. <strong>Optional</strong> Valid values: float Default value: 1</td>
+</tr>
+<tr class="odd">
+<td>lambda_bias</td>
+<td>L2 regularization term on bias. <strong>Optional</strong> Valid values: Float. Range: [0.0, 1.0]. Default value: 0</td>
+</tr>
+<tr class="even">
+<td>max_bin</td>
+<td>Maximum number of discrete bins to bucket continuous features. Used only if <code>tree_method</code> is set to <code>hist</code>. <strong>Optional</strong> Valid values: integer Default value: 256</td>
+</tr>
+<tr class="odd">
+<td>max_delta_step</td>
+<td>Maximum delta step allowed for each tree’s weight estimation. When a positive integer is used, it helps make the update more conservative. The preferred option is to use it in logistic regression. Set it to 1-10 to help control the update. <strong>Optional</strong> Valid values: Integer. Range: [0,∞). Default value: 0</td>
+</tr>
+<tr class="even">
+<td>max_depth</td>
+<td>Maximum depth of a tree. Increasing this value makes the model more complex and likely to be overfitted. 0 indicates no limit. A limit is required when <code>grow_policy</code>=<code>depth-wise</code>. <strong>Optional</strong> Valid values: Integer. Range: [0,∞) Default value: 6</td>
+</tr>
+<tr class="odd">
+<td>max_leaves</td>
+<td>Maximum number of nodes to be added. Relevant only if <code>grow_policy</code> is set to <code>lossguide</code>. <strong>Optional</strong> Valid values: integer Default value: 0</td>
+</tr>
+<tr class="even">
+<td>min_child_weight</td>
+<td>Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than <code>min_child_weight</code>, the building process gives up further partitioning. In linear regression models, this simply corresponds to a minimum number of instances needed in each node. The larger the algorithm, the more conservative it is. <strong>Optional</strong> Valid values: Float. Range: [0,∞). Default value: 1</td>
+</tr>
+<tr class="odd">
+<td>normalize_type</td>
+<td>Type of normalization algorithm. <strong>Optional</strong> Valid values: Either <em>tree</em> or <em>forest</em>. Default value: <em>tree</em></td>
+</tr>
+<tr class="even">
+<td>nthread</td>
+<td>Number of parallel threads used to run <em>xgboost</em>. <strong>Optional</strong> Valid values: integer Default value: Maximum number of threads.</td>
+</tr>
+<tr class="odd">
+<td>objective</td>
+<td>Specifies the learning task and the corresponding learning objective. Examples: <code>reg:linear</code>, <code>reg:logistic</code>, <code>multi:softmax</code>. For a full list of valid inputs, refer to <a href="https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst">XGBoost Parameters</a>. <strong>Optional</strong> Valid values: string Default value: <code>reg:linear</code></td>
+</tr>
+<tr class="even">
+<td>one_drop</td>
+<td>When this flag is enabled, at least one tree is always dropped during the dropout. <strong>Optional</strong> Valid values: 0 or 1 Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>process_type</td>
+<td>The type of boosting process to run. <strong>Optional</strong> Valid values: String. Either <code>default</code> or <code>update</code>. Default value: <code>default</code></td>
+</tr>
+<tr class="even">
+<td>rate_drop</td>
+<td>The dropout rate that specifies the fraction of previous trees to drop during the dropout. <strong>Optional</strong> Valid values: Float. Range: [0.0, 1.0]. Default value: 0.0</td>
+</tr>
+<tr class="odd">
+<td>refresh_leaf</td>
+<td>This is a parameter of the ‘refresh’ updater plugin. When set to <code>true</code> (1), tree leaves and tree node stats are updated. When set to <code>false</code>(0), only tree node stats are updated. <strong>Optional</strong> Valid values: 0/1 Default value: 1</td>
+</tr>
+<tr class="even">
+<td>sample_type</td>
+<td>Type of sampling algorithm. <strong>Optional</strong> Valid values: Either <code>uniform</code> or <code>weighted</code>. Default value: <code>uniform</code></td>
+</tr>
+<tr class="odd">
+<td>scale_pos_weight</td>
+<td>Controls the balance of positive and negative weights. It’s useful for unbalanced classes. A typical value to consider: <code>sum(negative cases)</code> / <code>sum(positive cases)</code>. <strong>Optional</strong> Valid values: float Default value: 1</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Random number seed. <strong>Optional</strong> Valid values: integer Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>silent</td>
+<td>0 means print running messages, 1 means silent mode. Valid values: 0 or 1 <strong>Optional</strong> Default value: 0</td>
+</tr>
+<tr class="even">
+<td>sketch_eps</td>
+<td>Used only for approximate greedy algorithm. This translates into O(1 / <code>sketch_eps</code>) number of bins. Compared to directly select number of bins, this comes with theoretical guarantee with sketch accuracy. <strong>Optional</strong> Valid values: Float, Range: [0, 1]. Default value: 0.03</td>
+</tr>
+<tr class="odd">
+<td>skip_drop</td>
+<td>Probability of skipping the dropout procedure during a boosting iteration. <strong>Optional</strong> Valid values: Float. Range: [0.0, 1.0]. Default value: 0.0</td>
+</tr>
+<tr class="even">
+<td>subsample</td>
+<td>Subsample ratio of the training instance. Setting it to 0.5 means that XGBoost randomly collects half of the data instances to grow trees. This prevents overfitting. <strong>Optional</strong> Valid values: Float. Range: [0,1]. Default value: 1</td>
+</tr>
+<tr class="odd">
+<td>tree_method</td>
+<td>The tree construction algorithm used in XGBoost. <strong>Optional</strong> Valid values: One of <code>auto</code>, <code>exact</code>, <code>approx</code>, or <code>hist</code>. Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>tweedie_variance_power</td>
+<td>Parameter that controls the variance of the Tweedie distribution. <strong>Optional</strong> Valid values: Float. Range: (1, 2). Default value: 1.5</td>
+</tr>
+<tr class="odd">
+<td>updater</td>
+<td>A comma-separated string that defines the sequence of tree updaters to run. This provides a modular way to construct and to modify the trees. For a full list of valid inputs, please refer to <a href="https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst">XGBoost Parameters</a>. <strong>Optional</strong> Valid values: comma-separated string. Default value: <code>grow_colmaker</code>, prune</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

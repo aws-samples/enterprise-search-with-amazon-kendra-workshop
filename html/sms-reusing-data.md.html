@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Chaining labeling jobs</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Chaining labeling jobs<a name="sms-reusing-data"></a></h1>
+</header>
+<p>Amazon SageMaker Ground Truth can reuse datasets from prior jobs in two ways: cloning and chaining.</p>
+<p>Cloning is a relatively straightforward operation. Cloning copies the set-up of a prior labeling job and allows you to make additional changes, before setting it to run.</p>
+<p>Chaining is a more complex operation. Chaining uses not only the setup of the prior job, but the results. This allows you to continue an incomplete job,and add labels or data objects to a completed job.</p>
+<p>When it comes to the data being processed: + <strong>Cloning</strong> — uses the prior job’s <em>input</em> manifest as the new job’s input manifest. + <strong>Chaining</strong> — uses the prior job’s <em>output</em> manifest as the new job’s input manifest.</p>
+<p>Some situations where chaining is useful include: + Continue a labeling job that was manually stopped. + Continue a labeling job that failed mid-job, with issues fixed.. + Switch to automated labeling after manually labeling part of a job (or vice-versa). + Add more data objects to a completed job and start the job from there. + Add another annotation to a completed job. For example, you have a collection of phrases labeled for topic, then want to run the set again, categorizing them by the topic’s implied audience.</p>
+<p>In Amazon SageMaker Ground Truth you can configure a chained labeling job via either the console or API.</p>
+<p>The label attribute name (<code>LabelAttributeName</code> in the API) is a string used as the key for the key-value pair formed with the label that a worker assigns to the data object.</p>
+<p>There are a few rules for the label attribute name. + It cannot end with <code>-metadata</code>. + The names <code>source</code> and <code>source-ref</code> are reserved and cannot be used. + Semantic-segmentation labeling jobs require it to end with <code>-ref</code>. All other labeling jobs require it to <em>not</em> end with <code>-ref</code>. The adding of <code>-ref</code> is managed automatically for you in jobs configured via the console. + If you’re using the same label attribute name from the originating job and you configure the chained job to use auto-labeling, then if it had been in auto-labeling mode at any point, the model from the originating job is used.</p>
+<p>In an output manifest, it can appear something like this:</p>
+<pre><code>  &quot;source-ref&quot;: &quot;&lt;S3 URI&gt;&quot;,
+  &quot;&lt;label attribute name&gt;&quot;: {
+    &quot;annotations&quot;: [{
+      &quot;class_id&quot;: 0,
+      &quot;width&quot;: 99,
+      &quot;top&quot;: 87,
+      &quot;height&quot;: 62,
+      &quot;left&quot;: 175
+    }],
+    &quot;image_size&quot;: [{
+      &quot;width&quot;: 344,
+      &quot;depth&quot;: 3,
+      &quot;height&quot;: 234
+    }]
+  },
+  &quot;&lt;label attribute name&gt;-metadata&quot;: {
+    &quot;job-name&quot;: &quot;&lt;job name&gt;&quot;,
+    &quot;class-map&quot;: {
+      &quot;0&quot;: &quot;&lt;label attribute name&gt;&quot;
+    },
+    &quot;human-annotated&quot;: &quot;yes&quot;,
+    &quot;objects&quot;: [{
+      &quot;confidence&quot;: 0.09
+    }],
+    &quot;creation-date&quot;: &quot;&lt;timestamp&gt;&quot;,
+    &quot;type&quot;: &quot;groundtruth/object-detection&quot;
+  }</code></pre>
+<p>If you’re creating a job in the console, the job name is used as the label attribute name for the job if you don’t explicitly set the label attribute name value.</p>
+<p>Select a stopped, failed, or completed labeling job from the list of your existing jobs. This enables the <strong>Actions</strong> menu.</p>
+<p>From the <strong>Actions</strong> menu, select <strong>Chain</strong>.</p>
+<p>In the <strong>Job overview</strong> panel, a new <strong>Job name</strong> is set based on the title of the job from which you are chaining this one. You can change it.</p>
+<p>You may also specify a label attribute name different from the labeling job name.</p>
+<p>If you’re chaining from a completed job, the label attribute name uses the name of the new job you’re configuring. To change the name, select the check box.</p>
+<p>If you’re chaining from a stopped or failed job, the label attribute name uses to the name of the job from which you’re chaining. Its easy to see and edit the value because the name check box is checked.</p>
+<p><strong>Attribute label naming considerations</strong><br />
+<strong>The default</strong> uses the label attribute name Ground Truth has selected. All data objects without data connected to that label attribute name are labeled. <strong>Using a label attribute name</strong> not present in the manifest causes the job to process <em>all</em> the objects in the dataset.</p>
+<p>The <strong>input dataset location</strong> in this case is automatically selected as the output manifest of the chained job. The input field is not available, so you cannot change it.</p>
+<p><strong>Adding data objects to a labeling job</strong><br />
+You cannot specify an alternate manifest file. Manually edit the output manifest from the previous job to add new items before starting a chained job. The S3 URI helps you locate where you are storing the manifest in your S3 bucket. Download the manifest file from there, edit it locally on your computer, then upload the new version to replace it. Make sure you are not introducing errors during editing. We recommend you use JSON linter to check your JSON. Many popular text editors and IDEs have linter plugins available.</p>
+<p>The procedure is almost the same as setting up a new labeling job with <code>CreateLabelingJob</code>, except for two primary differences. + <strong>Manifest location:</strong> Rather than use your original manifest from the prior job, the value for the <code>ManifestS3Uri</code> in the <code>DataSource</code> should point to the S3 URI of the <em>output manifest</em> from the prior labeling job. + <strong>Label attribute name:</strong> Setting the correct <code>LabelAttributeName</code> value is important here. As pointed out, this is the key portion of a key-value pair where labeling data is the value. Sample use cases include: + <strong>Adding new or more-specific labels to a completed job</strong> — set a new label attribute name. + <strong>Labeling the unlabeled items from a prior job</strong> — use the label attribute name from the prior job.</p>
+<p>You can get some chaining benefits if you use an augmented manifest that has already been partially labeled. Check the <strong>Label attribute name</strong> check box and set the name so that it matches the name in your manifest.</p>
+<p>If you’re using the API, the instructions are the same as starting a chained job. However, be sure to upload your manifest to an S3 bucket and use it instead of using the output manifest from a prior job.</p>
+<p>The <strong>Label attribute name</strong> value in the manifest has to conform to the naming considerations discussed above.</p>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-polygon</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-polygon<a name="sms-ui-template-crowd-polygon"></a></h1>
+</header>
+<p>A widget for drawing polygons on an image and assigning a label to the portion of the image that is enclosed in each polygon.</p>
+<p>The following attributes are supported by this element.</p>
+<p>The text to display above the image. This is typically a question or simple instruction for the worker.</p>
+<p>A JSON formatted array of strings, each of which is a label that a worker can assign to the image portion enclosed by a polygon.</p>
+<p>The name of this widget. It’s used as a key for the widget’s input in the form output.</p>
+<p>The URL of the image on which to draw polygons.</p>
+<p>An array of JSON objects, each of which defines a polygon to be drawn when the component is loaded. Each JSON object in the array contains the following properties. + <strong>label</strong> – The text assigned to the polygon as part of the labeling task. This text must match one of the labels defined in the <em>labels</em> attribute of the &lt;crowd-polygon&gt; element. + <strong>vertices</strong> – An array of JSON objects. Each object contains an x and y coordinate value for a point in the polygon.</p>
+<p><strong>Example</strong><br />
+An <code>initial-value</code> attribute might look something like this.</p>
+<pre><code>initial-value = 
+  &#39;[
+     {
+     &quot;label&quot;: &quot;dog&quot;,
+     &quot;vertices&quot;: 
+       [
+         {
+            &quot;x&quot;: 570,
+            &quot;y&quot;: 239
+         },
+        ... 
+         {
+            &quot;x&quot;: 759,
+            &quot;y&quot;: 281
+         }
+       ]
+     }
+  ]&#39;</code></pre>
+<p>Because this will be within an HTML element, the JSON array must be enclosed in single or double quotes. The example above uses single quotes to encapsulate the JSON and double quotes within the JSON itself. If you must mix single and double quotes inside your JSON, replace them with their HTML entity codes (<code>&amp;quot;</code> for double quote, <code>&amp;#39;</code> for single) to safely escape them.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: <a href="#polygon-regions-full-instructions">full-instructions</a>, <a href="#polygon-regions-short-instructions">short-instructions</a></p>
+<p>The following regions are required.</p>
+<p>General instructions about how to draw polygons.</p>
+<p>Important task-specific instructions that are displayed in a prominent place.</p>
+<p>The following output is supported by this element.</p>
+<p>An array of JSON objects, each of which describes a polygon that has been created by the worker. Each JSON object in the array contains the following properties. + <strong>label</strong> – The text assigned to the polygon as part of the labeling task. + <strong>vertices</strong> – An array of JSON objects. Each object contains an x and y coordinate value for a point in the polygon. The top left corner of the image is 0,0.</p>
+<p>A JSON object that specifies the dimensions of the image that is being annotated by the worker. This object contains the following properties. + <strong>height</strong> – The height, in pixels, of the image. + <strong>width</strong> – The width, in pixels, of the image.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+The following are samples of outputs from common use scenarios for this element.<br />
+<strong>Single Label, Single Polygon</strong></p>
+<pre><code>{
+    &quot;annotatedResult&quot;: 
+    {
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 853,
+        &quot;width&quot;: 1280
+      },
+      &quot;polygons&quot;: 
+      [
+        {
+          &quot;label&quot;: &quot;dog&quot;,
+          &quot;vertices&quot;: 
+          [
+            {
+              &quot;x&quot;: 570,
+              &quot;y&quot;: 239
+            },
+            {
+              &quot;x&quot;: 603,
+              &quot;y&quot;: 513
+            },
+            {
+              &quot;x&quot;: 823,
+              &quot;y&quot;: 645
+            },
+            {
+              &quot;x&quot;: 901,
+              &quot;y&quot;: 417
+            },
+            {
+              &quot;x&quot;: 759,
+              &quot;y&quot;: 281
+            }
+          ]
+        }
+      ]
+    }
+  }
+]</code></pre>
+<p><strong>Single Label, Multiple Polygons</strong></p>
+<pre><code>[
+  {
+    &quot;annotatedResult&quot;: {
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 853,
+        &quot;width&quot;: 1280
+      },
+      &quot;polygons&quot;: [
+        {
+          &quot;label&quot;: &quot;dog&quot;,
+          &quot;vertices&quot;: [
+            {
+              &quot;x&quot;: 570,
+              &quot;y&quot;: 239
+            },
+            {
+              &quot;x&quot;: 603,
+              &quot;y&quot;: 513
+            },
+            {
+              &quot;x&quot;: 823,
+              &quot;y&quot;: 645
+            },
+            {
+              &quot;x&quot;: 901,
+              &quot;y&quot;: 417
+            },
+            {
+              &quot;x&quot;: 759,
+              &quot;y&quot;: 281
+            }
+          ]
+        },
+        {
+          &quot;label&quot;: &quot;dog&quot;,
+          &quot;vertices&quot;: [
+            {
+              &quot;x&quot;: 870,
+              &quot;y&quot;: 278
+            },
+            {
+              &quot;x&quot;: 908,
+              &quot;y&quot;: 446
+            },
+            {
+              &quot;x&quot;: 1009,
+              &quot;y&quot;: 602
+            },
+            {
+              &quot;x&quot;: 1116,
+              &quot;y&quot;: 519
+            },
+            {
+              &quot;x&quot;: 1174,
+              &quot;y&quot;: 498
+            },
+            {
+              &quot;x&quot;: 1227,
+              &quot;y&quot;: 479
+            },
+            {
+              &quot;x&quot;: 1179,
+              &quot;y&quot;: 405
+            },
+            {
+              &quot;x&quot;: 1179,
+              &quot;y&quot;: 337
+            }
+          ]
+        }
+      ]
+    }
+  }
+]</code></pre>
+<p><strong>Multiple Labels, Multiple Polygons</strong></p>
+<pre><code>[
+  {
+    &quot;annotatedResult&quot;: {
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 853,
+        &quot;width&quot;: 1280
+      },
+      &quot;polygons&quot;: [
+        {
+          &quot;label&quot;: &quot;dog&quot;,
+          &quot;vertices&quot;: [
+            {
+              &quot;x&quot;: 570,
+              &quot;y&quot;: 239
+            },
+            {
+              &quot;x&quot;: 603,
+              &quot;y&quot;: 513
+            },
+            {
+              &quot;x&quot;: 823,
+              &quot;y&quot;: 645
+            },
+            {
+              &quot;x&quot;: 901,
+              &quot;y&quot;: 417
+            },
+            {
+              &quot;x&quot;: 759,
+              &quot;y&quot;: 281
+            }
+          ]
+        },
+        {
+          &quot;label&quot;: &quot;cat&quot;,
+          &quot;vertices&quot;: [
+            {
+              &quot;x&quot;: 870,
+              &quot;y&quot;: 278
+            },
+            {
+              &quot;x&quot;: 908,
+              &quot;y&quot;: 446
+            },
+            {
+              &quot;x&quot;: 1009,
+              &quot;y&quot;: 602
+            },
+            {
+              &quot;x&quot;: 1116,
+              &quot;y&quot;: 519
+            },
+            {
+              &quot;x&quot;: 1174,
+              &quot;y&quot;: 498
+            },
+            {
+              &quot;x&quot;: 1227,
+              &quot;y&quot;: 479
+            },
+            {
+              &quot;x&quot;: 1179,
+              &quot;y&quot;: 405
+            },
+            {
+              &quot;x&quot;: 1179,
+              &quot;y&quot;: 337
+            }
+          ]
+        }
+      ]
+    }
+  }
+]</code></pre>
+<p>You could have many labels available, but only the ones that are used appear in the output.</p>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

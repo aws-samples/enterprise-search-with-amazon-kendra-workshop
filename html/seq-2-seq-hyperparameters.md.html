@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Sequence-to-Sequence Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Sequence-to-Sequence Hyperparameters<a name="seq-2-seq-hyperparameters"></a></h1>
+</header>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>batch_size</td>
+<td>Mini batch size for gradient descent. <strong>Optional</strong> Valid values: positive integer Default value: 64</td>
+</tr>
+<tr class="even">
+<td>beam_size</td>
+<td>Length of the beam for beam search. Used during training for computing <code>bleu</code> and used during inference. <strong>Optional</strong> Valid values: positive integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>bleu_sample_size</td>
+<td>Number of instances to pick from validation dataset to decode and compute <code>bleu</code> score during training. Set to -1 to use full validation set (if <code>bleu</code> is chosen as <code>optimized_metric</code>). <strong>Optional</strong> Valid values: integer Default value: 0</td>
+</tr>
+<tr class="even">
+<td>bucket_width</td>
+<td>Returns (source,target) buckets up to (<code>max_seq_len_source</code>, <code>max_seq_len_target</code>). The longer side of the data uses steps of <code>bucket_width</code> while the shorter side uses steps scaled down by the average target/source length ratio. If one sided reaches its maximum length before the other, width of extra buckets on that side is fixed to that side of <code>max_len</code>. <strong>Optional</strong> Valid values: positive integer Default value: 10</td>
+</tr>
+<tr class="odd">
+<td>bucketing_enabled</td>
+<td>Set to <code>false</code> to disable bucketing, unroll to maximum length. <strong>Optional</strong> Valid values: <code>true</code> or <code>false</code> Default value: <code>true</code></td>
+</tr>
+<tr class="even">
+<td>checkpoint_frequency_num_batches</td>
+<td>Checkpoint and evaluate every x batches. <strong>Optional</strong> Valid values: positive integer Default value: 1000</td>
+</tr>
+<tr class="odd">
+<td>checkpoint_threshold</td>
+<td>Maximum number of checkpoints model is allowed to not improve in <code>optimized_metric</code> on validation dataset before training is stopped. <strong>Optional</strong> Valid values: positive integer Default value: 3</td>
+</tr>
+<tr class="even">
+<td>clip_gradient</td>
+<td>Clip absolute gradient values greater than this. Set to negative to disable. <strong>Optional</strong> Valid values: float Default value: 1</td>
+</tr>
+<tr class="odd">
+<td>cnn_activation_type</td>
+<td>The <code>cnn</code> activation type to be used. <strong>Optional</strong> Valid values: String. One of <code>glu</code>, <code>relu</code>, <code>softrelu</code>, <code>sigmoid</code>, or <code>tanh</code>. Default value: <code>glu</code></td>
+</tr>
+<tr class="even">
+<td>cnn_hidden_dropout</td>
+<td>Dropout probability for dropout between convolutional layers. <strong>Optional</strong> Valid values: Float. Range in [0,1]. Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>cnn_kernel_width_decoder</td>
+<td>Kernel width for the <code>cnn</code> decoder. <strong>Optional</strong> Valid values: positive integer Default value: 5</td>
+</tr>
+<tr class="even">
+<td>cnn_kernel_width_encoder</td>
+<td>Kernel width for the <code>cnn</code> encoder. <strong>Optional</strong> Valid values: positive integer Default value: 3</td>
+</tr>
+<tr class="odd">
+<td>cnn_num_hidden</td>
+<td>Number of <code>cnn</code> hidden units for encoder and decoder. <strong>Optional</strong> Valid values: positive integer Default value: 512</td>
+</tr>
+<tr class="even">
+<td>decoder_type</td>
+<td>Decoder type. <strong>Optional</strong> Valid values: String. Either <code>rnn</code> or <code>cnn</code>. Default value: <em>rnn</em></td>
+</tr>
+<tr class="odd">
+<td>embed_dropout_source</td>
+<td>Dropout probability for source side embeddings. <strong>Optional</strong> Valid values: Float. Range in [0,1]. Default value: 0</td>
+</tr>
+<tr class="even">
+<td>embed_dropout_target</td>
+<td>Dropout probability for target side embeddings. <strong>Optional</strong> Valid values: Float. Range in [0,1]. Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>encoder_type</td>
+<td>Encoder type. The <code>rnn</code> architecture is based on attention mechanism by Bahdanau et al. and <em>cnn</em> architecture is based on Gehring et al. <strong>Optional</strong> Valid values: String. Either <code>rnn</code> or <code>cnn</code>. Default value: <code>rnn</code></td>
+</tr>
+<tr class="even">
+<td>fixed_rate_lr_half_life</td>
+<td>Half life for learning rate in terms of number of checkpoints for <code>fixed_rate_</code>* schedulers. <strong>Optional</strong> Valid values: positive integer Default value: 10</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>Initial learning rate. <strong>Optional</strong> Valid values: float Default value: 0.0003</td>
+</tr>
+<tr class="even">
+<td>loss_type</td>
+<td>Loss function for training. <strong>Optional</strong> Valid values: String. <code>cross-entropy</code> Default value: <code>cross-entropy</code></td>
+</tr>
+<tr class="odd">
+<td>lr_scheduler_type</td>
+<td>Learning rate scheduler type. <code>plateau_reduce</code> means reduce the learning rate whenever <code>optimized_metric</code> on <code>validation_accuracy</code> plateaus. <code>inv_t</code> is inverse time decay. <code>learning_rate</code>/(1+<code>decay_rate</code>*t) <strong>Optional</strong> Valid values: String. One of <code>plateau_reduce</code>, <code>fixed_rate_inv_t</code>, or <code>fixed_rate_inv_sqrt_t</code>. Default value: <code>plateau_reduce</code></td>
+</tr>
+<tr class="even">
+<td>max_num_batches</td>
+<td>Maximum number of updates/batches to process. -1 for infinite. <strong>Optional</strong> Valid values: integer Default value: -1</td>
+</tr>
+<tr class="odd">
+<td>max_num_epochs</td>
+<td>Maximum number of epochs to pass through training data before fitting is stopped. Training continues until this number of epochs even if validation accuracy is not improving if this parameter is passed. Ignored if not passed. <strong>Optional</strong> Valid values: Positive integer and less than or equal to max_num_epochs. Default value: none</td>
+</tr>
+<tr class="even">
+<td>max_seq_len_source</td>
+<td>Maximum length for the source sequence length. Sequences longer than this length are truncated to this length. <strong>Optional</strong> Valid values: positive integer Default value: 100</td>
+</tr>
+<tr class="odd">
+<td>max_seq_len_target</td>
+<td>Maximum length for the target sequence length. Sequences longer than this length are truncated to this length. <strong>Optional</strong> Valid values: positive integer Default value: 100</td>
+</tr>
+<tr class="even">
+<td>min_num_epochs</td>
+<td>Minimum number of epochs the training must run before it is stopped via <code>early_stopping</code> conditions. <strong>Optional</strong> Valid values: positive integer Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>momentum</td>
+<td>Momentum constant used for <code>sgd</code>. Don’t pass this parameter if you are using <code>adam</code> or <code>rmsprop</code>. <strong>Optional</strong> Valid values: float Default value: none</td>
+</tr>
+<tr class="even">
+<td>num_embed_source</td>
+<td>Embedding size for source tokens. <strong>Optional</strong> Valid values: positive integer Default value: 512</td>
+</tr>
+<tr class="odd">
+<td>num_embed_target</td>
+<td>Embedding size for target tokens. <strong>Optional</strong> Valid values: positive integer Default value: 512</td>
+</tr>
+<tr class="even">
+<td>num_layers_decoder</td>
+<td>Number of layers for Decoder <em>rnn</em> or <em>cnn</em>. <strong>Optional</strong> Valid values: positive integer Default value: 1</td>
+</tr>
+<tr class="odd">
+<td>num_layers_encoder</td>
+<td>Number of layers for Encoder <code>rnn</code> or <code>cnn</code>. <strong>Optional</strong> Valid values: positive integer Default value: 1</td>
+</tr>
+<tr class="even">
+<td>optimized_metric</td>
+<td>Metrics to optimize with early stopping. <strong>Optional</strong> Valid values: String. One of <code>perplexity</code>, <code>accuracy</code>, or <code>bleu</code>. Default value: <code>perplexity</code></td>
+</tr>
+<tr class="odd">
+<td>optimizer_type</td>
+<td>Optimizer to choose from. <strong>Optional</strong> Valid values: String. One of <code>adam</code>, <code>sgd</code>, or <code>rmsprop</code>. Default value: <code>adam</code></td>
+</tr>
+<tr class="even">
+<td>plateau_reduce_lr_factor</td>
+<td>Factor to multiply learning rate with (for <code>plateau_reduce</code>). <strong>Optional</strong> Valid values: float Default value: 0.5</td>
+</tr>
+<tr class="odd">
+<td>plateau_reduce_lr_threshold</td>
+<td>For <code>plateau_reduce</code> scheduler, multiply learning rate with reduce factor if <code>optimized_metric</code> didn’t improve for this many checkpoints. <strong>Optional</strong> Valid values: positive integer Default value: 3</td>
+</tr>
+<tr class="even">
+<td>rnn_attention_in_upper_layers</td>
+<td>Pass the attention to upper layers of <em>rnn</em>, like Google NMT paper. Only applicable if more than one layer is used. <strong>Optional</strong> Valid values: boolean (<code>true</code> or <code>false</code>) Default value: <code>true</code></td>
+</tr>
+<tr class="odd">
+<td>rnn_attention_num_hidden</td>
+<td>Number of hidden units for attention layers. defaults to <code>rnn_num_hidden</code>. <strong>Optional</strong> Valid values: positive integer Default value: <code>rnn_num_hidden</code></td>
+</tr>
+<tr class="even">
+<td>rnn_attention_type</td>
+<td>Attention model for encoders. <code>mlp</code> refers to concat and bilinear refers to general from the Luong et al. paper. <strong>Optional</strong> Valid values: String. One of <code>dot</code>, <code>fixed</code>, <code>mlp</code>, or <code>bilinear</code>. Default value: <code>mlp</code></td>
+</tr>
+<tr class="odd">
+<td>rnn_cell_type</td>
+<td>Specific type of <code>rnn</code> architecture. <strong>Optional</strong> Valid values: String. Either <code>lstm</code> or <code>gru</code>. Default value: <code>lstm</code></td>
+</tr>
+<tr class="even">
+<td>rnn_decoder_state_init</td>
+<td>How to initialize <code>rnn</code> decoder states from encoders. <strong>Optional</strong> Valid values: String. One of <code>last</code>, <code>avg</code>, or <code>zero</code>. Default value: <code>last</code></td>
+</tr>
+<tr class="odd">
+<td>rnn_first_residual_layer</td>
+<td>First <em>rnn</em> layer to have a residual connection, only applicable if number of layers in encoder or decoder is more than 1. <strong>Optional</strong> Valid values: positive integer Default value: 2</td>
+</tr>
+<tr class="even">
+<td>rnn_num_hidden</td>
+<td>The number of <em>rnn</em> hidden units for encoder and decoder. This must be a multiple of 2 because the algorithm uses bi-directional Long Term Short Term Memory (LSTM) by default. <strong>Optional</strong> Valid values: positive even integer Default value: 1024</td>
+</tr>
+<tr class="odd">
+<td>rnn_residual_connections</td>
+<td>Add residual connection to stacked <em>rnn</em>. Number of layers should be more than 1. <strong>Optional</strong> Valid values: boolean (<code>true</code> or <code>false</code>) Default value: <code>false</code></td>
+</tr>
+<tr class="even">
+<td>rnn_decoder_hidden_dropout</td>
+<td>Dropout probability for hidden state that combines the context with the <em>rnn</em> hidden state in the decoder. <strong>Optional</strong> Valid values: Float. Range in [0,1]. Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>training_metric</td>
+<td>Metrics to track on training on validation data. <strong>Optional</strong> Valid values: String. Either <code>perplexity</code> or <code>accuracy</code>. Default value: <code>perplexity</code></td>
+</tr>
+<tr class="even">
+<td>weight_decay</td>
+<td>Weight decay constant. <strong>Optional</strong> Valid values: float Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>weight_init_scale</td>
+<td>Weight initialization scale (for <code>uniform</code> and <code>xavier</code> initialization). <strong>Optional</strong> Valid values: float Default value: 2.34</td>
+</tr>
+<tr class="even">
+<td>weight_init_type</td>
+<td>Type of weight initialization. <strong>Optional</strong> Valid values: String. Either <code>uniform</code> or <code>xavier</code>. Default value: <code>xavier</code></td>
+</tr>
+<tr class="odd">
+<td>xavier_factor_type</td>
+<td>Xavier factor type. <strong>Optional</strong> Valid values: String. One of <code>in</code>, <code>out</code>, or <code>avg</code>. Default value: <code>in</code></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

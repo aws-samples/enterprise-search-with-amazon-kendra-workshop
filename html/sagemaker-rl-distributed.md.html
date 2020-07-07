@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Distributed Training with Amazon SageMaker RL</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Distributed Training with Amazon SageMaker RL<a name="sagemaker-rl-distributed"></a></h1>
+</header>
+<p>Amazon SageMaker RL supports multi-core and multi-instance distributed training. Depending on your use case, training and/or environment rollout can be distributed. For example, Amazon SageMaker RL works for the following distributed scenarios: + Single training instance and multiple rollout instances of the same instance type. For an example, see the Neural Network Compression example in the Amazon SageMaker examples repository at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning</a>. + Single trainer instance and multiple rollout instances, where different instance types for training and rollouts. For an example, see the AWS DeepRacer / AWS RoboMaker example in the Amazon SageMaker examples repository at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning</a>. + Single trainer instance that uses multiple cores for rollout. For an example, see the Roboschool example in the Amazon SageMaker examples repository at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning</a>. This is useful if the simulation environment is light-weight and can run on a single thread. + Multiple instances for training and rollouts. For an example, see the Roboschool example in the Amazon SageMaker examples repository at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning</a>.</p>
+</body>
+</html>

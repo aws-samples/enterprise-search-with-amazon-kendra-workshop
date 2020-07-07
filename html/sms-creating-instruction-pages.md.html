@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Creating Instruction Pages</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Creating Instruction Pages<a name="sms-creating-instruction-pages"></a></h1>
+</header>
+<p>Create custom instructions for labeling jobs to improve your worker’s accuracy in completing their task. You can modify the default instructions that are provided in the console or you can create your own. The instructions are shown to the worker on the page where they complete their labeling task.</p>
+<p>There are two kinds of instructions: + <em>Short instructions</em>—instructions that are shown on the same webpage where the worker completes their task. These instructions should provide an easy reference to show the worker the correct way to label an object. + <em>Full instructions</em>—instructions that are shown on a dialog box that overlays the page where the worker completes their task. We recommend that you provide detailed instructions for completing the task with multiple examples showing edge cases and other difficult situations for labeling objects.</p>
+<p>Create instructions in the console when you are creating your labeling job. Start with the existing instructions for the task and use the editor to modify them to suit your labeling job.</p>
+<p>Short instructions appear on the same webpage that workers use to label your data object. For example, the following is the editing page for a bounding box task. The short instructions panel is on the left.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/sms-instructions-10.png" alt="" /><figcaption>[]</figcaption>
+</figure>
+<p>Keep in mind that a worker will only spend seconds looking at the short instructions. Workers must be able to scan and understand your information quickly. In all cases it should take less time to understand the instructions than it takes to complete the task. Keep these points in mind: + Your instructions should be clear and simple. + Pictures are better than words. Create a simple illustration of your task that your workers can immediately understand. + If you must use words, use short, concise examples. + Your short instructions are more important than your full instructions.</p>
+<p>The Amazon SageMaker Ground Truth console provides an editor so that you can create your short instructions. Replace the placeholder text and images with instructions for your task. Preview the worker’s task page by choosing <strong>Preview</strong>. The preview will open in a new window, be sure to turn off pop-up blocking so that the window will show.</p>
+<p>You can provide additional instructions for your workers in a dialog box that overlays the page where workers label your data objects. Use full instructions to explain more complex tasks and to show workers the proper way to label edge cases or other difficult objects.</p>
+<p>You can create full instructions using an editor in the Ground Truth console. As with quick instructions, keep the following in mind: + Workers will want detailed instruction the first few times that the complete your task. Any information that they <em>must</em> have should be in the quick instructions. + Pictures are more important than words. + Text should be concise. + Full instructions should supplement the short instructions. Don’t repeat information that appears in the short instructions.</p>
+<p>The Ground Truth console provides an editor so that you can create your full instructions. Replace the placeholder text and images with instructions for your task. Preview the full instruction page by choosing <strong>Preview</strong>. The preview will open in a new window, be sure to turn off pop-up blocking so that the window will show.</p>
+<p>Images provide useful examples for your workers. To add a publicly accessible image to your instructions: + Place the cursor where the image should go in the instructions editor. + Click the image icon in the editor toolbar. + Enter the URL of your image.</p>
+<p>If your instruction image in Amazon S3 is not publicly accessible: + As the image URL, enter: <code>{{ 'https://s3.amazonaws.com/your-bucket-name/image-file-name' | grant_read_access }}</code>. + This renders the image URL with a short-lived, one-time access code appended so the worker’s browser can display it. A broken image icon is displayed in the instructions editor, but previewing the tool displays the image in the rendered preview.</p>
+</body>
+</html>

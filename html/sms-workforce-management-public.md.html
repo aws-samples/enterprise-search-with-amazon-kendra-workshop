@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Using the Amazon Mechanical Turk Workforce</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Using the Amazon Mechanical Turk Workforce<a name="sms-workforce-management-public"></a></h1>
+</header>
+<p>The Amazon Mechanical Turk workforce provides the most workers for your labeling job.</p>
+<p>You can use the console to choose the Amazon Mechanical Turk workforce for your labeling job, or you can provide the Amazon Resource Name (ARN) for the Amazon Mechanical Turk workforce when you use the <a href="API_CreateLabelingJob.md">CreateLabelingJob</a> operation.</p>
+<p>Any Amazon Mechanical Turk workforce billing is handled as part of your Amazon SageMaker Ground Truth billing. You do not need to create a separate Mechanical Turk account to use the Amazon Mechanical Turk workforce.</p>
+<p>The ARN for the Amazon Mechanical Turk workforce is: + <code>arn:aws:sagemaker:region:394669845002:workteam/public-crowd/default</code></p>
+<p>The Amazon Mechanical Turk workforce is a world-wide resource. Workers are available 24 hours a day, 7 days a week. You typically get the fastest turn-around for your labeling jobs when you use the Amazon Mechanical Turk workforce.</p>
+<p>Adjust the number of workers that annotate each data object based on the complexity of the job and the quality that you need. Ground Truth uses annotation consolidation to improve the quality of the labels. More workers can make a difference in the quality of the labels for more complex labeling jobs, but might not make a difference for simpler jobs. For more information, see <a href="sms-annotation-consolidation.md">Annotation Consolidation</a>.</p>
+<p><strong>Note</strong><br />
+Only use the Amazon Mechanical Turk workforce to label data that is public or has been stripped of any sensitive information. You should not use the Amazon Mechanical Turk workforce for a dataset that contains personally identifiable information, such as names or email addresses.</p>
+<p>To choose the Amazon Mechanical Turk workforce when you are creating a labeling job using the console, do the following during the <strong>Select workers and configure tool</strong> step:</p>
+<p><strong>To use the Amazon Mechanical Turk workforce</strong></p>
+<ol type="1">
+<li><p>Choose <strong>Public</strong> from <strong>Worker types</strong>.</p></li>
+<li><p>Choose <strong>The dataset does not contain adult content</strong> if your dataset doesn’t contain potentially offensive content. This enables workers to opt out if they don’t want to work with it.</p></li>
+<li><p>Acknowledge that your data will be viewed by the Amazon Mechanical Turk workforce and that all personally identifiable information (PII) has been removed.</p></li>
+<li><p>Choose <strong>Additional configuration</strong> to set optional parameters.</p></li>
+<li><p>Optional. Enable automated data labeling to have Ground Truth automatically label some of your dataset. For more information, see <a href="sms-automated-labeling.md">Using Automated Data Labeling</a>.</p></li>
+<li><p>Optional. Set the number of workers that should see each object in your dataset. Using more workers can increase the quality of your labels but also increases the cost.</p></li>
+</ol>
+<p>Your labeling job will now be sent to the Amazon Mechanical Turk workforce. You can use the console to continue configuring your labeling job.</p>
+</body>
+</html>

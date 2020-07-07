@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Step 1: Setting up your workforce</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Step 1: Setting up your workforce<a name="sms-custom-templates-step1"></a></h1>
+</header>
+<p>In this step you use the console to establish which worker type to use and make the necessary sub-selections for the worker type. It assumes you have already completed the steps up to this point in the <a href="sms-getting-started.md">Getting started</a> section and have chosen the <strong>Custom labeling task</strong> as the <strong>Task type</strong>.</p>
+<p><strong>To configure your workforce.</strong></p>
+<ol type="1">
+<li><p>First choose an option from the <strong>Worker types</strong>. There are three types currently available:</p>
+<ul>
+<li><strong>Public</strong> uses an on-demand workforce of independent contractors, powered by Amazon Mechanical Turk. They are paid on a per-task basis.</li>
+<li><strong>Private</strong> uses your employees or contractors for handling data that needs to stay within your organization.</li>
+<li><strong>Vendor</strong> uses third party vendors that specialize in providing data labeling services, available via the AWS Marketplace.</li>
+</ul></li>
+<li><p>If you choose the <strong>Public</strong> option, you are asked to set the <strong>number of workers per dataset object</strong>. Having more than one worker perform the same task on the same object can help increase the accuracy of your results. The default is three. You can raise or lower that depending on the accuracy you need.</p>
+<p>You are also asked to set a <strong>price per task</strong>by using a drop-down menu. The menu recommends price points based on how long it will take to complete the task.</p>
+<p>The recommended method to determine this is to first run a short test of your task with a <strong>private</strong> workforce. The test provides a realistic estimate of how long the task takes to complete. You can then select the range your estimate falls within on the <strong>Price per task</strong> menu. If your average time is more than 5 minutes, consider breaking your task into smaller units.</p></li>
+</ol>
+<p><a href="sms-custom-templates-step2.md">Step 2: Creating your custom labeling task template</a></p>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-text-area</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-text-area<a name="sms-ui-template-crowd-text-area"></a></h1>
+</header>
+<p>A field for text input.</p>
+<p>The following attributes are supported by this element.</p>
+<p>A Boolean switch that, if present, puts the cursor in this element on-load so that users can immediately begin typing without having to click inside the element.</p>
+<p>A Boolean switch that, if present, turns on input validation. The behavior of the validator can be modified by the <em>error-message</em> and <em>allowed-pattern</em> attributes.</p>
+<p>A Boolean switch that, if present, puts a small text field beneath the lower-right corner of the element, displaying the number of characters inside the element.</p>
+<p>A Boolean switch that, if present, displays the input area as disabled.</p>
+<p>The text to be displayed below the input field, on the left side, if validation fails.</p>
+<p>A string that is displayed inside a text field.</p>
+<p>This text shrinks and rises up above a text field when the worker starts typing in the field or when the <em>value</em> attribute is set.</p>
+<p>An integer that specifies the maximum number of characters allowed by the element. Characters typed or pasted beyond the maximum are ignored.</p>
+<p>An integer that specifies the maximum number of rows of text that are allowed within a crowd-text-area. Normally the element expands to accommodate new rows. If this is set, after the number of rows exceeds it, content scrolls upward out of view and a scrollbar control appears.</p>
+<p>A string used to represent the element’s data in the output.</p>
+<p>A string presented to the user as placeholder text. It disappears after the user puts something in the input area.</p>
+<p>An integer that specifies the height of the element in rows of text.</p>
+<p>A preset that becomes the default if the worker does not provide input. The preset appears in a text field.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: none</p>
+<p>This element outputs the <code>name</code> as a property name and the element’s text contents as the value. Carriage returns in the text are represented as <code>\n</code>.</p>
+<p><strong>Example Sample output for this element</strong></p>
+<pre><code>[
+  {
+    &quot;textInput1&quot;: &quot;This is the text; the text that\nmakes the crowd go wild.&quot;
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

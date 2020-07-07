@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Sample RL Workflow Using Amazon SageMaker RL</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Sample RL Workflow Using Amazon SageMaker RL<a name="sagemaker-rl-workflow"></a></h1>
+</header>
+<p>The following example describes the steps for developing RL models using Amazon SageMaker RL.</p>
+<p>For complete code examples, see the sample notebooks at <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement_learning">https://github.com/awslabs/amazon-sagemaker-examples/tree/master/reinforcement-learning</a>.</p>
+<ol type="1">
+<li><p><strong>Formulate the RL problem</strong>—First, formulate the business problem into an RL problem. For example, auto scaling enables services to dynamically increase or decrease capacity depending on conditions that you define. Currently, this requires setting up alarms, scaling policies, and thresholds, and other manual steps. To solve this with RL, we define the components of the Markov Decision Process:</p>
+<ol type="1">
+<li><p><strong>Objective</strong>—Scale instance capacity so that it matches the desired load profile.</p></li>
+<li><p><strong>Environment</strong>—A custom environment that includes the load profile. It generates a simulated load with daily and weekly variations and occasional spikes. The simulated system has a delay between when new resources are requested and when they become available for serving requests.</p></li>
+<li><p><strong>State</strong>—The current load, number of failed jobs, and number of active machines</p></li>
+<li><p><strong>Action</strong>—Remove, add, or keep the same number of instances.</p></li>
+<li><p><strong>Reward</strong>—A positive reward for successful transactions, a high penalty for failing transactions beyond a specified threshold.</p></li>
+</ol></li>
+<li><p><strong>Define the RL environment</strong>—The RL environment can be the real world where the RL agent interacts or a simulation of the real world. You can connect open source and custom environments developed using Gym interfaces, and commercial simulation environments such as MATLAB and Simulink.</p></li>
+<li><p><strong>Define the presets</strong>—The presets configure the RL training jobs and define the hyperparameters for the RL algorithms.</p></li>
+<li><p><strong>Write the training code</strong>—Write training code as a Python script and pass the script to an Amazon SageMaker training job. In your training code, import the environment files and the preset files, and then define the <code>main()</code> function.</p></li>
+<li><p><strong>Train the RL Model</strong>— Use the Amazon SageMaker <code>RLEstimator</code> in the Amazon SageMaker Python SDK to start an RL training job. If you are using local mode, the training job runs on the notebook instance. When you use Amazon SageMaker for training, you can select GPU or CPU instances. Store the output from the training job in a local directory if you train in local mode, or on Amazon S3 if you use Amazon SageMaker training.</p>
+<p>For information about using the Amazon SageMaker Python SDK for RL, see <a href="https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/rl/README.rst">https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/rl/README.rst</a>.</p>
+<p>The <code>RLEstimator</code> requires the following information as parameters.</p>
+<ol type="1">
+<li><p>The source directory where the environment, presets, and training code are uploaded.</p></li>
+<li><p>The path to the training script.</p></li>
+<li><p>The RL toolkit and deep learning framework you want to use. This automatically resolves to the Amazon ECR path for the RL container.</p></li>
+<li><p>The training parameters, such as the instance count, job name, and S3 path for output.</p></li>
+<li><p>Metric definitions that you want to capture in your logs. These can also be visualized in CloudWatch and in Amazon SageMaker notebooks.</p></li>
+</ol></li>
+<li><p><strong>Visualize training metrics and output</strong>—After a training job that uses an RL model completes, you can view the metrics you defined in the training jobs in CloudWatch,. You can also plot the metrics in a notebook by using the Amazon SageMaker Python SDK analytics library. Visualizing metrics helps you understand how the performance of the model as measured by the reward improves over time. <strong>Note</strong><br />
+If you train in local mode, you can’t visualize metrics in CloudWatch.</p></li>
+<li><p><strong>Evaluate the model</strong>—Checkpointed data from the previously trained models can be passed on for evaluation and inference in the checkpoint channel. In local mode, use the local directory. In Amazon SageMaker training mode, you need to upload the data to S3 first.</p></li>
+<li><p><strong>Deploy RL models</strong>—Finally, deploy the trained model on an endpoint hosted on Amazon SageMaker or on an Edge device by using AWS IoT Greengrass.</p></li>
+</ol>
+</body>
+</html>

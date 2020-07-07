@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Use Your Own Inference Code with Hosting Services</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Use Your Own Inference Code with Hosting Services<a name="your-algorithms-inference-code"></a></h1>
+</header>
+<p>This section explains how Amazon SageMaker interacts with a Docker container that runs your own inference code for hosting services. Use this information to write inference code and create a Docker image.</p>
+<p><strong>Topics</strong> + <a href="#your-algorithms-inference-code-run-image">How Amazon SageMaker Runs Your Inference Image</a> + <a href="#your-algorithms-inference-code-load-artifacts">How Amazon SageMaker Loads Your Model Artifacts</a> + <a href="#your-algorithms-inference-code-how-containe-serves-requests">How Containers Serve Requests</a> + <a href="#your-algorithms-inference-code-container-response">How Your Container Should Respond to Inference Requests</a> + <a href="#your-algorithms-inference-algo-ping-requests">How Your Container Should Respond to Health Check (Ping) Requests</a></p>
+<p>To configure a container to run as an executable, use an <code>ENTRYPOINT</code> instruction in a Dockerfile. Note the following: + For model inference, Amazon SageMaker runs the container as:</p>
+<pre><code>docker run image serve</code></pre>
+<p>Amazon SageMaker overrides default <code>CMD</code> statements in a container by specifying the <code>serve</code> argument after the image name. The <code>serve</code> argument overrides arguments that you provide with the <code>CMD</code> command in the Dockerfile.</p>
+<p>  + We recommend that you use the <code>exec</code> form of the <code>ENTRYPOINT</code> instruction:</p>
+<pre><code>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</code></pre>
+<p>For example:</p>
+<pre><code>ENTRYPOINT [&quot;python&quot;, &quot;k_means_inference.py&quot;]</code></pre>
+<p>The <code>exec</code> form of the <code>ENTRYPOINT</code> instruction starts the executable directly, not as a child of <code>/bin/sh</code>. This enables it to receive signals like <code>SIGTERM</code> and <code>SIGKILL</code> from the Amazon SageMaker APIs, which is a requirement.</p>
+<p> </p>
+<p>For example, when you use the <a href="API_CreateEndpoint.md">CreateEndpoint</a> API to create an endpoint, Amazon SageMaker provisions the number of ML compute instances required by the endpoint configuration, which you specify in the request. Amazon SageMaker runs the Docker container on those instances.</p>
+<p> </p>
+<p>If you reduce the number of instances backing the endpoint (by calling the <a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a> APIs), Amazon SageMaker runs a command to stop the Docker container on the instances being terminated. The command sends the <code>SIGTERM</code> signal, then it sends the <code>SIGKILL</code> signal thirty seconds later.</p>
+<p> </p>
+<p>If you update the endpoint (by calling the <a href="API_UpdateEndpoint.md">UpdateEndpoint</a> API), Amazon SageMaker launches another set of ML compute instances and runs the Docker containers that contain your inference code on them. Then it runs a command to stop the previous Docker containers. To stop a Docker container, command sends the <code>SIGTERM</code> signal, then it sends the <code>SIGKILL</code> signal thirty seconds later.</p>
+<p>  + Amazon SageMaker uses the container definition that you provided in your <a href="API_CreateModel.md">CreateModel</a> request to set environment variables and the DNS hostname for the container as follows:</p>
+<p>  + It sets environment variables using the <code>ContainerDefinition.Environment</code> string-to-string map. + It sets the DNS hostname using the <code>ContainerDefinition.ContainerHostname</code>.</p>
+<pre><code> </code></pre>
+<ul>
+<li><p>If you plan to use GPU devices for model inferences (by specifying GPU-based ML compute instances in your <code>CreateEndpointConfig</code> request), make sure that your containers are <code>nvidia-docker</code> compatible. Don’t bundle NVIDIA drivers with the image. For more information about <code>nvidia-docker</code>, see <a href="https://github.com/NVIDIA/nvidia-docker">NVIDIA/nvidia-docker</a>.</p>
+<p> </p></li>
+<li><p>You can’t use the <code>tini</code> initializer as your entry point in Amazon SageMaker containers because it gets confused by the train and serve arguments.</p></li>
+</ul>
+<p>In your <a href="API_CreateModel.md">CreateModel</a> request, the container definition includes the <code>ModelDataUrl</code> parameter, which identifies the S3 location where model artifacts are stored. Amazon SageMaker uses this information to determine where to copy the model artifacts from. It copies the artifacts to the <code>/opt/ml/model</code> directory for use by your inference code.</p>
+<p>The <code>ModelDataUrl</code> must point to a tar.gz file. Otherwise, Amazon SageMaker won’t download the file.</p>
+<p>If you trained your model in Amazon SageMaker, the model artifacts are saved as a single compressed tar file in Amazon S3. If you trained your model outside Amazon SageMaker, you need to create this single compressed tar file and save it in a S3 location. Amazon SageMaker decompresses this tar file into /opt/ml/model directory before your container starts.</p>
+<p>Containers need to implement a web server that responds to <code>/invocations</code> and <code>/ping</code> on port 8080.</p>
+<p>To obtain inferences, the client application sends a POST request to the Amazon SageMaker endpoint. For more information, see the <a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a> API. Amazon SageMaker passes the request to the container, and returns the inference result from the container to the client. Note the following: + Amazon SageMaker strips all <code>POST</code> headers except those supported by <code>InvokeEndpoint</code>. Amazon SageMaker might add additional headers. Inference containers must be able to safely ignore these additional headers. + To receive inference requests, the container must have a web server listening on port 8080 and must accept <code>POST</code> requests to the <code>/invocations</code> endpoint. + A customer’s model containers must accept socket connection requests within 250 ms. + A customer’s model containers must respond to requests within 60 seconds. The model itself can have a maximum processing time of 60 seconds before responding to the /invocations. If your model is going to take 50-60 seconds of processing time, the SDK socket timeout should be set to be 70 seconds.</p>
+<p>The <code>CreateEndpoint</code> and <code>UpdateEndpoint</code> API calls result in Amazon SageMaker starting new inference containers. Soon after container startup, Amazon SageMaker starts sending periodic GET requests to the /ping endpoint.</p>
+<p>The simplest requirement on the container is to respond with an HTTP 200 status code and an empty body. This indicates to Amazon SageMaker that the container is ready to accept inference requests at the /invocations endpoint.</p>
+<p>If the container does not begin to pass health checks, by consistently responding with 200s, during the 4 minutes after startup, <code>CreateEndPoint</code> will fail, leaving Endpoint in a failed state, and the update requested by <code>UpdateEndpoint</code> will not be completed.</p>
+<p>While the minimum bar is for the container to return a static 200, a container developer can use this functionality to perform deeper checks. The request timeout on /ping attempts is 2 seconds.</p>
+</body>
+</html>

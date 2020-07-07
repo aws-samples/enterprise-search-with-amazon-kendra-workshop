@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune an XGBoost Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune an XGBoost Model<a name="xgboost-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The XGBoost algorithm computes the following nine metrics during training. When tuning the model, choose one of these metrics as the objective.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>validation:auc</td>
+<td>Area under the curve.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:error</td>
+<td>Binary classification error rate, calculated as #(wrong cases)/#(all cases).</td>
+<td>Minimize</td>
+</tr>
+<tr class="odd">
+<td>validation:logloss</td>
+<td>Negative log-likelihood.</td>
+<td>Minimize</td>
+</tr>
+<tr class="even">
+<td>validation:mae</td>
+<td>Mean absolute error.</td>
+<td>You must choose one of them as an objective to optimize when tuning the algorithm with hyperparameter values.&gt;Minimize</td>
+</tr>
+<tr class="odd">
+<td>validation:map</td>
+<td>Mean average precision.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:merror</td>
+<td>Multiclass classification error rate, calculated as #(wrong cases)/#(all cases).</td>
+<td>Minimize</td>
+</tr>
+<tr class="odd">
+<td>validation:mlogloss</td>
+<td>Negative log-likelihood for multiclass classification.</td>
+<td>Minimize</td>
+</tr>
+<tr class="even">
+<td>validation:ndcg</td>
+<td>Normalized Discounted Cumulative Gain.</td>
+<td>Maximize</td>
+</tr>
+<tr class="odd">
+<td>validation:rmse</td>
+<td>Root mean square error.</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>Tune the XGBoost model with the following hyperparameters. The hyperparameters that have the greatest effect on XGBoost objective metrics are: <code>alpha</code>, <code>min_child_weight</code>, <code>subsample</code>, <code>eta</code>, and <code>num_round</code>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>alpha</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0, MaxValue: 1000</td>
+</tr>
+<tr class="even">
+<td>colsample_bylevel</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0.1, MaxValue: 1</td>
+</tr>
+<tr class="odd">
+<td>colsample_bytree</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0.5, MaxValue: 1</td>
+</tr>
+<tr class="even">
+<td>eta</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0.1, MaxValue: 0.5</td>
+</tr>
+<tr class="odd">
+<td>gamma</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0, MaxValue: 5</td>
+</tr>
+<tr class="even">
+<td>lambda</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0, MaxValue: 1000</td>
+</tr>
+<tr class="odd">
+<td>max_delta_step</td>
+<td>IntegerParameterRanges</td>
+<td>[0, 10]</td>
+</tr>
+<tr class="even">
+<td>max_depth</td>
+<td>IntegerParameterRanges</td>
+<td>[0, 10]</td>
+</tr>
+<tr class="odd">
+<td>min_child_weight</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0, MaxValue: 120</td>
+</tr>
+<tr class="even">
+<td>num_round</td>
+<td>IntegerParameterRanges</td>
+<td>[1, 4000]</td>
+</tr>
+<tr class="odd">
+<td>subsample</td>
+<td>ContinuousParameterRanges</td>
+<td>MinValue: 0.5, MaxValue: 1</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

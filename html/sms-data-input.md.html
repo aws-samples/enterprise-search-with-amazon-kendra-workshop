@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Input Data</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Input Data<a name="sms-data-input"></a></h1>
+</header>
+<p>The input data are the data objects that you send to your workforce to be labeled. Each object in the input data is described in a manifest file. Each line in the manifest is an entry containing an object to label and may contain labels from previous jobs. + The input data is stored in an Amazon S3 bucket. The bucket must be in the same region as you are running Amazon SageMaker Ground Truth. You must give access to Amazon SageMaker for the data to be read. In order to read the data, give access to Amazon SageMaker. For more information about Amazon S3 buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Working with Amazon S3 buckets</a>. + The manifest file must be in the same region the data files but does not need to be in the same location as the data files. It can be in any Amazon S3 bucket accessible to the role that you assigned to Ground Truth when you created the labeling job with either the console or the <a href="API_CreateLabelingJob.md">CreateLabelingJob</a> operation.</p>
+<p>The manifest is a UTF-8 encoded file where each line is a complete and valid JSON object. Each line is delimited by a standard line break, \n or \r\n. Since each line must be a valid JSON object, you can’t have unescaped line break characters. For more information about the data format, see <a href="http://jsonlines.org/">JSON Lines</a>.</p>
+<p><strong>Limits:</strong> Each JSON object in the manifest file can be no larger than 100k characters and no single attribute within the object can be larger than 20,000 characters. Attribute names cannot begin with <code>$</code> (dollar sign).</p>
+<p>Each JSON object in the manifest file must contain a key, either <code>source-ref</code> or <code>source</code>. The value of the keys are interpreted as follows: + source-ref—The source of the object is the S3 object specified in the value. This can be used when the object is a binary object, such as an image, or when you have text in individual files. + source—The source of the object is the value. This can be used when the object is a text value.</p>
+<p>You use the <code>source-ref</code> key for image files for a bounding box or semantic segmentation labeling job. Each image file must be: + 6 Mb or smaller + 1920 x 1080 pixels or smaller for semantic segmentation</p>
+<p>The following is an example of a manifest file for files stored in an S3 bucket:</p>
+<pre><code>{&quot;source-ref&quot;: &quot;S3 bucket location 1&quot;} 
+{&quot;source-ref&quot;: &quot;S3 bucket location 2&quot;} 
+   ... 
+{&quot;source-ref&quot;: &quot;S3 bucket location n&quot;}</code></pre>
+<p>The following is an example of a manifest file with the input data stored in the manifest:</p>
+<pre><code>{&quot;source&quot;: &quot;Lorem ipsum dolor sit amet&quot;} 
+{&quot;source&quot;: &quot;consectetur adipiscing elit&quot;}
+   ...
+{&quot;source&quot;: &quot;mollit anim id est laborum&quot;}</code></pre>
+<p>You can include other key-value pairs in the manifest file. These pairs are passed to the output file unchanged. This is useful when you want to pass information between your applications. For more information, see <a href="sms-data-output.md">Output Data</a>.</p>
+<p>You can use the Amazon SageMaker console to select a portion of your dataset for labeling. The data must be stored in an Amazon S3 bucket. You have three options: + Use the full dataset. + Choose a randomly selected sample of the dataset. + Specify a subset of the dataset using a query.</p>
+<p>When you choose to use the full dataset you must provide a manifest file for your data objects. You can provide the S3 bucket location of the manifest file or you can have the Amazon SageMaker console create the file for you. Choose <strong>Create a manifest file</strong> to create the file. The file is stored in the S3 bucket specified in the <strong>Input data location</strong> field.</p>
+<p>Use a random sample of your dataset when you want to label a random subset of your data. The dataset is stored in the S3 bucket specified in the ** Input dataset location ** field.</p>
+<p>Once you have specified the percentage of data objects that you want to include in the sample, choose <strong>Create subset</strong>. The Amazon SageMaker console randomly picks the data objects for your labeling job. Once the objects are selected, choose <strong>Use this subset</strong>.</p>
+<p>The Amazon SageMaker console create a manifest file for the selected data objects. The <strong>Input dataset location</strong> field is modified to point to the new manifest file.</p>
+<p>You can specify a subset of your data objects using an Amazon S3 <code>SELECT</code> query on the object file names.</p>
+<p>The <code>SELECT</code> statement of the SQL query is defined for you. You provide the <code>WHERE</code> clause to specify which data objects should be returned.</p>
+<p>For more information about the Amazon S3 <code>SELECT</code> statement, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from Objects</a></p>
+<p>Choose <strong>Create subset</strong> to start the selection, and then choose <strong>Use this subset</strong> to use the selected data.</p>
+<p>The Amazon SageMaker console create a manifest file for the selected data objects. The <strong>Input dataset location</strong> field is modified to point to the new manifest file.</p>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Create and manage Amazon SNS topics for your work teams</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Create and manage Amazon SNS topics for your work teams<a name="sms-workforce-management-private-sns"></a></h1>
+</header>
+<p>These instructions are needed when you: + Create a topic to which you will subscribe an existing work team. + Create a topic prior to creating a work team. + Create or modify the work team with an API call and need to specify a topic ARN.</p>
+<p>If you create a work team using the console, that process provides an option to create a new topic for the team, and if used, handles these steps for you.</p>
+<p>The creation of Amazon SNS topics for work team notification is similar to the steps in the <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-getting-started.html">Amazon SNS Getting Started</a> document, with one significant addition: adding an access policy so the Sagemaker service can publish messages to the topic on your behalf.</p>
+<p><strong>Add the policy while creating the topic</strong></p>
+<ol type="1">
+<li><p>In the <strong>Access policy</strong> panel, select the advanced method.</p></li>
+<li><p>In the <strong>JSON editor</strong>, find the <code>Resource</code> property, which displays what the ARN of the topic will be when it is created. If the value ends in “undefined,” change “undefined” to the name of the topic.</p></li>
+<li><p>Copy the <code>Resource</code> value.</p></li>
+<li><p>Before the final closing bracket (<code>]</code>), add the following policy.</p>
+<pre><code>    {
+      &quot;Sid&quot;: &quot;AWSSagemaker_AccessPolicy&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Principal&quot;: {
+        &quot;Service&quot;: &quot;sagemaker.amazonaws.com&quot;
+      },
+      &quot;Action&quot;: &quot;sns:Publish&quot;,
+      &quot;Resource&quot;: &quot;resource ARN you copied in the previous step&quot;
+    }</code></pre></li>
+<li><p>Create the topic.</p></li>
+</ol>
+<p>For more details on creating topics, see the Amazon SNS <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tutorial-create-topic.html">“Creating a Topic”</a> tutorial.</p>
+<p>Workers are auto-subscribed to your topic only when a Amazon Cognito user group is created or imported during the creation of a work team that is subscribed to the topic at creation.</p>
+<p>If a work team is subscribed to a topic after creation, the individual members at the time of creation are not automatically subscribed. See <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tutorial-create-subscribe-endpoint-to-topic.html">“Subscribing an Endpoint to an Amazon SNS Topic”</a> for information on subscribing the workers’ email addresses to the topic.</p>
+</body>
+</html>

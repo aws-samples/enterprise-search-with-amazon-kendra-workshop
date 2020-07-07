@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>XGBoost Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">XGBoost Algorithm<a name="xgboost"></a></h1>
+</header>
+<p><a href="https://github.com/dmlc/xgboost">XGBoost</a> (eXtreme Gradient Boosting) is a popular and efficient open-source implementation of the gradient boosted trees algorithm. Gradient boosting is a supervised learning algorithm that attempts to accurately predict a target variable by combining the estimates of a set of simpler, weaker models. XGBoost has done remarkably well in machine learning competitions because it robustly handles a variety of data types, relationships, and distributions, and the large number of hyperparameters that can be tweaked and tuned for improved fits. This flexibility makes XGBoost a solid choice for problems in regression, classification (binary and multiclass), and ranking.</p>
+<p><strong>Topics</strong> + <a href="#InputOutput-XGBoost">Input/Output Interface for the XGBoost Algorithm</a> + <a href="#Instance-XGBoost">EC2 Instance Recommendation for the XGBoost Algorithm</a> + <a href="#xgboost-sample-notebooks">XGBoost Sample Notebooks</a> + <a href="xgboost-HowItWorks.md">How XGBoost Works</a> + <a href="xgboost_hyperparameters.md">XGBoost Hyperparameters</a> + <a href="xgboost-tuning.md">Tune an XGBoost Model</a></p>
+<p>Gradient boosting operates on tabular data, with the rows representing observations, one column representing the target variable or label, and the remaining columns representing features.</p>
+<p>The Amazon SageMaker implementation of XGBoost supports CSV and libsvm formats for training and inference: + For Training ContentType, valid inputs are <em>text/libsvm</em> (default) or <em>text/csv</em>. + For Inference ContentType, valid inputs are <em>text/libsvm</em> or (the defaut) <em>text/csv</em>.</p>
+<p><strong>Note</strong><br />
+For CSV training, the algorithm assumes that the target variable is in the first column and that the CSV does not have a header record. For CSV inference, the algorithm assumes that CSV input does not have the label column.<br />
+For libsvm training, the algorithm assumes that the label is in the first column. Subsequent columns contain the zero-based index value pairs for features. So each row has the format: <label> <index0>:<value0> <index1>:<value1> ... Inference requests for libsvm may or may not have labels in the libsvm format.</p>
+<p>This differs from other Amazon SageMaker algorithms, which use the protobuf training input format to maintain greater consistency with standard XGBoost data formats.</p>
+<p>For CSV training input mode, the total memory available to the algorithm (Instance Count * the memory available in the <code>InstanceType</code>) must be able to hold the training dataset. For libsvm training input mode, it’s not required, but we recommend it.</p>
+<p>SageMaker XGBoost uses the Python pickle module to serialize/deserialize the model, which can be used for saving/loading the model.</p>
+<p><strong>To use a model trained with SageMaker XGBoost in open source XGBoost</strong> + Use the following Python code:</p>
+<pre><code>import pickle as pkl 
+model = pkl.load(open(model_file_path, &#39;rb&#39;))
+# prediction with test data
+pred = model.predict(dtest)</code></pre>
+<p><strong>To differentiate the importance of labelled data points use Instance Weight Supports</strong> + Amazon SageMaker XGBoost allows customers to differentiate the importance of labelled data points by assigning each instance a weight value. For <em>text/libsvm</em> input, customers can assign weight values to data instances by attaching them after the labels. For example, <code>label:weight idx_0:val_0 idx_1:val_1...</code>. For <em>text/csv</em> input, customers need to turn on the <code>csv_weights</code> flag in the parameters and attach weight values in the column after labels. For example: <code>label,weight,val_0,val_1,...</code>).</p>
+<p>Amazon SageMaker XGBoost currently only trains using CPUs. It is a memory-bound (as opposed to compute-bound) algorithm. So, a general-purpose compute instance (for example, M4) is a better choice than a compute-optimized instance (for example, C4). Further, we recommend that you have enough total memory in selected instances to hold the training data. Although it supports the use of disk space to handle data that does not fit into main memory (the out-of-core feature available with the libsvm input mode), writing cache files onto disk slows the algorithm processing time.</p>
+<p>For a sample notebook that shows how to use the Amazon SageMaker XGBoost algorithm to train and host a regression model, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/xgboost_abalone/xgboost_abalone.ipynb">Regression with Amazon SageMaker XGBoost algorithm</a>. For instructions how to create and access Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. Once you have created a notebook instance and opened it, select the <strong>SageMaker Examples</strong> tab to see a list of all the Amazon SageMaker samples. The topic modeling example notebooks using the NTM algorithms are located in the <strong>Introduction to Amazon algorithms</strong> section. To open a notebook, click on its <strong>Use</strong> tab and select <strong>Create copy</strong>.</p>
+</body>
+</html>

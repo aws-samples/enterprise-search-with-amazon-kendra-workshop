@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Output Data</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Output Data<a name="sms-data-output"></a></h1>
+</header>
+<p>The output from a labeling job is placed in the location that you specified in the console or in the call to the <a href="API_CreateLabelingJob.md">CreateLabelingJob</a> operation.</p>
+<p>Each line in the output data file is identical to the manifest file with the addition of an attribute and value for the label assigned to the input object. The attribute name for the value is defined in the console or in the call to the <code>CreateLabelingJob</code> operation. You can’t use <code>-metadata</code> in the label attribute name. If you are running a semantic segmentation job, the label attribute must end with <code>-ref</code>. For any other type of job, the attribute name can’t end with <code>-ref</code>.</p>
+<p>The output of the labeling job is the value of the key/value pair with the label. The label and the value overwrites any existing JSON data in the input file with the new value.</p>
+<p>For example, the following is the output from an image classification labeling job where the input data files were stored in an Amazon S3 bucket and the label attribute name was defined as “sport”. In this example the JSON object is formatted for readability, in the actual output file the JSON object is on a single line. For more information about the data format, see <a href="http://jsonlines.org/">JSON Lines</a>.</p>
+<pre><code>{
+    &quot;source-ref&quot;: &quot;S3 bucket location&quot;,
+    &quot;sport&quot;:0,
+    &quot;sport-metadata&quot;: 
+    {
+        &quot;class-name&quot;: &quot;football&quot;,
+        &quot;confidence&quot;: 0.8,
+        &quot;type&quot;:&quot;groundtruth/image-classification&quot;,
+        &quot;job-name&quot;: &quot;identify-sport&quot;,
+        &quot;human-annotated&quot;: &quot;yes&quot;,
+        &quot;creation-date&quot;: &quot;2018-10-18T22:18:13.527256&quot;
+    }
+}</code></pre>
+<p>The value of the label can be any valid JSON. In this case the label’s value is the index of the class in the classification list. Other job types, such as bounding box, have more complex values.</p>
+<p>Any key-value pair in the input manifest file other than the label attribute is unchanged in the output file. You can use this to pass data to your application.</p>
+<p>The output from a labeling job can be used as the input to another labeling job. You can use this when you are chaining together labeling jobs. For example, you can send one labeling job to determine the sport that is being played. Then you send another using the same data to determine if the sport is being played indoors or outdoors. By using the output data from the first job as the manifest for the second job, you can consolidate the results of the two jobs into one output file for easier processing by your applications.</p>
+<p>The output data file is written to the output location periodically while the job is in progress. These intermediate files contain one line for each line in the manifest file. If an object is labeled, the label is included, if the object has not been labeled it is written to the intermediate output file identically to the manifest file.</p>
+<p>Ground Truth creates several directories in your Amazon S3 output path. These directories contain the results of your labeling job and other artifacts of the job. The top-level directory for a labeling job is given the same name as your labeling job, the output directories are placed beneath it. For example, if you named your labeling job <strong>find-people</strong> you output would be in the following directories:</p>
+<pre><code>s3://bucket/find-people/activelearning
+s3://bucket/find-people/annotations                
+s3://bucket/find-people/inference
+s3://bucket/find-people/manifests
+s3://bucket/find-people/training</code></pre>
+<p>Each directories contain the following output:</p>
+<p>The <code>activelearning</code> directory is only present when you are using automated data labeling. It contains the input and output validation set for automated data labeling, and the input and output folder for automatically labeled data.</p>
+<p>The <code>annotations</code> directory contains all of the annotations made by the workforce. These are the responses from individual workers that have not been consolidated into a single label for the data object.</p>
+<p>There are three subdirectories in the <code>annotations</code> directory. The first, <code>worker-response</code> contains the responses from individual workers. There may be more than one annotation for each data object in this directory, depending on how many workers you want to annotate each object.</p>
+<p>The second, <code>consolidated-annotation</code> contains information required to consolidate the annotations in the current batch into labels for your data objects.</p>
+<p>The third, <code>intermediate</code>, contains the output manifest for the current batch with any completed labels. This file is updated as the label for each data object is completed.</p>
+<p>The <code>inference</code> directory contains the input and output files for the Amazon SageMaker batch transform used while labeling data objects.</p>
+<p>The <code>manifest</code> directory contains the output manifest from your labeling job. There are two subdirectories in the manifest directory, <code>output</code> and <code>intermediate</code>. The <code>output</code> directory contains the output manifest file for your labeling job. The file is named <code>output.manifest</code>.</p>
+<p>The other directory, <code>intermediate</code>, contains the results of labeling each batch of data objects. The intermediate data is in a directory numbered for each iteration. An iteration directory contains an output.manifest file that contains the results of that iteration and all previous iterations.</p>
+<p>The <code>training</code> directory contains the input and output files used to train the automated data labeling model.</p>
+<p>Ground Truth calculates a confidence score for each label. A <em>confidence score</em> is a number between 0 and 1 that indicates how confident Ground Truth is in the label. You can use the confidence score to compare labeled data objects to each other, and to identify the least or most confident labels.</p>
+<p>You should not interpret the value of the confidence scores as an absolute value, or compare them across labeling jobs. For example, if all of the confidence scores are between 0.98 and 0.998, you should only compare the data objects with each other and not rely on the high confidence scores.</p>
+<p>You should not compare the confidence scores of human-labeled data objects and auto-labeled data objects. The confidence scores for humans are calculated using the annotation consolidation function for the task, the confidence scores for automated labeling are calculated using a model that incorporates object features. The two models generally have different scales and average confidence.</p>
+<p>For a bounding box labeling job, Ground Truth calculates a confidence score per box. You can compare confidence scores within one image or across images for the same labeling type (human or auto). You can’t compare confidence scores across labeling jobs.</p>
+<p>The output from each job contains metadata about the label assigned to data objects. These elements are the same for all jobs with minor variations. The following are the metadata elements:</p>
+<pre><code>    &quot;confidence&quot;: 0.93, 
+    &quot;type&quot;: &quot;groundtruth/image-classification&quot;, 
+    &quot;job-name&quot;: &quot;identify-animal-species&quot;,
+    &quot;human-annotated&quot;: &quot;yes&quot;, 
+    &quot;creation-date&quot;: &quot;2018-10-18T22:18:13.527256&quot;</code></pre>
+<p>The elements have the following meaning: + <code>confidence</code> — The confidence that Ground Truth has that the label is correct. For more information, see <a href="#sms-output-confidence">Confidence Score</a>. + <code>type</code> — The type of classification job. For job types, see the descriptions of the individual job types. + <code>job-name</code> — The name assigned to the job when it was created. + <code>human-annotated</code> — Indicates whether the data object was labeled by a human or by automated data labeling. For more information, see <a href="sms-automated-labeling.md">Using Automated Data Labeling</a>. + creation-date`` — The date and time that the label was created.</p>
+<p>The following are sample output from an image classification job and a text classification job. It includes the label that Ground Truth assigned to the data object, the value for the label, and metadata that describes the labeling task.</p>
+<p>In addition to the standard metadata elements, the metadata for a classification job includes the text value of the label’s class. For more information, see <a href="image-classification.md">Image Classification Algorithm</a>.</p>
+<pre><code>{
+    &quot;source-ref&quot;:&quot;S3 bucket location&quot;, 
+    &quot;species&quot;:&quot;0&quot;,    
+    &quot;species-metadata&quot;:  
+    {
+        &quot;class-name&quot;: &quot;dog&quot;, 
+        &quot;confidence&quot;: 0.93, 
+        &quot;type&quot;: &quot;groundtruth/image-classification&quot;, 
+        &quot;job-name&quot;: &quot;identify-animal-species&quot;,
+        &quot;human-annotated&quot;: &quot;yes&quot;, 
+        &quot;creation-date&quot;: &quot;2018-10-18T22:18:13.527256&quot;
+    }
+}</code></pre>
+<pre><code>{
+    &quot;source&quot;:&quot;a bad day&quot;, 
+    &quot;mood&quot;:&quot;1&quot;, 
+    &quot;mood-metadata&quot;: 
+    {
+        &quot;class-name&quot;: &quot;sad&quot;, 
+        &quot;confidence&quot;: 0.8, 
+        &quot;type&quot;: &quot;groundtruth/text-classification&quot;, 
+        &quot;job-name&quot;: &quot;label-mood&quot;,
+        &quot;human-annotated&quot;: &quot;yes&quot;, 
+        &quot;creation-date&quot;: &quot;2018-10-18T22:18:13.527256&quot;
+    }
+}</code></pre>
+<p>The following is sample output from a bounding box job. For this task, there are three bounding boxes returned. The value of the label contains information about the size of the image, and the location of the bounding boxes.</p>
+<p>The <code>class_id</code> element is the index of the box’s class in the list of available classes for the task. You can see the text of the class in the <code>class-map</code> metadata element.</p>
+<p>In the metadata there is a separate confidence score for each bounding box. The metadata also includes the <code>class-map</code> element that maps the <code>class_id</code> to the text value of the class. For more information, see <a href="object-detection.md">Object Detection Algorithm</a>.</p>
+<pre><code>{
+    &quot;source-ref&quot;: &quot;S3 bucket location&quot;,
+    &quot;bounding-box&quot;: 
+    {
+        &quot;image_size&quot;: [{ &quot;width&quot;: 500, &quot;height&quot;: 400, &quot;depth&quot;:3}],
+        &quot;annotations&quot;: 
+        [
+            {&quot;class_id&quot;: 0, &quot;left&quot;: 111, &quot;top&quot;: 134,
+                    &quot;width&quot;: 61, &quot;height&quot;: 128},
+            {&quot;class_id&quot;: 5, &quot;left&quot;: 161, &quot;top&quot;: 250,
+                     &quot;width&quot;: 30, &quot;height&quot;: 30}, 
+            {&quot;class_id&quot;: 5, &quot;left&quot;: 20, &quot;top&quot;: 20,
+                     &quot;width&quot;: 30, &quot;height&quot;: 30}
+        ]
+    },
+    &quot;bounding-box-metadata&quot;:
+    {
+        &quot;objects&quot;:  
+        [
+            {&quot;confidence&quot;: 0.8},
+            {&quot;confidence&quot;: 0.9},
+            {&quot;confidence&quot;: 0.9}
+        ], 
+        &quot;class-map&quot;: 
+        {
+            &quot;0&quot;: &quot;dog&quot;,
+            &quot;5&quot;: &quot;bone&quot;
+        },
+        &quot;type&quot;: &quot;groundtruth/object_detection&quot;,
+        &quot;human-annotated&quot;: &quot;yes&quot;, 
+        &quot;creation-date&quot;: &quot;2018-10-18T22:18:13.527256&quot;,
+        &quot;job-name&quot;: &quot;identify-dogs-and-toys&quot;        
+    }
+ }</code></pre>
+<p>For an example notebook, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/ground_truth_labeling_jobs/object_detection_augmented_manifest_training/object_detection_augmented_manifest_training.ipynb">object_detection_augmented_manifest_training.ipynb</a></p>
+<p>The following is the output from a semantic segmentation labeling job. The value of the label for this job is a reference to a PNG file in an S3 bucket.</p>
+<p>In addition to the standard elements, the metadata for the label includes a color map that defines which color was used to label the image, the class name associated with the color, and the confidence score for each color. For more information, see <a href="semantic-segmentation.md">Semantic Segmentation Algorithm</a>.</p>
+<pre><code>{
+    &quot;source-ref&quot;: &quot;S3 bucket location&quot;, 
+    &quot;city-streets-ref&quot;: &quot;S3 bucket location&quot;, 
+    &quot;city-streets-metadata&quot;: {
+      &quot;internal-color-map&quot;: {          
+        &quot;5&quot;: {                    
+           &quot;class-name&quot;: &quot;buildings&quot;, 
+           &quot;confidence&quot;: 0.8 
+        },
+        &quot;2&quot;:  {                   
+           &quot;class-name&quot;: &quot;road&quot;, 
+           &quot;confidence&quot;: 0.9  
+       }           
+     },
+     &quot;type&quot;: &quot;groundtruth/semantic-segmentation&quot;,
+     &quot;human-annotated&quot;: &quot;yes&quot;,
+     &quot;creation-date&quot;: &quot;2018-10-18T22:18:13.527256&quot;,
+     &quot;job-name&quot;: &quot;label-city-streets&quot;,
+     }
+}</code></pre>
+<p>After you create an augmented manifest file, you can use it in a training job. For more information, see <a href="augmented-manifest.md">Provide Dataset Metadata to Training Jobs with an Augmented Manifest File</a>.</p>
+</body>
+</html>

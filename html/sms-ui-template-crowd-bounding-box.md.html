@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-bounding-box</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-bounding-box<a name="sms-ui-template-crowd-bounding-box"></a></h1>
+</header>
+<p>A widget for drawing rectangles on an image and assigning a label to the portion of the image that is enclosed in each rectangle.</p>
+<p>The following attributes are supported by this element.</p>
+<p>The text to display above the image. This is typically a question or simple instruction for the worker.</p>
+<p>A JSON formatted array of strings, each of which is a label that a worker can assign to the image portion enclosed by a rectangle.</p>
+<p>The name of this widget. It’s used as a key for the widget’s input in the form output.</p>
+<p>The URL of the image on which to draw bounding boxes.</p>
+<p>An array of JSON objects, each of which sets a bounding box when the component is loaded. Each JSON object in the array contains the following properties. + <strong>height</strong> – The height of the box in pixels. + <strong>label</strong> – The text assigned to the box as part of the labeling task. This text must match one of the labels defined in the <em>labels</em> attribute of the &lt;crowd-bounding-box&gt; element. + <strong>left</strong> – Distance of the top-left corner of the box from the left side of the image, measured in pixels. + <strong>top</strong> – Distance of the top-left corner of the box from the top of the image, measured in pixels. + <strong>width</strong> – The width of the box in pixels.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: <a href="#bounding-box-regions-full-instructions">full-instructions</a>, <a href="#bounding-box-regions-short-instructions">short-instructions</a></p>
+<p>The following regions are required by this element.</p>
+<p>General instructions about how to draw bounding boxes.</p>
+<p>Important task-specific instructions that are displayed in a prominent place.</p>
+<p>The following output is supported by this element.</p>
+<p>An array of JSON objects, each of which specifies a bounding box that has been created by the worker. Each JSON object in the array contains the following properties. + <strong>height</strong> – The height of the box in pixels. + <strong>label</strong> – The text assigned to the box as part of the labeling task. This text must match one of the labels defined in the <em>labels</em> attribute of the &lt;crowd-bounding-box&gt; element. + <strong>left</strong> – Distance of the top-left corner of the box from the left side of the image, measured in pixels. + <strong>top</strong> – Distance of the top-left corner of the box from the top of the image, measured in pixels. + <strong>width</strong> – The width of the box in pixels.</p>
+<p>A JSON object that specifies the dimensions of the image that is being annotated by the worker. This object contains the following properties. + <strong>height</strong> – The height, in pixels, of the image. + <strong>width</strong> – The width, in pixels, of the image.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+The following are samples of outputs from common use scenarios for this element.<br />
+<strong>Single Label, Single Box / Multiple Label, Single Box</strong></p>
+<pre><code>[
+  {
+    &quot;annotatedResult&quot;: {
+      &quot;boundingBoxes&quot;: [
+        {
+          &quot;height&quot;: 401,
+          &quot;label&quot;: &quot;Dog&quot;,
+          &quot;left&quot;: 243,
+          &quot;top&quot;: 117,
+          &quot;width&quot;: 187
+        }
+      ],
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 533,
+        &quot;width&quot;: 800
+      }
+    }
+  }
+]</code></pre>
+<p><strong>Single Label, Multiple Box</strong></p>
+<pre><code>[
+  {
+    &quot;annotatedResult&quot;: {
+      &quot;boundingBoxes&quot;: [
+        {
+          &quot;height&quot;: 401,
+          &quot;label&quot;: &quot;Dog&quot;,
+          &quot;left&quot;: 243,
+          &quot;top&quot;: 117,
+          &quot;width&quot;: 187
+        },
+        {
+          &quot;height&quot;: 283,
+          &quot;label&quot;: &quot;Dog&quot;,
+          &quot;left&quot;: 684,
+          &quot;top&quot;: 120,
+          &quot;width&quot;: 116
+        }
+      ],
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 533,
+        &quot;width&quot;: 800
+      }
+    }
+  }
+]</code></pre>
+<p><strong>Multiple Label, Multiple Box</strong></p>
+<pre><code>[
+  {
+    &quot;annotatedResult&quot;: {
+      &quot;boundingBoxes&quot;: [
+        {
+          &quot;height&quot;: 395,
+          &quot;label&quot;: &quot;Dog&quot;,
+          &quot;left&quot;: 241,
+          &quot;top&quot;: 125,
+          &quot;width&quot;: 158
+        },
+        {
+          &quot;height&quot;: 298,
+          &quot;label&quot;: &quot;Cat&quot;,
+          &quot;left&quot;: 699,
+          &quot;top&quot;: 116,
+          &quot;width&quot;: 101
+        }
+      ],
+      &quot;inputImageProperties&quot;: {
+        &quot;height&quot;: 533,
+        &quot;width&quot;: 800
+      }
+    }
+  }
+]</code></pre>
+<p>You could have many labels available, but only the ones that are used appear in the output.</p>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

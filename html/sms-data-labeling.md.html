@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Data Labeling</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Data Labeling<a name="sms-data-labeling"></a></h1>
+</header>
+<p>Amazon SageMaker Ground Truth manages sending your data objects to workers to be labeled. Labeling each data object is a <em>task</em>. Workers complete each task until the entire labeling job is complete. Ground Truth divides the total number of tasks into smaller <em>batches</em> that are sent to workers. A new batch is sent to workers when the previous one is finished.</p>
+<p>Ground Truth provides two features that help improve the accuracy of your data labels and reduce the total cost of labeling your data.</p>
+<p>The first feature is <em>annotation consolidation</em>. This helps to improve the accuracy of your data object’s labels. It combines the results of multiple worker’s annotation tasks into one high-fidelity label.</p>
+<p>The second feature is <em>automated data labeling</em>. This uses machine learning to label portions of your data automatically without having to send them to human workers.</p>
+<p><strong>Topics</strong> + <a href="sms-batching.md">Batches for Labeling Tasks</a> + <a href="sms-annotation-consolidation.md">Annotation Consolidation</a> + <a href="sms-automated-labeling.md">Using Automated Data Labeling</a> + <a href="sms-reusing-data.md">Chaining labeling jobs</a></p>
+</body>
+</html>

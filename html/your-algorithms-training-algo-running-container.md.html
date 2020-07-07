@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How Amazon SageMaker Provides Training Information</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How Amazon SageMaker Provides Training Information<a name="your-algorithms-training-algo-running-container"></a></h1>
+</header>
+<p>This section explains how Amazon SageMaker makes training information, such as training data, hyperparameters, and other configuration information, available to your Docker container.</p>
+<p>When you send a <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> request to Amazon SageMaker to start model training, you specify the Amazon Elastic Container Registry path of the Docker image that contains the training algorithm. You also specify the Amazon Simple Storage Service (Amazon S3) location where training data is stored and algorithm-specific parameters. Amazon SageMaker makes this information available to the Docker container so that your training algorithm can use it. This section explains how we make this information available to your Docker container. For information about creating a training job, see <code>CreateTrainingJob</code>.</p>
+<p><strong>Topics</strong> + <a href="#your-algorithms-training-algo-running-container-hyperparameters">Hyperparameters</a> + <a href="#your-algorithms-training-algo-running-container-environment-variables">Environment Variables</a> + <a href="#your-algorithms-training-algo-running-container-inputdataconfig">Input Data Configuration</a> + <a href="#your-algorithms-training-algo-running-container-trainingdata">Training Data</a> + <a href="#your-algorithms-training-algo-running-container-dist-training">Distributed Training Configuration</a></p>
+<p>Amazon SageMaker makes the hyperparameters in a <code>CreateTrainingJob</code> request available in the Docker container in the <code>/opt/ml/input/config/hyperparameters.json</code> file.</p>
+<ul>
+<li>TRAINING_JOB_NAME—The training job name stored in the <code>TrainingJobName</code> parameter in a <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> request.</li>
+</ul>
+<p>You specify data channel information in the <code>InputDataConfig</code> parameter in a <code>CreateTrainingJob</code> request. Amazon SageMaker makes this information available in the <code>/opt/ml/input/config/inputdataconfig.json</code> file in the Docker container.</p>
+<p>For example, suppose that you specify three data channels (<code>train</code>, <code>evaluation</code>, and <code>validation</code>) in your request. Amazon SageMaker provides the following JSON:</p>
+<pre><code>{
+&quot;train&quot; : {&quot;ContentType&quot;:  &quot;trainingContentType&quot;, 
+           &quot;TrainingInputMode&quot;: &quot;File&quot;, 
+           &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;, 
+           &quot;RecordWrapperType&quot;: &quot;None&quot;},
+&quot;evaluation&quot; : {&quot;ContentType&quot;:  &quot;evalContentType&quot;, 
+                &quot;TrainingInputMode&quot;: &quot;File&quot;, 
+                &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;, 
+                &quot;RecordWrapperType&quot;: &quot;None&quot;},
+&quot;validation&quot; : {&quot;TrainingInputMode&quot;: &quot;File&quot;, 
+                &quot;S3DistributionType&quot;: &quot;FullyReplicated&quot;, 
+                &quot;RecordWrapperType&quot;: &quot;None&quot;}
+}</code></pre>
+<p><strong>Note</strong><br />
+Amazon SageMaker provides only relevant information about each data channel (for example, the channel name and the content type) to the container, as shown.</p>
+<p>The <code>TrainingInputMode</code> parameter in a <code>CreateTrainingJob</code> request specifies how to make data available for model training: in <code>FILE</code> mode or <code>PIPE</code> mode. Depending on the specified input mode, Amazon SageMaker does the following: + <code>FILE</code> mode—Amazon SageMaker makes the data for the channel available in the <code>/opt/ml/input/data/channel_name</code> directory in the Docker container. For example, if you have three channels named <code>training</code>, <code>validation</code>, and <code>testing</code>, Amazon SageMaker makes three directories in the Docker container: + <code>/opt/ml/input/data/training</code> + <code>/opt/ml/input/data/validation</code> + <code>/opt/ml/input/data/testing</code></p>
+<pre><code> </code></pre>
+<ul>
+<li><code>PIPE</code> mode—Amazon SageMaker makes data for the channel available from the named pipe: <code>/opt/ml/input/data/channel_name_epoch_number</code>. For example, if you have three channels named <code>training</code>, <code>validation</code>, and <code>testing</code>, you will need to read from the following pipes:</li>
+<li><code>/opt/ml/input/data/training_0,/opt/ml/input/data/training_1, ...</code></li>
+<li><code>/opt/ml/input/data/validation_0, /opt/ml/input/data/validation_1, ...</code></li>
+<li><code>/opt/ml/input/data/testing_0, /opt/ml/input/data/testing_1, ...</code></li>
+</ul>
+<p>Read the pipes sequentially. For example, if you have a channel called <strong>training</strong>, read the pipes in this sequence:</p>
+<ol type="1">
+<li><p>Open <code>/opt/ml/input/data/training_0</code> in read mode and read it to EOF (or if you are done with the first epoch, close the file early).</p></li>
+<li><p>After closing the first pipe file, look for <code>/opt/ml/input/data/training_1</code> and read it to go through the second epoch, and so on.</p></li>
+</ol>
+<p>If the file for a given epoch doesn’t exist yet, your code may need to retry until the pipe is created. There is no sequencing restriction across channel types. That is, you can read multiple epochs for the <strong>training</strong> channel, for example, and only start reading the <strong>validation</strong> channel when you are ready. Or, you can read them simultaneously if your algorithm requires that.</p>
+<p>If you’re performing distributed training with multiple containers, Amazon SageMaker makes information about all containers available in the <code>/opt/ml/input/config/resourceconfig.json</code> file.</p>
+<p>To enable inter-container communication, this JSON file contains information for all containers. Amazon SageMaker makes this file available for both FILE and PIPE mode algorithms. The file provides the following information: + <code>current_host</code>—The name of the current container on the container network. For example, <code>algo-1</code>. Host values can change at any time. Don’t write code with specific values for this variable. + <code>hosts</code>—The list of names of all containers on the container network, sorted lexicographically. For example, <code>["algo-1", "algo-2", "algo-3"]</code> for a three-node cluster. Containers can use these names to address other containers on the container network. Host values can change at any time. Don’t write code with specific values for these variables. + <code>network_interface_name</code>—The name of the network interface that is exposed to your container. For example, containers running the Message Passing Interface (MPI) can use this information to set the network interface name. + Do not use the information in <code>/etc/hostname</code> or <code>/etc/hosts</code> because it might be inaccurate. + Hostname information may not be immediately available to the algorithm container. We recommend adding a retry policy on hostname resolution operations as nodes become available in the cluster.</p>
+<p>The following is an example file on node 1 in a three-node cluster:</p>
+<pre><code>{
+&quot;current_host&quot;: &quot;algo-1&quot;,
+&quot;hosts&quot;: [&quot;algo-1&quot;,&quot;algo-2&quot;,&quot;algo-3&quot;],
+&quot;network_interface_name&quot;:&quot;eth1&quot;
+}</code></pre>
+</body>
+</html>

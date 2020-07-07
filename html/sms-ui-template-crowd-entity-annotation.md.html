@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-entity-annotation</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-entity-annotation<a name="sms-ui-template-crowd-entity-annotation"></a></h1>
+</header>
+<p>A widget for labeling words, phrases, or character strings within a longer text.</p>
+<p><strong>Important: Self-contained Widget</strong><br />
+Do not use <code>&lt;crowd-entity-annotation&gt;</code> element with the <code>&lt;crowd-form&gt;</code> element. It contains its own form submission logic and <strong>Submit</strong> button.</p>
+<p>The following attributes are supported by this element.</p>
+<p>The text to display above the image. This is typically a question or simple instruction for the worker.</p>
+<p>A JSON formatted array of objects, each of which defines an annotation to apply to the text at initialization. Objects contain a <code>label</code> value that matches one in the <code>labels</code> attribute, an integer <code>startOffset</code> value for labeled span’s starting unicode offset, and an integer <code>endOffset</code> value for the ending unicode offset.</p>
+<p><strong>Example</strong></p>
+<pre><code>[
+  {
+    label: &#39;person&#39;,
+    startOffset: 0,
+    endOffset: 16
+  },
+  ...
+]</code></pre>
+<p>A JSON formatted array of objects, each of which contains: + <code>label</code> (required): The name used to identify entities. + <code>fullDisplayName</code> (optional): Used for the label list in the task widget. Defaults to the label value if not specified. + <code>shortDisplayName</code> (optional): An abbreviation of 3-4 letters to display above selected entities. Defaults to the label value if not specified. <strong><code>shortDisplayName</code> is highly recommended</strong><br />
+Values displayed above the selections can overlap and create difficulty managing labeled entities in the workspace. Providing a 3-4 character <code>shortDisplayName</code> for each label is highly recommended to prevent overlap and keep the workspace manageable for your workers.</p>
+<p><strong>Example</strong></p>
+<pre><code>[
+  {
+    label: &#39;person&#39;,
+    shortDisplayName: &#39;per&#39;, 
+    fullDisplayName: &#39;person&#39;
+  }
+]</code></pre>
+<p>Serves as the widget’s name in the DOM. It is also used as the label attribute name in form output and the output manifest.</p>
+<p>The text to be annotated. The templating system escapes quotes and HTML strings by default. If your code is already escaped or partially escaped, see <a href="sms-custom-templates-step2.md#sms-custom-templates-step2-automate-filters">Variable filters</a> for more ways to control escaping.</p>
+<p>This element has the following parent and child elements. + <strong>Child elements</strong>: <a href="#entity-annotation-regions-full-instructions">full-instructions</a>, <a href="#entity-annotation-regions-short-instructions">short-instructions</a></p>
+<p>The following regions are supported by this element.</p>
+<p>General instructions about how to work with the widget.</p>
+<p>Important task-specific instructions that are displayed in a prominent place.</p>
+<p>The following output is supported by this element.</p>
+<p>A JSON object that specifies the start, end, and label of an annotation. This object contains the following properties. + <strong>label</strong> – The assigned label. + <strong>startOffset</strong> – The Unicode offset of the beginning of the selected text. + <strong>endOffset</strong> – The Unicode offset of the first character after the selection.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+The following is a sample of the output from this element.</p>
+<pre><code>{
+  &quot;myAnnotatedResult&quot;: {
+    &quot;entities&quot;: [
+      {
+        &quot;endOffset&quot;: 54,
+        &quot;label&quot;: &quot;person&quot;,
+        &quot;startOffset&quot;: 47
+      },
+      {
+        &quot;endOffset&quot;: 97,
+        &quot;label&quot;: &quot;event&quot;,
+        &quot;startOffset&quot;: 93
+      },
+      {
+        &quot;endOffset&quot;: 219,
+        &quot;label&quot;: &quot;date&quot;,
+        &quot;startOffset&quot;: 212
+      },
+      {
+        &quot;endOffset&quot;: 271,
+        &quot;label&quot;: &quot;location&quot;,
+        &quot;startOffset&quot;: 260
+      }
+    ]
+  }
+}</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

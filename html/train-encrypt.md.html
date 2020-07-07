@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Protect Communications Between ML Compute Instances in a Distributed Training Job</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Protect Communications Between ML Compute Instances in a Distributed Training Job<a name="train-encrypt"></a></h1>
+</header>
+<p>By default, Amazon SageMaker runs training jobs in an Amazon Virtual Private Cloud (Amazon VPC) to help keep your data secure. You can add another level of security to protect your training containers and data by configuring a <em>private</em> VPC. Distributed ML frameworks and algorithms usually transmit information that is directly related to the model such as weights, not the training dataset. When performing distributed training, you can further protect data that is transmitted between instances. This can help you to comply with regulatory requirements. To do this, use inter-container traffic encryption.</p>
+<p>Enabling inter-container traffic encryption can increase training time, especially if you are using distributed deep learning algorithms. Enabling inter-container traffic encryption doesn’t affect training jobs with a single compute instance. However, for training jobs with several compute instances, the effect on training time depends on the amount of communication between compute instances. For affected algorithms, adding this additional level of security also increases cost. The training time for most Amazon SageMaker built-in algorithms, such as XGBoost, DeepAR, and linear learner, typically aren’t affected.</p>
+<p>You can enable inter-container traffic encryption for training jobs or hyperparameter tuning jobs. You can use Amazon SageMaker APIs or console to enable inter-container traffic encryption.</p>
+<p>For information about running training jobs in a private VPC, see <a href="train-vpc.md">Give Amazon SageMaker Training Jobs Access to Resources in Your Amazon VPC</a>.</p>
+<p>Before enabling inter-container traffic encryption on training or hyperparameter tuning jobs with APIs, you need to add inbound and outbound rules to your private VPC’s security group.</p>
+<p><strong>To enable inter-container traffic encryption (API)</strong></p>
+<ol type="1">
+<li><p>Add the following inbound and outbound rules in the security group for your private VPC:<br />
+<a href="http://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html">[See the AWS documentation website for more details]</a></p></li>
+<li><p>When you send a request to the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> or <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a> API, specify <code>True</code> for the <code>EnableInterContainerTrafficEncryption</code> parameter.</p></li>
+</ol>
+<p><strong>Note</strong><br />
+The AWS Security Group Console might show display ports range as “All”, however EC2 ignores the specified port range because it is not applicable for the ESP 50 IP protocol.</p>
+<p><strong>To enable inter-container traffic encryption in a training job</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker">https://console.aws.amazon.com/sagemaker</a></p></li>
+<li><p>In the navigation pane, choose <strong>Training</strong>, then choose <strong>Training jobs</strong>.</p></li>
+<li><p>Choose <strong>Create training job</strong>.</p></li>
+<li><p>Under <strong>Network</strong>, choose a <strong>VPC</strong>. You can use the default VPC or one that you have created.</p></li>
+<li><p>Choose <strong>Enable inter-container traffic encryption</strong>.</p></li>
+</ol>
+<p>After you enable inter-container traffic encryption, finish creating the training job. For more information, see <a href="ex1-train-model.md">Step 5: Train a Model</a>.</p>
+<p><strong>To enable inter-container traffic encryption in a hyperparameter tuning job</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker">https://console.aws.amazon.com/sagemaker</a>.</p></li>
+<li><p>In the navigation pane, choose <strong>Training</strong>, then choose <strong>Hyperparameter tuning jobs</strong>.</p></li>
+<li><p>Choose <strong>Create hyperparameter tuning job</strong>.</p></li>
+<li><p>Under <strong>Network</strong>, choose a <strong>VPC</strong>. You can use the default VPC or one that you created.</p></li>
+<li><p>Choose <strong>Enable inter-container traffic encryption</strong>.</p></li>
+</ol>
+<p>After enabling inter-container traffic encryption, finish creating the hyperparameter tuning job. For more information, see <a href="automatic-model-tuning-ex-tuning-job.md">Configure and Launch a Hyperparameter Tuning Job</a>.</p>
+</body>
+</html>

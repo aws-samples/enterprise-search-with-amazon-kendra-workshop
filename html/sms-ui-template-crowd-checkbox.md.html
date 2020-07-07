@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>crowd-checkbox</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">crowd-checkbox<a name="sms-ui-template-crowd-checkbox"></a></h1>
+</header>
+<p>A UI component that can be checked or unchecked allowing a user to select multiple options from a set.</p>
+<p>The following attributes are supported by this element.</p>
+<p>A Boolean switch that, if present, displays the check box as checked.</p>
+<p>A Boolean switch that, if present, displays the check box as disabled and prevents it from being checked.</p>
+<p>A string that is used to identify the answer submitted by the worker. This value will match a key in the JSON object that specifies the answer.</p>
+<p>A Boolean switch that, if present, requires the worker to provide input.</p>
+<p>A string used as the name for the check box state in the output. Defaults to “on” if not specified.</p>
+<p>This element has the following parent and child elements. + <strong>Parent elements</strong>: <a href="sms-ui-template-crowd-form.md">crowd-form</a> + <strong>Child elements</strong>: none</p>
+<p>Provides a JSON object. The <code>name</code> string is the object name and the <code>value</code>string is the property name for a Boolean value based on the check box state; true if checked, false if not checked.</p>
+<p><strong>Example : Sample Element Outputs</strong><br />
+<strong>Using the same <code>name</code> value for multiple boxes.</strong></p>
+<pre><code>&lt;!-- INPUT --&gt;
+&lt;div&gt;&lt;crowd-checkbox name=&quot;myformbit&quot; value=&quot;Red&quot;&gt; Red &lt;/div&gt;
+&lt;div&gt;&lt;crowd-checkbox name=&quot;myformbit&quot; value=&quot;Yellow&quot;&gt; Yellow &lt;/div&gt;
+&lt;div&gt;&lt;crowd-checkbox name=&quot;myformbit&quot; value=&quot;Green&quot;&gt; Green &lt;/div&gt;</code></pre>
+<pre><code>//Output with &quot;Red&quot; checked
+[
+  {
+    &quot;myformbit&quot;: {
+      &quot;Green&quot;: false,
+      &quot;Red&quot;: true,
+      &quot;Yellow&quot;: false
+    }
+  }
+]</code></pre>
+<p>Note that all three color values are properties of a single object.<br />
+<strong>Using different <code>name</code> values for each box.</strong></p>
+<pre><code>&lt;!-- INPUT --&gt;
+&lt;div&gt;&lt;crowd-checkbox name=&quot;Stop&quot; value=&quot;Red&quot;&gt; Red &lt;/div&gt;
+&lt;div&gt;&lt;crowd-checkbox name=&quot;Slow&quot; value=&quot;Yellow&quot;&gt; Yellow &lt;/div&gt;
+&lt;div&gt;&lt;crowd-checkbox name=&quot;Go&quot; value=&quot;Green&quot;&gt; Green &lt;/div&gt;</code></pre>
+<pre><code>//Output with &quot;Red&quot; checked
+[
+  {
+    &quot;Go&quot;: {
+      &quot;Green&quot;: false
+    },
+    &quot;Slow&quot;: {
+      &quot;Yellow&quot;: false
+    },
+    &quot;Stop&quot;: {
+      &quot;Red&quot;: true
+    }
+  }
+]</code></pre>
+<p>For more information, see the following. + <a href="sms.md">Amazon SageMaker Ground Truth</a> + <a href="sms-ui-template-reference.md">HTML Elements Reference</a></p>
+</body>
+</html>

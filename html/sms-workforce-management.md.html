@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Managing Your Workforce</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Managing Your Workforce<a name="sms-workforce-management"></a></h1>
+</header>
+<p>A <em>workforce</em> is the group of workers that you have selected to label your dataset. You can choose either the Amazon Mechanical Turk workforce, a vendor-managed workforce, or you can create your own private workforce to label your dataset. Whichever you choose, Amazon SageMaker Ground Truth takes care of sending tasks to workers.</p>
+<p>When you use a private workforce, you also create <em>work teams</em>, a group of workers from your workforce that are assigned to specific labeling jobs. You can have multiple work teams and can assign one or more work teams to each labeling job.</p>
+<p>Ground Truth uses Amazon Cognito to manage your workforce and work teams. For more information about the permissions required to manage this way, see <a href="using-identity-based-policies.md#groundtruth-console-policy">Permissions Required to Use the Amazon SageMaker Ground Truth Console</a>.</p>
+<p><strong>Topics</strong> + <a href="sms-workforce-management-public.md">Using the Amazon Mechanical Turk Workforce</a> + <a href="sms-workforce-management-vendor.md">Managing Vendor Workforces</a> + <a href="sms-workforce-management-private.md">Managing a Private Workforce</a> + <a href="sms-workforce-management-private-sns.md">Create and manage Amazon SNS topics for your work teams</a></p>
+</body>
+</html>

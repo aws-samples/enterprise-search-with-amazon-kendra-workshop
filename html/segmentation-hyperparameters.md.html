@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Semantic Segmentation Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Semantic Segmentation Hyperparameters<a name="segmentation-hyperparameters"></a></h1>
+</header>
+<p>The following tables list the hyperparameters supported by the Amazon SageMaker semantic segmentation algorithm for network architecture, data inputs, and training. You specify Semantic Segmentation for training in the <code>AlgorithmName</code> of the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> request.</p>
+<p><strong>Network Architecture Hyperparameters</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>backbone</td>
+<td>The backbone to use for the algorithm’s encoder component. <strong>Optional</strong> Valid values: <code>resnet-50</code>, <code>resnet-101</code> Default value: <code>resnet-50</code></td>
+</tr>
+<tr class="even">
+<td>use_pretrained_model</td>
+<td>Whether a pretrained model is to be used for the backbone. <strong>Optional</strong> Valid values: <code>True</code>, <code>False</code> Default value: <code>True</code></td>
+</tr>
+<tr class="odd">
+<td>algorithm</td>
+<td>The algorithm to use for semantic segmentation. <strong>Optional</strong> Valid values: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/segmentation-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>fcn</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Data Hyperparameters</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_classes</td>
+<td>The number of classes to segment. <strong>Required</strong> Valid values: 2 ≤ positive integer ≤ 254</td>
+</tr>
+<tr class="even">
+<td>num_training_samples</td>
+<td>The number of samples in the training data. The algorithm uses this value to set up the learning rate scheduler. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>crop_size</td>
+<td>The image size for input images. We rescale the input image to a square image to this <code>crop_size</code>. We do this by rescaling the shorter side to match this parameter while maintaining the aspect ratio, and then take a random crop along the longer side. <strong>Optional</strong> Valid values: positive integer &gt; 16 Default value: 480</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Training Hyperparameters</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>early_stopping</td>
+<td>Whether to use early stopping logic during training. <strong>Optional</strong> Valid values: <code>True</code>, <code>False</code> Default value: <code>False</code></td>
+</tr>
+<tr class="even">
+<td>early_stopping_min_epochs</td>
+<td>The minimum number of epochs that must be run. <strong>Optional</strong> Valid values: integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_patience</td>
+<td>The number of epochs that meet the tolerance for lower performance before the algorithm enforces an early stop. <strong>Optional</strong> Valid values: integer Default value: 4</td>
+</tr>
+<tr class="even">
+<td>early_stopping_tolerance</td>
+<td>If the relative improvement of the score of the training job, the mIOU, is smaller than this value, early stopping considers the epoch as not improved. This is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: 0 ≤ float ≤ 1 Default value: 0.0</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The number of epochs with which to train. <strong>Optional</strong> Valid values: positive integer Default value: 30</td>
+</tr>
+<tr class="even">
+<td>gamma1</td>
+<td>The decay factor for the moving average of the squared gradient for <code>rmsprop</code>. Used only for <code>rmsprop</code>. <strong>Optional</strong> Valid values: 0 ≤ float ≤ 1 Default value: 0.9</td>
+</tr>
+<tr class="odd">
+<td>gamma2</td>
+<td>The momentum factor for <code>rmsprop</code>. <strong>Optional</strong> Valid values: 0 ≤ float ≤ 1 Default value: 0.9</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>The initial learning rate. <strong>Optional</strong> Valid values: 0 &lt; float ≤ 1 Default value: 0.001</td>
+</tr>
+<tr class="odd">
+<td>lr_scheduler</td>
+<td>The shape of the learning rate schedule that controls its decrease over time. <strong>Optional</strong> Valid values: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/segmentation-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>poly</code></td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>The batch size for training. Using a large <code>mini_batch_size</code> usually results in faster training, but it might cause you to run out of memory. Memory usage is affected by the values of the <code>mini_batch_size</code> and <code>image_shape</code> parameters, and the backbone architecture. <strong>Optional</strong> Valid values: positive integer Default value: 4</td>
+</tr>
+<tr class="odd">
+<td>momentum</td>
+<td>The momentum for the <code>sgd</code> optimizer. When you use other optimizers, the semantic segmentation algorithm ignores this parameter. <strong>Optional</strong> Valid values: 0 &lt; float ≤ 1 Default value: 0.9</td>
+</tr>
+<tr class="even">
+<td>optimizer</td>
+<td>The type of optimizer. For more information about an optimizer, choose the appropriate link: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/segmentation-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>adam</code>, <code>adagrad</code>, <code>nag</code>, <code>rmsprop</code>, <code>sgd</code> Default value: <code>sgd</code></td>
+</tr>
+<tr class="odd">
+<td>validation_mini_batch_size</td>
+<td>The batch size for validation. A large <code>mini_batch_size</code> usually results in faster training, but it might cause you to run out of memory. Memory usage is affected by the values of the <code>mini_batch_size</code> and <code>image_shape</code> parameters, and the backbone architecture. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/segmentation-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: positive integer Default value: 4</td>
+</tr>
+<tr class="even">
+<td>weight_decay</td>
+<td>The weight decay coefficient for the <code>sgd</code> optimizer. When you use other optimizers, the algorithm ignores this parameter. <strong>Optional</strong> Valid values: 0 &lt; float &lt; 1 Default value: 0.0001</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
