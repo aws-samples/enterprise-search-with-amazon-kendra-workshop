@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>RCF Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">RCF Hyperparameters<a name="rcf_hyperparameters"></a></h1>
+</header>
+<p>In the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTrainingJob.html">https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateTrainingJob.html</a> request, you specify the training algorithm. You can also specify algorithm-specific hyperparameters as string-to-string maps. The following table lists the hyperparameters for the Amazon SageMaker RCF algorithm. For more information, including recommendations on how to choose hyperparameters, see <a href="rcf_how-it-works.md">How RCF Works</a>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature_dim</td>
+<td>The number of features in the data set. (If you are using the client libraries through a notebook, this value is calculated for you and need not be specified.) <strong>Required</strong> (When the job is run through the console.) Valid values: Positive integer (min: 1, max: 10000)</td>
+</tr>
+<tr class="even">
+<td>eval_metrics</td>
+<td>A list of metrics used to score a labeled test data set. The following metrics can be selected for output: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/rcf_hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: a list with possible values taken from <code>accuracy</code> or <code>precision_recall_fscore</code>. Default value: Both <code>accuracy</code>, <code>precision_recall_fscore</code> are calculated.</td>
+</tr>
+<tr class="odd">
+<td>num_samples_per_tree</td>
+<td>Number of random samples given to each tree from the training data set. <strong>Optional</strong> Valid values: Positive integer (min: 1, max: 2048) Default value: 256</td>
+</tr>
+<tr class="even">
+<td>num_trees</td>
+<td>Number of trees in the forest. <strong>Optional</strong> Valid values: Positive integer (min: 50, max: 1000) Default value: 100</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

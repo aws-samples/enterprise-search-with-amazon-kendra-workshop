@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Inference Pipeline Logs and Metrics</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Inference Pipeline Logs and Metrics<a name="inference-pipeline-logs-metrics"></a></h1>
+</header>
+<p>Monitoring is important for maintaining the reliability, availability, and performance of Amazon SageMaker resources. To monitor and troubleshoot inference pipeline performance, use Amazon CloudWatch logs and error messages. For information about the monitoring tools that Amazon SageMaker provides, see <a href="monitoring-overview.md">Monitor Amazon SageMaker</a>.</p>
+<p>To monitor the multi-container models in Inference Pipelines, use Amazon CloudWatch. CloudWatch collects raw data and processes it into readable, near real-time metrics. Amazon SageMaker training jobs and endpoints write CloudWatch metrics and logs in the <code>AWS/SageMaker</code> namespace.</p>
+<p>The following tables list the metrics and dimensions for the following: + Endpoint invocations + Training jobs, batch transform jobs, and endpoint instances</p>
+<p>A <em>dimension</em> is a name/value pair that uniquely identifies a metric. You can assign up to 10 dimensions to a metric. For more information on monitoring with CloudWatch, see <a href="monitoring-cloudwatch.md">Monitor Amazon SageMaker with Amazon CloudWatch</a>.</p>
+<p><strong>Endpoint Invocation Metrics</strong></p>
+<p>The <code>AWS/SageMaker</code> namespace includes the following request metrics from calls to <a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a> .</p>
+<p>Metrics are reported at a 1-minute intervals.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Invocation4XXErrors</td>
+<td>The number of <code>InvokeEndpoint</code> requests that the model returned a <code>4xx</code> HTTP response code for. For each <code>4xx</code> response, Amazon SageMaker sends a <code>1</code>. Units: None Valid statistics: <code>Average</code>, <code>Sum</code></td>
+</tr>
+<tr class="even">
+<td>Invocation5XXErrors</td>
+<td>The number of <code>InvokeEndpoint</code> requests that the model returned a <code>5xx</code> HTTP response code for. For each <code>5xx</code> response, Amazon SageMaker sends a <code>1</code>. Units: None Valid statistics: <code>Average</code>, <code>Sum</code></td>
+</tr>
+<tr class="odd">
+<td>Invocations</td>
+<td>The <code>number of InvokeEndpoint</code> requests sent to a model endpoint. To get the total number of requests sent to a model endpoint, use the <code>Sum</code> statistic. Units: None Valid statistics: <code>Sum</code>, <code>Sample Count</code></td>
+</tr>
+<tr class="even">
+<td>InvocationsPerInstance</td>
+<td>The number of endpoint invocations sent to a model, normalized by <code>InstanceCount</code> in each <code>ProductionVariant</code>. Amazon SageMaker sends 1/<code>numberOfInstances</code> as the value for each request, where <code>numberOfInstances</code> is the number of active instances for the ProductionVariant at the endpoint at the time of the request. Units: None Valid statistics: <code>Sum</code></td>
+</tr>
+<tr class="odd">
+<td>ModelLatency</td>
+<td>The time the model or models took to respond. This includes the time it took to send the request, to fetch the response from the model container, and to complete the inference in the container. ModelLatency is the total time taken by all containers in an inerence pipeline..Units: MicrosecondsValid statistics: <code>Average</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, Sample Count</td>
+</tr>
+<tr class="even">
+<td>OverheadLatency</td>
+<td>The time added to the time taken to respond to a client request by Amazon SageMaker for overhead. <code>OverheadLatency</code> is measured from the time that Amazon SageMaker receives the request until it returns a response to the client, minus the <code>ModelLatency</code>. Overhead latency can vary depending on request and response payload sizes, request frequency, and authentication or authorization of the request, among other factors. Units: Microseconds Valid statistics: <code>Average</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Sample Count</code></td>
+</tr>
+<tr class="odd">
+<td>ContainerLatency</td>
+<td>The time it took for an Inference Pipelines container to respond as viewed from Amazon SageMaker. ContainerLatency includes the time it took to send the request, to fetch the response from the model’s container, and to complete inference in the container.Units: MicrosecondsValid statistics: <code>Average</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Sample Count</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dimensions for Endpoint Invocation Metrics</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dimension</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>EndpointName, VariantName, ContainerName</td>
+<td>Filters endpoint invocation metrics for a <code>ProductionVariant</code> at the specified endpoint and for the specified variant.</td>
+</tr>
+</tbody>
+</table>
+<p>For an inference pipeline endpoint, CloudWatch lists per-container latency metrics in your account as <strong>Endpoint Container Metrics</strong> and <strong>Endpoint Variant Metrics</strong> in the <strong>SageMaker</strong> namespace, as follows. The <code>ContainerLatency</code> metric appears only for inferences pipelines.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/pipeline-endpoint-metrics.png" alt="" /><figcaption>[The CloudWatch dashboard for an inference pipeline lists latency metrics for each endpoint for each container.]</figcaption>
+</figure>
+<p>For each endpoint and each container, latency metrics display names for the container, endpoint, varian, and metric.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/pipeline-endpoint-metrics-details.png" alt="" /><figcaption>[The latency metrics for an endpoint.]</figcaption>
+</figure>
+<p><strong>Training Job, Batch Transform Job, and Endpoint Instance Metrics</strong></p>
+<p>The namespaces <code>/aws/sagemaker/TrainingJobs</code>, <code>/aws/sagemaker/TransformJobs</code>, and <code>/aws/sagemaker/Endpoints</code> include the following metrics for training jobs and endpoint instances.</p>
+<p>Metrics are reported at a 1-minute intervals.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPUUtilization</td>
+<td>The percentage of CPU units that are used by the containers running on an instance. The value ranges from 0% to 100%, and is multiplied by the number of CPUs. For example, if there are four CPUs, <code>CPUUtilization</code> can range from 0% to 400%. For training jobs, <code>CPUUtilization</code> is the CPU utilization of the algorithm container running on the instance. For batch transform jobs, <code>CPUUtilization</code> is the CPU utilization of the transform container running on the instance. For multi-container models, <code>CPUUtilization</code> is the sum of CPU utilization by all containers running on the instance. For endpoint variants, <code>CPUUtilization</code> is the sum of CPU utilization by all of the containers running on the instance. Units: Percent</td>
+</tr>
+<tr class="even">
+<td>MemoryUtilizaton</td>
+<td>The percentage of memory that is used by the containers running on an instance. This value ranges from 0% to 100%.For training jobs, <code>MemoryUtilizaton</code> is the memory used by the algorithm container running on the instance.For batch transform jobs, <code>MemoryUtilizaton</code> is the memory used by the transform container running on the instance.For multi-container models, MemoryUtilizaton is the sum of memory used by all containers running on the instance.For endpoint variants, <code>MemoryUtilizaton</code> is the sum of memory used by all of the containers running on the instance.Units: Percent</td>
+</tr>
+<tr class="odd">
+<td>GPUUtilization</td>
+<td>The percentage of GPU units that are used by the containers running on an instance. <code>GPUUtilization</code> ranges from 0% to 100% and is multiplied by the number of GPUs. For example, if there are four GPUs, <code>GPUUtilization</code> can range from 0% to 400%. For training jobs, <code>GPUUtilization</code> is the GPU used by the algorithm container running on the instance. For batch transform jobs, <code>GPUUtilization</code> is the GPU used by the transform container running on the instance. For multi-container models, <code>GPUUtilization</code> is the sum of GPU used by all containers running on the instance. For endpoint variants, <code>GPUUtilization</code> is the sum of GPU used by all of the containers running on the instance. Units: Percent</td>
+</tr>
+<tr class="even">
+<td>GPUMemoryUtilization</td>
+<td>The percentage of GPU memory used by the containers running on an instance. GPUMemoryUtilization ranges from 0% to 100% and is multiplied by the number of GPUs. For example, if there are four GPUs, <code>GPUMemoryUtilization</code> can range from 0% to 400%. For training jobs, <code>GPUMemoryUtilization</code> is the GPU memory used by the algorithm container running on the instance. For batch transform jobs, <code>GPUMemoryUtilization</code> is the GPU memory used by the transform container running on the instance. For multi-container models, <code>GPUMemoryUtilization</code> is sum of GPU used by all containers running on the instance. For endpoint variants, <code>GPUMemoryUtilization</code> is the sum of the GPU memory used by all of the containers running on the instance. Units: Percent</td>
+</tr>
+<tr class="odd">
+<td>DiskUtilization</td>
+<td>The percentage of disk space used by the containers running on an instance. DiskUtilization ranges from 0% to 100%. This metric is not supported for batch transform jobs. For training jobs, <code>DiskUtilization</code> is the disk space used by the algorithm container running on the instance. For endpoint variants, <code>DiskUtilization</code> is the sum of the disk space used by all of the provided containers running on the instance. Units: Percent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dimensions for Training Job, Batch Transform Job, and Endpoint Instance Metrics</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dimension</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Host</td>
+<td>For training jobs, <code>Host</code> has the format <code>[training-job-name]/algo-[instance-number-in-cluster]</code>. Use this dimension to filter instance metrics for the specified training job and instance. This dimension format is present only in the <code>/aws/sagemaker/TrainingJobs</code> namespace. For batch transform jobs, <code>Host</code> has the format <code>[transform-job-name]/[instance-id]</code>. Use this dimension to filter instance metrics for the specified batch transform job and instance. This dimension format is present only in the <code>/aws/sagemaker/TransformJobs</code> namespace. For endpoints, <code>Host</code> has the format <code>[endpoint-name]/[ production-variant-name ]/[instance-id]</code>. Use this dimension to filter instance metrics for the specified endpoint, variant, and instance. This dimension format is present only in the <code>/aws/sagemaker/Endpoints</code> namespace.</td>
+</tr>
+</tbody>
+</table>
+<p>To help you debug your training jobs, endpoints, and notebook instance lifecycle configurations, Amazon SageMaker also sends anything an algorithm container, a model container, or a notebook instance lifecycle configuration sends to <code>stdout</code> or <code>stderr</code> to Amazon CloudWatch Logs. You can use this information for debugging and to analyze progress.</p>
+<p>The following table lists the log groups and log streams Amazon SageMaker. sends to Amazon CloudWatch</p>
+<p>A <em>log stream</em> is a sequence of log events that share the same source. Each separate source of logs into CloudWatch makes up a separate log stream. A <em>log group</em> is a group of log streams that share the same retention, monitoring, and access control settings.</p>
+<p><strong>Logs</strong></p>
+<p><a href="http://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipeline-logs-metrics.html">[See the AWS documentation website for more details]</a></p>
+<p><strong>Note</strong><br />
+Amazon SageMaker creates the <code>/aws/sagemaker/NotebookInstances</code> log group when you create a notebook instance with a lifecycle configuration. For more information, see <a href="notebook-lifecycle-config.md">Customize a Notebook Instance</a>.</p>
+<p>For more information about Amazon SageMaker logging, see <a href="logging-cloudwatch.md">Log Amazon SageMaker Events with Amazon CloudWatch</a>.</p>
+</body>
+</html>

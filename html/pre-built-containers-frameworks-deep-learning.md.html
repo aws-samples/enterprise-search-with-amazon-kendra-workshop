@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Prebuilt Amazon SageMaker Docker Images for TensorFlow, MXNet, Chainer, and PyTorch</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Prebuilt Amazon SageMaker Docker Images for TensorFlow, MXNet, Chainer, and PyTorch<a name="pre-built-containers-frameworks-deep-learning"></a></h1>
+</header>
+<p>Amazon SageMaker provides prebuilt Docker images that include deep learning framework libraries and other dependencies needed for training and inference. With the <a href="https://github.com/aws/sagemaker-python-sdk#installing-the-sagemaker-python-sdk">SageMaker Python SDK</a>, you can train and deploy models using one of these popular deep learning frameworks. For instructions on installing and using the SDK, see <a href="https://github.com/aws/sagemaker-python-sdk#installing-the-sagemaker-python-sdk">Amazon SageMaker Python SDK</a>.</p>
+<p>The following table provides links to the GitHub repositories that contain the source code and Dockerfiles for each framework and for TensorFlow and MXNet Serving. The instructions linked are for using the Python SDK estimators to run your own training algorithms on Amazon SageMaker and your own models on Amazon SageMaker hosting.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Framework</th>
+<th>Prebuilt Docker Image Source Code</th>
+<th>Instructions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TensorFlow</td>
+<td><a href="https://github.com/aws/sagemaker-tensorflow-container">Amazon SageMaker TensorFlow Containers</a> <a href="https://github.com/aws/sagemaker-tensorflow-serving-container">Amazon SageMaker TensorFlow Serving Container</a></td>
+<td><a href="https://sagemaker.readthedocs.io/en/stable/using_tf.html">Using TensorFlow with the SageMaker Python SDK</a></td>
+</tr>
+<tr class="even">
+<td>MXNet</td>
+<td><a href="https://github.com/aws/sagemaker-mxnet-container">Amazon SageMaker MXNet Containers</a> <a href="https://github.com/aws/sagemaker-mxnet-serving-container">Amazon SageMaker MXNet Serving Container</a></td>
+<td><a href="https://sagemaker.readthedocs.io/en/stable/using_mxnet.html">Using MXNet with the SageMaker Python SDK</a></td>
+</tr>
+<tr class="odd">
+<td>Chainer</td>
+<td><a href="https://github.com/aws/sagemaker-chainer-container">Amazon SageMaker Chainer SageMaker Containers</a></td>
+<td><a href="https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/chainer/README.rst">Chainer SageMaker Estimators and Models</a></td>
+</tr>
+<tr class="even">
+<td>PyTorch</td>
+<td><a href="https://github.com/aws/sagemaker-python-sdk#pytorch-sagemaker-estimators">Amazon SageMaker PyTorch Containers</a></td>
+<td><a href="https://github.com/aws/sagemaker-python-sdk/blob/master/src/sagemaker/pytorch/README.rst">SageMaker PyTorch Estimators and Models</a></td>
+</tr>
+</tbody>
+</table>
+<p>If you are not using the Amazon SageMaker Python SDK and one of its estimators to manage the container, you have to retrieve the relevant pre-built container. The Amazon SageMaker prebuilt Docker images are stored in Amazon Elastic Container Registry (Amazon ECR). To pull an image from an Amazon ECR repo or to push an image to an Amazon ECR repo, use fullname registry address of the image. Amazon SageMaker uses the following URL patterns for the Deep Learning container images: + URL pattern for Python 3 images for training with TensorFlow-1.13 and later or for training or serving with MXNet-1.4.1 and later (except for the Elastic Inference containers <code>sagemaker-tensorflow-eia</code> and <code>sagemaker-mxnet-serving-eia</code>): + <code>763104351884.dkr.ecr.&lt;region&gt;.amazonaws.com/&lt;ECR repo name&gt;:&lt;framework version&gt;-&lt;processing unit type&gt;-&lt;python version&gt;</code></p>
+<pre><code>**Example** of an Amazon ECR URI for the MXNet 1\.4\.1 training image:
+
+ `763104351884.dkr.ecr.us-east-1.amazonaws.com/mxnet-training:1.4.1-gpu-py3`\.</code></pre>
+<ul>
+<li>URL pattern for Python 3 images for serving with TensorFlow-1.13 and later:
+<ul>
+<li><p><code>763104351884.dkr.ecr.&lt;region&gt;.amazonaws.com/tensorflow-inference:&lt;framework version&gt;-&lt;processing unit type&gt;</code></p>
+<p><strong>Example</strong> of an Amazon ECR URI for the TensorFlow 1.13 serving image:</p>
+<p><code>763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-inference:1.13-gpu</code>.</p></li>
+</ul></li>
+<li>URL pattern for images with Chainer, PyTorch, Python 2 versions of TensorFlow or MXNet, and for the Elastic Inference containers <code>sagemaker-tensorflow-eia</code> and <code>sagemaker-mxnet-serving-eia</code>:
+<ul>
+<li><p><code>520713654638.dkr.ecr.&lt;region&gt;.amazonaws.com/&lt;ECR repo name&gt;:&lt;framework version&gt;-&lt;processing unit type&gt;-&lt;python version&gt;</code></p>
+<p><strong>Example</strong> of an Amazon ECR URI for the Chainer 4.1.0 training image:</p>
+<p><code>520713654638.dkr.ecr.us-east-1.amazonaws.com/sagemaker-chainer:4.1.0-gpu-py2</code>.</p></li>
+</ul></li>
+</ul>
+<p>For the supported values for the components in the URL addresses, see the following table.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>URL Component</th>
+<th>Description</th>
+<th>Supported Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><ECR repo name></td>
+<td>Specifies the public repository owned by Amazon SageMaker in the Amazon ECR.</td>
+<td>Python 3 containers for TensorFlow-1.13 and later and MXNet-1.4.1 and later: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-frameworks-deep-learning.html">[See the AWS documentation website for more details]</a> <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-frameworks-deep-learning.html">[See the AWS documentation website for more details]</a></td>
+</tr>
+<tr class="even">
+<td><framework version></td>
+<td>Specifies the framework and links to documentation for the estimators for each of the frameworks that explains how to specify the supported versions.</td>
+<td><a href="http://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-frameworks-deep-learning.html">[See the AWS documentation website for more details]</a></td>
+</tr>
+<tr class="odd">
+<td><processing unit type></td>
+<td>Specifies whether to use a GPU or CPU for training or hosting.</td>
+<td><a href="http://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-frameworks-deep-learning.html">[See the AWS documentation website for more details]</a></td>
+</tr>
+<tr class="even">
+<td><python version></td>
+<td>Specifies the version of Python used. (Optional if you are using the <code>tensorflow-inference</code> container for serving.)</td>
+<td><a href="http://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-frameworks-deep-learning.html">[See the AWS documentation website for more details]</a></td>
+</tr>
+</tbody>
+</table>
+<p>Amazon SageMaker also provides prebuilt Docker images for scikit-learn and Spark ML. For information about Docker images that enable using scikit-learn and Spark ML solutions in Amazon SageMaker, see <a href="pre-built-docker-containers-frameworks.md">Prebuilt Amazon SageMaker Docker Images for Scikit-learn and Spark ML</a>.</p>
+<p>You can use prebuilt containers to deploy your custom models or models that you have purchased on AWS Marketplace that have been trained in a framework other than Amazon SageMaker. For an overview of the process of bringing the trained model artifacts into Amazon SageMaker and hosting them at an endpoint, see <a href="https://aws.amazon.com/blogs/machine-learning/bring-your-own-pre-trained-mxnet-or-tensorflow-models-into-amazon-sagemaker/">Bring Your Own Pretrained MXNet or TensorFlow Models into Amazon SageMaker</a>.</p>
+<p>You can customize these prebuilt containers or extend them to handle any additional functional requirements for your algorithm or model that the prebuilt Amazon SageMaker Docker image doesn’t support. For an example, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/advanced_functionality/pytorch_extending_our_containers/pytorch_extending_our_containers.ipynb">Extending Our PyTorch Containers</a>.</p>
+</body>
+</html>

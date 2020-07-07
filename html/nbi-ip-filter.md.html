@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Limit Access to a Notebook Instance by IP Address</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Limit Access to a Notebook Instance by IP Address<a name="nbi-ip-filter"></a></h1>
+</header>
+<p>To allow access to a notebook instance only from IP addresses in a list that you specify, attach an IAM policy that denies access to <a href="API_CreatePresignedNotebookInstanceUrl.md">CreatePresignedNotebookInstanceUrl</a> unless the call comes from an IP address in the list to every AWS Identity and Access Management user, group, or role used to access the notebook instance. For information about creating IAM policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html">Creating IAM Policies</a> in the <em>AWS Identity and Access Management User Guide</em>. To specify the list of IP addresses that you want to have access to the notebook instance, use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key. For information about IAM condition operators, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html">IAM JSON Policy Elements: Condition Operators</a> in the <em>AWS Identity and Access Management User Guide</em>. For information about IAM condition context keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html">AWS Global Condition Context Keys</a>.</p>
+<p>For example, the following policy allows access to a notebook instance only from IP addresses in the ranges <code>192.0.2.0</code>-<code>192.0.2.255</code> and <code>203.0.113.0</code>-<code>203.0.113.255</code>:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Effect&quot;: &quot;Deny&quot;,
+            &quot;Action&quot;: &quot;sagemaker:CreatePresignedNotebookInstanceUrl&quot;,
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;NotIpAddress&quot;: {
+                    &quot;aws:SourceIp&quot;: [
+                        &quot;192.0.2.0/24&quot;,
+                        &quot;203.0.113.0/24&quot;
+                    ]
+                }
+            }
+        },
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: &quot;sagemaker:CreatePresignedNotebookInstanceUrl&quot;,
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;IpAddress&quot;: {
+                    &quot;aws:SourceIp&quot;: [
+                        &quot;192.0.2.0/24&quot;,
+                        &quot;203.0.113.0/24&quot;
+                    ]
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>The policy restricts access to both the call to <code>CreatePresignedNotebookInstanceUrl</code> and to the URL that the call returns. The policy also restricts access to opening a notebook instance in the console and is enforced for every HTTP request and WebSocket frame that attempts to connect to the notebook instance.</p>
+<p><strong>Note</strong><br />
+Using this method to filter by IP address is incompatible when <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html">connecting to Amazon SageMaker through a VPC interface endpoint.</a>. For information about restricting access to a notebook instance when connecting through a VPC interface endpoint, see <a href="notebook-interface-endpoint.md">Connect to a Notebook Instance Through a VPC Interface Endpoint</a>.</p>
+</body>
+</html>

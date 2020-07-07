@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune a Linear Learner Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune a Linear Learner Model<a name="linear-learner-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>The linear learner algorithm also has an internal mechanism for tuning hyperparameters separate from the automatic model tuning feature described here. By default, the linear learner algorithm tunes hyperparameters by training multiple models in parallel. When you use automatic model tuning, the linear learner internal tuning mechanism is turned off automatically. This sets the number of parallel models, <code>num_models</code>, to 1. The algorithm ignores any value that you set for <code>num_models</code>.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The linear learner algorithm reports the metrics in the following table, which are computed during training. Choose one of them as the objective metric. To avoid overfitting, we recommend tuning the model against a validation metric instead of a training metric.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:objective_loss</td>
+<td>The mean value of the objective loss function on the test dataset after the model is trained. By default, the loss is logistic loss for binary classification and squared loss for regression. To set the loss to other types, use the <code>loss</code> hyperparameter.</td>
+<td>Minimize</td>
+</tr>
+<tr class="even">
+<td>test:binary_classification_ accuracy</td>
+<td>The accuracy of the final model on the test dataset.</td>
+<td>Maximize</td>
+</tr>
+<tr class="odd">
+<td>test:binary_f_beta</td>
+<td>The F_beta score of the final model on the test dataset. By default, it is the F1 score, which is the harmonic mean of precision and recall.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>test:precision</td>
+<td>The precision of the final model on the test dataset. If you choose this metric as the objective, we recommend setting a target recall by setting the <code>binary_classifier_model_selection</code> hyperparameter to <code>precision_at_target_recall</code> and setting the value for the <code>target_recall</code> hyperparameter.</td>
+<td>Maximize</td>
+</tr>
+<tr class="odd">
+<td>test:recall</td>
+<td>The recall of the final model on the test dataset. If you choose this metric as the objective, we recommend setting a target precision by setting the <code>binary_classifier_model_selection</code> hyperparameter to <code>recall_at_target_precision</code> and setting the value for the <code>target_precison</code> hyperparameter.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:objective_loss</td>
+<td>The mean value of the objective loss function on the validation dataset every epoch. By default, the loss is logistic loss for binary classification and squared loss for regression. To set loss to other types, use the <code>loss</code> hyperparameter.</td>
+<td>Minimize</td>
+</tr>
+<tr class="odd">
+<td>validation:binary_classific ation_accuracy</td>
+<td>The accuracy of the final model on the validation dataset.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:binary_f_beta</td>
+<td>The F_beta score of the final model on the validation dataset. By default, the F_beta score is the F1 score, which is the harmonic mean of the <code>validation:precision</code> and <code>validation:recall</code> metrics.</td>
+<td>Maximize</td>
+</tr>
+<tr class="odd">
+<td>validation:precision</td>
+<td>The precision of the final model on the test dataset. If you choose this metric as the objective, we recommend setting a target recall by setting the <code>binary_classifier_model_selection</code> hyperparameter to <code>precision_at_target_recall</code> and setting the value for the <code>target_recall</code> hyperparameter.</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:recall</td>
+<td>The recall of the final model on the test dataset. If you choose this metric as the objective, we recommend setting a target precision by setting the <code>binary_classifier_model_selection</code> hyperparameter to <code>recall_at_target_precision</code> and setting the value for the <code>target_precison</code> hyperparameter.</td>
+<td>Maximize</td>
+</tr>
+</tbody>
+</table>
+<p>You can tune a linear learner model with the following hyperparameters.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>wd</td>
+<td><code>ContinuousParameterRanges</code></td>
+<td><code>MinValue: ``1e-7</code>, <code>MaxValue</code>: <code>1</code></td>
+</tr>
+<tr class="even">
+<td>l1</td>
+<td><code>ContinuousParameterRanges</code></td>
+<td><code>MinValue</code>: <code>1e-7</code>, <code>MaxValue</code>: <code>1</code></td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td><code>ContinuousParameterRanges</code></td>
+<td><code>MinValue</code>: <code>1e-5</code>, <code>MaxValue</code>: <code>1</code></td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td><code>IntegerParameterRanges</code></td>
+<td><code>MinValue</code>: <code>100</code>, <code>MaxValue</code>: <code>5000</code></td>
+</tr>
+<tr class="odd">
+<td>use_bias</td>
+<td><code>CategoricalParameterRanges</code></td>
+<td><code>[True, False]</code></td>
+</tr>
+<tr class="even">
+<td>positive_example_weight_mult</td>
+<td><code>ContinuousParameterRanges</code></td>
+<td><code>MinValue</code>: 1e-5, <code>MaxValue</code>: <code>1e5</code></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Connect to Amazon SageMaker Through a VPC Interface Endpoint</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Connect to Amazon SageMaker Through a VPC Interface Endpoint<a name="interface-vpc-endpoint"></a></h1>
+</header>
+<p>You can connect directly to the Amazon SageMaker API or to the Amazon SageMaker Runtime through an <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-interface.html">interface endpoint</a> in your Virtual Private Cloud (VPC) instead of connecting over the internet. When you use a VPC interface endpoint, communication between your VPC and the Amazon SageMaker API or Runtime is conducted entirely and securely within the AWS network.</p>
+<p><strong>Note</strong><br />
+PrivateLink for Amazon SageMaker is not supported in the <code>us-gov-west-1</code> region.</p>
+<p>The Amazon SageMaker API and Runtime support <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html">Amazon Virtual Private Cloud</a> (Amazon VPC) interface endpoints that are powered by <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html#what-is-privatelink">AWS PrivateLink</a>. Each VPC endpoint is represented by one or more <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html">Elastic Network Interfaces</a> (ENIs) with private IP addresses in your VPC subnets.</p>
+<p>The VPC interface endpoint connects your VPC directly to the Amazon SageMaker API or Runtime without an internet gateway, NAT device, VPN connection, or AWS Direct Connect connection. The instances in your VPC don’t need public IP addresses to communicate with the Amazon SageMaker API or Runtime.</p>
+<p>You can create an interface endpoint to connect to Amazon SageMaker or to Amazon SageMaker Runtime with either the AWS console or AWS Command Line Interface (AWS CLI) commands. For instructions, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-interface.html#create-interface-endpoint">Creating an Interface Endpoint</a>.</p>
+<p><em>After you have created a VPC endpoint</em>, you can use the following example CLI commands that use the <code>endpoint-url</code> parameter to specify interface endpoints to the Amazon SageMaker API or Runtime:</p>
+<pre><code>aws sagemaker list-notebook-instances --endpoint-url VPC_Endpoint_ID.api.sagemaker.Region.vpce.amazonaws.com
+
+aws sagemaker list-training-jobs --endpoint-url VPC_Endpoint_ID.api.sagemaker.Region.vpce.amazonaws.com
+
+aws sagemaker-runtime invoke-endpoint --endpoint-url VPC_Endpoint_ID.runtime.sagemaker.Region.vpce.amazonaws.com  \
+    --endpoint-name Endpoint_Name \
+    --body &quot;Endpoint_Body&quot; \
+    --content-type &quot;Content_Type&quot; \
+            Output_File</code></pre>
+<p>If you enable private DNS hostnames for your VPC endpoint, you don’t need to specify the endpoint URL. The Amazon SageMaker API DNS hostname that the CLI and Amazon SageMaker SDK use by default (https://api.sagemaker.<em>Region</em>.amazonaws.com) resolves to your VPC endpoint. Similarly, the Amazon SageMaker Runtime DNS hostname that the CLI and Amazon SageMaker Runtime SDK use by default (https://runtime.sagemaker.<em>Region</em>.amazonaws.com) resolves to your VPC endpoint.</p>
+<p>The Amazon SageMaker API and Runtime support VPC endpoints in all AWS Regions where both <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#vpc_region">Amazon VPC</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sagemaker_region">Amazon SageMaker</a> are available. Amazon SageMaker supports making calls to all of its <a href="API_Operations.md">Actions</a> inside your VPC. The result <code>AuthorizedUrl</code> from the <a href="API_CreatePresignedNotebookInstanceUrl.md">CreatePresignedNotebookInstanceUrl</a> is not supported by Private Link. For information about how to enable PrivateLink for the authorized URL that users use to connect to a notebook instance, see <a href="notebook-interface-endpoint.md">Connect to a Notebook Instance Through a VPC Interface Endpoint</a>.</p>
+<p>To learn more about AWS PrivateLink, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html#what-is-privatelink">AWS PrivateLink documentation</a> . Refer to <a href="https://aws.amazon.com/vpc/pricing/">VPC Pricing</a> for the price of VPC Endpoints. To learn more about VPC and Endpoints, see <a href="https://aws.amazon.com/vpc/">Amazon VPC</a>. For information about how to use identity-based AWS Identity and Access Management policies to restrict access to the Amazon SageMaker API and runtime, see <a href="using-identity-based-policies.md#api-access-policy">Control Access to the Amazon SageMaker API by Using Identity-based Policies</a>.</p>
+<p>You can create a policy for Amazon VPC endpoints for Amazon SageMaker to specify the following: + The principal that can perform actions. + The actions that can be performed. + The resources on which actions can be performed.</p>
+<p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints-access.html">Controlling Access to Services with VPC Endpoints</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p><strong>Note</strong><br />
+VPC endpoint policies aren’t supported for Federal Information Processing Standard (FIPS) Amazon SageMaker runtime endpoints for <a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a>.</p>
+<p>The following example VPC endpoint policy specifies that all users who have access to the VPC interface endpoint are allowed to invoke the Amazon SageMaker hosted endpoint named <code>myEndpoint</code>.</p>
+<pre><code>{
+  &quot;Statement&quot;: [
+      {
+          &quot;Action&quot;: &quot;sagemaker:InvokeEndpoint&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Resource&quot;: &quot;arn:aws:sagemaker:us-west-2:123456789012:endpoint/myEndpoint&quot;,
+          &quot;Principal&quot;: &quot;*&quot;
+      }
+  ]
+}</code></pre>
+<p>In this example, the following are denied: + Other Amazon SageMaker API actions, such as <code>sagemaker:CreateEndpoint</code> and <code>sagemaker:CreateTrainingJob</code>. + Invoking Amazon SageMaker hosted endpoints other than <code>myEndpoint</code>.</p>
+<p><strong>Note</strong><br />
+In this example, users can still take other Amazon SageMaker API actions from outside the VPC. For information about how to restrict API calls to those from within the VPC, see <a href="using-identity-based-policies.md#api-access-policy">Control Access to the Amazon SageMaker API by Using Identity-based Policies</a>.</p>
+<p>To call the Amazon SageMaker API and runtime through your VPC, you have to connect from an instance that is inside the VPC or connect your private network to your VPC by using an Amazon Virtual Private Network (VPN) or AWS Direct Connect. For information about Amazon VPN, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpn-connections.html">VPN Connections</a> in the <em>Amazon Virtual Private Cloud User Guide</em>. For information about AWS Direct Connect, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/create-connection.html">Creating a Connection</a> in the <em>AWS Direct Connect User Guide</em>.</p>
+</body>
+</html>

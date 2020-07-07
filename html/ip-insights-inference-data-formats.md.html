@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>IP Insights Inference Data Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">IP Insights Inference Data Formats<a name="ip-insights-inference-data-formats"></a></h1>
+</header>
+<p>The following are the available input and output formats for the IP Insights algorithm. Amazon SageMaker built-in algorithms adhere to the common input inference format described in <a href="cdf-inference.md">Common Data Formats for Inference</a>. However, the Amazon SageMaker IP Insights algorithm does not currently support RecordIO format.</p>
+<p>The CSV file must have two columns. The first column is an opaque string that corresponds to an entity’s unique identifier. The second column is the IPv4 address of the entity’s access event in decimal-dot notation.</p>
+<p>content-type: text/csv</p>
+<pre><code>entity_id_1, 192.168.1.2
+entity_id_2, 10.10.1.2</code></pre>
+<p>JSON data can be provided in different formats. IP Insights follows the common Amazon SageMaker formats. For more information about inference formats, see <a href="cdf-inference.md">Common Data Formats for Inference</a>.</p>
+<p>content-type: application/json</p>
+<pre><code>{
+  &quot;instances&quot;: [
+    {&quot;data&quot;: {&quot;features&quot;: {&quot;values&quot;: [&quot;entity_id_1&quot;, &quot;192.168.1.2&quot;]}}},
+    {&quot;features&quot;: [&quot;entity_id_2&quot;, &quot;10.10.1.2&quot;]}
+  ]
+}</code></pre>
+<p>The JSON Lines content type is useful for running batch transform jobs. For more information on Amazon SageMaker inference formats, see <a href="cdf-inference.md">Common Data Formats for Inference</a>. For more information on running batch transform jobs, see <a href="how-it-works-batch.md">Get Inferences for an Entire Dataset with Batch Transform</a>.</p>
+<p>content-type: application/jsonlines</p>
+<pre><code>{&quot;data&quot;: {&quot;features&quot;: {&quot;values&quot;: [&quot;entity_id_1&quot;, &quot;192.168.1.2&quot;]}}},
+{&quot;features&quot;: [&quot;entity_id_2&quot;, &quot;10.10.1.2&quot;]}]</code></pre>
+<p>The default output of the Amazon SageMaker IP Insights algorithm is the <code>dot_product</code> between the input entity and IP address. The dot_product signifies how compatible the model considers the entity and IP address. The <code>dot_product</code> is unbounded. To make predictions about whether an event is anomalous, you need to set a threshold based on your defined distribution. For information about how to use the <code>dot_product</code> for anomaly detection, see the <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/ipinsights_login/ipinsights-tutorial.ipynb">An Introduction to the Amazon SageMakerIP Insights Algorithm</a>.</p>
+<p>accept: application/json</p>
+<pre><code>{
+  &quot;predictions&quot;: [
+    {&quot;dot_product&quot;: 0.0},
+    {&quot;dot_product&quot;: 2.0}
+  ]
+}</code></pre>
+<p>Advanced users can access the model’s learned entity and IP embeddings by providing the additional content-type parameter <code>verbose=True</code> to the Accept heading. You can use the <code>entity_embedding</code> and <code>ip_embedding</code> for debugging, visualizing, and understanding the model. Additionally, you can use these embeddings in other machine learning techniques, such as classification or clustering.</p>
+<p>accept: application/json;verbose=True</p>
+<pre><code>{
+  &quot;predictions&quot;: [
+    {
+        &quot;dot_product&quot;: 0.0,
+        &quot;entity_embedding&quot;: [1.0, 0.0, 0.0],
+        &quot;ip_embedding&quot;: [0.0, 1.0, 0.0]
+    },
+    {
+        &quot;dot_product&quot;: 2.0,
+        &quot;entity_embedding&quot;: [1.0, 0.0, 1.0],
+        &quot;ip_embedding&quot;: [1.0, 0.0, 1.0]
+    }
+  ]
+}</code></pre>
+<p>accept: application/jsonlines</p>
+<pre><code>{&quot;dot_product&quot;: 0.0}
+{&quot;dot_product&quot;: 2.0}</code></pre>
+<p>accept: application/jsonlines; verbose=True</p>
+<pre><code>{&quot;dot_product&quot;: 0.0, &quot;entity_embedding&quot;: [1.0, 0.0, 0.0], &quot;ip_embedding&quot;: [0.0, 1.0, 0.0]}
+{&quot;dot_product&quot;: 2.0, &quot;entity_embedding&quot;: [1.0, 0.0, 1.0], &quot;ip_embedding&quot;: [1.0, 0.0, 1.0]}</code></pre>
+</body>
+</html>

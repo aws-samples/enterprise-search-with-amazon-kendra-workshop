@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Create a Pipeline Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Create a Pipeline Model<a name="inference-pipeline-create-console"></a></h1>
+</header>
+<p>To create a pipeline model that can be deployed to an endpoint or used for a batch transform job, use the Amazon SageMaker console or the <code>CreateModel</code> operation.</p>
+<p><strong>To create an inference pipeline (console)</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Models</strong>, and then choose <strong>Create models</strong> from the <strong>Inference</strong> group.</p></li>
+<li><p>On the <strong>Create model</strong> page, provide a model name, choose an IAM role, and, if you want to use a private VPC, specify VPC values.<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/create-pipeline-model.png" alt="[The page for creating a model for an Inference Pipeline.]" /></p></li>
+<li><p>To add information about the containers in the inference pipeline, choose <strong>Add container</strong>, then choose <strong>Next</strong>.</p></li>
+<li><p>Complete the fields for each container in the order that you want to execute them, up to the maximum of five. Complete the <strong>Container input options</strong>, , <strong>Location of inference code image</strong>, and, optionally, <strong>Location of model artifacts</strong>, <strong>Container host name</strong>, and <strong>Environmental variables</strong> fields. .<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/create-pipeline-model-containers.png" alt="[Creating a pipeline model with containers.]" /></p>
+<p>The <strong>MyInferencePipelineModel</strong> page summarizes the settings for the containers that provide input for the model. If you provided the environment variables in a corresponding container definition, Amazon SageMaker shows them in the <strong>Environment variables</strong> field.<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/pipeline-MyInferencePipelinesModel-recap.png" alt="[The summary of container settings for the pipeline model.]" /></p></li>
+</ol>
+</body>
+</html>

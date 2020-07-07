@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Troubleshooting Neo Compilation Errors</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Troubleshooting Neo Compilation Errors<a name="neo-troubleshooting"></a></h1>
+</header>
+<p>This section contains information about how to understand and prevent common errors, the error messages they generate, and guidance on how to resolve these errors. It also contains lists of the frameworks and the operations in each of those frameworks that Neo supports.</p>
+<p><strong>Topics</strong> + <a href="#neo-troubleshooting-errors-preventing">Prevent Neo Input Errors</a> + <a href="#neo-troubleshooting-errors-understanding">Neo Error Messages</a> + <a href="#neo-errors-resolving">Resolve Neo Errors</a></p>
+<p>Some of the most common errors are due to invalid inputs. This section contains information arranged in question and answer form to help you avoid these errors.</p>
+<p><strong><em>Which frameworks does Neo support?</em></strong> + <a href="https://aws.amazon.com/tensorflow/">TensorFlow</a> + <a href="https://pytorch.org/">PyTorch</a> + <a href="https://aws.amazon.com/mxnet/">Apache MXNET</a> + <a href="https://github.com/dmlc/xgboost">XGBoost</a> + <a href="https://github.com/onnx/onnx">ONNX</a></p>
+<p><strong><em>Which operators does Amazon SageMaker Neo support for these frameworks?</em></strong></p>
+<p>The following table lists the supported operations for each framework.</p>
+<table>
+<thead>
+<tr class="header">
+<th>MXNet</th>
+<th>TensorFlow</th>
+<th>PyTorch/ONNX</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>‘_add_scalar’</td>
+<td>‘Add’</td>
+<td>‘Abs’</td>
+</tr>
+<tr class="even">
+<td>‘_add_symbol’</td>
+<td>‘ArgMax’</td>
+<td>‘Add’</td>
+</tr>
+<tr class="odd">
+<td>‘_contrib_MultiBoxDetection’</td>
+<td>‘ArgMin’</td>
+<td>‘ArgMax’</td>
+</tr>
+<tr class="even">
+<td>‘_contrib_MultiBoxPrior’</td>
+<td>‘AvgPool’</td>
+<td>‘ArgMin’</td>
+</tr>
+<tr class="odd">
+<td>‘_copy’</td>
+<td>‘BatchNormWithGlobalNormalization’</td>
+<td>‘AveragePool’</td>
+</tr>
+<tr class="even">
+<td>‘_div_scalar’</td>
+<td>‘BiasAdd’</td>
+<td>‘BatchNormalization’</td>
+</tr>
+<tr class="odd">
+<td>‘_div_symbol’</td>
+<td>‘Cast’</td>
+<td>‘Cast’</td>
+</tr>
+<tr class="even">
+<td>‘_minus_scalar’</td>
+<td>‘Ceil’</td>
+<td>‘Ceil’</td>
+</tr>
+<tr class="odd">
+<td>‘_minus_scalar’</td>
+<td>‘CheckNumerics’</td>
+<td>‘Clip’</td>
+</tr>
+<tr class="even">
+<td>‘_mul_symbol’</td>
+<td>‘Concat’</td>
+<td>‘Concat’</td>
+</tr>
+<tr class="odd">
+<td>‘_Plus’</td>
+<td>‘ConcatV2’</td>
+<td>‘Constant’</td>
+</tr>
+<tr class="even">
+<td>‘_plus_scalar’</td>
+<td>‘Conv2D’</td>
+<td>‘ConstantFill’</td>
+</tr>
+<tr class="odd">
+<td>‘_pow_scalar’</td>
+<td>‘DecodeJpeg’</td>
+<td>‘Conv’</td>
+</tr>
+<tr class="even">
+<td>‘_rdiv_scalar’</td>
+<td>‘DepthwiseConv2dNative’</td>
+<td>‘ConvTranspose’</td>
+</tr>
+<tr class="odd">
+<td>‘_rminus_scalar’</td>
+<td>‘Elu’</td>
+<td>‘Div’</td>
+</tr>
+<tr class="even">
+<td>‘_rpow_scalar’</td>
+<td>‘Equal’</td>
+<td>‘Dropout’</td>
+</tr>
+<tr class="odd">
+<td>‘_rsub_scalar’</td>
+<td>‘ExpandDims’</td>
+<td>‘Elu’</td>
+</tr>
+<tr class="even">
+<td>‘_sub_scalar’</td>
+<td>‘Fill’</td>
+<td>‘Exp’</td>
+</tr>
+<tr class="odd">
+<td>‘_sub_symbol’</td>
+<td>‘Floor’</td>
+<td>‘FC’</td>
+</tr>
+<tr class="even">
+<td>‘Activation’</td>
+<td>‘FusedBatchNorm’</td>
+<td>‘Flatten’</td>
+</tr>
+<tr class="odd">
+<td>‘add_n’</td>
+<td>‘FusedBatchNormV2’</td>
+<td>‘Floor’</td>
+</tr>
+<tr class="even">
+<td>‘argmax’</td>
+<td>‘GatherV2’</td>
+<td>‘Gather’</td>
+</tr>
+<tr class="odd">
+<td>‘BatchNorm’</td>
+<td>‘Greater’</td>
+<td>‘Gemm’</td>
+</tr>
+<tr class="even">
+<td>‘BatchNorm_v1’</td>
+<td>‘GreaterEqual’</td>
+<td>‘GlobalAveragePool’</td>
+</tr>
+<tr class="odd">
+<td>‘broadcast_add’</td>
+<td>‘Identity’</td>
+<td>‘GlobalMaxPool’</td>
+</tr>
+<tr class="even">
+<td>‘broadcast_div’</td>
+<td>‘LeakyRelu’</td>
+<td>‘HardSigmoid’</td>
+</tr>
+<tr class="odd">
+<td>‘broadcast_mul’</td>
+<td>‘Less’</td>
+<td>‘Identity’</td>
+</tr>
+<tr class="even">
+<td>‘broadcast_sub’</td>
+<td>‘LessEqual’</td>
+<td>‘ImageScaler’</td>
+</tr>
+<tr class="odd">
+<td>‘broadcast_to’</td>
+<td>‘LRN’</td>
+<td>‘LeakyRelu’</td>
+</tr>
+<tr class="even">
+<td>‘cast’</td>
+<td>‘MatMul’</td>
+<td>‘Log’</td>
+</tr>
+<tr class="odd">
+<td>‘Cast’</td>
+<td>‘Maximum’</td>
+<td>‘LogSoftmax’</td>
+</tr>
+<tr class="even">
+<td>‘clip’</td>
+<td>‘MaxPool’</td>
+<td>‘LRN’</td>
+</tr>
+<tr class="odd">
+<td>‘Concat’</td>
+<td>‘Mean’</td>
+<td>‘MatMul’</td>
+</tr>
+<tr class="even">
+<td>‘concat’</td>
+<td>‘Minimum’</td>
+<td>‘Max’</td>
+</tr>
+<tr class="odd">
+<td>‘Convolution’</td>
+<td>‘Mul’ </td>
+<td>‘MaxPool’</td>
+</tr>
+<tr class="even">
+<td>‘Convolution_v1’</td>
+<td>‘NotEqual’</td>
+<td>‘Mean’</td>
+</tr>
+<tr class="odd">
+<td>‘Crop’</td>
+<td>‘Pack’</td>
+<td>‘Min’</td>
+</tr>
+<tr class="even">
+<td>‘Deconvolution’</td>
+<td>‘Pad’</td>
+<td>‘Mul’</td>
+</tr>
+<tr class="odd">
+<td>‘Dropout’</td>
+<td>‘PadV2’</td>
+<td>‘Neg’</td>
+</tr>
+<tr class="even">
+<td>‘elemwise_add’</td>
+<td>‘Range’</td>
+<td>‘Pad’</td>
+</tr>
+<tr class="odd">
+<td>‘elemwise_div’</td>
+<td>‘Rank’</td>
+<td>‘ParametricSoftplus’</td>
+</tr>
+<tr class="even">
+<td>‘elemwise_mul’</td>
+<td>‘Relu’</td>
+<td>‘Pow’</td>
+</tr>
+<tr class="odd">
+<td>‘elemwise_sub’</td>
+<td>‘Relu6’</td>
+<td>‘PRelu’</td>
+</tr>
+<tr class="even">
+<td>‘exp’</td>
+<td>‘Reshape’</td>
+<td>‘Reciprocal’</td>
+</tr>
+<tr class="odd">
+<td>‘expand_dims’</td>
+<td>‘ResizeBilinear’</td>
+<td>‘ReduceMax’</td>
+</tr>
+<tr class="even">
+<td>‘flatten’</td>
+<td>‘Rsqrt’</td>
+<td>‘ReduceMean’</td>
+</tr>
+<tr class="odd">
+<td>‘Flatten’</td>
+<td>‘Selu’</td>
+<td>‘ReduceMin’</td>
+</tr>
+<tr class="even">
+<td>‘FullyConnected’</td>
+<td>‘Shape’</td>
+<td>‘ReduceProd’</td>
+</tr>
+<tr class="odd">
+<td>‘LeakyReLU’</td>
+<td>‘Sigmoid’</td>
+<td>‘ReduceSum’</td>
+</tr>
+<tr class="even">
+<td>‘LinearRegressionOutput’</td>
+<td>‘Softmax’</td>
+<td>‘Relu’</td>
+</tr>
+<tr class="odd">
+<td>‘log’</td>
+<td>‘Square’</td>
+<td>‘Reshape’</td>
+</tr>
+<tr class="even">
+<td>‘log_softmax’</td>
+<td>‘Squeeze’</td>
+<td>‘Scale’</td>
+</tr>
+<tr class="odd">
+<td>‘LRN’</td>
+<td>‘StridedSlice’</td>
+<td>‘ScaledTanh’</td>
+</tr>
+<tr class="even">
+<td>‘max’</td>
+<td>‘Sub’</td>
+<td>‘Selu’</td>
+</tr>
+<tr class="odd">
+<td>‘max_axis’ </td>
+<td>‘Sum’</td>
+<td>‘Shape’</td>
+</tr>
+<tr class="even">
+<td>‘min’</td>
+<td>‘Tanh’</td>
+<td>‘Sigmoid’</td>
+</tr>
+<tr class="odd">
+<td>‘min_axis’</td>
+<td>‘Transpose’</td>
+<td>‘Slice’</td>
+</tr>
+<tr class="even">
+<td>‘negative’</td>
+<td></td>
+<td>‘Softmax’</td>
+</tr>
+<tr class="odd">
+<td>‘Pooling’</td>
+<td></td>
+<td>‘SoftPlus’</td>
+</tr>
+<tr class="even">
+<td>‘Pooling_v1’</td>
+<td></td>
+<td>‘Softsign’</td>
+</tr>
+<tr class="odd">
+<td>‘relu’</td>
+<td></td>
+<td>‘SpatialBN’</td>
+</tr>
+<tr class="even">
+<td>‘Reshape’</td>
+<td></td>
+<td>‘Split’</td>
+</tr>
+<tr class="odd">
+<td>‘reshape’</td>
+<td></td>
+<td>‘Sqrt’</td>
+</tr>
+<tr class="even">
+<td>‘reshape_like’</td>
+<td></td>
+<td>‘Squeeze’</td>
+</tr>
+<tr class="odd">
+<td>‘sigmoid’</td>
+<td></td>
+<td>‘Sub’</td>
+</tr>
+<tr class="even">
+<td>‘slice_like’</td>
+<td></td>
+<td>‘Sum’</td>
+</tr>
+<tr class="odd">
+<td>‘SliceChannel’</td>
+<td></td>
+<td>‘Tanh’</td>
+</tr>
+<tr class="even">
+<td>‘softmax’</td>
+<td></td>
+<td>‘ThresholdedRelu’</td>
+</tr>
+<tr class="odd">
+<td>‘Softmax’</td>
+<td></td>
+<td>‘Transpose’</td>
+</tr>
+<tr class="even">
+<td>‘SoftmaxActivation’</td>
+<td></td>
+<td>‘Unsqueeze’</td>
+</tr>
+<tr class="odd">
+<td>‘SoftmaxOutput’</td>
+<td></td>
+<td>‘Upsample’</td>
+</tr>
+<tr class="even">
+<td>‘split’</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>‘sum’</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>‘sum_axis’</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>‘tanh’</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>‘transpose’</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>‘UpSampling’</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong><em>Which model architectures does Neo support?</em></strong></p>
+<p>Neo supports image classification models.</p>
+<p><strong><em>Which model format files does Neo read in?</em></strong></p>
+<p>The file needs to be formatted as a tar.gz file that includes additional files that depend on the type of framework. + <strong>TensorFlow</strong>: Neo supports saved models and frozen models.</p>
+<p>For <em>saved models</em>, Neo expects one .pb or one .pbtxt file and a variables directory that contains variables.</p>
+<p>For <em>frozen models</em>, Neo expect only one .pb or .pbtxt file. + <strong>PyTorch</strong>: Neo expects one .pth file containing the model definition. + <strong>MXNET</strong>: Neo expects one symbol file (.json) and one parameter file (.params). + <strong>XGBoost</strong>: Neo expects one XGBoost model file (.model) where the number of nodes in a tree can’t exceed 2^31. + <strong>ONNX</strong>: Neo expects one .onnx file.</p>
+<p><strong><em>What input data shapes does Neo expect?</em></strong></p>
+<p>Neo expects the name and shape of the expected data inputs for your trained model with a JSON dictionary form or list form. The data inputs are framework specific. + <code>TensorFlow</code>: You must specify the name and shape (NHWC format) of the expected data inputs using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different. + Examples for one input: + If using the console, <code>{"input":[1,1024,1024,3]}</code> + If using the CLI, <code>{\"input\":[1,1024,1024,3]}</code> + Examples for two inputs: + If using the console, <code>{"data1": [1,28,28,1], "data2":[1,28,28,1]}</code> + If using the CLI, <code>{\"data1\": [1,28,28,1], \"data2\":[1,28,28,1]}</code> + <code>MXNET/ONNX</code>: You must specify the name and shape (NCHW format) of the expected data inputs in order using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different. + Examples for one input: + If using the console, <code>{"data":[1,3,1024,1024]}</code> + If using the CLI, <code>{\"data\":[1,3,1024,1024]}</code> + Examples for two inputs: + If using the console, <code>{"var1": [1,1,28,28], "var2":[1,1,28,28]}</code> + If using the CLI, <code>{\"var1\": [1,1,28,28], \"var2\":[1,1,28,28]}</code> + <code>PyTorch</code>: You can either specify the name and shape (NCHW format) of expected data inputs in order using a dictionary format for your trained model or you can specify the shape only using a list format. The dictionary formats required for the console and CLI are different. The list formats for the console and CLI are the same. + Examples for one input in dictionary format: + If using the console, <code>{"input0":[1,3,224,224]}</code> + If using the CLI, <code>{\"input0\":[1,3,224,224]}</code> + Example for one input in list format: <code>[[1,3,224,224]]</code> + Examples for two inputs in dictionary format: + If using the console, <code>{"input0":[1,3,224,224], "input1":[1,3,224,224]}</code> + If using the CLI, <code>{\"input0\":[1,3,224,224], \"input1\":[1,3,224,224]}</code> + Example for two inputs in list format: <code>[[1,3,224,224], [1,3,224,224]]</code> + <code>XGBOOST</code>: input data name and shape are not needed.</p>
+<p>This section lists and classifies Neo errors and error messages.</p>
+<p>This list catalogs the user and system error messages you can receive from Neo deployments. + <strong>User error messages</strong> + <strong>Client permission error</strong>: Neo passes the errors for these straight through from the dependent service.</p>
+<pre><code>*Access Denied* when calling sts:AssumeRole
+
+Any *400 error* when calling S3 to download or upload a client model\.
+
+*PassRole* error</code></pre>
+<ul>
+<li><p><strong>Load error</strong>: Keywords in error messages, ‘InputConfiguration’,‘ModelSizeTooBig’.</p>
+<p><em>Load Error: InputConfiguration</em>: Exactly one {.xxx} file is allowed for {yyy} model.</p>
+<p><em>Load Error: ModelSizeTooBig</em>: number of nodes in a tree can’t exceed 2^31</p></li>
+<li><p><strong>Compilation error</strong>: Keywords in error messages, ‘OperatorNotImplemented’,’ OperatorAttributeNotImplemented’, ‘OperatorAttributeRequired’, ‘OperatorAttributeValueNotValid’.</p>
+<p><em>OperatorNotImplemented</em>: {xxx} is not supported.</p>
+<p><em>OperatorAttributeNotImplemented</em>: {xxx} is not supported in {yyy}.</p>
+<p><em>OperatorAttributeRequired</em>: Required attribute {xxx} not found in {yyy}.</p>
+<p><em>OperatorAttributeValueNotValid</em>: The value of attribute {xxx} in operator {yyy} cannot be negative.</p></li>
+<li><p><strong>Any Malformed Input Errors</strong></p></li>
+<li><p><strong>System error messages</strong></p>
+<ul>
+<li>For system errors, Neo shows only one error message similar to the following: There was an unexpected error during compilation, check your inputs and try again in a few minutes.</li>
+<li>This covers all unexpected errors and errors that are not user errors.</li>
+</ul></li>
+</ul>
+<p>This list classifies the <em>user errors</em> you can receive from Neo. These include access and permission errors and load errors for each of the supported frameworks. All other errors are <em>system errors</em>. + <strong>Client permission error</strong>: Neo passes the errors for these straight through from the dependent service.</p>
+<p><em>Access Denied</em> when calling sts:AssumeRole</p>
+<p>Any <em>400 error</em> when calling Amazon S3 to download or upload a client model.</p>
+<p><em>PassRole</em> error + <strong>Load error</strong>: Assuming that the Neo compiler successfully loaded .tar.gz from Amazon S3, check whether the tarball contains the necessary files for compilation. The checking criteria is framework-specific: + <strong>TensorFlow</strong>: Expects only protobuf file (*.pb or *.pbtxt). For <em>saved models</em>, expects one <code>variables</code> folder. + <strong>Pytorch</strong>: Expect only one pytorch file (*.pth). + <strong>MXNET</strong>: Expect only one symbol file (*.json) and one parameter file (*.params). + <strong>XGBoost</strong>: Expect only one XGBoost model file (*.model). The input model has size limitation. + <strong>Compilation error</strong>: Assuming that the Neo compiler successfully loaded .tar.gz from Amazon S3, and that the tarball contains necessary files for compilation. The checking criteria is: + <strong>OperatorNotImplemented</strong>: An operator has not been implemented. + <strong>OperatorAttributeNotImplemented</strong>: The attribute in the specified operator has not been implemented. + <strong>OperatorAttributeRequired</strong>: An attribute is required for an internal symbol graph, but it is not listed in the user input model graph. + <strong>OperatorAttributeValueNotValid</strong>: The value of the attribute in the specific operator is not valid.</p>
+<p>This section provides guidance on troubleshooting common issues with Neo. These include permission, load, compilation, and system errors and errors involving invalid inputs and unsupported operations. + <strong>Catalog of Known Issues</strong>: + If you see <strong>Client Permission Error</strong>, review the set up documentation and make sure that you have correctly granted the permissions that are failing. + If you see <strong>Load Error</strong>, check the model format files that Neo expects for different frameworks. + If you see <strong>Compilation Error</strong>, check and address the details error message in your input model graph. + If you see <strong>System Error</strong>, try again in a few minutes. If that fails, file a ticket. + <strong>Lack of Roles and Permissions</strong>: Review the set up documentation and make sure that you have correctly granted the permissions that are failing. + <strong>Invalid API and Console Inputs</strong>: Fix your input as described in the validation error. + <strong>Unsupported Operators</strong>: + Check the failure reason where Neo has listed all unsupported operators with the keyword ‘OperatorNotImplemented’. + For example: Compilation Error: OperatorNotImplemented: The following operators are not implemented: {‘_sample_multinomial’, ‘RNN’ } + Remove the unsupported operators from your input model graph and test it again.</p>
+</body>
+</html>

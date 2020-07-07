@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Object2Vec Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Object2Vec Algorithm<a name="object2vec"></a></h1>
+</header>
+<p>The Amazon SageMaker Object2Vec algorithm is a general-purpose neural embedding algorithm that is highly customizable. It can learn low-dimensional dense embeddings of high-dimensional objects. The embeddings are learned in a way that preserves the semantics of the relationship between pairs of objects in the original space in the embedding space. You can use the learned embeddings to efficiently compute nearest neighbors of objects and to visualize natural clusters of related objects in low-dimensional space, for example. You can also use the embeddings as features of the corresponding objects in downstream supervised tasks, such as classification or regression.</p>
+<p>Object2Vec generalizes the well-known Word2Vec embedding technique for words that is optimized in the Amazon SageMaker <a href="blazingtext.md">BlazingText Algorithm</a>. For a blog post that discusses how to apply Object2Vec to some practical use cases, see <a href="https://aws.amazon.com/blogs/machine-learning/introduction-to-amazon-sagemaker-object2vec/">Introduction to Amazon SageMaker Object2Vec</a>.</p>
+<p><strong>Topics</strong> + <a href="#object2vec-inputoutput">I/O Interface for the Object2Vec Algorithm</a> + <a href="#object2vec--instances">EC2 Instance Recommendation for the Object2Vec Algorithm</a> + <a href="#object2vec-sample-notebooks">Object2Vec Sample Notebooks</a> + <a href="object2vec-howitworks.md">How Object2Vec Works</a> + <a href="object2vec-hyperparameters.md">Object2Vec Hyperparameters</a> + <a href="object2vec-tuning.md">Tune an Object2Vec Model</a> + <a href="object2vec-training-formats.md">Data Formats for Object2Vec Training</a> + <a href="object2vec-inference-formats.md">Data Formats for Object2Vec Inference</a> + <a href="object2vec-encoder-embeddings.md">Encoder Embeddings for Object2Vec</a></p>
+<p>You can use Object2Vec on many input data types, including the following examples.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Input Data Type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sentence-sentence pairs</td>
+<td>“A soccer game with multiple males playing.” and “Some men are playing a sport.”</td>
+</tr>
+<tr class="even">
+<td>Labels-sequence pairs</td>
+<td>The genre tags of the movie “Titanic”, such as “Romance” and “Drama”, and its short description: “James Cameron’s Titanic is an epic, action-packed romance set against the ill-fated maiden voyage of the R.M.S. Titanic. She was the most luxurious liner of her era, a ship of dreams, which ultimately carried over 1,500 people to their death in the ice cold waters of the North Atlantic in the early hours of April 15, 1912.”</td>
+</tr>
+<tr class="odd">
+<td>Customer-customer pairs</td>
+<td>The customer ID of Jane and customer ID of Jackie.</td>
+</tr>
+<tr class="even">
+<td>Product-product pairs</td>
+<td>The product ID of football and product ID of basketball.</td>
+</tr>
+<tr class="odd">
+<td>Item review user-item pairs</td>
+<td>A user’s ID and the items she has bought, such as apple, pear, and orange.</td>
+</tr>
+</tbody>
+</table>
+<p>To transform the input data into the supported formats, you must preprocess it. Currently, Object2Vec natively supports two types of input: + A discrete token, which is represented as a list of a single <code>integer-id</code>. For example, <code>[10]</code>. + A sequences of discrete tokens, which is represented as a list of <code>integer-ids</code>. For example, <code>[0,12,10,13]</code>.</p>
+<p>The object in each pair can be asymmetric. For example, the pairs can be (token, sequence) or (token, token) or (sequence, sequence). For token inputs, the algorithm supports simple embeddings as compatible encoders. For sequences of token vectors, the algorithm supports the following as encoders: + Average-pooled embeddings + Hierarchical convolutional neural networks (CNNs), + Multi-layered bidirectional long short-term memory (BiLSTMs)</p>
+<p>The input label for each pair can be one of the following: + A categorical label that expresses the relationship between the objects in the pair + A score that expresses the strength of the similarity between the two objects</p>
+<p>For categorical labels used in classification, the algorithm supports the cross-entropy loss function. For ratings/score-based labels used in regression, the algorithm supports the mean squared error (MSE) loss function. Specify these loss functions with the <code>output_layer</code> hyperparameter when you create the model training job.</p>
+<p>The type of Amazon Elastic Compute Cloud (Amazon EC2) instance that you use depends on whether you are training or running inferences.</p>
+<p>When training a model using the Object2Vec algorithm on a CPU, start with an ml.m5.2xlarge instance. For training on a GPU, start with an ml.p2.xlarge instance. If the training takes too long on this instance, you can use a larger instance, such as an ml.m5.4xlarge or an ml.m5.12xlarge instance Currently, the Object2Vec algorithm can train only on a single machine. However, it does offer support for multiple GPUs.</p>
+<p>For inference with a trained Object2Vec model that has a deep neural network, we recommend using ml.p3.2xlarge GPU instance. Due to GPU memory scarcity, the <code>INFERENCE_PREFERRED_MODE</code> environment variable can be specified to optimize on whether the <a href="object2vec-inference-formats.md#object2vec-inference-gpu-optimize-classification">GPU optimization: Classification or Regression</a> or <a href="object2vec-encoder-embeddings.md#object2vec-inference-gpu-optimize-encoder-embeddings">GPU optimization: Encoder Embeddings</a> inference network is loaded into GPU.</p>
+<p>For a sample notebook that uses the Amazon SageMaker Object2Vec algorithm to encode sequences into fixed-length embeddings, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/introduction_to_amazon_algorithms/object2vec_sentence_similarity/">Using Object2Vec to Encode Sentences into Fixed Length Embeddings</a>. For a sample notebook that uses the Object2Vec algorithm in a multi-label prediction setting to predict the genre of a movie from its plot description, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object2vec_multilabel_genre_classification/object2vec_multilabel_genre_classification.ipynb">Movie genre prediction with Object2Vec Algorithm</a>. For a sample notebook that uses the Object2Vec algorithm to make movie recommendations, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object2vec_movie_recommendation/object2vec_movie_recommendation.ipynb">An Introduction to SageMaker ObjectToVec model for MovieLens recommendation</a>. For a sample notebook that uses the Object2Vec algorithm to learn document embeddings, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/introduction_to_applying_machine_learning/object2vec_document_embedding/object2vec_document_embedding.ipynb">Using Object2Vec to learn document embeddings</a>. For instructions on how to create and access Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. After you have created a notebook instance and opened it, choose <strong>SageMaker Examples</strong> to see a list of Amazon SageMaker samples. To open a notebook, choose its <strong>Use</strong> tab and choose <strong>Create copy</strong>.</p>
+</body>
+</html>

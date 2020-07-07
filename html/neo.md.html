@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Amazon SageMaker Neo</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Amazon SageMaker Neo<a name="neo"></a></h1>
+</header>
+<p>Neo is a new capability of Amazon SageMaker that enables machine learning models to train once and run anywhere in the cloud and at the edge.</p>
+<p>Ordinarily, optimizing machine learning models for inference on multiple platforms is extremely difficult because you need to hand-tune models for the specific hardware and software configuration of each platform. If you want to get optimal performance for a given workload, you need to know the hardware architecture, instruction set, memory access patterns, and input data shapes among other factors. For traditional software development, tools such as compilers and profilers simplify the process. For machine learning, most tools are specific to the framework or to the hardware. This forces you into a manual trial-and-error process that is unreliable and unproductive.</p>
+<p>Neo eliminates the time and effort required to do this by automatically optimizing TensorFlow, Apache MXNet, PyTorch, ONNX, and XGBoost models for deployment on ARM, Intel, and Nvidia processors. Neo consists of a compiler and a runtime. First, the Neo compilation API reads models exported from various frameworks. It converts the framework-specific functions and operations into a framework-agnostic intermediate representation. Next, it performs a series of optimizations. Then it generates binary code for the optimized operations, writes them to a shared object library, and saves the model definition and parameters into separate files. Neo also provides a runtime for each target platform that loads and executes the compiled model.</p>
+<p>You can create a Neo compilation job from either the Amazon SageMaker console, AWS Command Line Interface (AWS CLI), Python notebook, or the Amazon SageMaker SDK. With a few CLI commands, an API invocation, or a few clicks, you can convert a model for your chosen platform. You can deploy the model to an Amazon SageMaker endpoint or on an AWS IoT Greengrass device quickly. Amazon SageMaker provides Neo container images for Amazon SageMaker XGBoost and Image Classification models, and supports Amazon SageMaker-compatible containers for your own compiled models.</p>
+<p><strong>Note</strong><br />
+Neo currently supports image classification models exported as frozen graphs from TensorFlow, MXNet, or PyTorch, and XGBoost models. Neo is available in the following AWS Regions:<br />
+US East (N. Virginia), us-east-1 US West (Oregon), us-west-2 EU (Ireland), eu-west-1</p>
+<p><strong>Topics</strong> + <a href="#neo-sample-notebooks">Amazon SageMaker Neo Sample Notebooks</a> + <a href="neo-job-compilation.md">Use Neo to Compile a Model</a> + <a href="neo-deployment.md">Deploy a Model</a> + <a href="neo-requests.md">Request Inferences from a Deployed Service</a> + <a href="neo-troubleshooting.md">Troubleshooting Neo Compilation Errors</a></p>
+<p>For sample notebooks that uses Amazon SageMaker Neo to train, compile, optimize, and deploy machine learning models to make inferences, see: + <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker_neo_compilation_jobs/mxnet_mnist/mxnet_mnist_neo.ipynb">MNIST Training, Compilation and Deployment with MXNet Module</a> + <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker_neo_compilation_jobs/tensorflow_distributed_mnist/tensorflow_distributed_mnist_neo.ipynb">MNIST Training, Compilation and Deployment with Tensorflow Module</a> + <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker_neo_compilation_jobs/pytorch_torchvision/pytorch_torchvision_neo.ipynb">Deploying pre-trained PyTorch vision models with Amazon SageMaker Neo</a> + <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker_neo_compilation_jobs/imageclassification_caltech/Image-classification-fulltraining-highlevel-neo.ipynb">Model Optimization with an Image Classification Example</a> + <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker_neo_compilation_jobs/xgboost_customer_churn/xgboost_customer_churn_neo.ipynb">Model Optimization with XGBoost Example</a></p>
+<p>For instructions on how to run these example notebooks in Amazon SageMaker, see <a href="howitworks-nbexamples.md">Use Example Notebooks</a>. If you need intructions on how to create a notebook instance to run these examples, see Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. To navigate to the relevant example in your notebook instance, choose the <strong>Amazon SageMaker Examples</strong> tab to see a list of all of the Amazon SageMaker samples. To open a notebook, choose its <strong>Use</strong> tab, then choose <strong>Create copy</strong>.</p>
+</body>
+</html>

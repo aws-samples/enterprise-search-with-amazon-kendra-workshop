@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Compile a Model (Console)</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Compile a Model (Console)<a name="neo-job-compilation-console"></a></h1>
+</header>
+<p>You can create a Neo compilation job in the Amazon SageMaker console. In the <strong>Amazon SageMaker</strong> console, choose <strong>Compilation jobs</strong>, and then choose <strong>Create compilation job</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/8-create-compilation-job.png" alt="" /><figcaption>[Create a compilation job.]</figcaption>
+</figure>
+<p>On the <strong>Create compilation job</strong> page, for <strong>Job name</strong>, enter a name. Then select an <strong>IAM role</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/9-create-compilation-job-config.png" alt="" /><figcaption>[IAM role.]</figcaption>
+</figure>
+<p>If you don’t have an IAM role, choose <strong>Create a new role</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/10a-create-iam-role.png" alt="" /><figcaption>[IAM role.]</figcaption>
+</figure>
+<p>On the <strong>Create an IAM role</strong> page, choose <strong>Any S3 bucket</strong>, and choose <strong>Create role</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/10-create-iam-role.png" alt="" /><figcaption>[Create IAM role.]</figcaption>
+</figure>
+<p>In the <strong>Input configuration</strong> section, for <strong>Location of model artifacts</strong>, enter the path of the S3 bucket that contains your model artifacts. For <strong>Data input configuration</strong>, enter the JSON string that specifies how many data matrix inputs you and the shape of each data matrices. For <strong>Machine learning framework</strong>, choose the framework.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/11b-create-compilation-job-input-config.png" alt="" /><figcaption>[Input config.]</figcaption>
+</figure>
+<p>In the <strong>Output configuration</strong> section, for <strong>S3 Output location</strong>, enter the path to the S3 bucket or folder where you want to store the model. For <strong>Target device</strong>, choose which device you want to deploy your model to, and choose <strong>Create job</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/11c-create-compilation-job-output-config.png" alt="" /><figcaption>[Create job.]</figcaption>
+</figure>
+<p>Check the status of the compilation job when started.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/12-run-model-compilation.png" alt="" /><figcaption>[Compilation job status.]</figcaption>
+</figure>
+<p>Check the status of the compilation job when completed.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/12a-completed-model-compilation.png" alt="" /><figcaption>[Compilation job status.]</figcaption>
+</figure>
+</body>
+</html>

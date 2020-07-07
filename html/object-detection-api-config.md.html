@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Object Detection Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Object Detection Hyperparameters<a name="object-detection-api-config"></a></h1>
+</header>
+<p>In the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> request, you specify the training algorithm that you want to use. You can also specify algorithm-specific hyperparameters that are used to help estimate the parameters of the model from a training dataset. The following table lists the hyperparameters provided by Amazon SageMaker for training the object detection algorithm. For more information about how object training works, see <a href="algo-object-detection-tech-notes.md">How Object Detection Works</a>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_classes</td>
+<td>The number of output classes. This parameter defines the dimensions of the network output and is typically set to the number of classes in the dataset. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="even">
+<td>num_training_samples</td>
+<td>The number of training examples in the input dataset. If there is a mismatch between this value and the number of samples in the training set, then the behavior of the <code>lr_scheduler_step</code> parameter will be undefined and distributed training accuracy may be affected. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>base_network</td>
+<td>The base network architecture to use. <strong>Optional</strong> Valid values: ‘vgg-16’ or ‘resnet-50’ Default value: ‘vgg-16’</td>
+</tr>
+<tr class="even">
+<td>early_stopping</td>
+<td><code>True</code> to use early stopping logic during training. <code>False</code> not to use it. <strong>Optional</strong> Valid values: <code>True</code> or <code>False</code> Default value: <code>False</code></td>
+</tr>
+<tr class="odd">
+<td>early_stopping_min_epochs</td>
+<td>The minimum number of epochs that must be run before the early stopping logic can be invoked. It is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: positive integer Default value: 10</td>
+</tr>
+<tr class="even">
+<td>early_stopping_patience</td>
+<td>The number of epochs to wait before ending training if no improvement, as defined by the <code>early_stopping_tolerance</code> hyperparameter, is made in the relevant metric. It is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: positive integer Default value: 5</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_tolerance</td>
+<td>The tolerance value that the relative improvement in <code>validation:mAP</code>, the mean average precision (mAP), is required to exceed to avoid early stopping. If the ratio of the change in the mAP divided by the previous best mAP is smaller than the <code>early_stopping_tolerance</code> value set, early stopping considers that there is no improvement. It is used only when <code>early_stopping</code> = <code>True</code>. <strong>Optional</strong> Valid values: 0 ≤ float ≤ 1 Default value: 0.0</td>
+</tr>
+<tr class="even">
+<td>image_shape</td>
+<td>The image size for input images. We rescale the input image to a square image with this size. We recommend using 300 and 512 for better performance. <strong>Optional</strong> Valid values: positive integer ≥300 Default: 300</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The number of training epochs. <strong>Optional</strong> Valid values: positive integer Default: 30</td>
+</tr>
+<tr class="even">
+<td>freeze_layer_pattern</td>
+<td>The regular expression (regex) for freezing layers in the base network. For example, if we set <code>freeze_layer_pattern</code> = <code>"^(conv1_\|conv2_).*"</code>, then any layers with a name that contains <code>"conv1_"</code> or <code>"conv2_"</code> are frozen, which means that the weights for these layers are not updated during training. The layer names can be found in the network symbol files <a href="http://data.mxnet.io/models/imagenet/vgg/vgg16-symbol.json">vgg16-symbol.json</a> and <a href="http://data.mxnet.io/models/imagenet/resnet/50-layers/resnet-50-symbol.json">resnet-50-symbol.json</a>. Freezing a layer means that its weights can not be modified further. This can reduce training time significantly in exchange for modest losses in accuracy. This technique is commonly used in transfer learning where the lower layers in the base network do not need to be retrained. <strong>Optional</strong> Valid values: string Default: No layers frozen.</td>
+</tr>
+<tr class="odd">
+<td>kv_store</td>
+<td>The weight update synchronization mode used for distributed training. The weights can be updated either synchronously or asynchronously across machines. Synchronous updates typically provide better accuracy than asynchronous updates but can be slower. See the <a href="https://mxnet.incubator.apache.org/versions/master/faq/distributed_training.html">Distributed Training</a> MXNet tutorial for details. This parameter is not applicable to single machine training. <strong>Optional</strong> Valid values: <code>'dist_sync'</code> or <code>'dist_async'</code> <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object-detection-api-config.html">[See the AWS documentation website for more details]</a> Default: -</td>
+</tr>
+<tr class="even">
+<td>label_width</td>
+<td>The force padding label width used to sync across training and validation data. For example, if one image in the data contains at most 10 objects, and each object’s annotation is specified with 5 numbers, [class_id, left, top, width, height], then the <code>label_width</code> should be no smaller than (10*5 + header information length). The header information length is usually 2. We recommend using a slightly larger <code>label_width</code> for the training, such as 60 for this example. <strong>Optional</strong> Valid values: Positive integer large enough to accommodate the largest annotation information length in the data. Default: 350</td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>The initial learning rate. <strong>Optional</strong> Valid values: float in (0, 1] Default: 0.001</td>
+</tr>
+<tr class="even">
+<td>lr_scheduler_factor</td>
+<td>The ratio to reduce learning rate. Used in conjunction with the <code>lr_scheduler_step</code> parameter defined as <code>lr_new</code> = <code>lr_old</code> * <code>lr_scheduler_factor</code>. <strong>Optional</strong> Valid values: float in (0, 1) Default: 0.1</td>
+</tr>
+<tr class="odd">
+<td>lr_scheduler_step</td>
+<td>The epochs at which to reduce the learning rate. The learning rate is reduced by <code>lr_scheduler_factor</code> at epochs listed in a comma-delimited string: “epoch1, epoch2, ...”. For example, if the value is set to “10, 20” and the <code>lr_scheduler_factor</code> is set to 1/2, then the learning rate is halved after 10th epoch and then halved again after 20th epoch. <strong>Optional</strong> Valid values: string Default: empty string</td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>The batch size for training. In a single-machine multi-gpu setting, each GPU handles <code>mini_batch_size</code>/<code>num_gpu</code> training samples. For the multi-machine training in <code>dist_sync</code> mode, the actual batch size is <code>mini_batch_size</code>*number of machines. A large <code>mini_batch_size</code> usually leads to faster training, but it may cause out of memory problem. The memory usage is related to <code>mini_batch_size</code>, <code>image_shape</code>, and <code>base_network</code> architecture. For example, on a single p3.2xlarge instance, the largest <code>mini_batch_size</code> without an out of memory error is 32 with the base_network set to “resnet-50” and an <code>image_shape</code> of 300. With the same instance, you can use 64 as the <code>mini_batch_size</code> with the base network <code>vgg-16</code> and an <code>image_shape</code> of 300. <strong>Optional</strong> Valid values: positive integer Default: 32</td>
+</tr>
+<tr class="odd">
+<td>momentum</td>
+<td>The momentum for <code>sgd</code>. Ignored for other optimizers. <strong>Optional</strong> Valid values: float in (0, 1] Default: 0.9</td>
+</tr>
+<tr class="even">
+<td>nms_threshold</td>
+<td>The non-maximum suppression threshold. <strong>Optional</strong> Valid values: float in (0, 1] Default: 0.45</td>
+</tr>
+<tr class="odd">
+<td>optimizer</td>
+<td>The optimizer types. For details on optimizer values, see <a href="https://mxnet.incubator.apache.org/api/python/index.html">MXNet’s API</a>. <strong>Optional</strong> Valid values: [‘sgd’, ‘adam’, ‘rmsprop’, ‘adadelta’] Default: ‘sgd’</td>
+</tr>
+<tr class="even">
+<td>overlap_threshold</td>
+<td>The evaluation overlap threshold. <strong>Optional</strong> Valid values: float in (0, 1] Default: 0.5</td>
+</tr>
+<tr class="odd">
+<td>use_pretrained_model</td>
+<td>Indicates whether to use a pre-trained model for training. If set to 1, then the pre-trained model with corresponding architecture is loaded and used for training. Otherwise, the network is trained from scratch. <strong>Optional</strong> Valid values: 0 or 1 Default: 1</td>
+</tr>
+<tr class="even">
+<td>weight_decay</td>
+<td>The weight decay coefficient for <code>sgd</code> and <code>rmsprop</code>. Ignored for other optimizers. <strong>Optional</strong> Valid values: float in (0, 1) Default: 0.0005</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

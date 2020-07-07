@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How Object2Vec Works</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How Object2Vec Works<a name="object2vec-howitworks"></a></h1>
+</header>
+<p>When using the Amazon SageMaker Object2Vec algorithm, you follow the standard workflow: process the data, train the model, and produce inferences.</p>
+<p><strong>Topics</strong> + <a href="#object2vec-step-1-data-preprocessing">Step 1: Process Data</a> + <a href="#object2vec-step-2-training-model">Step 2: Train a Model</a> + <a href="#object2vec-step-3-inference">Step 3: Produce Inferences</a></p>
+<p>During preprocessing, convert the data to the <a href="http://jsonlines.org/">JSON Lines</a> text file format specified in <a href="object2vec-training-formats.md">Data Formats for Object2Vec Training</a> . To get the highest accuracy during training, also randomly shuffle the data before feeding it into the model. How you generate random permutations depends on the language. For python, you could use <code>np.randon.shuffle</code>; for Unix, <code>shuf</code>.</p>
+<p>The Amazon SageMaker Object2Vec algorithm has the following main components: + <strong>Two input channels</strong> – The input channels take a pair of objects of the same or different types as inputs, and pass them to independent and customizable encoders. + <strong>Two encoders</strong> – The two encoders, enc0 and enc1, convert each object into a fixed-length embedding vector. The encoded embeddings of the objects in the pair are then passed into a comparator. + <strong>A comparator</strong> – The comparator compares the embeddings in different ways and outputs scores that indicate the strength of the relationship between the paired objects. In the output score for a sentence pair. For example, 1 indicates a strong relationship between a sentence pair, and 0 represents a weak relationship.</p>
+<p>During training, the algorithm accepts pairs of objects and their relationship labels or scores as inputs. The objects in each pair can be of different types, as described earlier. If the inputs to both encoders are composed of the same token-level units, you can use a shared token embedding layer by setting the <code>tied_token_embedding_weight</code> hyperparameter to <code>True</code> when you create the training job. This is possible, for example, when comparing sentences that both have word token-level units. To generate negative samples at a specified rate, set the <code>negative_sampling_rate</code> hyperparameter to the desired ratio of negative to positive samples. This hyperparameter expedites learning how to discriminate between the positive samples observed in the training data and the negative samples that are not likely to be observed.</p>
+<p>Pairs of objects are passed through independent, customizable encoders that are compatible with the input types of corresponding objects. The encoders convert each object in a pair into a fixed-length embedding vector of equal length. The pair of vectors are passed to a comparator operator, which assembles the vectors into a single vector using the value specified in the he <code>comparator_list</code> hyperparameter. The assembled vector then passes through a multilayer perceptron (MLP) layer, which produces an output that the loss function compares with the labels that you provided. This comparison evaluates the strength of the relationship between the objects in the pair as predicted by the model. The following figure shows this workflow.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/object2vec-training-image.png" alt="" /><figcaption>[Architecture of the Object2Vec Algorithm from Data Inputs to Scores]</figcaption>
+</figure>
+<p>After the model is trained, you can use the trained encoder to preprocess input objects or to perform two types of inference: + To convert singleton input objects into fixed-length embeddings using the corresponding encoder + To predict the relationship label or score between a pair of input objects</p>
+<p>The inference server automatically figures out which of the types is requested based on the input data. To get the embeddings as output, provide only one input. To predict the relationship label or score, provide both inputs in the pair.</p>
+</body>
+</html>

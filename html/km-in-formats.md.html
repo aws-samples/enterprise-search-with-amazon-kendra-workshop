@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>K-Means Response Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">K-Means Response Formats<a name="km-in-formats"></a></h1>
+</header>
+<p>All Amazon SageMaker built-in algorithms adhere to the common input inference format described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats - Inference</a>. This topic contains a list of the available output formats for the Amazon SageMaker k-means algorithm.</p>
+<pre><code>{
+    &quot;predictions&quot;: [
+        {
+            &quot;closest_cluster&quot;: 1.0,
+            &quot;distance_to_cluster&quot;: 3.0,
+        },
+        {
+            &quot;closest_cluster&quot;: 2.0,
+            &quot;distance_to_cluster&quot;: 5.0,
+        },
+ 
+        ....
+    ]
+}</code></pre>
+<pre><code>{&quot;closest_cluster&quot;: 1.0, &quot;distance_to_cluster&quot;: 3.0}
+{&quot;closest_cluster&quot;: 2.0, &quot;distance_to_cluster&quot;: 5.0}</code></pre>
+<pre><code>[
+    Record = {
+        features = {},
+        label = {
+            &#39;closest_cluster&#39;: {
+                keys: [],
+                values: [1.0, 2.0]  # float32
+            },
+            &#39;distance_to_cluster&#39;: {
+                keys: [],
+                values: [3.0, 5.0]  # float32
+            },
+        }
+    }
+]</code></pre>
+</body>
+</html>

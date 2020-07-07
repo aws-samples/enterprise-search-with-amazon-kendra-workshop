@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Object2Vec Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Object2Vec Hyperparameters<a name="object2vec-hyperparameters"></a></h1>
+</header>
+<p>In the <code>CreateTrainingJob</code> request, you specify the training algorithm. You can also specify algorithm-specific hyperparameters as string-to-string maps. The following table lists the hyperparameters for the Object2Vec training algorithm.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>enc0_max_seq_len</td>
+<td>The maximum sequence length for the enc0 encoder. <strong>Required</strong> Valid values: 1 ≤ integer ≤ 5000</td>
+</tr>
+<tr class="even">
+<td>enc0_vocab_size</td>
+<td>The vocabulary size of enc0 tokens. <strong>Required</strong> Valid values: 2 ≤ integer ≤ 3000000</td>
+</tr>
+<tr class="odd">
+<td>bucket_width</td>
+<td>The allowed difference between data sequence length when bucketing is enabled. To enable bucketing, specify a non-zero value for this parameter. <strong>Optional</strong> Valid values: 0 ≤ integer ≤ 100 Default value: 0 (no bucketing)</td>
+</tr>
+<tr class="even">
+<td>comparator_list</td>
+<td>A list used to customize the way in which two embeddings are compared. The Object2Vec comparator operator layer takes the encodings from both encoders as inputs and outputs a single vector. This vector is a concatenation of subvectors. The string values passed to the <code>comparator_list</code> and the order in which they are passed determine how these subvectors are assembled. For example, if <code>comparator_list="hadamard, concat"</code>, then the comparator operator constructs the vector by concatenating the Hadamard product of two encodings and the concatenation of two encodings. If, on the other hand, <code>comparator_list="hadamard"</code>, then the comparator operator constructs the vector as the hadamard product of only two encodings. <strong>Optional</strong> Valid values: A string that contains any combination of the names of the three binary operators: <code>hadamard</code>, <code>concat</code>, or <code>abs_diff</code>. The Object2Vec algorithm currently requires that the two vector encodings have the same dimension. These operators produce the subvectors as follows: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>"hadamard, concat, abs_diff"</code></td>
+</tr>
+<tr class="odd">
+<td>dropout</td>
+<td>The dropout probability for network layers. <em>Dropout</em> is a form of regularization used in neural networks that reduces overfitting by trimming codependent neurons. <strong>Optional</strong> Valid values: 0.0 ≤ float ≤ 1.0 Default value: 0.0</td>
+</tr>
+<tr class="even">
+<td>early_stopping_patience</td>
+<td>The number of consecutive epochs without improvement allowed before early stopping is applied. Improvement is defined by with the <code>early_stopping_tolerance</code> hyperparameter. <strong>Optional</strong> Valid values: 1 ≤ integer ≤ 5 Default value: 3</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_tolerance</td>
+<td>The reduction in the loss function that an algorithm must achieve between consecutive epochs to avoid early stopping after the number of consecutive epochs specified in the <code>early_stopping_patience</code> hyperparameter concludes. <strong>Optional</strong> Valid values: 0.000001 ≤ float ≤ 0.1 Default value: 0.01</td>
+</tr>
+<tr class="even">
+<td>enc_dim</td>
+<td>The dimension of the output of the embedding layer. <strong>Optional</strong> Valid values: 4 ≤ integer ≤ 10000 Default value: 4096</td>
+</tr>
+<tr class="odd">
+<td>enc0_network</td>
+<td>The network model for the enc0 encoder. <strong>Optional</strong> Valid values: <code>hcnn</code>, <code>bilstm</code>, or <code>pooled_embedding</code> <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>hcnn</code></td>
+</tr>
+<tr class="even">
+<td>enc0_cnn_filter_width</td>
+<td>The filter width of the convolutional neural network (CNN) enc0 encoder. <strong>Conditional</strong> Valid values: 1 ≤ integer ≤ 9 Default value: 3</td>
+</tr>
+<tr class="odd">
+<td>enc0_freeze_pretrained_embedding</td>
+<td>Whether to freeze enc0 pretrained embedding weights. <strong>Conditional</strong> Valid values: <code>True</code> or <code>False</code> Default value: <code>True</code></td>
+</tr>
+<tr class="even">
+<td>enc0_layers</td>
+<td>The number of layers in the enc0 encoder. <strong>Conditional</strong> Valid values: <code>auto</code> or 1 ≤ integer ≤ 4 <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>enc0_pretrained_embedding_file</td>
+<td>The filename of the pretrained enc0 token embedding file in the auxiliary data channel. <strong>Conditional</strong> Valid values: String with alphanumeric characters, underscore, or period. [A-Za-z0-9\.\_] Default value: "" (empty string)</td>
+</tr>
+<tr class="even">
+<td>enc0_token_embedding_dim</td>
+<td>The output dimension of the enc0 token embedding layer. <strong>Conditional</strong> Valid values: 2 ≤ integer ≤ 1000 Default value: 300</td>
+</tr>
+<tr class="odd">
+<td>enc0_vocab_file</td>
+<td>The vocabulary file for mapping pretrained enc0 token embedding vectors to numerical vocabulary IDs. <strong>Conditional</strong> Valid values: String with alphanumeric characters, underscore, or period. [A-Za-z0-9\.\_] Default value: "" (empty string)</td>
+</tr>
+<tr class="even">
+<td>enc1_network</td>
+<td>The network model for the enc1 encoder. If you want the enc1 encoder to use the same network model as enc0, including the hyperparameter values, set the value to <code>enc0</code>. Even when the enc0 and enc1 encoder networks have symmetric architectures, you can’t shared parameter values for these networks. <strong>Optional</strong> Valid values: <code>enc0</code>, <code>hcnn</code>, <code>bilstm</code>, or <code>pooled_embedding</code> <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>enc0</code></td>
+</tr>
+<tr class="odd">
+<td>enc1_cnn_filter_width</td>
+<td>The filter width of the CNN enc1 encoder. <strong>Conditional</strong> Valid values: 1 ≤ integer ≤ 9 Default value: 3</td>
+</tr>
+<tr class="even">
+<td>enc1_freeze_pretrained_embedding</td>
+<td>Whether to freeze enc1 pretrained embedding weights. <strong>Conditional</strong> Valid values: <code>True</code> or <code>False</code> Default value: <code>True</code></td>
+</tr>
+<tr class="odd">
+<td>enc1_layers</td>
+<td>The number of layers in the enc1 encoder. <strong>Conditional</strong> Valid values: <code>auto</code> or 1 ≤ integer ≤ 4 <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>enc1_max_seq_len</td>
+<td>The maximum sequence length for the enc1 encoder. <strong>Conditional</strong> Valid values: 1 ≤ integer ≤ 5000</td>
+</tr>
+<tr class="odd">
+<td>enc1_pretrained_embedding_file</td>
+<td>The name of the enc1 pretrained token embedding file in the auxiliary data channel. <strong>Conditional</strong> Valid values: String with alphanumeric characters, underscore, or period. [A-Za-z0-9\.\_] Default value: "" (empty string)</td>
+</tr>
+<tr class="even">
+<td>enc1_token_embedding_dim</td>
+<td>The output dimension of the enc1 token embedding layer. <strong>Conditional</strong> Valid values: 2 ≤ integer ≤ 1000 Default value: 300</td>
+</tr>
+<tr class="odd">
+<td>enc1_vocab_file</td>
+<td>The vocabulary file for mapping pretrained enc1 token embeddings to vocabulary IDs. <strong>Conditional</strong> Valid values: String with alphanumeric characters, underscore, or period. [A-Za-z0-9\.\_] Default value: "" (empty string)</td>
+</tr>
+<tr class="even">
+<td>enc1_vocab_size</td>
+<td>The vocabulary size of enc0 tokens. <strong>Conditional</strong> Valid values: 2 ≤ integer ≤ 3000000</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The number of epochs to run for training. <strong>Optional</strong> Valid values: 1 ≤ integer ≤ 100 Default value: 30</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>The learning rate for training. <strong>Optional</strong> Valid values: 1.0E-6 ≤ float ≤ 1.0 Default value: 0.0004</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The batch size that the dataset is split into for an <code>optimizer</code> during training. <strong>Optional</strong> Valid values: 1 ≤ integer ≤ 10000 Default value: 32</td>
+</tr>
+<tr class="even">
+<td>mlp_activation</td>
+<td>The type of activation function for the multilayer perceptron (MLP) layer. <strong>Optional</strong> Valid values: <code>tanh</code>, <code>relu</code>, or <code>linear</code> <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>linear</code></td>
+</tr>
+<tr class="odd">
+<td>mlp_dim</td>
+<td>The dimension of the output from MLP layers. <strong>Optional</strong> Valid values: 2 ≤ integer ≤ 10000 Default value: 512</td>
+</tr>
+<tr class="even">
+<td>mlp_layers</td>
+<td>The number of MLP layers in the network. <strong>Optional</strong> Valid values: 0 ≤ integer ≤ 10 Default value: 2</td>
+</tr>
+<tr class="odd">
+<td>negative_sampling_rate</td>
+<td>The ratio of negative samples, generated to assist in training the algorithm, to positive samples that are provided by users. Negative samples represent data that is unlikely to occur in reality and are labelled negatively for training. They facilitate training a model to discriminate between the positive samples observed and the negative samples that are not. To specify the ratio of negative samples to positive samples used for training, set the value to a positive integer. For example, if you train the algorithm on input data in which all of the samples are positive and set <code>negative_sampling_rate</code> to 2, the Object2Vec algorithm internally generates two negative samples per positive sample. If you don’t want to generate or use negative samples during training, set the value to 0. <strong>Optional</strong> Valid values: 0 ≤ integer Default value: 0 (off)</td>
+</tr>
+<tr class="even">
+<td>num_classes</td>
+<td>The number of classes for classification training. Amazon SageMaker ignores this hyperparameter for regression problems. <strong>Optional</strong> Valid values: 2 ≤ integer ≤ 30 Default value: 2</td>
+</tr>
+<tr class="odd">
+<td>optimizer</td>
+<td>The optimizer type. <strong>Optional</strong> Valid values: <code>adadelta</code>, <code>adagrad</code>, <code>adam</code>, <code>sgd</code>, or <code>rmsprop</code>. <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>adam</code></td>
+</tr>
+<tr class="even">
+<td>output_layer</td>
+<td>The type of output layer where you specify that the task is regression or classification. <strong>Optional</strong> Valid values: <code>softmax</code> or <code>mean_squared_error</code> <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>softmax</code></td>
+</tr>
+<tr class="odd">
+<td>tied_token_embedding_weight</td>
+<td>Whether to use a shared embedding layer for both encoders. If the inputs to both encoders use the same token-level units, use a shared token embedding layer. For example, for a collection of documents, if one encoder encodes sentences and another encodes whole documents, you can use a shared token embedding layer. That’s because both sentences and documents are composed of word tokens from the same vocabulary. <strong>Optional</strong> Valid values: <code>True</code> or <code>False</code> Default value: <code>False</code></td>
+</tr>
+<tr class="even">
+<td>token_embedding_storage_type</td>
+<td>The mode of gradient update used during training: when the <code>dense</code> mode is used, the optimizer calculates the full gradient matrix for the token embedding layer even if most rows of the gradient are zero-valued. When <code>sparse</code> mode is used, the optimizer only stores rows of the gradient that are actually being used in the mini-batch. If you want the algorithm to perform lazy gradient updates, which calculate the gradients only in the non-zero rows and which speed up training, specify <code>row_sparse</code>. Setting the value to <code>row_sparse</code> constrains the values available for other hyperparameters, as follows: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/object2vec-hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>dense</code> or <code>row_sparse</code> Default value: <code>dense</code></td>
+</tr>
+<tr class="odd">
+<td>weight_decay</td>
+<td>The weight decay parameter used for optimization. <strong>Optional</strong> Valid values: 0 ≤ float ≤ 10000 Default value: 0 (no decay)</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

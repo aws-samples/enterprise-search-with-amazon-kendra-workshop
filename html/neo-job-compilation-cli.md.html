@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Compile a Model (API)</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Compile a Model (API)<a name="neo-job-compilation-cli"></a></h1>
+</header>
+<p>This section shows how to manage compilation jobs for machine learning models. You can create, describe, stop, and list compilation jobs.</p>
+<p><strong>Create a Compilation Job</strong></p>
+<p>As shown in the following JSON file, you specify the data input format, the S3 bucket where you stored your model, the S3 bucket where you want to write the compiled model, and the target hardware:</p>
+<pre><code>job.json
+{
+    &quot;CompilationJobName&quot;: &quot;job002&quot;,
+    &quot;RoleArn&quot;: &quot;arn:aws:iam::&lt;your-account&gt;:role/service-role/AmazonSageMaker-ExecutionRole-20180829T140091&quot;,
+    &quot;InputConfig&quot;: {
+        &quot;S3Uri&quot;: &quot;s3://&lt;your-bucket&gt;/sagemaker/DEMO-breast-cancer-prediction/train&quot;,
+        &quot;DataInputConfig&quot;:  &quot;{\&quot;data\&quot;: [1,3,1024,1024]}&quot;,
+        &quot;Framework&quot;: &quot;MXNET&quot;
+    },
+    &quot;OutputConfig&quot;: {
+        &quot;S3OutputLocation&quot;: &quot;s3://&lt;your-bucket&gt;/sagemaker/DEMO-breast-cancer-prediction/compile&quot;,
+        &quot;TargetDevice&quot;: &quot;ml_c5&quot;
+    },
+    &quot;StoppingCondition&quot;: {
+        &quot;MaxRuntimeInSeconds&quot;: 300
+    }
+}
+
+
+aws sagemaker create-compilation-job \
+--cli-input-json file://job.json \
+--region us-west-2 
+
+# You should get CompilationJobArn</code></pre>
+<p><strong>Describe a Compilation Job</strong></p>
+<pre><code>aws sagemaker describe-compilation-job \
+--compilation-job-name $JOB_NM \
+--region us-west-2</code></pre>
+<p><strong>Stop a Compilation Job</strong></p>
+<pre><code>aws sagemaker stop-compilation-job \
+--compilation-job-name $JOB_NM \
+--region us-west-2
+
+# There is no output for compilation-job operation</code></pre>
+<p><strong>List a Compilation Job</strong></p>
+<pre><code>aws sagemaker list-compilation-jobs \
+--region us-west-2</code></pre>
+</body>
+</html>

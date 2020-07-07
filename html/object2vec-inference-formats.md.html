@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Data Formats for Object2Vec Inference</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Data Formats for Object2Vec Inference<a name="object2vec-inference-formats"></a></h1>
+</header>
+<p>Due to GPU memory scarcity, the <code>INFERENCE_PREFERRED_MODE</code> environment variable can be specified to optimize on whether the classification/regression or the <a href="object2vec-encoder-embeddings.md#object2vec-out-encoder-embeddings-data">Output: Encoder Embeddings</a> inference network is loaded into GPU. If the majority of your inference is for classification or regression, specify <code>INFERENCE_PREFERRED_MODE=classification</code>. The following is a Batch Transform example of using 4 instances of p3.2xlarge that optimizes for classification/regression inference:</p>
+<pre><code>transformer = o2v.transformer(instance_count=4, 
+                              instance_type=&quot;ml.p2.xlarge&quot;, 
+                              max_concurrent_transforms=2,
+                              max_payload=1,  # 1MB
+                              strategy=&#39;MultiRecord&#39;,
+                              env={&#39;INFERENCE_PREFERRED_MODE&#39;: &#39;classification&#39;},  # only useful with GPU
+                              output_path=output_s3_path)</code></pre>
+<p>Content-type: application/json</p>
+<pre><code>{
+  &quot;instances&quot; : [
+    {&quot;in0&quot;: [6, 17, 606, 19, 53, 67, 52, 12, 5, 10, 15, 10178, 7, 33, 652, 80, 15, 69, 821, 4], &quot;in1&quot;: [16, 21, 13, 45, 14, 9, 80, 59, 164, 4]},
+    {&quot;in0&quot;: [22, 1016, 32, 13, 25, 11, 5, 64, 573, 45, 5, 80, 15, 67, 21, 7, 9, 107, 4], &quot;in1&quot;: [22, 32, 13, 25, 1016, 573, 3252, 4]},
+    {&quot;in0&quot;: [774, 14, 21, 206], &quot;in1&quot;: [21, 366, 125]}
+  ]
+}</code></pre>
+<p>Content-type: application/jsonlines</p>
+<pre><code>{&quot;in0&quot;: [6, 17, 606, 19, 53, 67, 52, 12, 5, 10, 15, 10178, 7, 33, 652, 80, 15, 69, 821, 4], &quot;in1&quot;: [16, 21, 13, 45, 14, 9, 80, 59, 164, 4]}
+{&quot;in0&quot;: [22, 1016, 32, 13, 25, 11, 5, 64, 573, 45, 5, 80, 15, 67, 21, 7, 9, 107, 4], &quot;in1&quot;: [22, 32, 13, 25, 1016, 573, 3252, 4]}
+{&quot;in0&quot;: [774, 14, 21, 206], &quot;in1&quot;: [21, 366, 125]}</code></pre>
+<p>For classification problems, the length of the scores vector corresponds to <code>num_classes</code>. For regression problems, the length is 1.</p>
+<p>Accept: application/json</p>
+<pre><code>{
+    &quot;predictions&quot;: [
+        {
+            &quot;scores&quot;: [
+                0.6533935070037842,
+                0.07582679390907288,
+                0.2707797586917877
+            ]
+        },       
+        {
+            &quot;scores&quot;: [
+                0.026291321963071823,
+                0.6577019095420837,
+                0.31600672006607056
+            ]
+        }
+    ]
+}</code></pre>
+<p>Accept: application/jsonlines</p>
+<pre><code>{&quot;scores&quot;:[0.195667684078216,0.395351558923721,0.408980727195739]}
+{&quot;scores&quot;:[0.251988261938095,0.258233487606048,0.489778339862823]}
+{&quot;scores&quot;:[0.280087798833847,0.368331134319305,0.351581096649169]}</code></pre>
+<p>In both the classification and regression formats, the scores apply to individual labels.</p>
+</body>
+</html>

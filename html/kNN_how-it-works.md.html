@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How the K-nn Algorithm Works</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How the K-nn Algorithm Works<a name="kNN_how-it-works"></a></h1>
+</header>
+<p>To specify the total number of data points to be sampled from the training dataset, use the <code>sample_size</code>parameter. For example, if the initial dataset has 1,000 data points and the <code>sample_size</code> is set to 100, where the total number of instances is 2, each worker would sample 50 points. A total set of 100 data points would be collected. Sampling runs in linear time with respect to the number of data points.</p>
+<p>The current implementation of k-NN has two methods of dimension reduction. You specify the method in the <code>dimension_reduction_type</code> hyperparameter. The <code>sign</code> method specifies a random projection, which uses a linear projection using a matrix of random signs, and the <code>fjlt</code> method specifies a fast Johnson-Lindenstrauss transform, a method based on the Fourier transform. Both methods preserve the L2 and inner product distances. The <code>fjlt</code> method should be used when the target dimension is large and has better performance with CPU inference. The methods differ in their computational complexity. The <code>sign</code> method requires O(ndk) time to reduce the dimension of a batch of n points of dimension d into a target dimension k. The <code>fjlt</code> method requires O(nd log(d)) time, but the constants involved are larger. Using dimension reduction introduces noise into the data and this noise can reduce prediction accuracy.</p>
+<p>During inference, the algorithm queries the index for the k-nearest-neighbors of a sample point. Based on the references to the points, the algorithm makes the classification or regression prediction. It makes the prediction based on the class labels or values provided. k-NN provides three different types of indexes: a flat index, an inverted index, and an inverted index with product quantization. You specify the type with the <code>index_type</code> parameter.</p>
+<p>When the k-NN algorithm finishes training, it serializes three files to prepare for inference. + model_algo-1: Contains the serialized index for computing the nearest neighbors. + model_algo-1.labels: Contains serialized labels (np.float32 binary format) for computing the predicted label based on the query result from the index. + model_algo-1.json: Contains the JSON-formatted model metadata which stores the <code>k</code> and <code>predictor_type</code> hyper-parameters from training for inference along with other relevant state.</p>
+<p>With the current implementation of k-NN, you can modify the metadata file to change the way predictions are computed. For example, you can change <code>k</code> to 10 or change <code>predictor_type</code> to <em>regressor</em>.</p>
+<pre><code>{
+  &quot;k&quot;: 5,
+  &quot;predictor_type&quot;: &quot;classifier&quot;,
+  &quot;dimension_reduction&quot;: {&quot;type&quot;: &quot;sign&quot;, &quot;seed&quot;: 3, &quot;target_dim&quot;: 10, &quot;input_dim&quot;: 20},
+  &quot;normalize&quot;: False,
+  &quot;version&quot;: &quot;1.0&quot;
+}</code></pre>
+</body>
+</html>

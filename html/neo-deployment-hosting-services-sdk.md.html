@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Deploy a Model Compiled with Neo (Amazon SageMaker SDK)</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Deploy a Model Compiled with Neo (Amazon SageMaker SDK)<a name="neo-deployment-hosting-services-sdk"></a></h1>
+</header>
+<p>The object handle for the compiled model supplies the <code>deploy</code> function, which allows you to create an endpoint to serve inference requests. The function lets you set the number and type of instances that are used for the endpoint. You must choose an instance for which you have compiled your model. For example, in the job compiled in <a href="neo-job-compilation-sagemaker-sdk.md">Compile a Model (Amazon SageMaker SDK)</a> section, this is <code>ml_c5</code>. The Neo API uses a special runtime, the <em>Neo runtime</em>, to run Neo-optimized models.</p>
+<pre><code>predictor = compiled_model.deploy(initial_instance_count = 1, instance_type = &#39;ml.c5.4xlarge&#39;)</code></pre>
+<p>After the command is done, the name of the newly created endpoint is printed in the jupyter notebook.</p>
+</body>
+</html>

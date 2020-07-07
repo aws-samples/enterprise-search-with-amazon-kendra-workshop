@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Get Notebook Instance Metadata</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Get Notebook Instance Metadata<a name="nbi-metadata"></a></h1>
+</header>
+<p>When you create a notebook instance, Amazon SageMaker creates a JSON file on the instance at the location <code>/opt/ml/metadata/resource-metadata.json</code> that contains the <code>ResourceName</code> and <code>ResourceArn</code> of the notebook instance. You can access this metadata from anywhere within the notebook instance, including in lifecycle configurations. For information about notebook instance lifecycle configurations, see <a href="notebook-lifecycle-config.md">Customize a Notebook Instance</a>.</p>
+<p>The <code>resource-metadata.json</code> file has the following structure:</p>
+<pre><code>{
+    &quot;ResourceArn&quot;: &quot;NotebookInstanceArn&quot;,
+    &quot;ResourceName&quot;: &quot;NotebookInstanceName&quot;
+}</code></pre>
+<p>You can use this metadata from within the notebook instance to get other information about the notebook instance. For example, the following commands get the tags associated with the notebook instance:</p>
+<pre><code>NOTEBOOK_ARN=$(jq &#39;.ResourceArn&#39;
+            /opt/ml/metadata/resource-metadata.json --raw-output)
+aws sagemaker list-tags --resource-arn $NOTEBOOK_ARN</code></pre>
+<p>The out put looks like the following:</p>
+<pre><code>{
+    &quot;Tags&quot;: [
+        {
+            &quot;Key&quot;: &quot;test&quot;,
+            &quot;Value&quot;: &quot;true&quot;
+        }
+    ]
+}</code></pre>
+</body>
+</html>

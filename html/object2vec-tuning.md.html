@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune an Object2Vec Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune an Object2Vec Model<a name="object2vec-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. For the objective metric, you use one of the metrics that the algorithm computes. Automatic model tuning searches the chosen hyperparameters to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The Object2Vec algorithm has both classification and regression metrics. The <code>output_layer</code> type determines which metric you can use for automatic model tuning.</p>
+<p>The algorithm reports a mean squared error regressor metric, which is computed during testing and validation. When tuning the model for regression tasks, choose this metric as the objective.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:mean_squared_error</td>
+<td>Root Mean Square Error</td>
+<td>Minimize</td>
+</tr>
+<tr class="even">
+<td>validation:mean_squared_error</td>
+<td>Root Mean Square Error</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>The Object2Vec algorithm reports accuracy and cross-entropy classification metrics, which are computed during test and validation. When tuning the model for classification tasks, choose one of these as the objective.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:accuracy</td>
+<td>Accuracy</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>test:cross_entropy</td>
+<td>Cross-entropy</td>
+<td>Minimize</td>
+</tr>
+<tr class="odd">
+<td>validation:accuracy</td>
+<td>Accuracy</td>
+<td>Maximize</td>
+</tr>
+<tr class="even">
+<td>validation:cross_entropy</td>
+<td>Cross-entropy</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>You can tune the following hyperparameters for the Object2Vec algorithm.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hyperparameter Name</th>
+<th>Hyperparameter Type</th>
+<th>Recommended Ranges and Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dropout</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 1.0</td>
+</tr>
+<tr class="even">
+<td>early_stopping_patience</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 5</td>
+</tr>
+<tr class="odd">
+<td>early_stopping_tolerance</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.001, MaxValue: 0.1</td>
+</tr>
+<tr class="even">
+<td>enc_dim</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 4, MaxValue: 4096</td>
+</tr>
+<tr class="odd">
+<td>enc0_cnn_filter_width</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 5</td>
+</tr>
+<tr class="even">
+<td>enc0_layers</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 4</td>
+</tr>
+<tr class="odd">
+<td>enc0_token_embedding_dim</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 5, MaxValue: 300</td>
+</tr>
+<tr class="even">
+<td>enc1_cnn_filter_width</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 5</td>
+</tr>
+<tr class="odd">
+<td>enc1_layers</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 4</td>
+</tr>
+<tr class="even">
+<td>enc1_token_embedding_dim</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 5, MaxValue: 300</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 4, MaxValue: 20</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-6, MaxValue: 1.0</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 8192</td>
+</tr>
+<tr class="even">
+<td>mlp_activation</td>
+<td>CategoricalParameterRanges</td>
+<td>[<code>tanh</code>, <code>relu</code>, <code>linear</code>]</td>
+</tr>
+<tr class="odd">
+<td>mlp_dim</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 16, MaxValue: 1024</td>
+</tr>
+<tr class="even">
+<td>mlp_layers</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 4</td>
+</tr>
+<tr class="odd">
+<td>optimizer</td>
+<td>CategoricalParameterRanges</td>
+<td>[<code>adagrad</code>, <code>adam</code>, <code>rmsprop</code>, <code>sgd</code>, <code>adadelta</code>]</td>
+</tr>
+<tr class="even">
+<td>weight_decay</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 1.0</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

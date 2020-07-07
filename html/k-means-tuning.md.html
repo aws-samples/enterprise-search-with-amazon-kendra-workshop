@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune a K-Means Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune a K-Means Model<a name="k-means-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>The Amazon SageMaker k-means algorithm is an unsupervised algorithm that groups data into clusters whose members are as similar as possible. Because it is unsupervised, it doesn’t use a validation dataset that hyperparameters can optimize against. But it does take a test dataset and emits metrics that depend on the squared distance between the data points and the final cluster centroids at the end of each training run. To find the model that reports the tightest clusters on the test dataset, you can use a hyperparameter tuning job. The clusters optimize the similarity of their members.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The k-means algorithm computes the following metrics during training. When tuning a model, choose one of these metrics as the objective metric.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:msd</td>
+<td>Mean squared distances between each record in the test set and the closest center of the model.</td>
+<td>Minimize</td>
+</tr>
+<tr class="even">
+<td>test:ssd</td>
+<td>Sum of the squared distances between each record in the test set and the closest center of the model.</td>
+<td>Minimize</td>
+</tr>
+</tbody>
+</table>
+<p>Tune the Amazon SageMaker k-means model with the following hyperparameters. The hyperparameters that have the greatest impact on k-means objective metrics are: <code>mini_batch_size</code>, <code>extra_center_factor</code>, and <code>init_method</code>. Tuning the hyperparameter <code>epochs</code> generally results in minor improvements.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>epochs</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 1, MaxValue:10</td>
+</tr>
+<tr class="even">
+<td>extra_center_factor</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 4, MaxValue:10</td>
+</tr>
+<tr class="odd">
+<td>init_method</td>
+<td>CategoricalParameterRanges</td>
+<td>[‘kmeans++’, ‘random’]</td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 3000, MaxValue:15000</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

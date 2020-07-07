@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Feature Processing with Spark ML and Scikit-learn</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Feature Processing with Spark ML and Scikit-learn<a name="inference-pipeline-mleap-scikit-learn-containers"></a></h1>
+</header>
+<p>Before training a model with either Amazon SageMaker built-in algorithms or custom algorithms, you can use Spark and scikit-learn preprocessors to transform your data and engineer features.</p>
+<p>You can run Spark ML jobs with <a href="https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html">AWS Glue</a>, a serverless ETL (extract, transform, load) service, from your Amazon SageMaker notebook. You can also connect to existing EMR clusters to run Spark ML jobs with <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html">Amazon EMR</a>. To do this, you need an AWS Identity and Access Management (IAM) role that grants permission for making calls from your Amazon SageMaker notebook to AWS Glue.</p>
+<p><strong>Note</strong><br />
+Currently, AWS Glue supports only Python 2.7.</p>
+<p>After engineering features, you package and serialize Spark ML jobs with MLeap into MLeap containers that you can add to an inference pipeline. You don’t need to use externally managed Spark clusters. With this approach, you can seamlessly scale from a sample of rows to terabytes of data. The same transformers work for both training and inference, so you don’t need to duplicate preprocessing and feature engineering logic or develop a one-time solution to make the models persist. With inference pipelines, you don’t need to maintain outside infrastructure, and you can make predictions directly from data inputs.</p>
+<p>When you run a Spark ML job on AWS Glue, a Spark ML pipeline is serialized into <a href="http://mleap-docs.combust.ml/">MLeap</a> format. Then, you can use the job with the <a href="https://github.com/aws/sagemaker-sparkml-serving-container">SparkML Model Serving Container</a> in an Amazon SageMaker Inference Pipeline.<em>MLeap</em> is a serialization format and execution engine for machine learning pipelines. It supports Spark, Scikit-learn, and TensorFlow for training pipelines and exporting them to a serialized pipeline called an MLeap Bundle. You can deserialize Bundles back into Spark for batch-mode scoring or into the MLeap runtime to power real-time API services.</p>
+<p>You can run and package scikit-learn jobs into containers directly in Amazon SageMaker. For an example of Python code for building a scikit-learn featurizer model that trains on <a href="http://archive.ics.uci.edu/ml/datasets/Iris">Fisher’s Iris flower data set</a> and predicts the species of Iris based on morphological measurements, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/sagemaker-python-sdk/scikit_learn_iris">IRIS Training and Prediction with Sagemaker Scikit-learn</a>.</p>
+</body>
+</html>

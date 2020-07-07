@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Principal Component Analysis (PCA) Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Principal Component Analysis (PCA) Algorithm<a name="pca"></a></h1>
+</header>
+<p>PCA is an unsupervised machine learning algorithm that attempts to reduce the dimensionality (number of features) within a dataset while still retaining as much information as possible. This is done by finding a new set of features called <em>components</em>, which are composites of the original features that are uncorrelated with one another. They are also constrained so that the first component accounts for the largest possible variability in the data, the second component the second most variability, and so on.</p>
+<p>In Amazon SageMaker, PCA operates in two modes, depending on the scenario: + <strong>regular</strong>: For datasets with sparse data and a moderate number of observations and features. + <strong>randomized</strong>: For datasets with both a large number of observations and features. This mode uses an approximation algorithm.</p>
+<p>PCA uses tabular data.</p>
+<p>The rows represent observations you want to embed in a lower dimensional space. The columns represent features that you want to find a reduced approximation for. The algorithm calculates the covariance matrix (or an approximation thereof in a distributed manner), and then performs the singular value decomposition on this summary to produce the principal components.</p>
+<p><strong>Topics</strong> + <a href="#pca-inputoutput">Input/Output Interface for the PCA Algorithm</a> + <a href="#pca-instances">EC2 Instance Recommendation for the PCA Algorithm</a> + <a href="#PCA-sample-notebooks">PCA Sample Notebooks</a> + <a href="how-pca-works.md">How PCA Works</a> + <a href="PCA-reference.md">PCA Hyperparameters</a> + <a href="PCA-in-formats.md">PCA Response Formats</a></p>
+<p>For training, PCA expects data provided in the train channel, and optionally supports a dataset passed to the test dataset, which is scored by the final algorithm. Both <code>recordIO-wrapped-protobuf</code> and <code>CSV</code> formats are supported for training. You can use either File mode or Pipe mode to train models on data that is formatted as <code>recordIO-wrapped-protobuf</code> or as <code>CSV</code>.</p>
+<p>For inference, PCA supports <code>text/csv</code>, <code>application/json</code>, and <code>application/x-recordio-protobuf</code>. Results are returned in either <code>application/json</code> or <code>application/x-recordio-protobuf</code> format with a vector of “projections.”</p>
+<p>For more details on training and inference file formats, see the <a href="#PCA-sample-notebooks">PCA Sample Notebooks</a> and the <a href="PCA-in-formats.md">PCA Response Formats</a>.</p>
+<p>For more information on input and output file formats, see <a href="PCA-in-formats.md">PCA Response Formats</a> for inference and the <a href="#PCA-sample-notebooks">PCA Sample Notebooks</a>.</p>
+<p>PCA supports both GPU and CPU computation. Which instance type is most performant depends heavily on the specifics of the input data.</p>
+<p>For a sample notebook that shows how to use the Amazon SageMaker Principal Component Analysis algorithm to analyze the images of handwritten digits from zero to nine in the MNIST dataset, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/pca_mnist/pca_mnist.ipynb">An Introduction to PCA with MNIST</a>. For instructions how to create and access Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. Once you have created a notebook instance and opened it, select the <strong>SageMaker Examples</strong> tab to see a list of all the Amazon SageMaker samples. The topic modeling example notebooks using the NTM algorithms are located in the <strong>Introduction to Amazon algorithms</strong> section. To open a notebook, click on its <strong>Use</strong> tab and select <strong>Create copy</strong>.</p>
+</body>
+</html>

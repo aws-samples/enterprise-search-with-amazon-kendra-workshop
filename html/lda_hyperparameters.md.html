@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>LDA Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LDA Hyperparameters<a name="lda_hyperparameters"></a></h1>
+</header>
+<p>In the <code>CreateTrainingJob</code> request, you specify the training algorithm. You can also specify algorithm-specific hyperparameters as string-to-string maps. The following table lists the hyperparameters for the LDA training algorithm provided by Amazon SageMaker. For more information, see <a href="lda-how-it-works.md">How LDA Works</a>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_topics</td>
+<td>The number of topics for LDA to find within the data. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="even">
+<td>feature_dim</td>
+<td>The size of the vocabulary of the input document corpus. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The total number of documents in the input document corpus. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="even">
+<td>alpha0</td>
+<td>Initial guess for the concentration parameter: the sum of the elements of the Dirichlet prior. Small values are more likely to generate sparse topic mixtures and large values (greater than 1.0) produce more uniform mixtures. <strong>Optional</strong> Valid values: Positive float Default value: 0.1</td>
+</tr>
+<tr class="odd">
+<td>max_restarts</td>
+<td>The number of restarts to perform during the Alternating Least Squares (ALS) spectral decomposition phase of the algorithm. Can be used to find better quality local minima at the expense of additional computation, but typically should not be adjusted. <strong>Optional</strong> Valid values: Positive integer Default value: 10</td>
+</tr>
+<tr class="even">
+<td>max_iterations</td>
+<td>The maximum number of iterations to perform during the ALS phase of the algorithm. Can be used to find better quality minima at the expense of additional computation, but typically should not be adjusted. <strong>Optional</strong> Valid values: Positive integer Default value: 1000</td>
+</tr>
+<tr class="odd">
+<td>tol</td>
+<td>Target error tolerance for the ALS phase of the algorithm. Can be used to find better quality minima at the expense of additional computation, but typically should not be adjusted. <strong>Optional</strong> Valid values: Positive float Default value: 1e-8</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

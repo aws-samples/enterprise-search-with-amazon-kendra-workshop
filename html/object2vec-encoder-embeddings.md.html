@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Encoder Embeddings for Object2Vec</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Encoder Embeddings for Object2Vec<a name="object2vec-encoder-embeddings"></a></h1>
+</header>
+<p>Due to GPU memory scarcity, the <code>INFERENCE_PREFERRED_MODE</code> environment variable can be specified to optimize on whether the <a href="object2vec-inference-formats.md">Data Formats for Object2Vec Inference</a> or the encoder embedding inference network is loaded into GPU. If the majority of your inference is for encoder embeddings, specify <code>INFERENCE_PREFERRED_MODE=embedding</code>. The following is a Batch Transform example of using 4 instances of p3.2xlarge that optimizes for encoder embedding inference:</p>
+<pre><code>transformer = o2v.transformer(instance_count=4, 
+                              instance_type=&quot;ml.p2.xlarge&quot;, 
+                              max_concurrent_transforms=2,
+                              max_payload=1,  # 1MB
+                              strategy=&#39;MultiRecord&#39;,
+                              env={&#39;INFERENCE_PREFERRED_MODE&#39;: &#39;embedding&#39;},  # only useful with GPU
+                              output_path=output_s3_path)</code></pre>
+<p>Content-type: application/json</p>
+<pre><code>{
+  &quot;instances&quot; : [
+    {&quot;in0&quot;: [6, 17, 606, 19, 53, 67, 52, 12, 5, 10, 15, 10178, 7, 33, 652, 80, 15, 69, 821, 4]},
+    {&quot;in0&quot;: [22, 1016, 32, 13, 25, 11, 5, 64, 573, 45, 5, 80, 15, 67, 21, 7, 9, 107, 4]},
+    {&quot;in0&quot;: [774, 14, 21, 206]}
+  ]
+}</code></pre>
+<p>Content-type: application/jsonlines</p>
+<pre><code>{&quot;in0&quot;: [6, 17, 606, 19, 53, 67, 52, 12, 5, 10, 15, 10178, 7, 33, 652, 80, 15, 69, 821, 4]}
+{&quot;in0&quot;: [22, 1016, 32, 13, 25, 11, 5, 64, 573, 45, 5, 80, 15, 67, 21, 7, 9, 107, 4]}
+{&quot;in0&quot;: [774, 14, 21, 206]}</code></pre>
+<p>In both of these formats, you specify only one input type: <code>“in0”</code> or <code>“in1.”</code> The inference service then invokes the corresponding encoder and outputs the embeddings for each of the instances.</p>
+<p>Content-type: application/json</p>
+<pre><code>{
+  &quot;predictions&quot;: [
+    {&quot;embeddings&quot;:[0.057368703186511,0.030703511089086,0.099890425801277,0.063688032329082,0.026327300816774,0.003637571120634,0.021305780857801,0.004316598642617,0.0,0.003397724591195,0.0,0.000378780066967,0.0,0.0,0.0,0.007419463712722]},
+    {&quot;embeddings&quot;:[0.150190666317939,0.05145975202322,0.098204270005226,0.064249359071254,0.056249320507049,0.01513972133398,0.047553978860378,0.0,0.0,0.011533712036907,0.011472506448626,0.010696629062294,0.0,0.0,0.0,0.008508535102009]}
+  ]
+}</code></pre>
+<p>Content-type: application/jsonlines</p>
+<pre><code>{&quot;embeddings&quot;:[0.057368703186511,0.030703511089086,0.099890425801277,0.063688032329082,0.026327300816774,0.003637571120634,0.021305780857801,0.004316598642617,0.0,0.003397724591195,0.0,0.000378780066967,0.0,0.0,0.0,0.007419463712722]}
+{&quot;embeddings&quot;:[0.150190666317939,0.05145975202322,0.098204270005226,0.064249359071254,0.056249320507049,0.01513972133398,0.047553978860378,0.0,0.0,0.011533712036907,0.011472506448626,0.010696629062294,0.0,0.0,0.0,0.008508535102009]}</code></pre>
+<p>The vector length of the embeddings output by the inference service is equal to the value of one of the following hyperparameters that you specify at training time: <code>enc0_token_embedding_dim</code>, <code>enc1_token_embedding_dim</code>, or <code>enc_dim</code>.</p>
+</body>
+</html>

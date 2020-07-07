@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Connect to a Notebook Instance Through a VPC Interface Endpoint</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Connect to a Notebook Instance Through a VPC Interface Endpoint<a name="notebook-interface-endpoint"></a></h1>
+</header>
+<p>You can connect to your notebook instance from your VPC through an <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-interface.html">interface endpoint</a> in your Virtual Private Cloud (VPC) instead of connecting over the internet. When you use a VPC interface endpoint, communication between your VPC and the notebook instance is conducted entirely and securely within the AWS network.</p>
+<p>Amazon SageMaker notebook instances support <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html">Amazon Virtual Private Cloud</a> (Amazon VPC) interface endpoints that are powered by <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html#what-is-privatelink">AWS PrivateLink</a>. Each VPC endpoint is represented by one or more <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html">Elastic Network Interfaces</a> (ENIs) with private IP addresses in your VPC subnets.</p>
+<p><strong>Note</strong><br />
+Before you create an interface VPC endpoint to connect to a notebook instance, create an interface VPC endpoint to connect to the Amazon SageMaker API. That way, when users call <a href="API_CreatePresignedNotebookInstanceUrl.md">CreatePresignedNotebookInstanceUrl</a> to get the URL to connect to the notebook instance, that call also goes through the interface VPC endpoint. For information, see <a href="interface-vpc-endpoint.md">Connect to Amazon SageMaker Through a VPC Interface Endpoint</a>.</p>
+<p>You can create an interface endpoint to connect to your notebook instance with either the AWS console or AWS Command Line Interface (AWS CLI) commands. For instructions, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-interface.html#create-interface-endpoint">Creating an Interface Endpoint</a>. Make sure that you create an interface endpoint for all of the subnets in your VPC from which you want to connect to the notebook instance.</p>
+<p>When you create the interface endpoint, specify <strong>aws.sagemaker.<em>region</em>.notebook</strong> as the service name. After you create a VPC endpoint, enable private DNS for your VPC endpoint. Anyone using the Amazon SageMaker API, the AWS CLI, or the console to connect to the notebook instance from within the VPC will connect to the notebook instance through the VPC endpoint instead of the public internet.</p>
+<p>Amazon SageMaker notebook instances support VPC endpoints in all AWS Regions where both <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#vpc_region">Amazon VPC</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sagemaker_region">Amazon SageMaker</a> are available.</p>
+<p><strong>Topics</strong> + <a href="#notebook-private-link-vpn">Connect Your Private Network to Your VPC</a> + <a href="#nbi-private-link-policy">Create a VPC Endpoint Policy for Amazon SageMaker Notebook Instances</a> + <a href="#notebook-private-link-restrict">Restrict Access to Connections from Within Your VPC</a></p>
+<p>To connect to your notebook instance through your VPC, you either have to connect from an instance that is inside the VPC, or connect your private network to your VPC by using an Amazon Virtual Private Network (VPN) or AWS Direct Connect. For information about Amazon VPN, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpn-connections.html">VPN Connections</a> in the <em>Amazon Virtual Private Cloud User Guide</em>. For information about AWS Direct Connect, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/create-connection.html">Creating a Connection</a> in the <em>AWS Direct Connect User Guide</em>.</p>
+<p>You can create a policy for Amazon VPC endpoints for Amazon SageMaker notebook instances to specify the following: + The principal that can perform actions. + The actions that can be performed. + The resources on which actions can be performed.</p>
+<p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints-access.html">Controlling Access to Services with VPC Endpoints</a> in the <em>Amazon VPC User Guide</em>.</p>
+<p>The following example of a VPC endpoint policy specifies that all users that have access to the endpoint are allowed to access the notebook instance named <code>myNotebookInstance</code>.</p>
+<pre><code>{
+  &quot;Statement&quot;: [
+      {
+          &quot;Action&quot;: &quot;sagemaker:CreatePresignedNotebookInstanceUrl&quot;,
+          &quot;Effect&quot;: &quot;Allow&quot;,
+          &quot;Resource&quot;: &quot;arn:aws:sagemaker:us-west-2:123456789012:notebook-instance/myNotebookInstance&quot;,
+          &quot;Principal&quot;: &quot;*&quot;
+      }
+  ]
+}</code></pre>
+<p>Access to other notebook instances is denied.</p>
+<p>Even if you set up an interface endpoint in your VPC, individuals outside the VPC can connect to the notebook instance over the internet.</p>
+<p><strong>Important</strong><br />
+If you apply an IAM policy similar to one of the following, users can’t access the specified Amazon SageMaker APIs or the notebook instance through the console.</p>
+<p>To restrict access to only connections made from within your VPC, create an AWS Identity and Access Management policy that restricts access to only calls that come from within your VPC. Then add that policy to every AWS Identity and Access Management user, group, or role used to access the notebook instance.</p>
+<p><strong>Note</strong><br />
+This policy allows connections only to callers within a subnet where you created an interface endpoint.</p>
+<pre><code>{
+    &quot;Id&quot;: &quot;notebook-example-1&quot;,
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Enable Notebook Access&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;sagemaker:CreatePresignedNotebookInstanceUrl&quot;,
+                &quot;sagemaker:DescribeNotebookInstance&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;StringEquals&quot;: {
+                    &quot;aws:SourceVpc&quot;: &quot;vpc-111bbaaa&quot;
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>If you want to restrict access to the notebook instance to only connections made using the interface endpoint, use the <code>aws:SourceVpce</code> condition key instead of <code>aws:SourceVpc</code>:</p>
+<pre><code>{
+    &quot;Id&quot;: &quot;notebook-example-1&quot;,
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Enable Notebook Access&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;sagemaker:CreatePresignedNotebookInstanceUrl&quot;,
+                &quot;sagemaker:DescribeNotebookInstance&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;ForAnyValue:StringEquals&quot;: {
+                    &quot;aws:sourceVpce&quot;: [
+                        &quot;vpce-111bbccc&quot;,
+                        &quot;vpce-111bbddd&quot;
+                    ]
+                }
+            }
+        }
+    ]
+}</code></pre>
+<p>Both of these policy examples assume that you have also created an interface endpoint for the Amazon SageMaker API. For more information, see <a href="interface-vpc-endpoint.md">Connect to Amazon SageMaker Through a VPC Interface Endpoint</a>. In the second example, one of the values for <code>aws:SourceVpce</code> is the ID of the interface endpoint for the notebook instance. The other is the ID of the interface endpoint for the Amazon SageMaker API.</p>
+<p>The policy examples here include <a href="API_DescribeNotebookInstance.md">DescribeNotebookInstance</a> because typically you would call <code>DescribeNotebookInstance</code> to make sure that the <code>NotebookInstanceStatus</code> is <code>InService</code> before you try to connect to it. For example:</p>
+<pre><code>aws sagemaker describe-notebook-instance \
+                    --notebook-instance-name myNotebookInstance
+                    
+                    
+{
+   &quot;NotebookInstanceArn&quot;:
+   &quot;arn:aws:sagemaker:us-west-2:1234567890ab:notebook-instance/mynotebookinstance&quot;,
+   &quot;NotebookInstanceName&quot;: &quot;myNotebookInstance&quot;,
+   &quot;NotebookInstanceStatus&quot;: &quot;InService&quot;,
+   &quot;Url&quot;: &quot;mynotebookinstance.notebook.us-west-2.sagemaker.aws&quot;,
+   &quot;InstanceType&quot;: &quot;ml.m4.xlarge&quot;,
+   &quot;RoleArn&quot;:
+   &quot;arn:aws:iam::1234567890ab:role/service-role/AmazonSageMaker-ExecutionRole-12345678T123456&quot;,
+   &quot;LastModifiedTime&quot;: 1540334777.501,
+   &quot;CreationTime&quot;: 1523050674.078,
+   &quot;DirectInternetAccess&quot;: &quot;Disabled&quot;
+}
+aws sagemaker create-presigned-notebook-instance-url --notebook-instance-name myNotebookInstance
+                
+                
+{
+   &quot;AuthorizedUrl&quot;: &quot;https://mynotebookinstance.notebook.us-west-2.sagemaker.aws?authToken=AuthToken
+}</code></pre>
+<p>For both of these calls, if you did not enable private DNS hostnames for your VPC endpoint, or if you are using a version of the AWS SDK that was released before August 13, 2018, you must specify the endpoint URL in the call. For example, the call to <code>create-presigned-notebook-instance-url</code> would be:</p>
+<pre><code>aws sagemaker create-presigned-notebook-instance-url
+    --notebook-instance-name myNotebookInstance --endpoint-url
+    VPC_Endpoint_ID.api.sagemaker.Region.vpce.amazonaws.com</code></pre>
+</body>
+</html>

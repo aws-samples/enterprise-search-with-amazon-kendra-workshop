@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>NTM Response Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">NTM Response Formats<a name="ntm-in-formats"></a></h1>
+</header>
+<p>All Amazon SageMaker built-in algorithms adhere to the common input inference format described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats - Inference</a>. This topic contains a list of the available output formats for the Amazon SageMaker NTM algorithm.</p>
+<pre><code>{
+    &quot;predictions&quot;:    [
+        {&quot;topic_weights&quot;: [0.02, 0.1, 0,...]},
+        {&quot;topic_weights&quot;: [0.25, 0.067, 0,...]}
+    ]
+}</code></pre>
+<pre><code>{&quot;topic_weights&quot;: [0.02, 0.1, 0,...]}
+{&quot;topic_weights&quot;: [0.25, 0.067, 0,...]}</code></pre>
+<pre><code>[
+    Record = {
+        features = {},
+        label = {
+            &#39;topic_weights&#39;: {
+                keys: [],
+                values: [0.25, 0.067, 0, ...]  # float32
+            }
+        }
+    },
+    Record = {
+        features = {},
+        label = {
+            &#39;topic_weights&#39;: {
+                keys: [],
+                values: [0.25, 0.067, 0, ...]  # float32
+            }
+        }
+    }  
+]</code></pre>
+</body>
+</html>

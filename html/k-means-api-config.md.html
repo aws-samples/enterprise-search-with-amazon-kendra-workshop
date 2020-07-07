@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>K-Means Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">K-Means Hyperparameters<a name="k-means-api-config"></a></h1>
+</header>
+<p>In the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> request, you specify the training algorithm that you want to use. You can also specify algorithm-specific hyperparameters as string-to-string maps. The following table lists the hyperparameters for the k-means training algorithm provided by Amazon SageMaker. For more information about how k-means clustering works, see <a href="algo-kmeans-tech-notes.md">How K-Means Clustering Works</a>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature_dim</td>
+<td>The number of features in the input data. <strong>Required</strong> Valid values: Positive integer</td>
+</tr>
+<tr class="even">
+<td>k</td>
+<td>The number of required clusters. <strong>Required</strong> Valid values: Positive integer</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The number of passes done over the training data. <strong>Optional</strong> Valid values: Positive integer Default value: 1</td>
+</tr>
+<tr class="even">
+<td>eval_metrics</td>
+<td>A JSON list of metric types used to report a score for the model. Allowed values are <code>msd</code> for Means Square Error and <code>ssd</code> for Sum of Square Distance. If test data is provided, the score is reported for each of the metrics requested. <strong>Optional</strong> Valid values: Either <code>[\"msd\"]</code> or <code>[\"ssd\"]</code> or <code>[\"msd\",\"ssd\"]</code> . Default value: <code>[\"msd\"]</code></td>
+</tr>
+<tr class="odd">
+<td>extra_center_factor</td>
+<td>The algorithm creates K centers = <code>num_clusters</code> * <code>extra_center_factor</code> as it runs and reduces the number of centers from K to <code>k</code> when finalizing the model. <strong>Optional</strong> Valid values: Either a positive integer or <code>auto</code>. Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>half_life_time_size</td>
+<td>Used to determine the weight given to an observation when computing a cluster mean. This weight decays exponentially as more points are observed. When a point is first observed, it is assigned a weight of 1 when computing the cluster mean. The decay constant for the exponential decay function is chosen so that after observing <code>half_life_time_size</code> points, its weight is 1/2. If set to 0, there is no decay. <strong>Optional</strong> Valid values: Non-negative integer Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>init_method</td>
+<td>Method by which the algorithm chooses the initial cluster centers. The standard k-means approach chooses them at random. An alternative k-means++ method chooses the first cluster center at random. Then it spreads out the position of the remaining initial clusters by weighting the selection of centers with a probability distribution that is proportional to the square of the distance of the remaining data points from existing centers. <strong>Optional</strong> Valid values: Either <code>random</code> or <code>kmeans++</code>. Default value: <code>random</code></td>
+</tr>
+<tr class="even">
+<td>local_lloyd_init_method</td>
+<td>The initialization method for Lloyd’s expectation-maximization (EM) procedure used to build the final model containing <code>k</code> centers. <strong>Optional</strong> Valid values: Either <code>random</code> or <code>kmeans++</code>. Default value: <code>kmeans++</code></td>
+</tr>
+<tr class="odd">
+<td>local_lloyd_max_iter</td>
+<td>The maximum number of iterations for Lloyd’s expectation-maximization (EM) procedure used to build the final model containing <code>k</code> centers. <strong>Optional</strong> Valid values: Positive integer Default value: 300</td>
+</tr>
+<tr class="even">
+<td>local_lloyd_num_trials</td>
+<td>The number of times the Lloyd’s expectation-maximization (EM) procedure with the least loss is run when building the final model containing <code>k</code> centers. <strong>Optional</strong> Valid values: Either a positive integer or <code>auto</code>. Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>local_lloyd_tol</td>
+<td>The tolerance for change in loss for early stopping of Lloyd’s expectation-maximization (EM) procedure used to build the final model containing <code>k</code> centers. <strong>Optional</strong> Valid values: Float. Range in [0, 1]. Default value: 0.0001</td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>The number of observations per mini-batch for the data iterator. <strong>Optional</strong> Valid values: Positive integer Default value: 5000</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

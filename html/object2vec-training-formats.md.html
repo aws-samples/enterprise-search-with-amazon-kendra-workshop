@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Data Formats for Object2Vec Training</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Data Formats for Object2Vec Training<a name="object2vec-training-formats"></a></h1>
+</header>
+<p>Content-type: application/jsonlines</p>
+<pre><code>{&quot;label&quot;: 0, &quot;in0&quot;: [6, 17, 606, 19, 53, 67, 52, 12, 5, 10, 15, 10178, 7, 33, 652, 80, 15, 69, 821, 4], &quot;in1&quot;: [16, 21, 13, 45, 14, 9, 80, 59, 164, 4]}
+{&quot;label&quot;: 1, &quot;in0&quot;: [22, 1016, 32, 13, 25, 11, 5, 64, 573, 45, 5, 80, 15, 67, 21, 7, 9, 107, 4], &quot;in1&quot;: [22, 32, 13, 25, 1016, 573, 3252, 4]}
+{&quot;label&quot;: 1, &quot;in0&quot;: [774, 14, 21, 206], &quot;in1&quot;: [21, 366, 125]}</code></pre>
+<p>The “in0” and “in1” are the inputs for encoder0 and encoder1, respectively. The same format is valid for both classification and regression problems. For regression, the field <code>"label"</code> can accept real valued inputs.</p>
+</body>
+</html>

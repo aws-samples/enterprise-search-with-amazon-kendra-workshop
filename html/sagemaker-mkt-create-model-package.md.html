@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Create a Model Package Resource</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Create a Model Package Resource<a name="sagemaker-mkt-create-model-package"></a></h1>
+</header>
+<p>To create a model package resource that you can use to create deployable models in Amazon SageMaker and publish on AWS Marketplace specify the following information: + The Docker container that contains the inference code, or the algorithm resource that was used to train the model. + The location of the model artifacts. Model artifacts can either be packaged in the same Docker container as the inference code or stored in Amazon S3. + The instance types that your model package supports for both real-time inference and batch transform jobs. + Validation profiles, which are batch transform jobs that Amazon SageMaker runs to test your model package’s inference code.</p>
+<p>Before listing model packages on AWS Marketplace, you must validate them. This ensures that buyers and sellers can be confident that products work in Amazon SageMaker. You can list products on AWS Marketplace only if validation succeeds.</p>
+<p>The validation procedure uses your validation profile and sample data to run the following validations tasks:</p>
+<ol type="1">
+<li><p>Create a model in your account using the model package’s inference image and the optional model artifacts that are stored in Amazon S3. <strong>Note</strong><br />
+A model package is specific to the region in which you create it. The S3 bucket where the model artifacts are stored must be in the same region where your created the model package.</p></li>
+<li><p>Create a transform job in your account using the model to verify that your inference image works with Amazon SageMaker.</p></li>
+<li><p>Create a validation profile. <strong>Note</strong><br />
+In your validation profile, provide only data that you want to expose publicly.</p></li>
+</ol>
+<p>Validation can take up to a few hours. To see the status of the jobs in your account, in the Amazon SageMaker console, see the <strong>Transform jobs</strong> pages. If validation fails, you can access the scan and validation reports from the Amazon SageMaker console. After fixing issues, recreate the algorithm. When the status of the algorithm is <code>COMPLETED</code>, find it in the Amazon SageMaker console and start the listing process <strong>Note</strong><br />
+To publish your model package on AWS Marketplace, at least one validation profile is required.</p>
+<p>You can create an model package either by using the Amazon SageMaker console or by using the Amazon SageMaker API.</p>
+<p><strong>Topics</strong> + <a href="#sagemaker-mkt-create-model-pkg-console">Create a Model Package Resource (Console)</a> + <a href="#sagemaker-mkt-create-model-pkg-api">Create a Model Package Resource (API)</a></p>
+<p><strong>To create a model package in the Amazon SageMaker console:</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Model packages</strong>, then choose <strong>Create model package</strong>.</p></li>
+<li><p>On the <strong>Inference specifications</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Model package name</strong>, type a name for your model package. The model package name must be unique in your account and in the AWS region. The name must have 1 to 64 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></li>
+<li><p>Type a description for your model package. This description appears in the Amazon SageMaker console and in the AWS Marketplace.</p></li>
+<li><p>For <strong>Inference specification options</strong>, choose <strong>Provide the location of the inference image and model artifacts</strong> to create a model package by using an inference container and model artifacts. Choose <strong>Provide the algorithm used for training and its model artifacts</strong> to create a model package from an algorithm resource that you created or subscribe to from AWS Marketplace.</p></li>
+<li><p>If you chose <strong>Provide the location of the inference image and model artifacts</strong> for <strong>Inference specification options</strong>, provide the following information for <strong>Container definition</strong> and <strong>Supported resources</strong>:</p>
+<ol type="1">
+<li><p>For <strong>Location of inference image</strong>, type the path to the image that contains your inference code. The image must be stored as a Docker container in Amazon ECR.</p></li>
+<li><p>For <strong>Location of model data artifacts</strong>, type the location in S3 where your model artifacts are stored.</p></li>
+<li><p>For <strong>Container DNS host name </strong>, type the name of the DNS host to use for your container.</p></li>
+<li><p>For <strong>Supported instance types for real-time inference</strong>, choose the instance types that your model package supports for real-time inference from Amazon SageMaker hosted endpoints.</p></li>
+<li><p>For <strong>Supported instance types for batch transform jobs</strong>, choose the instance types that your model package supports for batch transform jobs.</p></li>
+<li><p><strong>Supported content types</strong>, type the content types that your model package expects for inference requests.</p></li>
+<li><p>For <strong>Supported response MIME types</strong>, type the MIME types that your model package uses to provide inferences.</p></li>
+</ol></li>
+<li><p>If you chose <strong>Provide the algorithm used for training and its model artifacts</strong> for <strong>Inference specification options</strong>, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Algorithm ARN</strong>, type the Amazon Resource Name (ARN) of the algorithm resource to use to create the model package.</p></li>
+<li><p>For <strong>Location of model data artifacts</strong>, type the location in S3 where your model artifacts are stored.</p></li>
+</ol></li>
+<li><p>Choose <strong>Next</strong>.</p></li>
+</ol></li>
+<li><p>On the <strong>Validation and scanning</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Publish this model package on AWS Marketplace</strong>, choose <strong>Yes</strong> to publish the model package on AWS Marketplace.</p></li>
+<li><p>For <strong>Validate this model package</strong>, choose <strong>Yes</strong> if you want Amazon SageMaker to run batch transform jobs that you specify to test the inference code of your model package. <strong>Note</strong><br />
+To publish your model package on AWS Marketplace, your model package must be validated.</p></li>
+<li><p>For <strong>IAM role</strong>, choose an IAM role that has the required permissions to run batch transform jobs in Amazon SageMaker, or choose <strong>Create a new role</strong> to allow Amazon SageMaker to create a role that has the <code>AmazonSageMakerFullAccess</code> managed policy attached. For information, see <a href="sagemaker-roles.md">Amazon SageMaker Roles</a>.</p></li>
+<li><p>For <strong>Validation profile</strong>, specify the following:</p>
+<ul>
+<li>A name for the validation profile.</li>
+<li>A <strong>Transform job definition</strong>. This is a JSON block that describes a batch transform job. This is in the same format as the <a href="API_TransformJobDefinition.md">TransformJobDefinition</a>input parameter of the <a href="API_CreateAlgorithm.md">CreateAlgorithm</a> API.</li>
+</ul></li>
+</ol></li>
+<li><p>Choose <strong>Create model package</strong>.</p></li>
+</ol>
+<p>To create a model package by using the Amazon SageMaker API, call the <a href="API_CreateModelPackage.md">CreateModelPackage</a> API.</p>
+</body>
+</html>

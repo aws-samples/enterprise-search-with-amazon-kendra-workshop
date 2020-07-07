@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Common Parameters for Built-In Algorithms</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Common Parameters for Built-In Algorithms<a name="sagemaker-algo-docker-registry-paths"></a></h1>
+</header>
+<p>The following table lists parameters for each of the algorithms provided by Amazon SageMaker.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Algorithm Name</th>
+<th>Channel Name</th>
+<th>Training Image and Inference Image Registry Path</th>
+<th>Training Input Mode</th>
+<th>File Type</th>
+<th>Instance Class</th>
+<th>Parallelizable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>BlazingText</td>
+<td>train</td>
+<td><em>&lt;ecr_path&gt;</em>/blazingtext:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>Text file (one sentence per line with space-separated tokens)</td>
+<td>GPU (single instance only) or CPU</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>DeepAR Forecasting</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/forecasting-deepar:<em><tag></em></td>
+<td>File</td>
+<td>JSON Lines or Parquet</td>
+<td>GPU or CPU</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Factorization Machines</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/factorization-machines:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf</td>
+<td>CPU (GPU for dense data)</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Image Classification</td>
+<td>train and validation, (optionally) train_lst, validation_lst, and model</td>
+<td><em>&lt;ecr_path&gt;</em>/image-classification:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO or image files (.jpg or .png)</td>
+<td>GPU</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>IP Insights</td>
+<td>train and (optionally) validation</td>
+<td><em>&lt;ecr_path&gt;</em>/ipinsights:<em><tag></em></td>
+<td>File</td>
+<td>CSV</td>
+<td>CPU or GPU</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>k-means</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/kmeans:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>CPU or GPUCommon (single GPU device on one or more instances)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td>k-nearest-neighbor (k-NN)</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/knn:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>CPU or GPU (single GPU device on one or more instances)</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>LDA</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/lda:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>CPU (single instance only)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td>Linear Learner</td>
+<td>train and (optionally) validation, test, or both</td>
+<td>&lt;ecr_path&gt;/linear-learner:<tag></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>CPU or GPU</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Neural Topic Model</td>
+<td>train and (optionally) validation, test, or both</td>
+<td><em>&lt;ecr_path&gt;</em>/ntm:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>GPU or CPU</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Object2Vec</td>
+<td>train and (optionally) validation, test, or both</td>
+<td><em>&lt;ecr_path&gt;</em>/object2vec:<em><tag></em></td>
+<td>File</td>
+<td>JSON Lines</td>
+<td>GPU or CPU (single instance only)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>train and validation, (optionally) train_annotation, validation_annotation, and model</td>
+<td><em>&lt;ecr_path&gt;</em>/object-detection:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO or image files (.jpg or .png)</td>
+<td>GPU</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>PCA</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/pca:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>GPU or CPU</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Random Cut Forest</td>
+<td>train and (optionally) test</td>
+<td><em>&lt;ecr_path&gt;</em>/randomcutforest:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>recordIO-protobuf or CSV</td>
+<td>CPU</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Semantic Segmentation</td>
+<td>train and validation, train_annotation, validation_annotation, and (optionally) label_map and model</td>
+<td><em>&lt;ecr_path&gt;</em>/semantic-segmentation:<em><tag></em></td>
+<td>File or Pipe</td>
+<td>image files</td>
+<td>GPU (single instance only)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>Seq2Seq Modeling</td>
+<td>train, validation, and vocab</td>
+<td>&lt;ecr_path&gt;/seq2seq:<tag></td>
+<td>File</td>
+<td>recordIO-protobuf</td>
+<td>GPU (single instance only)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td>XGBoost</td>
+<td>train and (optionally) validation</td>
+<td><em>&lt;ecr_path&gt;</em>/xgboost:<em><tag></em></td>
+<td>File</td>
+<td>CSV or LibSVM</td>
+<td>CPU</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Algorithms that are <em>parallelizable</em> can be deployed on multiple compute instances for distributed training. For the <strong>Training Image and Inference Image Registry Path</strong> column, use the <code>:1</code> version tag to ensure that you are using a stable version of the algorithm. You can reliably host a model trained using an image with the <code>:1</code> tag on an inference image that has the <code>:1</code> tag. Using the <code>:latest</code> tag in the registry path provides you with the most up-to-date version of the algorithm, but might cause problems with backward compatibility. Avoid using the <code>:latest</code> tag for production purposes.</p>
+<p>For the <strong>Training Image and Inference Image Registry Path</strong> column, depending on algorithm and region use one of the following values for <em>&lt;ecr_path&gt;.</em></p>
+<p><a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">[See the AWS documentation website for more details]</a></p>
+<p>Use the paths and training input mode as follows: + To create a training job (with a request to the <a href="API_CreateTrainingJob.md">CreateTrainingJob</a> API), specify the Docker Registry path and the training input mode for the training image. You create a training job to train a model using a specific dataset.</p>
+<p>  + To create a model (with a <a href="API_CreateModel.md">CreateModel</a> request), specify the Docker Registry path for the inference image. Amazon SageMaker launches machine learning compute instances that are based on the endpoint configuration and deploys the model, which includes the artifacts (the result of model training).</p>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>K-nn Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">K-nn Hyperparameters<a name="kNN_hyperparameters"></a></h1>
+</header>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature_dim</td>
+<td>The number of features in the input data. <strong>Required</strong> Valid values: positive integer.</td>
+</tr>
+<tr class="even">
+<td>k</td>
+<td>The number of nearest neighbors. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>predictor_type</td>
+<td>The type of inference to use on the data labels. <strong>Required</strong> Valid values: <em>classifier</em> for classification or <em>regressor</em> for regression.</td>
+</tr>
+<tr class="even">
+<td>sample_size</td>
+<td>The number of data points to be sampled from the training data set. <strong>Required</strong> Valid values: positive integer</td>
+</tr>
+<tr class="odd">
+<td>dimension_reduction_target</td>
+<td>The target dimension to reduce to. <strong>Required</strong> when you specify the <code>dimension_reduction_type</code> parameter. Valid values: positive integer greater than 0 and less than <code>feature_dim</code>.</td>
+</tr>
+<tr class="even">
+<td>dimension_reduction_type</td>
+<td>The type of dimension reduction method. <strong>Optional</strong> Valid values: <em>sign</em> for random projection or <em>fjlt</em> for the fast Johnson-Lindenstrauss transform. Default value: No dimension reduction</td>
+</tr>
+<tr class="odd">
+<td>faiss_index_ivf_nlists</td>
+<td>The number of centroids to construct in the index when <code>index_type</code> is <em>faiss.IVFFlat</em> or <em>faiss.IVFPQ</em>. <strong>Optional</strong> Valid values: positive integer Default value: <em>auto</em>, which resolves to <code>sqrt(sample_size)</code>.</td>
+</tr>
+<tr class="even">
+<td>faiss_index_pq_m</td>
+<td>The number of vector sub-components to construct in the index when <code>index_type</code> is set to <em>faiss.IVFPQ</em>. The FaceBook AI Similarity Search (FAISS) library requires that the value of <code>faiss_index_pq_m</code> is a divisor of the data dimension. If <code>faiss_index_pq_m</code> is not a divisor of the data dimension, we increase the data dimension to smallest integer divisible by <code>faiss_index_pq_m</code>. If no dimension reduction is applied, the algorithm adds a padding of zeros. If dimension reduction is applied, the algorithm increase the value of the <code>dimension_reduction_target</code> hyper-parameter. <strong>Optional</strong> Valid values: One of the following positive integers: 1, 2, 3, 4, 8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 96</td>
+</tr>
+<tr class="odd">
+<td>index_metric</td>
+<td>The metric to measure the distance between points when finding nearest neighbors. When training with <code>index_type</code> set to <code>faiss.IVFPQ</code>, the <code>INNER_PRODUCT</code> distance and <code>COSINE</code> similarity are not supported. <strong>Optional</strong> Valid values: <em>L2</em> for Euclidean-distance, <em>INNER_PRODUCT</em> for inner-product distance, <em>COSINE</em> for cosine similarity. Default value: <em>L2</em></td>
+</tr>
+<tr class="even">
+<td>index_type</td>
+<td>The type of index. <strong>Optional</strong> Valid values: <em>faiss.Flat</em>, <em>faiss.IVFFlat</em>, <em>faiss.IVFPQ</em>. Default values: <em>faiss.Flat</em></td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The number of observations per mini-batch for the data iterator. <strong>Optional</strong> Valid values: positive integer Default value: 5000</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

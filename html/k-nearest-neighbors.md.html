@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>K-Nearest Neighbors (k-NN) Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">K-Nearest Neighbors (k-NN) Algorithm<a name="k-nearest-neighbors"></a></h1>
+</header>
+<p>Amazon SageMaker k-nearest neighbors (k-NN) algorithm is an index-based algorithm. It uses a non-parametric method for classification or regression. For classification problems, the algorithm queries the <em>k</em> points that are closest to the sample point and returns the most frequently used label of their class as the predicted label. For regression problems, the algorithm queries the <em>k</em> closest points to the sample point and returns the average of their feature values as the predicted value.</p>
+<p>Training with the k-NN algorithm has three steps: sampling, dimension reduction, and index building. Sampling reduces the size of the initial dataset so that it fits into memory. For dimension reduction, the algorithm decreases the feature dimension of the data to reduce the footprint of the k-NN model in memory and inference latency. We provide two methods of dimension reduction methods: random projection and the fast Johnson-Lindenstrauss transform. Typically, you use dimension reduction for high-dimensional (d &gt;1000) datasets to avoid the “curse of dimensionality” that troubles the statistical analysis of data that becomes sparse as dimensionality increases. The main objective of k-NN’s training is to construct the index. The index enables efficient lookups of distances between points whose values or class labels have not yet been determined and the k nearest points to use for inference.</p>
+<p><strong>Topics</strong> + <a href="#kNN-input_output">Input/Output Interface for the k-NN Algorithm</a> + <a href="#kNN-sample-notebooks">k-NN Sample Notebooks</a> + <a href="kNN_how-it-works.md">How the K-nn Algorithm Works</a> + <a href="#kNN-instances">EC2 Instance Recommendation for the K-nn Algorithm</a> + <a href="kNN_hyperparameters.md">K-nn Hyperparameters</a> + <a href="kNN-tuning.md">Tune a K-nn Model</a> + <a href="kNN-in-formats.md">Data Formats for K-nn Training Input</a> + <a href="kNN-inference-formats.md">K-nn Request and Response Formats</a></p>
+<p>Amazon SageMaker k-NN supports train and test data channels. + Use a <em>train channel</em> for data that you want to sample and construct into the k-NN index. + Use a <em>test channel</em> to emit scores in log files. Scores are listed as one line per mini-batch: accuracy for <code>classifier</code>, mean-squared error (mse) for <code>regressor</code> for score.</p>
+<p>For training inputs, k-NN supports <code>text/csv</code> and <code>application/x-recordio-protobuf</code> data formats. For input type <code>text/csv</code>, the first <code>label_size</code> columns are interpreted as the label vector for that row. You can use either File mode or Pipe mode to train models on data that is formatted as <code>recordIO-wrapped-protobuf</code> or as <code>CSV</code>.</p>
+<p>For inference inputs, k-NN supports the <code>application/json</code>, <code>application/x-recordio-protobuf</code>, and <code>text/csv</code> data formats. The <code>text/csv</code> format accepts a <code>label_size</code> and encoding parameter. It assumes a <code>label_size</code> of 0 and a UTF-8 encoding.</p>
+<p>For inference outputs, k-NN supports the <code>application/json</code> and <code>application/x-recordio-protobuf</code> data formats. These two data formats also support a verbose output mode. In verbose output mode, the API provides the search results with the distances vector sorted from smallest to largest, and corresponding elements in the labels vector.</p>
+<p>For batch transform, k-NN supports the <code>application/jsonlines</code> data format for both input and output. An example input is as follows:</p>
+<pre><code>content-type: application/jsonlines
+
+{&quot;features&quot;: [1.5, 16.0, 14.0, 23.0]}
+{&quot;data&quot;: {&quot;features&quot;: {&quot;values&quot;: [1.5, 16.0, 14.0, 23.0]}}</code></pre>
+<p>An example output is as follows:</p>
+<pre><code>accept: application/jsonlines
+
+{&quot;predicted_label&quot;: 0.0}
+{&quot;predicted_label&quot;: 2.0}</code></pre>
+<p>For more information on input and output file formats, see <a href="kNN-in-formats.md">Data Formats for K-nn Training Input</a> for training, <a href="kNN-inference-formats.md">K-nn Request and Response Formats</a> for inference, and the <a href="#kNN-sample-notebooks">k-NN Sample Notebooks</a>.</p>
+<p>For a sample notebook that uses the Amazon SageMaker k-nearest neighbor algorithm to predict wilderness cover types from geological and forest service data, see the <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/k_nearest_neighbors_covtype/k_nearest_neighbors_covtype.ipynb">K-Nearest Neighbor Covertype</a>. For instructions how to create and access Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. Once you have created a notebook instance and opened it, select the <strong>SageMaker Examples</strong> tab to see a list of all the Amazon SageMaker samples. The topic modeling example notebooks using the NTM algorithms are located in the <strong>Introduction to Amazon algorithms</strong> section. To open a notebook, click on its <strong>Use</strong> tab and select <strong>Create copy</strong>.</p>
+<p>To start, try running training on a CPU, using, for example, an ml.m5.2xlarge instance, or on a GPU using, for example, an ml.p2.xlarge instance.</p>
+<p>Inference requests from CPUs generally have a lower average latency than requests from GPUs because there is a tax on CPU-to-GPU communication when you use GPU hardware. However, GPUs generally have higher throughput for larger batches.</p>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Customize a Notebook Instance</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Customize a Notebook Instance<a name="notebook-lifecycle-config"></a></h1>
+</header>
+<p>To install packages or sample notebooks on your notebook instance, configure networking and security for it, or otherwise use a shell script to customize it, use a lifecycle configuration. A <em>lifecycle configuration</em> provides shell scripts that run only when you create the notebook instance or whenever you start one. When you create a notebook instance, you can create a new lifecycle configuration and the scripts it uses or apply one that you already have.</p>
+<p>The Amazon SageMaker team maintains a public repository of notebook intance lifecycle configurations that address common use cases for customizing notebook instances at <a href="https://github.com/aws-samples/amazon-sagemaker-notebook-instance-lifecycle-configuration-samples">https://github.com/aws-samples/amazon-sagemaker-notebook-instance-lifecycle-configuration-samples</a>.</p>
+<p><strong>Note</strong><br />
+Each script has a limit of 16384 characters.<br />
+The value of the <code>$PATH</code> environment variable that is available to both scripts is <code>/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin</code>. The working directory, which is the value of the <code>$PWD</code> environment variable, is <code>/</code>.<br />
+View CloudWatch Logs for notebook instance lifecycle configurations in log group <code>/aws/sagemaker/NotebookInstances</code> in log stream <code>[notebook-instance-name]/[LifecycleConfigHook]</code>.<br />
+Scripts cannot run for longer than 5 minutes. If a script runs for longer than 5 minutes, it fails and the notebook instance is not created or started. To help decrease the run time of scripts, try the following:<br />
+Cut down on necessary steps. For example, limit which conda environments in which to install large packages. Run tasks in parallel processes. Use the <code>nohup</code> command in your script.</p>
+<p><strong>To create a lifecycle configuration</strong></p>
+<ol type="1">
+<li><p>For <strong>Lifecycle configuration - <em>Optional</em></strong>, choose <strong>Create a new lifecycle configuration</strong>.</p></li>
+<li><p>For <strong>Name</strong>, type a name.</p></li>
+<li><p>(Optional) To create a script that runs when you create the notebook and every time you start it, choose <strong>Start notebook</strong>.</p></li>
+<li><p>In the <strong>Start notebook</strong> editor, type the script.</p></li>
+<li><p>(Optional) To create a script that runs only once, when you create the notebook, choose <strong>Create notebook</strong>.</p></li>
+<li><p>In the <strong>Create notebook</strong> editor, type the script configure networking.</p></li>
+<li><p>Choose <strong>Create configuration</strong>.</p></li>
+</ol>
+<p>You can see a list of notebook instance lifecycle configurations you previously created by choosing <strong>Lifecycle configuration</strong> in the Amazon SageMaker console. From there, you can view, edit, delete existing lifecycle configurations. You can create a new notebook instance lifecycle configuration by choosing <strong>Create configuration</strong>. These notebook instance lifecycle configurations are available when you create a new notebook instance.</p>
+<p>The following are best practices for using lifecycle configurations: + Lifecycle configurations run as the <code>root</code> user. If your script makes any changes within the <code>/home/ec2-user/SageMaker</code> directory, (for example, installing a package with <code>pip</code>), use the command <code>sudo -u ec2-user</code> command to run as the <code>ec2-user</code> user. This is the same user that Amazon SageMaker runs as. + Amazon SageMaker notebook instances use <code>conda</code> environments to implement different kernels for Jupyter notebooks. If you want to install packages that are available to one or more notebook kernels, enclose the commands to install the packages with <code>conda</code> environment commands that activate the conda environment that contains the kernel where you want to install the packages.</p>
+<p>For example, if you want to install a package only in for the <code>python3</code> environment, use the following code:</p>
+<pre><code>#!/bin/bash
+sudo -u ec2-user -i &lt;&lt;&#39;EOF&#39;
+
+# This will affect only the Jupyter kernel called &quot;conda_python3&quot;.
+source activate python3
+
+# Replace myPackage with the name of the package you want to install.
+pip install myPackage
+# You can also perform &quot;conda install&quot; here as well.
+
+source deactivate
+
+EOF</code></pre>
+<p>If you want to install a package in all conda environments in the notebook instance, use the following code:</p>
+<pre><code>#!/bin/bash
+sudo -u ec2-user -i &lt;&lt;&#39;EOF&#39;
+
+# Note that &quot;base&quot; is special environment name, include it there as well.
+for env in base /home/ec2-user/anaconda3/envs/*; do
+    source /home/ec2-user/anaconda3/bin/activate $(basename &quot;$env&quot;)
+
+    # Installing packages in the Jupyter system environment can affect stability of your SageMaker
+    # Notebook Instance.  You can remove this check if you&#39;d like to install Jupyter extensions, etc.
+    if [ $env = &#39;JupyterSystemEnv&#39; ]; then
+      continue
+    fi
+
+    # Replace myPackage with the name of the package you want to install.
+    pip install --upgrade --quiet myPackage
+    # You can also perform &quot;conda install&quot; here as well.
+
+    source /home/ec2-user/anaconda3/bin/deactivate
+done
+
+EOF</code></pre>
+<p><strong>Important</strong><br />
+When you create or change a script file, we recommend you use <strong>Create notebook</strong> editor or a text editor that allows for Unix style line breaks. Copying text from a non Linux operating system might include incompatible line breaks and result in an unexpected error.</p>
+</body>
+</html>

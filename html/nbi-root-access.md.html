@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Control Root Access to a Notebook Instance</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Control Root Access to a Notebook Instance<a name="nbi-root-access"></a></h1>
+</header>
+<p>By default, when you create a notebook instance, users that log into that notebook instance have root access. Data science is an iterative process that might require the data scientist to test and use different software tools and packages, so many notebook instance users need to have root access to be able to install these tools and packages. Because users with root access have administrator privileges, users can access and edit all files on a notebook instance with root access enabled.</p>
+<p>If you don’t want users to have root access to a notebook instance, when you call <a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a> or <a href="API_UpdateNotebookInstance.md">UpdateNotebookInstance</a> operations, set the <code>RootAccess</code> field to <code>Disabled</code>. You can also disable root access for users when you create or update a notebook instance in the Amazon SageMaker console. For information, see <a href="gs-setup-working-env.md">Step 2: Create an Amazon SageMaker Notebook Instance</a>.</p>
+<p><strong>Note</strong><br />
+Lifecycle configurations need root access to be able to set up a notebook instance. Because of this, lifecycle configurations associated with a notebook instance always run with root access even if you disable root access for users.</p>
+</body>
+</html>

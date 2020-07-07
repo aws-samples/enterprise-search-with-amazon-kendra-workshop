@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Amazon SageMaker Developer Guide</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Amazon SageMaker Developer Guide</h1>
+</header>
+<table style="width:8%;">
+<colgroup>
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>*****Copyright © 2019 Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Amazon’s trademarks and trade dress may not be used in connection with any product or service that is not Amazon’s, in any manner that is likely to cause confusion among customers, or in any manner that disparages or discredits Amazon. All other trademarks not owned by Amazon are the property of their respective owners, who may or may not be affiliated with, connected to, or sponsored by Amazon.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="whatis.md">What Is Amazon SageMaker?</a></li>
+<li><a href="how-it-works.md">How Amazon SageMaker Works</a>
+<ul>
+<li><a href="how-it-works-mlconcepts.md">Machine Learning with Amazon SageMaker</a></li>
+<li><a href="how-it-works-notebooks-instances.md">Explore and Preprocess Data</a></li>
+<li><a href="how-it-works-training.md">Train a Model with Amazon SageMaker</a></li>
+<li><a href="how-it-works-deployment.md">Deploy a Model in Amazon SageMaker</a>
+<ul>
+<li><a href="how-it-works-hosting.md">Deploy a Model on Amazon SageMaker Hosting Services</a></li>
+<li><a href="how-it-works-batch.md">Get Inferences for an Entire Dataset with Batch Transform</a></li>
+<li><a href="how-it-works-model-validation.md">Validate a Machine Learning Model</a></li>
+<li><a href="how-it-works-prog-model.md">The Amazon SageMaker Programming Model</a></li>
+</ul></li>
+</ul></li>
+<li><a href="gs-set-up.md">Set Up Amazon SageMaker</a>
+<ul>
+<li><a href="gs-account.md">Step 1: Create an AWS Account</a></li>
+<li><a href="gs-account-user.md">Step 2: Create an IAM Administrator User and Group</a></li>
+</ul></li>
+<li><a href="gs.md">Get Started</a>
+<ul>
+<li><a href="gs-config-permissions.md">Step 1: Create an Amazon S3 Bucket</a></li>
+<li><a href="gs-setup-working-env.md">Step 2: Create an Amazon SageMaker Notebook Instance</a></li>
+<li><a href="ex1-prepare.md">Step 3: Create a Jupyter Notebook</a></li>
+<li><a href="ex1-preprocess-data.md">Step 4: Download, Explore, and Transform the Training Data</a>
+<ul>
+<li><a href="ex1-preprocess-data-pull-data.md">Step 4.1: Download the MNIST Dataset</a></li>
+<li><a href="ex1-preprocess-data-inspect.md">Step 4.2: Explore the Training Dataset</a></li>
+<li><a href="ex1-preprocess-data-transform.md">Step 4.3: Transform the Training Dataset and Upload It to Amazon S3</a></li>
+</ul></li>
+<li><a href="ex1-train-model.md">Step 5: Train a Model</a></li>
+<li><a href="ex1-model-deployment.md">Step 6: Deploy the Model to Amazon SageMaker</a>
+<ul>
+<li><a href="ex1-deploy-model.md">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a></li>
+<li><a href="ex1-batch-transform.md">Step 6.2: Deploy the Model with Batch Transform</a></li>
+</ul></li>
+<li><a href="ex1-test-model.md">Step 7: Validate the Model</a>
+<ul>
+<li><a href="ex1-test-model-endpoint.md">Step 7.1: Validate a Model Deployed to Amazon SageMaker Hosting Services</a></li>
+<li><a href="ex1-test-model-batch.md">Step 7.2: Validate a Model Deployed with Batch Transform</a></li>
+</ul></li>
+<li><a href="ex1-cleanup.md">Step 8: Clean Up</a></li>
+<li><a href="getting-started-client-app.md">Step 9: Integrating Amazon SageMaker Endpoints into Internet-facing Applications</a></li>
+</ul></li>
+<li><a href="nbi.md">Use Notebook Instances</a>
+<ul>
+<li><a href="howitworks-create-ws.md">Create a Notebook Instance</a></li>
+<li><a href="howitworks-access-ws.md">Access Notebook Instances</a>
+<ul>
+<li><a href="nbi-root-access.md">Control Root Access to a Notebook Instance</a></li>
+<li><a href="nbi-ip-filter.md">Limit Access to a Notebook Instance by IP Address</a></li>
+<li><a href="notebook-interface-endpoint.md">Connect to a Notebook Instance Through a VPC Interface Endpoint</a></li>
+</ul></li>
+<li><a href="notebook-lifecycle-config.md">Customize a Notebook Instance</a></li>
+<li><a href="howitworks-nbexamples.md">Use Example Notebooks</a></li>
+<li><a href="howitworks-set-kernel.md">Set the Notebook Kernel</a></li>
+<li><a href="nbi-add-external.md">Install External Libraries and Kernels in Notebook Instances</a></li>
+<li><a href="nbi-git-repo.md">Associate Git Repositories with Amazon SageMaker Notebook Instances</a></li>
+<li><a href="nbi-metadata.md">Get Notebook Instance Metadata</a></li>
+</ul></li>
+<li><a href="build-model.md">Build a Model</a>
+<ul>
+<li><a href="algos.md">Use Amazon SageMaker Built-in Algorithms</a>
+<ul>
+<li><a href="common-info-all-im-models.md">Common Elements of Built-in Algorithms</a>
+<ul>
+<li><a href="sagemaker-algo-docker-registry-paths.md">Common Parameters for Built-In Algorithms</a></li>
+<li><a href="sagemaker-algo-common-data-formats.md">Common Data Formats for Built-in Algorithms</a>
+<ul>
+<li><a href="cdf-training.md">Common Data Formats for Training</a></li>
+<li><a href="cdf-inference.md">Common Data Formats for Inference</a></li>
+</ul></li>
+<li><a href="cmn-info-instance-types.md">Instance Types for Built-in Algorithms</a></li>
+<li><a href="common-info-all-sagemaker-models-logs.md">Logs for Built-In Algorithms</a></li>
+</ul></li>
+<li><a href="blazingtext.md">BlazingText Algorithm</a>
+<ul>
+<li><a href="blazingtext_hyperparameters.md">BlazingText Hyperparameters</a></li>
+<li><a href="blazingtext-tuning.md">Tune a BlazingText Model</a></li>
+</ul></li>
+<li><a href="deepar.md">DeepAR Forecasting Algorithm</a>
+<ul>
+<li><a href="deepar_how-it-works.md">How the DeepAR Algorithm Works</a></li>
+<li><a href="deepar_hyperparameters.md">DeepAR Hyperparameters</a></li>
+<li><a href="deepar-tuning.md">Tune a DeepAR Model</a></li>
+<li><a href="deepar-in-formats.md">DeepAR Inference Formats</a></li>
+</ul></li>
+<li><a href="fact-machines.md">Factorization Machines Algorithm</a>
+<ul>
+<li><a href="fact-machines-howitworks.md">How Factorization Machines Work</a></li>
+<li><a href="fact-machines-hyperparameters.md">Factorization Machines Hyperparameters</a></li>
+<li><a href="fm-tuning.md">Tune a Factorization Machines Model</a></li>
+<li><a href="fm-in-formats.md">Factorization Machine Response Formats</a></li>
+</ul></li>
+<li><a href="image-classification.md">Image Classification Algorithm</a>
+<ul>
+<li><a href="IC-HowItWorks.md">How Image Classification Works</a></li>
+<li><a href="IC-Hyperparameter.md">Image Classification Hyperparameters</a></li>
+<li><a href="IC-tuning.md">Tune an Image Classification Model</a></li>
+</ul></li>
+<li><a href="ip-insights.md">IP Insights Algorithm</a>
+<ul>
+<li><a href="ip-insights-howitworks.md">How IP Insights Works</a></li>
+<li><a href="ip-insights-hyperparameters.md">IP Insights Hyperparameters</a></li>
+<li><a href="ip-insights-tuning.md">Tune an IP Insights Model</a></li>
+<li><a href="ip-insights-data-formats.md">IP Insights Data Formats</a>
+<ul>
+<li><a href="ip-insights-training-data-formats.md">IP Insights Training Data Formats</a></li>
+<li><a href="ip-insights-inference-data-formats.md">IP Insights Inference Data Formats</a></li>
+</ul></li>
+</ul></li>
+<li><a href="k-means.md">K-Means Algorithm</a>
+<ul>
+<li><a href="algo-kmeans-tech-notes.md">How K-Means Clustering Works</a></li>
+<li><a href="k-means-api-config.md">K-Means Hyperparameters</a></li>
+<li><a href="k-means-tuning.md">Tune a K-Means Model</a></li>
+<li><a href="km-in-formats.md">K-Means Response Formats</a></li>
+</ul></li>
+<li><a href="k-nearest-neighbors.md">K-Nearest Neighbors (k-NN) Algorithm</a>
+<ul>
+<li><a href="kNN_how-it-works.md">How the K-nn Algorithm Works</a></li>
+<li><a href="kNN_hyperparameters.md">K-nn Hyperparameters</a></li>
+<li><a href="kNN-tuning.md">Tune a K-nn Model</a></li>
+<li><a href="kNN-in-formats.md">Data Formats for K-nn Training Input</a></li>
+<li><a href="kNN-inference-formats.md">K-nn Request and Response Formats</a></li>
+</ul></li>
+<li><a href="lda.md">Latent Dirichlet Allocation (LDA) Algorithm</a>
+<ul>
+<li><a href="lda-how-it-works.md">How LDA Works</a></li>
+<li><a href="lda_hyperparameters.md">LDA Hyperparameters</a></li>
+<li><a href="lda-tuning.md">Tune an LDA Model</a></li>
+</ul></li>
+<li><a href="linear-learner.md">Linear Learner Algorithm</a>
+<ul>
+<li><a href="ll_how-it-works.md">How Linear Learner Works</a></li>
+<li><a href="ll_hyperparameters.md">Linear Learner Hyperparameters</a></li>
+<li><a href="linear-learner-tuning.md">Tune a Linear Learner Model</a></li>
+<li><a href="LL-in-formats.md">Linear Learner Response Formats</a></li>
+</ul></li>
+<li><a href="ntm.md">Neural Topic Model (NTM) Algorithm</a>
+<ul>
+<li><a href="ntm_hyperparameters.md">NTM Hyperparameters</a></li>
+<li><a href="ntm-tuning.md">Tune an NTM Model</a></li>
+<li><a href="ntm-in-formats.md">NTM Response Formats</a></li>
+</ul></li>
+<li><a href="object2vec.md">Object2Vec Algorithm</a>
+<ul>
+<li><a href="object2vec-howitworks.md">How Object2Vec Works</a></li>
+<li><a href="object2vec-hyperparameters.md">Object2Vec Hyperparameters</a></li>
+<li><a href="object2vec-tuning.md">Tune an Object2Vec Model</a></li>
+<li><a href="object2vec-training-formats.md">Data Formats for Object2Vec Training</a></li>
+<li><a href="object2vec-inference-formats.md">Data Formats for Object2Vec Inference</a></li>
+<li><a href="object2vec-encoder-embeddings.md">Encoder Embeddings for Object2Vec</a></li>
+</ul></li>
+<li><a href="object-detection.md">Object Detection Algorithm</a>
+<ul>
+<li><a href="algo-object-detection-tech-notes.md">How Object Detection Works</a></li>
+<li><a href="object-detection-api-config.md">Object Detection Hyperparameters</a></li>
+<li><a href="object-detection-tuning.md">Tune an Object Detection Model</a></li>
+<li><a href="object-detection-in-formats.md">Object Detection Request and Response Formats</a></li>
+</ul></li>
+<li><a href="pca.md">Principal Component Analysis (PCA) Algorithm</a>
+<ul>
+<li><a href="how-pca-works.md">How PCA Works</a></li>
+<li><a href="PCA-reference.md">PCA Hyperparameters</a></li>
+<li><a href="PCA-in-formats.md">PCA Response Formats</a></li>
+</ul></li>
+<li><a href="randomcutforest.md">Random Cut Forest (RCF) Algorithm</a>
+<ul>
+<li><a href="rcf_how-it-works.md">How RCF Works</a></li>
+<li><a href="rcf_hyperparameters.md">RCF Hyperparameters</a></li>
+<li><a href="random-cut-forest-tuning.md">Tune an RCF Model</a></li>
+<li><a href="rcf-in-formats.md">RCF Response Formats</a></li>
+</ul></li>
+<li><a href="semantic-segmentation.md">Semantic Segmentation Algorithm</a>
+<ul>
+<li><a href="segmentation-hyperparameters.md">Semantic Segmentation Hyperparameters</a></li>
+</ul></li>
+<li><a href="seq-2-seq.md">Sequence-to-Sequence Algorithm</a>
+<ul>
+<li><a href="seq-2-seq-howitworks.md">How Sequence-to-Sequence Works</a></li>
+<li><a href="seq-2-seq-hyperparameters.md">Sequence-to-Sequence Hyperparameters</a></li>
+<li><a href="seq-2-seq-tuning.md">Tune a Sequence-to-Sequence Model</a></li>
+</ul></li>
+<li><a href="xgboost.md">XGBoost Algorithm</a>
+<ul>
+<li><a href="xgboost-HowItWorks.md">How XGBoost Works</a></li>
+<li><a href="xgboost_hyperparameters.md">XGBoost Hyperparameters</a></li>
+<li><a href="xgboost-tuning.md">Tune an XGBoost Model</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="train-model.md">Train a Model</a>
+<ul>
+<li><a href="training-metrics.md">Monitor and Analyze Training Jobs Using Metrics</a></li>
+<li><a href="incremental-training.md">Incremental Training in Amazon SageMaker</a></li>
+<li><a href="automatic-model-tuning.md">Automatic Model Tuning</a>
+<ul>
+<li><a href="automatic-model-tuning-how-it-works.md">How Hyperparameter Tuning Works</a></li>
+<li><a href="automatic-model-tuning-define-metrics.md">Define Metrics</a></li>
+<li><a href="automatic-model-tuning-define-ranges.md">Define Hyperparameter Ranges</a></li>
+<li><a href="automatic-model-tuning-ex.md">Example: Hyperparameter Tuning Job</a>
+<ul>
+<li><a href="automatic-model-tuning-ex-notebook.md">Create a Notebook</a></li>
+<li><a href="automatic-model-tuning-ex-client.md">Get the Amazon Sagemaker Boto 3 Client</a></li>
+<li><a href="automatic-model-tuning-ex-role.md">Get the Amazon SageMaker Execution Role</a></li>
+<li><a href="automatic-model-tuning-ex-bucket.md">Specify a Bucket and Data Output Location</a></li>
+<li><a href="automatic-model-tuning-ex-data.md">Download, Prepare, and Upload Training Data</a></li>
+<li><a href="automatic-model-tuning-ex-tuning-job.md">Configure and Launch a Hyperparameter Tuning Job</a></li>
+<li><a href="automatic-model-tuning-monitor.md">Monitor the Progress of a Hyperparameter Tuning Job</a></li>
+<li><a href="automatic-model-tuning-ex-cleanup.md">Clean up</a></li>
+</ul></li>
+<li><a href="automatic-model-tuning-early-stopping.md">Stop Training Jobs Early</a></li>
+<li><a href="automatic-model-tuning-warm-start.md">Run a Warm Start Hyperparameter Tuning Job</a></li>
+<li><a href="automatic-model-tuning-considerations.md">Best Practices for Hyperparameter Tuning</a></li>
+</ul></li>
+<li><a href="augmented-manifest.md">Provide Dataset Metadata to Training Jobs with an Augmented Manifest File</a></li>
+</ul></li>
+<li><a href="deploy-model.md">Deploy a Model</a>
+<ul>
+<li><a href="inference-pipelines.md">Deploy an Inference Pipeline</a>
+<ul>
+<li><a href="inference-pipeline-mleap-scikit-learn-containers.md">Feature Processing with Spark ML and Scikit-learn</a></li>
+<li><a href="inference-pipeline-create-console.md">Create a Pipeline Model</a></li>
+<li><a href="inference-pipeline-real-time.md">Run Real-time Predictions with an Inference Pipeline</a></li>
+<li><a href="inference-pipeline-batch.md">Run Batch Transforms with Inference Pipelines</a></li>
+<li><a href="inference-pipeline-logs-metrics.md">Inference Pipeline Logs and Metrics</a></li>
+<li><a href="inference-pipeline-troubleshoot.md">Troubleshoot Inference Pipelines</a></li>
+</ul></li>
+<li><a href="neo.md">Amazon SageMaker Neo</a>
+<ul>
+<li><a href="neo-job-compilation.md">Use Neo to Compile a Model</a>
+<ul>
+<li><a href="neo-job-compilation-cli.md">Compile a Model (API)</a></li>
+<li><a href="neo-job-compilation-console.md">Compile a Model (Console)</a></li>
+<li><a href="neo-job-compilation-sagemaker-sdk.md">Compile a Model (Amazon SageMaker SDK)</a></li>
+</ul></li>
+<li><a href="neo-deployment.md">Deploy a Model</a>
+<ul>
+<li><a href="neo-deployment-hosting-services.md">Deploy a Model Compiled with Neo with Hosting Services</a>
+<ul>
+<li><a href="neo-deployment-hosting-services-cli.md">Deploy a Model Compiled with Neo (AWS CLI)</a></li>
+<li><a href="neo-deployment-hosting-services-console.md">Deploy a Model Compiled with Neo (Console)</a></li>
+<li><a href="neo-deployment-hosting-services-sdk.md">Deploy a Model Compiled with Neo (Amazon SageMaker SDK)</a></li>
+</ul></li>
+<li><a href="neo-deployment-greengrass.md">Deploy a Model Compiled with Neo (AWS IoT Greengrass)</a></li>
+</ul></li>
+<li><a href="neo-requests.md">Request Inferences from a Deployed Service</a></li>
+<li><a href="neo-troubleshooting.md">Troubleshooting Neo Compilation Errors</a></li>
+</ul></li>
+<li><a href="batch-transform.md">Batch Transform</a>
+<ul>
+<li><a href="batch-transform-data-processing.md">Associate Prediction Results with their Corresponding Input Records</a></li>
+</ul></li>
+<li><a href="ei.md">Amazon SageMaker Elastic Inference (EI)</a>
+<ul>
+<li><a href="ei-setup.md">Set Up to Use EI</a></li>
+<li><a href="ei-notebook-instance.md">Attach EI to a Notebook Instance</a></li>
+<li><a href="ei-endpoints.md">Use EI on Amazon SageMaker Hosted Endpoints</a></li>
+</ul></li>
+<li><a href="endpoint-auto-scaling.md">Automatically Scale Amazon SageMaker Models</a>
+<ul>
+<li><a href="endpoint-auto-scaling-add-policy.md">Configure Automatic Scaling for a Production Variant</a></li>
+<li><a href="endpoint-auto-scaling-edit.md">Edit a Scaling Policy</a></li>
+<li><a href="endpoint-auto-scaling-delete.md">Delete a Scaling Policy</a></li>
+<li><a href="endpoint-scaling-update.md">Update Endpoints that Use Automatic Scaling</a></li>
+<li><a href="endpoint-scaling-loadtest.md">Load Testing for Production Variant Automatic Scaling</a></li>
+<li><a href="endpoint-auto-scaling-considerations.md">Best Practices for Configuring Automatic Scaling</a></li>
+</ul></li>
+<li><a href="monitoring-overview.md">Monitor Amazon SageMaker</a>
+<ul>
+<li><a href="monitoring-cloudwatch.md">Monitor Amazon SageMaker with Amazon CloudWatch</a></li>
+<li><a href="logging-cloudwatch.md">Log Amazon SageMaker Events with Amazon CloudWatch</a></li>
+<li><a href="logging-using-cloudtrail.md">Log Amazon SageMaker API Calls with AWS CloudTrail</a></li>
+<li><a href="cloudwatch-events.md">React to Amazon SageMaker Job Status Changes with CloudWatch Events</a></li>
+</ul></li>
+<li><a href="deploy-model-troubleshoot.md">Troubleshoot Amazon SageMaker Model Deployments</a></li>
+<li><a href="best-pratices.md">Best Practices for Deploying Amazon SageMaker Models</a>
+<ul>
+<li><a href="deployment-best-pratices.md">Deploy Multiple Instances Across Avalibility Zones</a></li>
+</ul></li>
+<li><a href="host-instance-storage.md">Hosting Instance Storage Volumes</a></li>
+</ul></li>
+<li><a href="your-algorithms.md">Use Your Own Algorithms or Models with Amazon SageMaker</a>
+<ul>
+<li><a href="docker-basics.md">Docker Container Basics</a></li>
+<li><a href="amazon-sagemaker-containers.md">Amazon SageMaker Containers: a Library to Create Docker Containers</a>
+<ul>
+<li><a href="docker-container-environmental-variables-entrypoint.md">Environmental Variables used by Amazon SageMaker Containers to Define Entry Points</a></li>
+<li><a href="docker-container-environmental-variables-user-scripts.md">Environmental Variables used by Amazon SageMaker Containers Important for Running User Scripts</a></li>
+<li><a href="docker-container-environmental-variables.md">Reference: Amazon SageMaker Containers Environmental Variables</a></li>
+<li><a href="container-information-add.md">Additional Information for Scripts</a></li>
+</ul></li>
+<li><a href="build-container-to-train-script-get-started.md">Get Started: Use Amazon SageMaker Containers to Run a Python Script</a></li>
+<li><a href="pre-built-containers-frameworks-deep-learning.md">Prebuilt Amazon SageMaker Docker Images for TensorFlow, MXNet, Chainer, and PyTorch</a></li>
+<li><a href="pre-built-docker-containers-frameworks.md">Prebuilt Amazon SageMaker Docker Images for Scikit-learn and Spark ML</a></li>
+<li><a href="adv-bring-own-examples.md">Example Notebooks: Use Your Own Algorithm or Model</a></li>
+<li><a href="your-algorithms-training-algo.md">Use Your Own Training Algorithms</a>
+<ul>
+<li><a href="your-algorithms-training-algo-dockerfile.md">How Amazon SageMaker Runs Your Training Image</a></li>
+<li><a href="your-algorithms-training-algo-running-container.md">How Amazon SageMaker Provides Training Information</a></li>
+<li><a href="your-algorithms-training-signal-success-failure.md">How Amazon SageMaker Signals Algorithm Success and Failure</a></li>
+<li><a href="your-algorithms-training-algo-envvariables.md">How Amazon SageMaker Processes Training Output</a></li>
+</ul></li>
+<li><a href="your-algorithms-inference-main.md">Use Your Own Inference Code</a>
+<ul>
+<li><a href="your-algorithms-inference-code.md">Use Your Own Inference Code with Hosting Services</a></li>
+<li><a href="your-algorithms-batch-code.md">Use Your Own Inference Code with Batch Transform</a></li>
+</ul></li>
+<li><a href="sagemaker-mkt-create.md">Create Algorithm and Model Package Resources</a>
+<ul>
+<li><a href="sagemaker-mkt-create-algo.md">Create an Algorithm Resource</a></li>
+<li><a href="sagemaker-mkt-create-model-package.md">Create a Model Package Resource</a></li>
+</ul></li>
+<li><a href="sagemaker-mkt-buy.md">Use Algorithm and Model Package Resources</a>
+<ul>
+<li><a href="sagemaker-mkt-algo-train.md">Use an Algorithm to Run a Training Job</a></li>
+<li><a href="sagemaker-mkt-algo-tune.md">Use an Algorithm to Run a Hyperparameter Tuning Job</a></li>
+<li><a href="sagemaker-mkt-model-pkg-model.md">Use a Model Package to Create a Model</a></li>
+</ul></li>
+</ul></li>
+<li><a href="sagemaker-marketplace.md">Amazon SageMaker Resources in AWS Marketplace</a>
+<ul>
+<li><a href="sagemaker-marketplace-sell.md">Sell Amazon SageMaker Algorithms and Model Packages</a>
+<ul>
+<li><a href="sagemaker-marketplace-develop.md">Develop Algorithms and Models in Amazon SageMaker</a></li>
+<li><a href="sagemaker-mkt-list.md">List Your Algorithm or Model Package on AWS Marketplace</a></li>
+</ul></li>
+<li><a href="sagemaker-mkt-find-subscribe.md">Find and Subscribe to Algorithms and Model Packages on AWS Marketplace</a></li>
+</ul></li>
+<li><a href="search.md">Manage Machine Learning Experiments with Amazon SageMaker Model Tracking Capability</a></li>
+<li><a href="frameworks.md">Use Machine Learning Frameworks with Amazon SageMaker</a>
+<ul>
+<li><a href="apache-spark.md">Use Apache Spark with Amazon SageMaker</a>
+<ul>
+<li><a href="apache-spark-example1.md">Example 1: Use Amazon SageMaker for Training and Inference with Apache Spark</a>
+<ul>
+<li><a href="apache-spark-example1-cust-algo.md">Use Custom Algorithms for Model Training and Hosting on Amazon SageMaker with Apache Spark</a></li>
+<li><a href="apache-spark-example1-extend-pipeline.md">Use the SageMakerEstimator in a Spark Pipeline</a></li>
+</ul></li>
+<li><a href="apache-spark-additional-examples.md">Additional Examples: Use Amazon SageMaker with Apache Spark</a></li>
+</ul></li>
+<li><a href="tf.md">Use TensorFlow with Amazon SageMaker</a></li>
+<li><a href="mxnet.md">Use Apache MXNet with Amazon SageMaker</a></li>
+<li><a href="sklearn.md">Use Scikit-learn with Amazon SageMaker</a></li>
+<li><a href="pytorch.md">Use PyTorch with Amazon SageMaker</a></li>
+<li><a href="chainer.md">Use Chainer with Amazon SageMaker</a></li>
+<li><a href="sparkml-serving.md">Use SparkML Serving with Amazon SageMaker</a></li>
+</ul></li>
+<li><a href="reinforcement-learning.md">Reinforcement Learning with Amazon SageMaker RL</a>
+<ul>
+<li><a href="sagemaker-rl-workflow.md">Sample RL Workflow Using Amazon SageMaker RL</a></li>
+<li><a href="sagemaker-rl-environments.md">RL Environments in Amazon SageMaker</a></li>
+<li><a href="sagemaker-rl-distributed.md">Distributed Training with Amazon SageMaker RL</a></li>
+<li><a href="sagemaker-rl-tuning.md">Hyperparameter Tuning with Amazon SageMaker RL</a></li>
+</ul></li>
+<li><a href="authentication-and-access-control.md">Authentication and Access Control for Amazon SageMaker</a>
+<ul>
+<li><a href="access-control-overview.md">Overview of Managing Access Permissions to Your Amazon SageMaker Resources</a></li>
+<li><a href="using-identity-based-policies.md">Using Identity-based Policies (IAM Policies) for Amazon SageMaker</a></li>
+<li><a href="api-permissions-reference.md">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</a></li>
+<li><a href="sagemaker-roles.md">Amazon SageMaker Roles</a></li>
+</ul></li>
+<li><a href="security.md">Security</a>
+<ul>
+<li><a href="appendix-additional-considerations.md">Notebook Instance Security</a></li>
+<li><a href="interface-vpc-endpoint.md">Connect to Amazon SageMaker Through a VPC Interface Endpoint</a></li>
+<li><a href="train-vpc.md">Give Amazon SageMaker Training Jobs Access to Resources in Your Amazon VPC</a></li>
+<li><a href="train-encrypt.md">Protect Communications Between ML Compute Instances in a Distributed Training Job</a></li>
+<li><a href="host-vpc.md">Give Amazon SageMaker Hosted Endpoints Access to Resources in Your Amazon VPC</a></li>
+<li><a href="batch-vpc.md">Give Batch Transform Jobs Access to Resources in Your Amazon VPC</a></li>
+<li><a href="mkt-algo-model-internet-free.md">Training and Inference Containers Run in Internet-Free Mode</a></li>
+<li><a href="mkt-container-scan.md">Amazon SageMaker Scans AWS Marketplace Training and Inference Containers for Security Vulnerabilities</a></li>
+</ul></li>
+<li><a href="sms.md">Amazon SageMaker Ground Truth</a>
+<ul>
+<li><a href="sms-getting-started.md">Getting started</a>
+<ul>
+<li><a href="sms-getting-started-step1.md">Step 1: Before You Begin</a></li>
+<li><a href="sms-getting-started-step2.md">Step 2: Create a Labeling Job</a></li>
+<li><a href="sms-getting-started-step3.md">Step 3: Select Workers</a></li>
+<li><a href="sms-getting-started-step4.md">Step 4: Configure the Bounding Box Tool.</a></li>
+<li><a href="sms-getting-started-step5.md">Step 5: Monitoring Your Labeling Job</a></li>
+</ul></li>
+<li><a href="sms-data-labeling.md">Data Labeling</a>
+<ul>
+<li><a href="sms-batching.md">Batches for Labeling Tasks</a></li>
+<li><a href="sms-annotation-consolidation.md">Annotation Consolidation</a></li>
+<li><a href="sms-automated-labeling.md">Using Automated Data Labeling</a></li>
+<li><a href="sms-reusing-data.md">Chaining labeling jobs</a></li>
+</ul></li>
+<li><a href="sms-data.md">Using Input and Output Data</a>
+<ul>
+<li><a href="sms-data-input.md">Input Data</a></li>
+<li><a href="sms-data-output.md">Output Data</a></li>
+</ul></li>
+<li><a href="sms-creating-instruction-pages.md">Creating Instruction Pages</a></li>
+<li><a href="sms-workforce-management.md">Managing Your Workforce</a>
+<ul>
+<li><a href="sms-workforce-management-public.md">Using the Amazon Mechanical Turk Workforce</a></li>
+<li><a href="sms-workforce-management-vendor.md">Managing Vendor Workforces</a></li>
+<li><a href="sms-workforce-management-private.md">Managing a Private Workforce</a></li>
+<li><a href="sms-workforce-management-private-sns.md">Create and manage Amazon SNS topics for your work teams</a></li>
+</ul></li>
+<li><a href="sms-custom-templates.md">Creating Custom Labeling Workflows</a>
+<ul>
+<li><a href="sms-custom-templates-step1.md">Step 1: Setting up your workforce</a></li>
+<li><a href="sms-custom-templates-step2.md">Step 2: Creating your custom labeling task template</a></li>
+<li><a href="sms-custom-templates-step2-demo1.md">Demo Template: Annotation of Images with crowd-bounding-box</a></li>
+<li><a href="sms-custom-templates-step2-demo2.md">Demo Template: Labeling Intents with crowd-classifier</a></li>
+<li><a href="sms-custom-templates-step3.md">Step 3: Processing with AWS Lambda</a></li>
+<li><a href="sms-custom-templates-step4.md">Custom Workflows via the API</a></li>
+<li><a href="sms-ui-template-reference.md">HTML Elements Reference</a>
+<ul>
+<li><a href="sms-ui-template-crowd-bounding-box.md">crowd-bounding-box</a></li>
+<li><a href="sms-ui-template-crowd-image-classifier.md">crowd-image-classifier</a></li>
+<li><a href="sms-ui-template-crowd-classifier.md">crowd-classifier</a></li>
+<li><a href="sms-ui-template-crowd-instance-segmentation.md">crowd-instance-segmentation</a></li>
+<li><a href="sms-ui-template-crowd-semantic-segmentation.md">crowd-semantic-segmentation</a></li>
+<li><a href="sms-ui-template-crowd-entity-annotation.md">crowd-entity-annotation</a></li>
+<li><a href="sms-ui-template-crowd-alert.md">crowd-alert</a></li>
+<li><a href="sms-ui-template-crowd-badge.md">crowd-badge</a></li>
+<li><a href="sms-ui-template-crowd-button.md">crowd-button</a></li>
+<li><a href="sms-ui-template-crowd-card.md">crowd-card</a></li>
+<li><a href="sms-ui-template-crowd-checkbox.md">crowd-checkbox</a></li>
+<li><a href="sms-ui-template-crowd-fab.md">crowd-fab</a></li>
+<li><a href="sms-ui-template-crowd-form.md">crowd-form</a></li>
+<li><a href="sms-ui-template-crowd-icon-button.md">crowd-icon-button</a></li>
+<li><a href="sms-ui-template-crowd-input.md">crowd-input</a></li>
+<li><a href="sms-ui-template-crowd-instructions.md">crowd-instructions</a></li>
+<li><a href="sms-ui-template-crowd-keypoint.md">crowd-keypoint</a></li>
+<li><a href="sms-ui-template-crowd-modal.md">crowd-modal</a></li>
+<li><a href="sms-ui-template-crowd-polygon.md">crowd-polygon</a></li>
+<li><a href="sms-ui-template-crowd-radio-button.md">crowd-radio-button</a></li>
+<li><a href="sms-ui-template-crowd-radio-group.md">crowd-radio-group</a></li>
+<li><a href="sms-ui-template-crowd-slider.md">crowd-slider</a></li>
+<li><a href="sms-ui-template-crowd-tab.md">crowd-tab</a></li>
+<li><a href="sms-ui-template-crowd-tabs.md">crowd-tabs</a></li>
+<li><a href="sms-ui-template-crowd-text-area.md">crowd-text-area</a></li>
+<li><a href="sms-ui-template-crowd-toast.md">crowd-toast</a></li>
+<li><a href="sms-ui-template-crowd-toggle-button.md">crowd-toggle-button</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="appendix.md">Limits and Supported Regions</a></li>
+<li><a href="API_Reference.md">API Reference</a>
+<ul>
+<li><a href="API_Operations.md">Actions</a>
+<ul>
+<li><a href="API_Operations_Amazon_SageMaker_Service.md">Amazon SageMaker Service</a>
+<ul>
+<li><a href="API_AddTags.md">AddTags</a></li>
+<li><a href="API_CreateAlgorithm.md">CreateAlgorithm</a></li>
+<li><a href="API_CreateCodeRepository.md">CreateCodeRepository</a></li>
+<li><a href="API_CreateCompilationJob.md">CreateCompilationJob</a></li>
+<li><a href="API_CreateEndpoint.md">CreateEndpoint</a></li>
+<li><a href="API_CreateEndpointConfig.md">CreateEndpointConfig</a></li>
+<li><a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a></li>
+<li><a href="API_CreateLabelingJob.md">CreateLabelingJob</a></li>
+<li><a href="API_CreateModel.md">CreateModel</a></li>
+<li><a href="API_CreateModelPackage.md">CreateModelPackage</a></li>
+<li><a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a></li>
+<li><a href="API_CreateNotebookInstanceLifecycleConfig.md">CreateNotebookInstanceLifecycleConfig</a></li>
+<li><a href="API_CreatePresignedNotebookInstanceUrl.md">CreatePresignedNotebookInstanceUrl</a></li>
+<li><a href="API_CreateTrainingJob.md">CreateTrainingJob</a></li>
+<li><a href="API_CreateTransformJob.md">CreateTransformJob</a></li>
+<li><a href="API_CreateWorkteam.md">CreateWorkteam</a></li>
+<li><a href="API_DeleteAlgorithm.md">DeleteAlgorithm</a></li>
+<li><a href="API_DeleteCodeRepository.md">DeleteCodeRepository</a></li>
+<li><a href="API_DeleteEndpoint.md">DeleteEndpoint</a></li>
+<li><a href="API_DeleteEndpointConfig.md">DeleteEndpointConfig</a></li>
+<li><a href="API_DeleteModel.md">DeleteModel</a></li>
+<li><a href="API_DeleteModelPackage.md">DeleteModelPackage</a></li>
+<li><a href="API_DeleteNotebookInstance.md">DeleteNotebookInstance</a></li>
+<li><a href="API_DeleteNotebookInstanceLifecycleConfig.md">DeleteNotebookInstanceLifecycleConfig</a></li>
+<li><a href="API_DeleteTags.md">DeleteTags</a></li>
+<li><a href="API_DeleteWorkteam.md">DeleteWorkteam</a></li>
+<li><a href="API_DescribeAlgorithm.md">DescribeAlgorithm</a></li>
+<li><a href="API_DescribeCodeRepository.md">DescribeCodeRepository</a></li>
+<li><a href="API_DescribeCompilationJob.md">DescribeCompilationJob</a></li>
+<li><a href="API_DescribeEndpoint.md">DescribeEndpoint</a></li>
+<li><a href="API_DescribeEndpointConfig.md">DescribeEndpointConfig</a></li>
+<li><a href="API_DescribeHyperParameterTuningJob.md">DescribeHyperParameterTuningJob</a></li>
+<li><a href="API_DescribeLabelingJob.md">DescribeLabelingJob</a></li>
+<li><a href="API_DescribeModel.md">DescribeModel</a></li>
+<li><a href="API_DescribeModelPackage.md">DescribeModelPackage</a></li>
+<li><a href="API_DescribeNotebookInstance.md">DescribeNotebookInstance</a></li>
+<li><a href="API_DescribeNotebookInstanceLifecycleConfig.md">DescribeNotebookInstanceLifecycleConfig</a></li>
+<li><a href="API_DescribeSubscribedWorkteam.md">DescribeSubscribedWorkteam</a></li>
+<li><a href="API_DescribeTrainingJob.md">DescribeTrainingJob</a></li>
+<li><a href="API_DescribeTransformJob.md">DescribeTransformJob</a></li>
+<li><a href="API_DescribeWorkteam.md">DescribeWorkteam</a></li>
+<li><a href="API_GetSearchSuggestions.md">GetSearchSuggestions</a></li>
+<li><a href="API_ListAlgorithms.md">ListAlgorithms</a></li>
+<li><a href="API_ListCodeRepositories.md">ListCodeRepositories</a></li>
+<li><a href="API_ListCompilationJobs.md">ListCompilationJobs</a></li>
+<li><a href="API_ListEndpointConfigs.md">ListEndpointConfigs</a></li>
+<li><a href="API_ListEndpoints.md">ListEndpoints</a></li>
+<li><a href="API_ListHyperParameterTuningJobs.md">ListHyperParameterTuningJobs</a></li>
+<li><a href="API_ListLabelingJobs.md">ListLabelingJobs</a></li>
+<li><a href="API_ListLabelingJobsForWorkteam.md">ListLabelingJobsForWorkteam</a></li>
+<li><a href="API_ListModelPackages.md">ListModelPackages</a></li>
+<li><a href="API_ListModels.md">ListModels</a></li>
+<li><a href="API_ListNotebookInstanceLifecycleConfigs.md">ListNotebookInstanceLifecycleConfigs</a></li>
+<li><a href="API_ListNotebookInstances.md">ListNotebookInstances</a></li>
+<li><a href="API_ListSubscribedWorkteams.md">ListSubscribedWorkteams</a></li>
+<li><a href="API_ListTags.md">ListTags</a></li>
+<li><a href="API_ListTrainingJobs.md">ListTrainingJobs</a></li>
+<li><a href="API_ListTrainingJobsForHyperParameterTuningJob.md">ListTrainingJobsForHyperParameterTuningJob</a></li>
+<li><a href="API_ListTransformJobs.md">ListTransformJobs</a></li>
+<li><a href="API_ListWorkteams.md">ListWorkteams</a></li>
+<li><a href="API_RenderUiTemplate.md">RenderUiTemplate</a></li>
+<li><a href="API_Search.md">Search</a></li>
+<li><a href="API_StartNotebookInstance.md">StartNotebookInstance</a></li>
+<li><a href="API_StopCompilationJob.md">StopCompilationJob</a></li>
+<li><a href="API_StopHyperParameterTuningJob.md">StopHyperParameterTuningJob</a></li>
+<li><a href="API_StopLabelingJob.md">StopLabelingJob</a></li>
+<li><a href="API_StopNotebookInstance.md">StopNotebookInstance</a></li>
+<li><a href="API_StopTrainingJob.md">StopTrainingJob</a></li>
+<li><a href="API_StopTransformJob.md">StopTransformJob</a></li>
+<li><a href="API_UpdateCodeRepository.md">UpdateCodeRepository</a></li>
+<li><a href="API_UpdateEndpoint.md">UpdateEndpoint</a></li>
+<li><a href="API_UpdateEndpointWeightsAndCapacities.md">UpdateEndpointWeightsAndCapacities</a></li>
+<li><a href="API_UpdateNotebookInstance.md">UpdateNotebookInstance</a></li>
+<li><a href="API_UpdateNotebookInstanceLifecycleConfig.md">UpdateNotebookInstanceLifecycleConfig</a></li>
+<li><a href="API_UpdateWorkteam.md">UpdateWorkteam</a></li>
+</ul></li>
+<li><a href="API_Operations_Amazon_SageMaker_Runtime.md">Amazon SageMaker Runtime</a>
+<ul>
+<li><a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a></li>
+</ul></li>
+</ul></li>
+<li><a href="API_Types.md">Data Types</a>
+<ul>
+<li><a href="API_Types_Amazon_SageMaker_Service.md">Amazon SageMaker Service</a>
+<ul>
+<li><a href="API_AlgorithmSpecification.md">AlgorithmSpecification</a></li>
+<li><a href="API_AlgorithmStatusDetails.md">AlgorithmStatusDetails</a></li>
+<li><a href="API_AlgorithmStatusItem.md">AlgorithmStatusItem</a></li>
+<li><a href="API_AlgorithmSummary.md">AlgorithmSummary</a></li>
+<li><a href="API_AlgorithmValidationProfile.md">AlgorithmValidationProfile</a></li>
+<li><a href="API_AlgorithmValidationSpecification.md">AlgorithmValidationSpecification</a></li>
+<li><a href="API_AnnotationConsolidationConfig.md">AnnotationConsolidationConfig</a></li>
+<li><a href="API_CategoricalParameterRange.md">CategoricalParameterRange</a></li>
+<li><a href="API_CategoricalParameterRangeSpecification.md">CategoricalParameterRangeSpecification</a></li>
+<li><a href="API_Channel.md">Channel</a></li>
+<li><a href="API_ChannelSpecification.md">ChannelSpecification</a></li>
+<li><a href="API_CodeRepositorySummary.md">CodeRepositorySummary</a></li>
+<li><a href="API_CognitoMemberDefinition.md">CognitoMemberDefinition</a></li>
+<li><a href="API_CompilationJobSummary.md">CompilationJobSummary</a></li>
+<li><a href="API_ContainerDefinition.md">ContainerDefinition</a></li>
+<li><a href="API_ContinuousParameterRange.md">ContinuousParameterRange</a></li>
+<li><a href="API_ContinuousParameterRangeSpecification.md">ContinuousParameterRangeSpecification</a></li>
+<li><a href="API_DataProcessing.md">DataProcessing</a></li>
+<li><a href="API_DataSource.md">DataSource</a></li>
+<li><a href="API_DeployedImage.md">DeployedImage</a></li>
+<li><a href="API_DesiredWeightAndCapacity.md">DesiredWeightAndCapacity</a></li>
+<li><a href="API_EndpointConfigSummary.md">EndpointConfigSummary</a></li>
+<li><a href="API_EndpointSummary.md">EndpointSummary</a></li>
+<li><a href="API_Filter.md">Filter</a></li>
+<li><a href="API_FinalHyperParameterTuningJobObjectiveMetric.md">FinalHyperParameterTuningJobObjectiveMetric</a></li>
+<li><a href="API_GitConfig.md">GitConfig</a></li>
+<li><a href="API_GitConfigForUpdate.md">GitConfigForUpdate</a></li>
+<li><a href="API_HumanTaskConfig.md">HumanTaskConfig</a></li>
+<li><a href="API_HyperParameterAlgorithmSpecification.md">HyperParameterAlgorithmSpecification</a></li>
+<li><a href="API_HyperParameterSpecification.md">HyperParameterSpecification</a></li>
+<li><a href="API_HyperParameterTrainingJobDefinition.md">HyperParameterTrainingJobDefinition</a></li>
+<li><a href="API_HyperParameterTrainingJobSummary.md">HyperParameterTrainingJobSummary</a></li>
+<li><a href="API_HyperParameterTuningJobConfig.md">HyperParameterTuningJobConfig</a></li>
+<li><a href="API_HyperParameterTuningJobObjective.md">HyperParameterTuningJobObjective</a></li>
+<li><a href="API_HyperParameterTuningJobSummary.md">HyperParameterTuningJobSummary</a></li>
+<li><a href="API_HyperParameterTuningJobWarmStartConfig.md">HyperParameterTuningJobWarmStartConfig</a></li>
+<li><a href="API_InferenceSpecification.md">InferenceSpecification</a></li>
+<li><a href="API_InputConfig.md">InputConfig</a></li>
+<li><a href="API_IntegerParameterRange.md">IntegerParameterRange</a></li>
+<li><a href="API_IntegerParameterRangeSpecification.md">IntegerParameterRangeSpecification</a></li>
+<li><a href="API_LabelCounters.md">LabelCounters</a></li>
+<li><a href="API_LabelCountersForWorkteam.md">LabelCountersForWorkteam</a></li>
+<li><a href="API_LabelingJobAlgorithmsConfig.md">LabelingJobAlgorithmsConfig</a></li>
+<li><a href="API_LabelingJobDataAttributes.md">LabelingJobDataAttributes</a></li>
+<li><a href="API_LabelingJobDataSource.md">LabelingJobDataSource</a></li>
+<li><a href="API_LabelingJobForWorkteamSummary.md">LabelingJobForWorkteamSummary</a></li>
+<li><a href="API_LabelingJobInputConfig.md">LabelingJobInputConfig</a></li>
+<li><a href="API_LabelingJobOutput.md">LabelingJobOutput</a></li>
+<li><a href="API_LabelingJobOutputConfig.md">LabelingJobOutputConfig</a></li>
+<li><a href="API_LabelingJobResourceConfig.md">LabelingJobResourceConfig</a></li>
+<li><a href="API_LabelingJobS3DataSource.md">LabelingJobS3DataSource</a></li>
+<li><a href="API_LabelingJobStoppingConditions.md">LabelingJobStoppingConditions</a></li>
+<li><a href="API_LabelingJobSummary.md">LabelingJobSummary</a></li>
+<li><a href="API_MemberDefinition.md">MemberDefinition</a></li>
+<li><a href="API_MetricData.md">MetricData</a></li>
+<li><a href="API_MetricDefinition.md">MetricDefinition</a></li>
+<li><a href="API_ModelArtifacts.md">ModelArtifacts</a></li>
+<li><a href="API_ModelPackageContainerDefinition.md">ModelPackageContainerDefinition</a></li>
+<li><a href="API_ModelPackageStatusDetails.md">ModelPackageStatusDetails</a></li>
+<li><a href="API_ModelPackageStatusItem.md">ModelPackageStatusItem</a></li>
+<li><a href="API_ModelPackageSummary.md">ModelPackageSummary</a></li>
+<li><a href="API_ModelPackageValidationProfile.md">ModelPackageValidationProfile</a></li>
+<li><a href="API_ModelPackageValidationSpecification.md">ModelPackageValidationSpecification</a></li>
+<li><a href="API_ModelSummary.md">ModelSummary</a></li>
+<li><a href="API_NestedFilters.md">NestedFilters</a></li>
+<li><a href="API_NotebookInstanceLifecycleConfigSummary.md">NotebookInstanceLifecycleConfigSummary</a></li>
+<li><a href="API_NotebookInstanceLifecycleHook.md">NotebookInstanceLifecycleHook</a></li>
+<li><a href="API_NotebookInstanceSummary.md">NotebookInstanceSummary</a></li>
+<li><a href="API_NotificationConfiguration.md">NotificationConfiguration</a></li>
+<li><a href="API_ObjectiveStatusCounters.md">ObjectiveStatusCounters</a></li>
+<li><a href="API_OutputConfig.md">OutputConfig</a></li>
+<li><a href="API_OutputDataConfig.md">OutputDataConfig</a></li>
+<li><a href="API_ParameterRange.md">ParameterRange</a></li>
+<li><a href="API_ParameterRanges.md">ParameterRanges</a></li>
+<li><a href="API_ParentHyperParameterTuningJob.md">ParentHyperParameterTuningJob</a></li>
+<li><a href="API_ProductionVariant.md">ProductionVariant</a></li>
+<li><a href="API_ProductionVariantSummary.md">ProductionVariantSummary</a></li>
+<li><a href="API_PropertyNameQuery.md">PropertyNameQuery</a></li>
+<li><a href="API_PropertyNameSuggestion.md">PropertyNameSuggestion</a></li>
+<li><a href="API_PublicWorkforceTaskPrice.md">PublicWorkforceTaskPrice</a></li>
+<li><a href="API_RenderableTask.md">RenderableTask</a></li>
+<li><a href="API_RenderingError.md">RenderingError</a></li>
+<li><a href="API_ResourceConfig.md">ResourceConfig</a></li>
+<li><a href="API_ResourceLimits.md">ResourceLimits</a></li>
+<li><a href="API_S3DataSource.md">S3DataSource</a></li>
+<li><a href="API_SearchExpression.md">SearchExpression</a></li>
+<li><a href="API_SearchRecord.md">SearchRecord</a></li>
+<li><a href="API_SecondaryStatusTransition.md">SecondaryStatusTransition</a></li>
+<li><a href="API_ShuffleConfig.md">ShuffleConfig</a></li>
+<li><a href="API_SourceAlgorithm.md">SourceAlgorithm</a></li>
+<li><a href="API_SourceAlgorithmSpecification.md">SourceAlgorithmSpecification</a></li>
+<li><a href="API_StoppingCondition.md">StoppingCondition</a></li>
+<li><a href="API_SubscribedWorkteam.md">SubscribedWorkteam</a></li>
+<li><a href="API_SuggestionQuery.md">SuggestionQuery</a></li>
+<li><a href="API_Tag.md">Tag</a></li>
+<li><a href="API_TrainingJob.md">TrainingJob</a></li>
+<li><a href="API_TrainingJobDefinition.md">TrainingJobDefinition</a></li>
+<li><a href="API_TrainingJobStatusCounters.md">TrainingJobStatusCounters</a></li>
+<li><a href="API_TrainingJobSummary.md">TrainingJobSummary</a></li>
+<li><a href="API_TrainingSpecification.md">TrainingSpecification</a></li>
+<li><a href="API_TransformDataSource.md">TransformDataSource</a></li>
+<li><a href="API_TransformInput.md">TransformInput</a></li>
+<li><a href="API_TransformJobDefinition.md">TransformJobDefinition</a></li>
+<li><a href="API_TransformJobSummary.md">TransformJobSummary</a></li>
+<li><a href="API_TransformOutput.md">TransformOutput</a></li>
+<li><a href="API_TransformResources.md">TransformResources</a></li>
+<li><a href="API_TransformS3DataSource.md">TransformS3DataSource</a></li>
+<li><a href="API_UiConfig.md">UiConfig</a></li>
+<li><a href="API_UiTemplate.md">UiTemplate</a></li>
+<li><a href="API_USD.md">USD</a></li>
+<li><a href="API_VpcConfig.md">VpcConfig</a></li>
+<li><a href="API_Workteam.md">Workteam</a></li>
+</ul></li>
+<li><a href="API_Types_Amazon_SageMaker_Runtime.md">Amazon SageMaker Runtime</a></li>
+</ul></li>
+<li><a href="CommonErrors.md">Common Errors</a></li>
+<li><a href="CommonParameters.md">Common Parameters</a></li>
+</ul></li>
+<li><a href="doc-history.md">Document History for Amazon SageMaker</a></li>
+<li><a href="glossary.md">AWS Glossary</a></li>
+</ul>
+</body>
+</html>

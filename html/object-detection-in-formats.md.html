@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Object Detection Request and Response Formats</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Object Detection Request and Response Formats<a name="object-detection-in-formats"></a></h1>
+</header>
+<p>Query a trained model by using the model’s endpoint. The endpoint takes .jpg and .png image formats with <code>image/jpeg</code> and <code>image/png</code> content-types.</p>
+<p>The response is the class index with a confidence score and bounding box coordinates for all objects within the image encoded in JSON format. The following is an example of response .json file:</p>
+<pre><code>{&quot;prediction&quot;:[
+  [4.0, 0.86419455409049988, 0.3088374733924866, 0.07030484080314636, 0.7110607028007507, 0.9345266819000244],
+  [0.0, 0.73376623392105103, 0.5714187026023865, 0.40427327156066895, 0.827075183391571, 0.9712159633636475],
+  [4.0, 0.32643985450267792, 0.3677481412887573, 0.034883320331573486, 0.6318609714508057, 0.5967587828636169],
+  [8.0, 0.22552496790885925, 0.6152569651603699, 0.5722782611846924, 0.882301390171051, 0.8985623121261597],
+  [3.0, 0.42260299175977707, 0.019305512309074402, 0.08386176824569702, 0.39093565940856934, 0.9574796557426453]
+]}</code></pre>
+<p>Each row in this .json file contains an array that represents a detected object. Each of these object arrays consists of a list of six numbers. The first number is the predicted class label. The second number is the associated confidence score for the detection. The last four numbers represent the bounding box coordinates [xmin, ymin, xmax, ymax]. These output bounding box corner indices are normalized by the overall image size. Note that this encoding is different than that use by the input .json format. For example, in the first entry of the detection result, 0.3088374733924866 is the left coordinate (x-coordinate of upper-left corner) of the bounding box as a ratio of the overall image width, 0.07030484080314636 is the top coordinate (y-coordinate of upper-left corner) of the bounding box as a ratio of the overall image height, 0.7110607028007507 is the right coordinate (x-coordinate of lower-right corner) of the bounding box as a ratio of the overall image width, and 0.9345266819000244 is the bottom coordinate (y-coordinate of lower-right corner) of the bounding box as a ratio of the overall image height.</p>
+<p>To avoid unreliable detection results, you might want to filter out the detection results with low confidence scores. In the <a href="https://github.com/awslabs/amazon-sagemaker-examples/tree/master/introduction_to_amazon_algorithms/object_detection_pascalvoc_coco">object detection sample notebook</a>, we provide scripts to remove the low confidence detections. Scripts are also provided to plot the bounding boxes on the original image.</p>
+<p>For batch transform, the response is in JSON format, where the format is identical to the JSON format described above. The detection results of each image is represented as a JSON file. For example:</p>
+<pre><code>{&quot;prediction&quot;: [[label_id, confidence_score, xmin, ymin, xmax, ymax], [label_id, confidence_score, xmin, ymin, xmax, ymax]]}</code></pre>
+<p>For more details on training and inference, see the <a href="object-detection.md#object-detection-sample-notebooks">Object Detection Sample Notebooks</a>.</p>
+<p>accept: application/json;annotation=1</p>
+<pre><code>{
+   &quot;image_size&quot;: [
+      {
+         &quot;width&quot;: 500,
+         &quot;height&quot;: 400,
+         &quot;depth&quot;: 3
+      }
+   ],
+   &quot;annotations&quot;: [
+      {
+         &quot;class_id&quot;: 0,
+         &quot;score&quot;: 0.943,
+         &quot;left&quot;: 111,
+         &quot;top&quot;: 134,
+         &quot;width&quot;: 61,
+         &quot;height&quot;: 128
+      },
+      {
+         &quot;class_id&quot;: 0,
+         &quot;score&quot;: 0.0013,
+         &quot;left&quot;: 161,
+         &quot;top&quot;: 250,
+         &quot;width&quot;: 79,
+         &quot;height&quot;: 143
+      },
+      {
+         &quot;class_id&quot;: 1,
+         &quot;score&quot;: 0.0133,
+         &quot;left&quot;: 101,
+         &quot;top&quot;: 185,
+         &quot;width&quot;: 42,
+         &quot;height&quot;: 130
+      }
+   ]
+}</code></pre>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Linear Learner Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Linear Learner Hyperparameters<a name="ll_hyperparameters"></a></h1>
+</header>
+<p>The following table contains the hyperparameters for the learner learner algorithm. These are parameters that are set by users to facilitate the estimation of model parameters from data. The required hyperparameters that must be set are listed first, in alphabetical order. The optional hyperparameters that can be set are listed next, also in alphabetical order.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>feature_dim</td>
+<td>The number of features in the input data. <strong>Required</strong> Valid values: Positive integer</td>
+</tr>
+<tr class="even">
+<td>num_classes</td>
+<td>The number of classes for the response variable. The algorithm assumes that classes are labeled <code>0</code>, ..., <code>num_classes - 1</code>. <strong>Required</strong> when <code>predictor_type</code> is <code>multiclass_classifier</code>. Otherwise, the algorithm ignores it. Valid values: Integers from 3 to 1,000,000</td>
+</tr>
+<tr class="odd">
+<td>predictor_type</td>
+<td>Specifies the type of target variable as a binary classification, multiclass classification, or regression. <strong>Required</strong> Valid values: <code>binary_classifier</code>, <code>multiclass_classifier</code>, or <code>regressor</code></td>
+</tr>
+<tr class="even">
+<td>accuracy_top_k</td>
+<td>When computing the top-k accuracy metric for multiclass classification, the value of <em>k</em>. If the model assigns one of the top-k scores to the true label, an example is scored as correct. <strong>Optional</strong> Valid values: Positive integers Default value: 3</td>
+</tr>
+<tr class="odd">
+<td>balance_multiclass_weights</td>
+<td>Specifies whether to use class weights, which give each class equal importance in the loss function. Used only when the <code>predictor_type</code> is <code>multiclass_classifier</code>. <strong>Optional</strong> Valid values: <code>true</code>, <code>false</code> Default value: <code>false</code></td>
+</tr>
+<tr class="even">
+<td>beta_1</td>
+<td>The exponential decay rate for first-moment estimates. Applies only when the <code>optimizer</code> value is <code>adam</code>. <strong>Optional</strong> Valid values: <code>auto</code> or floating-point value between 0 and 1.0 Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>beta_2</td>
+<td>The exponential decay rate for second-moment estimates. Applies only when the <code>optimizer</code> value is <code>adam</code>. <strong>Optional</strong> Valid values: <code>auto</code> or floating-point integer between 0 and 1.0 Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>bias_lr_mult</td>
+<td>Allows a different learning rate for the bias term. The actual learning rate for the bias is <code>learning_rate</code> * <code>bias_lr_mult</code>. <strong>Optional</strong> Valid values: <code>auto</code> or positive floating-point integer Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>bias_wd_mult</td>
+<td>Allows different regularization for the bias term. The actual L2 regularization weight for the bias is <code>wd</code> * <code>bias_wd_mult</code>. By default, there is no regularization on the bias term. <strong>Optional</strong> Valid values: <code>auto</code> or non-negative floating-point integer Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>binary_classifier_model_selection_criteria</td>
+<td>When <code>predictor_type</code> is set to <code>binary_classifier</code>, the model evaluation criteria for the validation dataset (or for the training dataset if you don’t provide a validation dataset). Criteria include: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>accuracy</code>, <code>f_beta</code>, <code>precision_at_target_recall</code>, <code>recall_at_target_precision</code>, or <code>loss_function</code> Default value: <code>accuracy</code></td>
+</tr>
+<tr class="odd">
+<td>early_stopping_patience</td>
+<td>If no improvement is made in the relevant metric, the number of epochs to wait before ending training. If you have provided a value for binary_classifier_model_selection_criteria. the metric is that value. Otherwise, the metric is the same as the value specified for the loss hyperparameter. The metric is evaluated on the validation data. If you haven’t provided validation data, the metric is always the same as the value specified for the <code>loss</code> hyperparameter and is evaluated on the training data. To disable early stopping, set <code>early_stopping_patience</code> to a value greater than the value specified for <code>epochs</code>.<strong>Optional</strong>Valid values: Positive integerDefault value: 3</td>
+</tr>
+<tr class="even">
+<td>early_stopping_tolerance</td>
+<td>The relative tolerance to measure an improvement in loss. If the ratio of the improvement in loss divided by the previous best loss is smaller than this value, early stopping considers the improvement to be zero. <strong>Optional</strong> Valid values: Positive floating-point integer Default value: 0.001</td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The maximum number of passes over the training data. <strong>Optional</strong> Valid values: Positive integer Default value: 15</td>
+</tr>
+<tr class="even">
+<td>f_beta</td>
+<td>The value of beta to use when calculating F score metrics for binary or multiclass classification. Also used if the value specified for <code>binary_classifier_model_selection_criteria</code> is <code>f_beta</code>. <strong>Optional</strong> Valid values: Positive floating-point integers Default value: 1.0</td>
+</tr>
+<tr class="odd">
+<td>huber_delta</td>
+<td>The parameter for Huber loss. During training and metric evaluation, compute L2 loss for errors smaller than delta and L1 loss for errors larger than delta. <strong>Optional</strong> Valid values: Positive floating-point integer Default value: 1.0</td>
+</tr>
+<tr class="even">
+<td>init_bias</td>
+<td>Initial weight for the bias term. <strong>Optional</strong> Valid values: Floating-point integer Default value: 0</td>
+</tr>
+<tr class="odd">
+<td>init_method</td>
+<td>Sets the initial distribution function used for model weights. Functions include: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html">[See the AWS documentation website for more details]</a> <strong>Optional</strong> Valid values: <code>uniform</code> or <code>normal</code> Default value: <code>uniform</code></td>
+</tr>
+<tr class="even">
+<td>init_scale</td>
+<td>Scales an initial uniform distribution for model weights. Applies only when the <code>init_method</code> hyperparameter is set to <code>uniform</code>. <strong>Optional</strong> Valid values: Positive floating-point integer Default value: 0.07</td>
+</tr>
+<tr class="odd">
+<td>init_sigma</td>
+<td>The initial standard deviation for the normal distribution. Applies only when the <code>init_method</code> hyperparameter is set to <code>normal</code>. <strong>Optional</strong> Valid values: Positive floating-point integer Default value: 0.01</td>
+</tr>
+<tr class="even">
+<td>l1</td>
+<td>The L1 regularization parameter. If you don’t want to use L1 regularization, set the value to 0. <strong>Optional</strong> Valid values: <code>auto</code> or non-negative float Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>learning_rate</td>
+<td>The step size used by the optimizer for parameter updates. <strong>Optional</strong> Valid values: <code>auto</code> or positive floating-point integer Default value: <code>auto</code>, whose value depends on the optimizer chosen.</td>
+</tr>
+<tr class="even">
+<td>loss</td>
+<td>Specifies the loss function. The available loss functions and their default values depend on the value of <code>predictor_type</code>: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html">[See the AWS documentation website for more details]</a> Valid values: <code>auto</code>, <code>logistic</code>, <code>squared_loss</code>, <code>absolute_loss</code>, <code>hinge_loss</code>, <code>eps_insensitive_squared_loss</code>, <code>eps_insensitive_absolute_loss</code>, <code>quantile_loss</code>, or <code>huber_loss</code> <strong>Optional</strong> Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>loss_insensitivity</td>
+<td>The parameter for the epsilon-insensitive loss type. During training and metric evaluation, any error smaller than this value is considered to be zero. <strong>Optional</strong> Valid values: Positive floating-point integer Default value: 0.01</td>
+</tr>
+<tr class="even">
+<td>lr_scheduler_factor</td>
+<td>For every <code>lr_scheduler_step</code> hyperparameter, the learning rate decreases by this quantity. Applies only when the <code>use_lr_scheduler</code> hyperparameter is set to <code>true</code>. <strong>Optional</strong> Valid values: <code>auto</code> or positive floating-point integer between 0 and 1 Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>lr_scheduler_minimum_lr</td>
+<td>The learning rate never decreases to a value lower than the value set for <code>lr_scheduler_minimum_lr</code>. Applies only when the <code>use_lr_scheduler</code> hyperparameter is set to <code>true</code>. <strong>Optional</strong> Valid values: <code>auto</code> or positive floating-point integer Default values: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>lr_scheduler_step</td>
+<td>The number of steps between decreases of the learning rate. Applies only when the <code>use_lr_scheduler</code> hyperparameter is set to <code>true</code>. <strong>Optional</strong> Valid values: <code>auto</code> or positive integer Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>margin</td>
+<td>The margin for the <code>hinge_loss</code> function. <strong>Optional</strong> Valid values: Positive floating-point integer Default value: 1.0</td>
+</tr>
+<tr class="even">
+<td>mini_batch_size</td>
+<td>The number of observations per mini-batch for the data iterator. <strong>Optional</strong> Valid values: Positive integer Default value: 1000</td>
+</tr>
+<tr class="odd">
+<td>momentum</td>
+<td>The momentum of the <code>sgd</code> optimizer. <strong>Optional</strong> Valid values: <code>auto</code> or a floating-point integer between 0 and 1.0 Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>normalize_data</td>
+<td>Normalizes the feature data before training. Data normalization shifts the data for each feature to have a mean of zero and scales it to have unit standard deviation. <strong>Optional</strong> Valid values: <code>auto</code>, <code>true</code>, or <code>false</code> Default value: <code>true</code></td>
+</tr>
+<tr class="odd">
+<td>normalize_label</td>
+<td>Normalizes the label. Label normalization shifts the label to have a mean of zero and scales it to have unit standard deviation. The <code>auto</code> default value normalizes the label for regression problems but does not for classification problems. If you set the <code>normalize_label</code> hyperparameter to <code>true</code> for classification problems, the algorithm ignores it. <strong>Optional</strong> Valid values: <code>auto</code>, <code>true</code>, or <code>false</code> Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>num_calibration_samples</td>
+<td>The number of observations from the validation dataset to use for model calibration (when finding the best threshold). <strong>Optional</strong> Valid values: <code>auto</code> or positive integer Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>num_models</td>
+<td>The number of models to train in parallel. For the default, <code>auto</code>, the algorithm decides the number of parallel models to train. One model is trained according to the given training parameter (regularization, optimizer, loss), and the rest by close parameters. <strong>Optional</strong> Valid values: <code>auto</code> or positive integer Default values: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>num_point_for_scaler</td>
+<td>The number of data points to use for calculating normalization or unbiasing of terms. <strong>Optional</strong> Valid values: Positive integer Default value: 10,000</td>
+</tr>
+<tr class="odd">
+<td>optimizer</td>
+<td>The optimization algorithm to use. <strong>Optional</strong> Valid values: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>auto</code>. The default setting for <code>auto</code> is <code>adam</code>.</td>
+</tr>
+<tr class="even">
+<td>positive_example_weight_mult</td>
+<td>The weight assigned to positive examples when training a binary classifier. The weight of negative examples is fixed at 1. If you want the algorithm to choose a weight so that errors in classifying negative <em>vs.</em> positive examples have equal impact on training loss, specify <code>balanced</code>. If you want the algorithm to choose the weight that optimizes performance, specify <code>auto</code>. <strong>Optional</strong> Valid values: <code>balanced</code>, <code>auto</code>, or a positive floating-point integer Default value: 1.0</td>
+</tr>
+<tr class="odd">
+<td>quantile</td>
+<td>The quantile for quantile loss. For quantile q, the model attempts to produce predictions so that the value of <code>true_label</code> is greater than the prediction with probability q. <strong>Optional</strong> Valid values: Floating-point integer between 0 and 1 Default value: 0.5</td>
+</tr>
+<tr class="even">
+<td>target_precision</td>
+<td>The target precision. If <code>binary_classifier_model_selection_criteria</code> is <code>recall_at_target_precision</code>, then precision is held at this value while recall is maximized. <strong>Optional</strong> Valid values: Floating-point integer between 0 and 1.0 Default value: 0.8</td>
+</tr>
+<tr class="odd">
+<td>target_recall</td>
+<td>The target recall. If <code>binary_classifier_model_selection_criteria</code> is <code>precision_at_target_recall</code>, then recall is held at this value while precision is maximized. <strong>Optional</strong> Valid values: Floating-point integer between 0 and 1.0 Default value: 0.8</td>
+</tr>
+<tr class="even">
+<td>unbias_data</td>
+<td>Unbiases the features before training so that the mean is 0. By default. data is unbiased if the <code>use_bias</code> hyperparameter is set to <code>true</code>. <strong>Optional</strong> Valid values: <code>auto</code>, <code>true</code>, or <code>false</code> Default value: <code>auto</code></td>
+</tr>
+<tr class="odd">
+<td>unbias_label</td>
+<td>Unbiases labels before training so that the mean is 0. Applies to regression only if the <code>use_bias</code> hyperparameter is set to <code>true</code>. <strong>Optional</strong> Valid values: <code>auto</code>, <code>true</code>, or <code>false</code> Default value: <code>auto</code></td>
+</tr>
+<tr class="even">
+<td>use_bias</td>
+<td>Specifies whether the model should include a bias term, which is the intercept term in the linear equation. <strong>Optional</strong> Valid values: <code>true</code> or <code>false</code> Default value: <code>true</code></td>
+</tr>
+<tr class="odd">
+<td>use_lr_scheduler</td>
+<td>Whether to use a scheduler for the learning rate. If you want to use a scheduler, specify <code>true</code>. <strong>Optional</strong> Valid values: <code>true</code> or <code>false</code> Default value: <code>true</code></td>
+</tr>
+<tr class="even">
+<td>wd</td>
+<td>The weight decay parameter, also known as the L2 regularization parameter. If you don’t want to use L2 regularization, set the value to 0. <strong>Optional</strong> Valid values:<code>auto</code> or non-negative floating-point integer Default value: <code>auto</code></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

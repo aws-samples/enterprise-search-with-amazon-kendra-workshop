@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Troubleshoot Inference Pipelines</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Troubleshoot Inference Pipelines<a name="inference-pipeline-troubleshoot"></a></h1>
+</header>
+<p>To troubleshoot inference pipeline issues, use CloudWatch logs and error messages. If you are using custom Docker images in a pipeline that includes Amazon SageMaker built-in algorithms, you might also encounter permissions problems. To grant the required permissions, create an Amazon Elastic Container Registry (Amazon ECR) policy.</p>
+<p><strong>Topics</strong> + <a href="#inference-pipeline-troubleshoot-permissions">Troubleshoot Amazon ECR Permissions for Inference Pipelines</a> + <a href="#inference-pipeline-troubleshoot-logs">Use CloudWatch Logs to Troubleshoot Amazon SageMaker Inference Pipelines</a> + <a href="#inference-pipeline-troubleshoot-errors">Use Error Messages to Troubleshoot Inference Pipelines</a></p>
+<p>When you use custom Docker images in a pipeline that includes <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Amazon SageMaker built-in algorithms</a>, you need an <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">Amazon ECR policy</a>. The policy allows your Amazon ECR repository to grant permission for Amazon SageMaker to pull the image. The policy must add the following permissions:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2008-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;allowSageMakerToPull&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Principal&quot;: {
+                &quot;Service&quot;: &quot;sagemaker.amazonaws.com&quot;
+            },
+            &quot;Action&quot;: [
+                &quot;ecr:GetDownloadUrlForLayer&quot;,
+                &quot;ecr:BatchGetImage&quot;,
+                &quot;ecr:BatchCheckLayerAvailability&quot;
+            ]
+        }
+    ]
+}</code></pre>
+<p>Amazon SageMaker publishes the container logs for endpoints that deploy an inference pipeline to Amazon CloudWatch at the following path for each container.</p>
+<pre><code>/aws/sagemaker/Endpoints/{EndpointName}/{Variant}/{InstanceId}/{ContainerHostname}</code></pre>
+<p>For example, logs for this endpoint are published to the following log groups and streams:</p>
+<pre><code>EndpointName: MyInferencePipelinesEndpoint
+Variant: MyInferencePipelinesVariant
+InstanceId: i-0179208609ff7e488
+ContainerHostname: MyContainerName1 and MyContainerName2</code></pre>
+<pre><code>logGroup: /aws/sagemaker/Endpoints/MyInferencePipelinesEndpoint
+logStream: MyInferencePipelinesVariant/i-0179208609ff7e488/MyContainerName1
+logStream: MyInferencePipelinesVariant/i-0179208609ff7e488/MyContainerName2</code></pre>
+<p>A <em>log stream</em> is a sequence of log events that share the same source. Each separate source of logs into CloudWatch makes up a separate log stream. A <em>log group</em> is a group of log streams that share the same retention, monitoring, and access control settings.</p>
+<p><strong>To see the log groups and streams</strong></p>
+<ol type="1">
+<li><p>Open the CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a>.</p></li>
+<li><p>In the navigation page, choose <strong>Logs</strong>.</p></li>
+<li><p>In <strong>Log Groups</strong>. filter on <strong>MyInferencePipelinesEndpoint</strong>:<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/pipeline-log-group-filter.png" alt="[The CloudWatch log groups filtered for the inference pipeline endpoint.]" /></p></li>
+<li><p>To see the log streams, on the CloudWatch <strong>Log Groups</strong> page, choose <strong>MyInferencePipelinesEndpoint</strong>, and then <strong>Search Log Group</strong>.<br />
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/pipeline-log-streams-2.png" alt="[The CloudWatch log stream for the inference pipeline.]" /></p></li>
+</ol>
+<p>For a list of the logs that Amazon SageMaker publishes, see <a href="inference-pipeline-logs-metrics.md">Inference Pipeline Logs and Metrics</a>.</p>
+<p>The inference pipeline error messages indicate which containers failed.</p>
+<p>If an error occurs while Amazon SageMaker is invoking an endpoint, the service returns a <code>ModelError</code> (error code 424), which indicates which container failed. If the request payload (the response from the previous container) exceeds the limit of 5 MB, Amazon SageMaker provides a detailed error message, such as:</p>
+<p>Received response from MyContainerName1 with status code 200. However, the request payload from MyContainerName1 to MyContainerName2 is 6000000 bytes, which has exceeded the maximum limit of 5 MB. See https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logEventViewer:group=/aws/sagemaker/Endpoints/MyInferencePipelinesEndpoint in account 123456789012 for more information.</p>
+<p>``</p>
+<p>If a container fails the ping health check while Amazon SageMaker is creating an endpoint, it returns a <code>ClientError</code> and indicates all of the containers that failed the ping check in the last health check.</p>
+</body>
+</html>

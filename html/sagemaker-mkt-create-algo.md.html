@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Create an Algorithm Resource</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Create an Algorithm Resource<a name="sagemaker-mkt-create-algo"></a></h1>
+</header>
+<p>To create an algorithm resource that you can use to run training jobs in Amazon SageMaker and publish on AWS Marketplace specify the following information: + The Docker containers that contains the training and, optionally, inference code. + The configuration of the input data that your algorithm expects for training. + The hyperparameters that your algorithm supports. + Metrics that your algorithm sends to Amazon CloudWatch during training jobs. + The instance types that your algorithm supports for training and inference, and whether it supports distributed training across multiple instances. + Validation profiles, which are training jobs that Amazon SageMaker uses to test your algorithm’s training code and batch transform jobs that Amazon SageMaker runs to test your algorithm’s inference code.</p>
+<p>To ensure that buyers and sellers can be confident that products work in Amazon SageMaker, we require that you validate your algorithms before listing them on AWS Marketplace. You can list products in the AWS Marketplace only if validation succeeds. To validate your algorithms, Amazon SageMaker uses your validation profile and sample data to run the following validations tasks:</p>
+<ol type="1">
+<li><p>Create a training job in your account to verify that your training image works with Amazon SageMaker.</p></li>
+<li><p>If you included inference code in your algorithm, create a model in your account using the algorithm’s inference image and the model artifacts produced by the training job.</p></li>
+<li><p>If you included inference code in your algorithm, create a transform job in your account using the model to verify that your inference image works with Amazon SageMaker.</p></li>
+</ol>
+<p>When you list your product on AWS Marketplace, the inputs and outputs of this validation process persist as part of your product and are made available to your buyers. This helps buyers understand and evaluate the product before they buy it. For example, buyers can inspect the input data that you used, the outputs generated, and the logs and metrics emitted by your code. The more comprehensive your validation specification, the easier it is for customers to evaluate your product. <strong>Note</strong><br />
+In your validation profile, provide only data that you want to expose publicly.</p>
+<p>Validation can take up to a few hours. To see the status of the jobs in your account, in the Amazon SageMaker console, see the <strong>Training jobs</strong> and <strong>Transform jobs</strong> pages. If validation fails, you can access the scan and validation reports from the Amazon SageMaker console. If any issues are found, you will have to create the algorithm again. <strong>Note</strong><br />
+To publish your algorithm on AWS Marketplace, at least one validation profile is required.</p>
+<p>You can create an algorithm by using either the Amazon SageMaker console or the Amazon SageMaker API.</p>
+<p><strong>Topics</strong> + <a href="#sagemaker-mkt-create-algo-console">Create an Algorithm Resource (Console)</a> + <a href="#sagemaker-mkt-create-algo-api">Create an Algorithm Resource (API)</a></p>
+<p><strong>To create an algorithm resource (console)</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Algorithms</strong>, then choose <strong>Create algorithm</strong>.</p></li>
+<li><p>On the <strong>Training specifications</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Algorithm name</strong>, type a name for your algorithm. The algorithm name must be unique in your account and in the AWS region. The name must have 1 to 64 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></li>
+<li><p>Type a description for your algorithm. This description appears in the Amazon SageMaker console and in the AWS Marketplace.</p></li>
+<li><p>For <strong>Training image, type the path in Amazon ECR where your training container is stored.</strong></p></li>
+<li><p>For <strong>Support distributed training</strong>, Choose <strong>Yes</strong> if your algorithm supports training on multiple instances. Otherwise, choose <strong>No</strong>.</p></li>
+<li><p>For <strong>Support instance types for training</strong>, choose the instance types that your algorithm supports.</p></li>
+<li><p>For <strong>Channel specification</strong>, specify up to 8 channels of input data for your algorithm. For example, you might specify 3 input channels named <code>train</code>, <code>validation</code>, and <code>test</code>. For each channel, specify the following information:</p>
+<ol type="1">
+<li><p>For <strong>Channel name</strong>, type a name for the channel. The name must have 1 to 64 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></li>
+<li><p>To require the channel for your algorithm, choose <strong>Channel required</strong>.</p></li>
+<li><p>Type a description for the channel.</p></li>
+<li><p>For <strong>Supported input modes</strong>, choose <strong>Pipe mode</strong> if your algorithm supports streaming the input data, and <strong>File mode</strong> if your algorithm supports downloading the input data as a file. You can choose both.</p></li>
+<li><p>For <strong>Supported content types</strong>, type the MIME type that your algorithm expects for input data.</p></li>
+<li><p>For <strong>Supported compression type</strong>, choose <strong>Gzip</strong> if your algorithm supports Gzip compression. Otherwise, choose <strong>None</strong>.</p></li>
+<li><p>Choose <strong>Add channel</strong> to add another data input channel, or choose <strong>Next</strong> if you are done adding channels.</p></li>
+</ol></li>
+</ol></li>
+<li><p>On the <strong>Tuning specifications</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Hyperparameter specification</strong>, specify the hyperparameters that your algorithm supports by editing the JSON object. For each hyperparameter that your algorithm supports, construct a JSON block similar to the following:</p>
+<pre><code>{
+      &quot;DefaultValue&quot;: &quot;5&quot;,
+      &quot;Description&quot;: &quot;The first hyperparameter&quot;,
+      &quot;IsRequired&quot;: true,
+      &quot;IsTunable&quot;: false,
+      &quot;Name&quot;: &quot;intRange&quot;,
+      &quot;Range&quot;: {
+          &quot;IntegerParameterRangeSpecification&quot;: {
+              &quot;MaxValue&quot;: &quot;10&quot;,
+              &quot;MinValue&quot;: &quot;1&quot;
+          }
+      },
+      &quot;Type&quot;: &quot;Integer&quot;</code></pre>
+<p>In the JSON, supply the following:</p>
+<ol type="1">
+<li><p>For <code>DefaultValue</code>, specify a default value for the hyperparameter, if there is one.</p></li>
+<li><p>For <code>Description</code>, specify a description for the hyperparameter.</p></li>
+<li><p>For <code>IsRequired</code>, specify whether the hyperparameter is required.</p></li>
+<li><p>For <code>IsTunable</code>, specify <code>true</code> if this hyperparameter can be tuned when a user runs a hyperparameter tuning job that uses this algorithm. For information, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p></li>
+<li><p>For <code>Name</code>, specify a name for the hyperparameter.</p></li>
+<li><p>For <code>Range</code>, specify one of the following:</p>
+<ul>
+<li><code>IntegerParameterRangeSpecification</code> - the values of the hyperparameter are integers. Specify minimum and maximum values for the hyperparameter.</li>
+<li><code>ContinuousParameterRangeSpecification</code> - the values of the hyperparameter are floating-point values. Specify minimum and maximum values for the hyperparameter.</li>
+<li><code>CategoricalParameterRangeSpecification</code> - the values of the hyperparameter are categorical values. Specify a list of all of the possible values.</li>
+</ul></li>
+<li><p>For <code>Type</code>, specify <code>Integer</code>, <code>Continuous</code>, or <code>Categorical</code>. The value must correspond to the type of <code>Range</code> that you specified.</p></li>
+</ol></li>
+<li><p>For <strong>Metric definitions</strong>, specify any training metrics that you want your algorithm to emit. Amazon SageMaker uses the regular expression that you specify to find the metrics by parsing the logs from your training container during training. Users can view these metrics when they run training jobs with your algorithm, and they can monitor and plot the metrics in Amazon CloudWatch. For information, see <a href="training-metrics.md">Monitor and Analyze Training Jobs Using Metrics</a>. For each metric, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Metric name</strong>, type a name for the metric.</p></li>
+<li><p>For <code>Regex</code>, type the regular expression that Amazon SageMaker uses to parse training logs so that it can find the metric value.</p></li>
+<li><p>For <strong>Objective metric support</strong> choose <strong>Yes</strong> if this metric can be used as the objective metric for a hyperparameter tuning job. For information, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p></li>
+<li><p>Choose <strong>Add metric</strong> to add another metric, or choose <strong>Next</strong> if you are done adding metrics.</p></li>
+</ol></li>
+</ol></li>
+<li><p>On the <strong>Inference specifications</strong> page, provide the following information if your algorithm supports inference:</p>
+<ol type="1">
+<li><p>For <strong>Container definition</strong>, type path in Amazon ECR where your inference container is stored.</p></li>
+<li><p>For <strong>Container DNS host name</strong>, type the name of a DNS host for your image.</p></li>
+<li><p>For <strong>Supported instance types for real-time inference</strong>, choose the instance types that your algorithm supports for models deployed as hosted endpoints in Amazon SageMaker. For information, see <a href="how-it-works-hosting.md">Deploy a Model on Amazon SageMaker Hosting Services</a>.</p></li>
+<li><p>For <strong>Supported instance types for batch transform jobs</strong>, choose the instance types that your algorithm supports for batch transform jobs. For information, see <a href="how-it-works-batch.md">Get Inferences for an Entire Dataset with Batch Transform</a>.</p></li>
+<li><p>For <strong>Supported content types</strong>, type the type of input data that your algorithm expects for inference requests.</p></li>
+<li><p>For <strong>Supported response MIME types</strong>, type the MIME types that your algorithm supports for inference responses.</p></li>
+<li><p>Choose <strong>Next</strong>.</p></li>
+</ol></li>
+<li><p>On the <strong>Validation specifications</strong> page, provide the following information:</p>
+<ol type="1">
+<li><p>For <strong>Publish this algorithm on AWS Marketplace</strong>, choose <strong>Yes</strong> to publish the algorithm on AWS Marketplace.</p></li>
+<li><p>For <strong>Validate this algorithm</strong>, choose <strong>Yes</strong> if you want Amazon SageMaker to run training jobs and/or batch transform jobs that you specify to test the training and/or inference code of your algorithm. <strong>Note</strong><br />
+To publish your algorithm on AWS Marketplace, your algorithm must be validated.</p></li>
+<li><p>For <strong>IAM role</strong>, choose an IAM role that has the required permissions to run training jobs and batch transform jobs in Amazon SageMaker, or choose <strong>Create a new role</strong> to allow Amazon SageMaker to create a role that has the <code>AmazonSageMakerFullAccess</code> managed policy attached. For information, see <a href="sagemaker-roles.md">Amazon SageMaker Roles</a>.</p></li>
+<li><p>For <strong>Validation profile</strong>, specify the following:</p>
+<ul>
+<li>A name for the validation profile.</li>
+<li>A <strong>Training job definition</strong>. This is a JSON block that describes a training job. This is in the same format as the <a href="API_TrainingJobDefinition.md">TrainingJobDefinition</a> input parameter of the <a href="API_CreateAlgorithm.md">CreateAlgorithm</a> API.</li>
+<li>A <strong>Transform job definition</strong>. This is a JSON block that describes a batch transform job. This is in the same format as the <a href="API_TransformJobDefinition.md">TransformJobDefinition</a>input parameter of the <a href="API_CreateAlgorithm.md">CreateAlgorithm</a> API.</li>
+</ul></li>
+<li><p>Choose <strong>Create algorithm</strong>.</p></li>
+</ol></li>
+</ol>
+<p>To create an algorithm resource by using the Amazon SageMaker API, call the <a href="API_CreateAlgorithm.md">CreateAlgorithm</a> API.</p>
+</body>
+</html>

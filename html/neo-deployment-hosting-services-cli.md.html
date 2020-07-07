@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Deploy a Model Compiled with Neo (AWS CLI)</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Deploy a Model Compiled with Neo (AWS CLI)<a name="neo-deployment-hosting-services-cli"></a></h1>
+</header>
+<p>The deployment of a Neo-compiled model with the CLI has three steps.</p>
+<p><strong>Topics</strong> + <a href="#neo-deployment-hosting-services-cli-create-model">Create a Model That Was Compiled with Neo (AWS CLI)</a> + <a href="#neo-deployment-hosting-services-cli-create-endpoint-config">Create the Endpoint Configuration (AWS CLI)</a> + <a href="#neo-deployment-hosting-services-cli-create-endpoint">Create an Endpoint (AWS CLI)</a></p>
+<p>For the full syntax of the <code>CreateModel</code> API, see <a href="API_CreateModel.md">CreateModel</a>.</p>
+<p>For Neo-compiled models, use one of the following values for <code>PrimaryContainer</code>/<code>ContainerHostname</code>, depending on your region and applications: + <strong>Amazon SageMaker Image Classification</strong> + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/image-classification-neo:latest</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/image-classification-neo:latest</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/image-classification-neo:latest</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/image-classification-neo:latest</code> + <strong>Amazon SageMaker XGBoost</strong> + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/xgboost-neo:latest</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/xgboost-neo:latest</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/xgboost-neo:latest</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/xgboost-neo:latest</code> + <strong>TensorFlow </strong>: The TensorFlow version used must be in <a href="https://github.com/aws/sagemaker-python-sdk#tensorflow-sagemaker-estimators">TensorFlow SageMaker Estimators</a> list. + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <strong>MXNet </strong>The MXNet version used must be in <a href="https://github.com/aws/sagemaker-python-sdk#mxnet-sagemaker-estimators">MXNet SageMaker Estimators</a> list. + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <strong>Pytorch </strong>The Pytorch version used must be in <a href="https://github.com/aws/sagemaker-python-sdk#pytorch-sagemaker-estimators">Pytorch SageMaker Estimators</a> list. + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code></p>
+<p>Also, if you are using <strong>TensorFlow</strong>, <strong>Pytorch</strong>, or <strong>MXNet</strong>, add the following key-value pair to <code>PrimaryContainer</code>/<code>Environment</code>:</p>
+<pre><code>&quot;Environment&quot;: {
+&quot;SAGEMAKER_SUBMIT_DIRECTORY&quot; : &quot;[Full S3 path for *.tar.gz file containing the training script]&quot;
+}</code></pre>
+<p>The script must be packaged as a <code>*.tar.gz</code> file. The <code>*.tar.gz</code> file must contain the training script at the root level. The script must contain two additional functions for Neo serving containers: + <code>neo_preprocess(payload, content_type)</code>: Function that takes in the payload and <code>Content-Type</code> of each incoming request and returns a NumPy array. + <code>neo_postprocess(result)</code>: Function that takes the prediction results produced by Deep Learning Runtime and returns the response body.</p>
+<p>Neither of these two functions use any functionalities of MXNet, Pytorch, or Tensorflow. See the <a href="neo.md#neo-sample-notebooks">Amazon SageMaker Neo Sample Notebooks</a> for examples using these functions.</p>
+<p>For the full syntax of the <code>CreateEndpointConfig</code> API, see <a href="API_CreateEndpointConfig.md">CreateEndpointConfig</a>. You must specify the correct instance type in <code>ProductionVariants</code>/<code>InstanceType</code>. It is imperative that this value matches the instance type specified in your compilation job.</p>
+<p>For the full syntax of the <code>CreateEndpoint</code> API, see <a href="API_CreateEndpoint.md">CreateEndpoint</a>.</p>
+</body>
+</html>

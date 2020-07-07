@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Deploy a Model Compiled with Neo (Console)</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Deploy a Model Compiled with Neo (Console)<a name="neo-deployment-hosting-services-console"></a></h1>
+</header>
+<p>You can create a Neo endpoint in the Amazon SageMaker console. Open the Amazon SageMaker console at https://console.aws.amazon.com/sagemaker/.</p>
+<p>Choose <strong>Models</strong>, and then choose <strong>Create models</strong> from the <strong>Inference</strong> group. On the <strong>Create model</strong> page, complete the <strong>Model name</strong>,** IAM role<strong>, and, if needed, </strong>VPC** fields.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/neo-deploy-console-create-inference-model.png" alt="" /><figcaption>[Create Neo Model for Inference]</figcaption>
+</figure>
+<p>To add information about the container used to deploy your model, choose <strong>Add</strong> container, then choose <strong>Next</strong>. Complete the <strong>Container input options</strong>, <strong>Location of inference code image</strong>, and <strong>Location of model artifacts</strong>, and optionally, <strong>Container host name</strong>, and <strong>Environmental variables</strong> fields.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/neo-deploy-console-container-definition.png" alt="" /><figcaption>[Create Neo Model for Inference]</figcaption>
+</figure>
+<p>To deploy Neo-compiled models, choose the following: + <strong>Container input options</strong>: Provide model artifacts and inference image + <strong>Location of inference code image</strong>: Choose one of the following images, depending the region and kind of application: + <strong>Amazon SageMaker Image Classification</strong> + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/image-classification-neo:latest</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/image-classification-neo:latest</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/image-classification-neo:latest</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/image-classification-neo:latest</code> + <strong>Amazon SageMaker XGBoost</strong> + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/xgboost-neo:latest</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/xgboost-neo:latest</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/xgboost-neo:latest</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/xgboost-neo:latest</code> + <strong>TensorFlow </strong>: The TensorFlow version used must be in <a href="https://github.com/aws/sagemaker-python-sdk#tensorflow-sagemaker-estimators">TensorFlow SageMaker Estimators</a> list. + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-neo-tensorflow:[tensorflow-version]-[cpu/gpu]-py3</code> + <strong>MXNet </strong>The MXNet version used must be in <a href="https://github.com/aws/sagemaker-python-sdk#mxnet-sagemaker-estimators">MXNet SageMaker Estimators</a> list. + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-neo-mxnet:[mxnet-version]-[cpu/gpu]-py3</code> + <strong>Pytorch </strong>The Pytorch version used must be in <a href="https://github.com/aws/sagemaker-python-sdk#pytorch-sagemaker-estimators">Pytorch SageMaker Estimators</a> list. + <code>301217895009.dkr.ecr.us-west-2.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <code>785573368785.dkr.ecr.us-east-1.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <code>007439368137.dkr.ecr.us-east-2.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <code>802834080501.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-neo-pytorch:[pytorch-version]-[cpu/gpu]-py3</code> + <strong>Location of model artifact</strong>: the full S3 path of the compiled model artifact generated by the Neo compilation API. + <strong>Environmental variables</strong>: + Omit this field for <strong>SageMaker Image Classification</strong> and <strong>SageMaker XGBoost</strong>. + For <strong>TensorFlow</strong>, <strong>Pytorch</strong>, and <strong>MXNet</strong>, specify the environment variable <strong>SAGEMAKER_SUBMIT_DIRECTORY</strong> as the full S3 path that contains the training script.</p>
+<p>The script must be packaged as a <code>*.tar.gz</code> file. The <code>*.tar.gz</code> file must contain the training script at the root level. The script must contain two additional functions for Neo serving containers: + <code>neo_preprocess(payload, content_type)</code>: Function that takes in the payload and <code>Content-Type</code> of each incoming request and returns a NumPy array. + <code>neo_postprocess(result)</code>: Function that takes the prediction results produced by Deep Learning Runtime and returns the response body.</p>
+<p>Neither of these two functions use any functionalities of MXNet, Pytorch, or Tensorflow. See the <a href="neo.md#neo-sample-notebooks">Amazon SageMaker Neo Sample Notebooks</a> for examples using these functions.</p>
+<p>Confirm that the information for the containers is accurate, and then choose <strong>Create model</strong>.This takes you to the create model landing page. Select the <strong>Create endpoint</strong> button there.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/neo-deploy-console-create-model-land-page.png" alt="" /><figcaption>[Create Model Landing Page]</figcaption>
+</figure>
+<p>In <strong>Create and configure endpoint</strong> diagram, specify the <strong>Endpoint name</strong>. Choose <strong>Create a new endpoint configuration</strong> in <strong>Attach endpoint configuration</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/neo-deploy-console-config-endpoint.png" alt="" /><figcaption>[Neo console Create and configure endpoint UI.]</figcaption>
+</figure>
+<p>In <strong>New endpoint configuration</strong> page, specify the <strong>Endpoint configuration name</strong>.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/neo-deploy-console-new-endpoint-config.png" alt="" /><figcaption>[Neo console New endpoint configuration UI.]</figcaption>
+</figure>
+<p>Then press <strong>Edit</strong> next to the name of the model and specify the correct <strong>Instance type</strong> on the <strong>Edit Production Variant</strong> page. It is imperative that the <strong>Instance type</strong> value match the one specified in your compilation job.</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/neo-deploy-console-edit-production-variant.png" alt="" /><figcaption>[Neo console New endpoint configuration UI.]</figcaption>
+</figure>
+<p>When you’re done click <strong>Save</strong>, then click <strong>Create endpoint configuration</strong> on the <strong>New endpoint configuration</strong> page, and then click <strong>Create endpoint</strong>.</p>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Log Amazon SageMaker API Calls with AWS CloudTrail</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Log Amazon SageMaker API Calls with AWS CloudTrail<a name="logging-using-cloudtrail"></a></h1>
+</header>
+<p>Amazon SageMaker is integrated with AWS CloudTrail, a service that provides a record of actions taken by a user, role, or an AWS service in Amazon SageMaker. CloudTrail captures all API calls for Amazon SageMaker, with the exception of <a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a>, as events. The calls captured include calls from the Amazon SageMaker console and code calls to the Amazon SageMaker API operations. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for Amazon SageMaker. If you don’t configure a trail, you can still view the most recent events in the CloudTrail console in <strong>Event history</strong>. Using the information collected by CloudTrail, you can determine the request that was made to Amazon SageMaker, the IP address from which the request was made, who made the request, when it was made, and additional details.</p>
+<p>To learn more about CloudTrail, see the <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/">AWS CloudTrail User Guide</a>.</p>
+<p>By default, log data is stored in CloudWatch Logs indefinitely. Howerver, you can configure how long to store log data in a log group. For information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#SettingLogRetention">Change Log Data Retention in CloudWatch Logs</a> in the <em>Amazon CloudWatch Logs User Guide</em>.</p>
+<p>CloudTrail is enabled on your AWS account when you create the account. When activity occurs in Amazon SageMaker, that activity is recorded in a CloudTrail event along with other AWS service events in <strong>Event history</strong>. You can view, search, and download recent events in your AWS account. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html">Viewing Events with CloudTrail Event History</a>.</p>
+<p>For an ongoing record of events in your AWS account, including events for Amazon SageMaker, create a trail. A <em>trail</em> enables CloudTrail to deliver log files to an Amazon S3 bucket. By default, when you create a trail in the console, the trail applies to all AWS Regions. The trail logs events from all Regions in the AWS partition and delivers the log files to the Amazon S3 bucket that you specify. Additionally, you can configure other AWS services to further analyze and act upon the event data collected in CloudTrail logs. For more information, see the following: + <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html">Overview for Creating a Trail</a> + <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html#cloudtrail-aws-service-specific-topics-integrations">CloudTrail Supported Services and Integrations</a> + <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/getting_notifications_top_level.html">Configuring Amazon SNS Notifications for CloudTrail</a> + <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/receive-cloudtrail-log-files-from-multiple-regions.html">Receiving CloudTrail Log Files from Multiple Regions</a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html">Receiving CloudTrail Log Files from Multiple Accounts</a></p>
+<p>All Amazon SageMaker actions, with the exception of <a href="API_runtime_InvokeEndpoint.md">InvokeEndpoint</a>, are logged by CloudTrail and are documented in the <a href="API_Operations.md">Actions</a>. For example, calls to the <code>CreateTrainingJob</code>, <code>CreateEndpoint</code> and <code>CreateNotebookInstance</code> actions generate entries in the CloudTrail log files.</p>
+<p>Every event or log entry contains information about who generated the request. The identity information helps you determine the following: + Whether the request was made with root or AWS Identity and Access Management (IAM) user credentials. + Whether the request was made with temporary security credentials for a role or federated user. + Whether the request was made by another AWS service.</p>
+<p>For more information, see the <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html">CloudTrail userIdentity Element</a>.</p>
+<p>Amazon SageMaker supports logging non-API service events to your CloudTrail log files,for automatic model tuning jobs. These events are related to your tuning jobs but, are not the direct result of a customer request to the public AWS API. For example, when you create a hyperparameter tuning job by calling <a href="API_CreateHyperParameterTuningJob.md">CreateHyperParameterTuningJob</a>, Amazon SageMaker creates training jobs to evaluate various combinations of hyperparameters to find the best result. Similarly, when you call <a href="API_StopHyperParameterTuningJob.md">StopHyperParameterTuningJob</a> to stop a hyperparameter tuning job, Amazon SageMaker might stop any of the associated running training jobs. Non-API events for your tuning jobs are logged to CloudTrail to help you improve governance, compliance, and operational and risk auditing of your AWS account.</p>
+<p>Log entries that result from non-API service events have an <code>eventType</code> of <code>AwsServiceEvent</code> instead of <code>AwsApiCall</code>.</p>
+<p>A trail is a configuration that enables delivery of events as log files to an S3 bucket that you specify. CloudTrail log files contain one or more log entries. An event represents a single request from any source and includes information about the requested action, the date and time of the action, request parameters, and so on. CloudTrail log files are not an ordered stack trace of the public API calls, so they do not appear in any specific order.</p>
+<p>The following examples a log entry for the <code>CreateEndpoint</code> action, which creates an endpoint to deploy a trained model.</p>
+<pre><code>{
+    &quot;eventVersion&quot;:&quot;1.05&quot;,
+    &quot;userIdentity&quot;: {
+        &quot;type&quot;:&quot;IAMUser&quot;,
+        &quot;principalId&quot;:&quot;AIXDAYQEXAMPLEUMLYNGL&quot;,
+        &quot;arn&quot;:&quot;arn:aws:iam::123456789012:user/intern&quot;,
+        &quot;accountId&quot;:&quot;123456789012&quot;,
+        &quot;accessKeyId&quot;:&quot;ASXIAGXEXAMPLEQULKNXV&quot;,
+        &quot;userName&quot;:&quot;intern&quot;
+    },
+    &quot;eventTime&quot;:&quot;2018-01-02T13:39:06Z&quot;,
+    &quot;eventSource&quot;:&quot;sagemaker.amazonaws.com&quot;,
+    &quot;eventName&quot;:&quot;CreateEndpoint&quot;,
+    &quot;awsRegion&quot;:&quot;us-west-2&quot;,
+    &quot;sourceIPAddress&quot;:&quot;127.0.0.1&quot;,
+    &quot;userAgent&quot;:&quot;USER_AGENT&quot;,
+    &quot;requestParameters&quot;: {
+        &quot;endpointName&quot;:&quot;ExampleEndpoint&quot;,
+        &quot;endpointConfigName&quot;:&quot;ExampleEndpointConfig&quot;
+    },
+    &quot;responseElements&quot;: {
+        &quot;endpointArn&quot;:&quot;arn:aws:sagemaker:us-west-2:123456789012:endpoint/exampleendpoint&quot;
+    },
+    &quot;requestID&quot;:&quot;6b1b42b9-EXAMPLE&quot;,
+    &quot;eventID&quot;:&quot;a6f85b21-EXAMPLE&quot;,
+    &quot;eventType&quot;:&quot;AwsApiCall&quot;,
+    &quot;recipientAccountId&quot;:&quot;444455556666&quot;
+}</code></pre>
+<p>The following example is a log entry for the <code>CreateModel</code> action, which creates one or more containers to host a previously trained model.</p>
+<pre><code>{
+    &quot;eventVersion&quot;:&quot;1.05&quot;,
+    &quot;userIdentity&quot;: {
+        &quot;type&quot;:&quot;IAMUser&quot;,
+        &quot;principalId&quot;:&quot;AIXDAYQEXAMPLEUMLYNGL&quot;,
+        &quot;arn&quot;:&quot;arn:aws:iam::123456789012:user/intern&quot;,
+        &quot;accountId&quot;:&quot;123456789012&quot;,
+        &quot;accessKeyId&quot;:&quot;ASXIAGXEXAMPLEQULKNXV&quot;,
+        &quot;userName&quot;:&quot;intern&quot;
+    },
+    &quot;eventTime&quot;:&quot;2018-01-02T15:23:46Z&quot;,
+    &quot;eventSource&quot;:&quot;sagemaker.amazonaws.com&quot;,
+    &quot;eventName&quot;:&quot;CreateModel&quot;,
+    &quot;awsRegion&quot;:&quot;us-west-2&quot;,
+    &quot;sourceIPAddress&quot;:&quot;127.0.0.1&quot;,
+    &quot;userAgent&quot;:&quot;USER_AGENT&quot;,
+    &quot;requestParameters&quot;: {
+        &quot;modelName&quot;:&quot;ExampleModel&quot;,
+        &quot;primaryContainer&quot;: {
+            &quot;image&quot;:&quot;174872318107.dkr.ecr.us-west-2.amazonaws.com/kmeans:latest&quot;
+        },
+        &quot;executionRoleArn&quot;:&quot;arn:aws:iam::123456789012:role/EXAMPLEARN&quot;
+    },
+    &quot;responseElements&quot;: {
+        &quot;modelArn&quot;:&quot;arn:aws:sagemaker:us-west-2:123456789012:model/barkinghappy2018-01-02t15-23-32-275z-ivrdog&quot;
+    },
+    &quot;requestID&quot;:&quot;417b8dab-EXAMPLE&quot;,
+    &quot;eventID&quot;:&quot;0f2b3e81-EXAMPLE&quot;,
+    &quot;eventType&quot;:&quot;AwsApiCall&quot;,
+    &quot;recipientAccountId&quot;:&quot;444455556666&quot;
+}</code></pre>
+</body>
+</html>

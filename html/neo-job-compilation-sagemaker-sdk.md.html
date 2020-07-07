@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Compile a Model (Amazon SageMaker SDK)</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Compile a Model (Amazon SageMaker SDK)<a name="neo-job-compilation-sagemaker-sdk"></a></h1>
+</header>
+<p>Follow the steps described in the <strong>Running the Training Job</strong> section of the <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/sagemaker-python-sdk/mxnet_mnist/mxnet_mnist_neo.ipynb">MNIST Training, Compilation and Deployment with MXNet Module</a> sample to produce a machine learning model train using Amazon SageMaker. Then you can use Neo to further optimize the model with the following code:</p>
+<pre><code>output_path = ‘/’.join( mnist_estimator.output_path.split(‘/’)[:-1])
+compiled_model = mnist_estimator.compile_model(target_instance_family=&#39;ml_c5&#39;, 
+                                               input_shape={&#39;data&#39;:[1, 784]},
+                                               role=role,
+                                               output_path=output_path)</code></pre>
+<p>This code compiles the model and saves the optimized model in <code>output_path</code>. Sample notebooks of using SDK are provided in the <a href="neo.md#neo-sample-notebooks">Amazon SageMaker Neo Sample Notebooks</a> section.</p>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune an IP Insights Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune an IP Insights Model<a name="ip-insights-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also called hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The Amazon SageMaker IP Insights algorithm is an unsupervised learning algorithm that learns associations between IP addresses and entities. The algorithm trains a discriminator model , which learns to separate observed data points (<em>positive samples</em>) from randomly generated data points (<em>negative samples</em>). Automatic model tuning on IP Insights helps you find the model that can most accurately distinguish between unlabeled validation data and automatically generated negative samples. The model accuracy on the validation dataset is measured by the area under the receiver operating characteristic (ROC) curve. This <code>validation:discriminator_auc</code> metric can take values between 0.0 and 1.0, where 1.0 indicates perfect accuracy.</p>
+<p>The IP Insights algorithm computes a <code>validation:discriminator_auc</code> metric during validation, the value of which is used as the objective function to optimize for hyperparameter tuning.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>validation:discriminator_auc</td>
+<td>Area under the ROC curve on the validation dataset. The validation dataset is not labeled. AUC is a metric that describes the model’s ability to discriminate validation data points from randomly generated data points.</td>
+<td>Maximize</td>
+</tr>
+</tbody>
+</table>
+<p>You can tune the following hyperparameters for the Amazon SageMaker IP Insights algorithm.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>epochs</td>
+<td>IntegerParameterRange</td>
+<td>MinValue: 1, MaxValue: 100</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 1e-4, MaxValue: 0.1</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 100, MaxValue: 50000</td>
+</tr>
+<tr class="even">
+<td>num_entity_vectors</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 10000, MaxValue: 1000000</td>
+</tr>
+<tr class="odd">
+<td>num_ip_encoder_layers</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 1, MaxValue: 10</td>
+</tr>
+<tr class="even">
+<td>random_negative_sampling_rate</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 0, MaxValue: 10</td>
+</tr>
+<tr class="odd">
+<td>shuffled_negative_sampling_rate</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 0, MaxValue: 10</td>
+</tr>
+<tr class="even">
+<td>vector_dim</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 8, MaxValue: 256</td>
+</tr>
+<tr class="odd">
+<td>weight_decay</td>
+<td>ContinuousParameterRange</td>
+<td>MinValue: 0.0, MaxValue: 1.0</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

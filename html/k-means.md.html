@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>K-Means Algorithm</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">K-Means Algorithm<a name="k-means"></a></h1>
+</header>
+<p>K-means is an unsupervised learning algorithm. It attempts to find discrete groupings within data, where members of a group are as similar as possible to one another and as different as possible from members of other groups. You define the attributes that you want the algorithm to use to determine similarity.</p>
+<p>Amazon SageMaker uses a modified version of the web-scale k-means clustering algorithm. Compared with the original version of the algorithm, the version used by Amazon SageMaker is more accurate. Like the original algorithm, it scales to massive datasets and delivers improvements in training time. To do this, the version used by Amazon SageMaker streams mini-batches (small, random subsets) of the training data. For more information about mini-batch k-means, see <a href="https://www.eecs.tufts.edu/~dsculley/papers/fastkmeans.pdf">Web-scale k-means Clustering</a>.</p>
+<p>The k-means algorithm expects tabular data, where rows represent the observations that you want to cluster, and the columns represent attributes of the observations. The <em>n</em> attributes in each row represent a point in <em>n</em>-dimensional space. The Euclidean distance between these points represents the similarity of the corresponding observations. The algorithm groups observations with similar attribute values (the points corresponding to these observations are closer together). For more information about how k-means works in Amazon SageMaker, see <a href="algo-kmeans-tech-notes.md">How K-Means Clustering Works</a>.</p>
+<p><strong>Topics</strong> + <a href="#km-inputoutput">Input/Output Interface for the K-Means Algorithm</a> + <a href="#km-instances">EC2 Instance Recommendation for the K-Means Algorithm</a> + <a href="#kmeans-sample-notebooks">K-Means Sample Notebooks</a> + <a href="algo-kmeans-tech-notes.md">How K-Means Clustering Works</a> + <a href="k-means-api-config.md">K-Means Hyperparameters</a> + <a href="k-means-tuning.md">Tune a K-Means Model</a> + <a href="km-in-formats.md">K-Means Response Formats</a></p>
+<p>For training, the k-means algorithm expects data to be provided in the <em>train</em> channel (recommended <code>S3DataDistributionType=ShardedByS3Key</code>), with an optional <em>test</em> channel (recommended <code>S3DataDistributionType=FullyReplicated</code>) to score the data on. Both <code>recordIO-wrapped-protobuf</code> and <code>CSV</code> formats are supported for training. You can use either File mode or Pipe mode to train models on data that is formatted as <code>recordIO-wrapped-protobuf</code> or as <code>CSV</code>.</p>
+<p>For inference, <code>text/csv</code>, <code>application/json</code>, and <code>application/x-recordio-protobuf</code> are supported. k-means returns a <code>closest_cluster</code> label and the <code>distance_to_cluster</code> for each observation.</p>
+<p>For more information on input and output file formats, see <a href="km-in-formats.md">K-Means Response Formats</a> for inference and the <a href="#kmeans-sample-notebooks">K-Means Sample Notebooks</a>. The k-means algorithm does not support multiple instance learning, in which the training set consists of labeled “bags”, each of which is a collection of unlabeled instances.</p>
+<p>We recommend training k-means on CPU instances. You can train on GPU instances, but should limit GPU training to <code>p*.xlarge</code> instances because only one GPU per instance is used.</p>
+<p>For a sample notebook that uses the Amazon SageMaker K-means algorithm to segment the population of counties in the United States by attributes identified using principle component analysis, see <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_applying_machine_learning/US-census_population_segmentation_PCA_Kmeans/sagemaker-countycensusclustering.ipynb">Analyze US census data for population segmentation using Amazon SageMaker</a>. For instructions how to create and access Jupyter notebook instances that you can use to run the example in Amazon SageMaker, see <a href="nbi.md">Use Notebook Instances</a>. Once you have created a notebook instance and opened it, select the <strong>SageMaker Examples</strong> tab to see a list of all the Amazon SageMaker samples. To open a notebook, click on its <strong>Use</strong> tab and select <strong>Create copy</strong>.</p>
+</body>
+</html>

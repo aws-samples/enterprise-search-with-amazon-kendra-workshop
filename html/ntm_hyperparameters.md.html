@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>NTM Hyperparameters</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">NTM Hyperparameters<a name="ntm_hyperparameters"></a></h1>
+</header>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>feature_dim</code></td>
+<td>The vocabulary size of the dataset. <strong>Required</strong> Valid values: Positive integer (min: 1, max: 1,000,000)</td>
+</tr>
+<tr class="even">
+<td>num_topics</td>
+<td>The number of required topics. <strong>Required</strong> Valid values: Positive integer (min: 2, max: 1000)</td>
+</tr>
+<tr class="odd">
+<td>batch_norm</td>
+<td>Whether to use batch normalization during training. <strong>Optional</strong> Valid values: <em>true</em> or <em>false</em> Default value: <em>false</em></td>
+</tr>
+<tr class="even">
+<td>clip_gradient</td>
+<td>The maximum magnitude for each gradient component. <strong>Optional</strong> Valid values: Float (min: 1e-3) Default value: Infinity</td>
+</tr>
+<tr class="odd">
+<td>encoder_layers</td>
+<td>The number of layers in the encoder and the output size of each layer. When set to <em>auto</em>, the algorithm uses two layers of sizes 3 x <code>num_topics</code> and 2 x <code>num_topics</code> respectively. <strong>Optional</strong> Valid values: Comma-separated list of positive integers or <em>auto</em> Default value: <em>auto</em></td>
+</tr>
+<tr class="even">
+<td>encoder_layers_activation</td>
+<td>The activation function to use in the encoder layers. <strong>Optional</strong> Valid values: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ntm_hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>sigmoid</code></td>
+</tr>
+<tr class="odd">
+<td>epochs</td>
+<td>The maximum number of passes over the training data. <strong>Optional</strong> Valid values: Positive integer (min: 1) Default value: 50</td>
+</tr>
+<tr class="even">
+<td>learning_rate</td>
+<td>The learning rate for the optimizer. <strong>Optional</strong> Valid values: Float (min: 1e-6, max: 1.0) Default value: 0.001</td>
+</tr>
+<tr class="odd">
+<td>mini_batch_size</td>
+<td>The number of examples in each mini batch. <strong>Optional</strong> Valid values: Positive integer (min: 1, max: 10000) Default value: 256</td>
+</tr>
+<tr class="even">
+<td>num_patience_epochs</td>
+<td>The number of successive epochs over which early stopping criterion is evaluated. Early stopping is triggered when the change in the loss function drops below the specified <code>tolerance</code> within the last <code>num_patience_epochs</code> number of epochs. To disable early stopping, set <code>num_patience_epochs</code> to a value larger than <code>epochs</code>. <strong>Optional</strong> Valid values: Positive integer (min: 1) Default value: 3</td>
+</tr>
+<tr class="odd">
+<td>optimizer</td>
+<td>The optimizer to use for training. <strong>Optional</strong> Valid values: <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ntm_hyperparameters.html">[See the AWS documentation website for more details]</a> Default value: <code>adadelta</code></td>
+</tr>
+<tr class="even">
+<td>rescale_gradient</td>
+<td>The rescale factor for gradient. <strong>Optional</strong> Valid values: float (min: 1e-3, max: 1.0) Default value: 1.0</td>
+</tr>
+<tr class="odd">
+<td>sub_sample</td>
+<td>The fraction of the training data to sample for training per epoch. <strong>Optional</strong> Valid values: Float (min: 0.0, max: 1.0) Default value: 1.0</td>
+</tr>
+<tr class="even">
+<td>tolerance</td>
+<td>The maximum relative change in the loss function. Early stopping is triggered when change in the loss function drops below this value within the last <code>num_patience_epochs</code> number of epochs. <strong>Optional</strong> Valid values: Float (min: 1e-6, max: 0.1) Default value: 0.001</td>
+</tr>
+<tr class="odd">
+<td>weight_decay</td>
+<td>The weight decay coefficient. Adds L2 regularization. <strong>Optional</strong> Valid values: Float (min: 0.0, max: 1.0) Default value: 0.0</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

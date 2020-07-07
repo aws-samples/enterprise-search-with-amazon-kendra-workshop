@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Run Real-time Predictions with an Inference Pipeline</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Run Real-time Predictions with an Inference Pipeline<a name="inference-pipeline-real-time"></a></h1>
+</header>
+<p>You can use trained models in an inference pipeline to make real-time predictions directly without performing external preprocessing. When you configure the pipeline, you can choose to use the built-in feature transformers already available in Amazon SageMaker. Or, you can implement your own transformation logic using just a few lines of scikit-learn or Spark code.</p>
+<p><a href="http://mleap-docs.combust.ml/">MLeap</a>, a serialization format and execution engine for machine learning pipelines, supports Spark, scikit-learn, and TensorFlow for training pipelines and exporting them to a serialized pipeline called an MLeap Bundle. You can deserialize Bundles back into Spark for batch-mode scoring or into the MLeap runtime to power real-time API services.</p>
+<p>The containers in a pipeline listen on the port specified in the <code>SAGEMAKER_BIND_TO_PORT</code> environment variable (instead of 8080). When running in an inference pipeline, Amazon SageMaker automatically provides this environment variable to containers. If this environment variable isn’t present, containers default to using port 8080. To indicate that your container complies with this requirement, use the following command to add a label to your Dockerfile:</p>
+<pre><code>LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true</code></pre>
+<p>If your container needs to listen on a second port, choose a port in the range specified by the <code>SAGEMAKER_SAFE_PORT_RANGE</code> environment variable. Specify the value as an inclusive range in the format <strong>“XXXX-YYYY”</strong>, where <code>XXXX</code> and <code>YYYY</code> are multi-digit integers. Amazon SageMaker provides this value automatically when you run the container in a multicontainer pipeline.</p>
+<p><strong>Note</strong><br />
+To use custom Docker images in a pipeline that includes <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Amazon SageMaker built-in algorithms</a>, you need an <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">Amazon Elastic Container Registry (Amazon ECR) policy</a>. Your Amazon ECR repository must grant Amazon SageMaker permission to pull the image. For more information, see <a href="inference-pipeline-troubleshoot.md#inference-pipeline-troubleshoot-permissions">Troubleshoot Amazon ECR Permissions for Inference Pipelines</a>.</p>
+<p>The following code creates and deploys a real-time inference pipeline model with SparkML and XGBoost models in series using the Amazon SageMaker SDK.</p>
+<pre><code>from sagemaker.model import Model
+from sagemaker.pipeline_model import PipelineModel
+from sagemaker.sparkml.model import SparkMLModel
+
+sparkml_data = &#39;s3://{}/{}/{}&#39;.format(s3_model_bucket, s3_model_key_prefix, &#39;model.tar.gz&#39;)
+sparkml_model = SparkMLModel(model_data=sparkml_data)
+xgb_model = Model(model_data=xgb_model.model_data, image=training_image)
+
+model_name = &#39;serial-inference-&#39; + timestamp_prefix
+endpoint_name = &#39;serial-inference-ep-&#39; + timestamp_prefix
+sm_model = PipelineModel(name=model_name, role=role, models=[sparkml_model, xgb_model])
+sm_model.deploy(initial_instance_count=1, instance_type=&#39;ml.c4.xlarge&#39;, endpoint_name=endpoint_name)</code></pre>
+<p>The following example shows how to make real-time predictions by calling an inference endpoint and passing a request payload in JSON format:</p>
+<pre><code>from sagemaker.predictor import json_serializer, json_deserializer, RealTimePredictor
+from sagemaker.content_types import CONTENT_TYPE_CSV, CONTENT_TYPE_JSON
+
+payload = {
+        &quot;input&quot;: [
+            {
+                &quot;name&quot;: &quot;Pclass&quot;,
+                &quot;type&quot;: &quot;float&quot;,
+                &quot;val&quot;: &quot;1.0&quot;
+            },
+            {
+                &quot;name&quot;: &quot;Embarked&quot;,
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;val&quot;: &quot;Q&quot;
+            },
+            {
+                &quot;name&quot;: &quot;Age&quot;,
+                &quot;type&quot;: &quot;double&quot;,
+                &quot;val&quot;: &quot;48.0&quot;
+            },
+            {
+                &quot;name&quot;: &quot;Fare&quot;,
+                &quot;type&quot;: &quot;double&quot;,
+                &quot;val&quot;: &quot;100.67&quot;
+            },
+            {
+                &quot;name&quot;: &quot;SibSp&quot;,
+                &quot;type&quot;: &quot;double&quot;,
+                &quot;val&quot;: &quot;1.0&quot;
+            },
+            {
+                &quot;name&quot;: &quot;Sex&quot;,
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;val&quot;: &quot;male&quot;
+            }
+        ],
+        &quot;output&quot;: {
+            &quot;name&quot;: &quot;features&quot;,
+            &quot;type&quot;: &quot;double&quot;,
+            &quot;struct&quot;: &quot;vector&quot;
+        }
+    }
+
+predictor = RealTimePredictor(endpoint=endpoint_name, sagemaker_session=sess, serializer=json_serializer,
+                                content_type=CONTENT_TYPE_JSON, accept=CONTENT_TYPE_CSV)
+
+print(predictor.predict(payload))</code></pre>
+</body>
+</html>

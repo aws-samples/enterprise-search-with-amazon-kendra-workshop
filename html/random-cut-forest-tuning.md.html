@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tune an RCF Model</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tune an RCF Model<a name="random-cut-forest-tuning"></a></h1>
+</header>
+<p><em>Automatic model tuning</em>, also known as hyperparameter tuning, finds the best version of a model by running many jobs that test a range of hyperparameters on your dataset. You choose the tunable hyperparameters, a range of values for each, and an objective metric. You choose the objective metric from the metrics that the algorithm computes. Automatic model tuning searches the hyperparameters chosen to find the combination of values that result in the model that optimizes the objective metric.</p>
+<p>The Amazon SageMaker RCF algorithm is an unsupervised anomaly-detection algorithm that requires a labeled test dataset for hyperparameter optimization. It calculates anomaly scores for test datapoints and then labels the datapoints as anomalous if their scores are beyond three standard deviations from the mean score. This is known as the three-sigma limit heuristic. The F1 score is emitted based on the difference between calculated labels and actual labels. The hyperparameter tuning job finds the model that maximizes that score. The success of hyperparameter optimization depends on the applicability of the three-sigma limit heuristic to the test dataset.</p>
+<p>For more information about model tuning, see <a href="automatic-model-tuning.md">Automatic Model Tuning</a>.</p>
+<p>The RCF algorithm computes the following metric during training. When tuning the model, choose this metric as the objective metric.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric Name</th>
+<th>Description</th>
+<th>Optimization Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test:f1</td>
+<td>F1 score on the test dataset, based on the difference between calculated labels and actual labels.</td>
+<td>Maximize</td>
+</tr>
+</tbody>
+</table>
+<p>You can tune a RCF model with the following hyperparameters.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Name</th>
+<th>Parameter Type</th>
+<th>Recommended Ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>num_samples_per_tree</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 1, MaxValue:2048</td>
+</tr>
+<tr class="even">
+<td>num_trees</td>
+<td>IntegerParameterRanges</td>
+<td>MinValue: 50, MaxValue:1000</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

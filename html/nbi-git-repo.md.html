@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Associate Git Repositories with Amazon SageMaker Notebook Instances</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Associate Git Repositories with Amazon SageMaker Notebook Instances<a name="nbi-git-repo"></a></h1>
+</header>
+<p>Associate Git repositories with your notebook instance to save your notebooks in a source control environment that persists even if you stop or delete your notebook instance. You can associate one default repository and up to three additional repositories with a notebook instance. The repositories can be hosted in AWS CodeCommit, GitHub or on any other Git server. Associating Git repositories with your notebook instance can be useful for: + Persistence - Notebooks in a notebook instance are stored on durable Amazon EBS volumes, but they do not persist beyond the life of your notebook instance. Storing notebooks in a Git repository enables you to store and use notebooks even if you stop or delete your notebook instance. + Collaboration - Peers on a team often work on machine learning projects together. Storing your notebooks in Git repositories allows peers working in different notebook instances to share notebooks and collaborate on them in a source-control environment. + Learning - Many Jupyter notebooks that demonstrate machine learning techniques are available in publicly hosted Git repositories, such as on GitHub. You can associate your notebook instance with a repository to easily load Jupyter notebooks contained in that repository.</p>
+<p>There are two ways to associate a Git repository with a notebook instance: + Add a Git repository as a resource in your Amazon SageMaker account. Then, to access the repository, you can specify an AWS Secrets Manager secret that contains credentials. That way, you can access repositories that require authentication. + Associate a public Git repository that is not a resource in your account. If you do this, you cannot specify credentials to access the repository.</p>
+<p><strong>Topics</strong> + <a href="#nbi-git-resource">Add a Git Repository to Your Amazon SageMaker Account</a> + <a href="#nbi-git-create">Create a Notebook Instance with an Associated Git Repository</a> + <a href="#nbi-git-cross">Associate a CodeCommit Repository in a Different AWS Account with a Notebook Instance</a> + <a href="#git-nbi-use">Use Git Repositories in a Notebook Instance</a></p>
+<p>To manage your GitHub repositories, easily associate them with your notebook instances, and associate credentials for repositories that require authentication, add the repositories as resources in your Amazon SageMaker account. You can view a list of repositories that are stored in your account and details about each repository in the Amazon SageMaker console and by using the API.</p>
+<p>You can add Git repositories to your Amazon SageMaker account in the Amazon SageMaker console or by using the AWS CLI.</p>
+<p><strong>Note</strong><br />
+You can use the Amazon SageMaker API <a href="API_CreateCodeRepository.md">CreateCodeRepository</a> to add Git repositories to your Amazon SageMaker account, but step-by-step instructions are not provided here.</p>
+<p><strong>To add a Git repository as a resource in your Amazon SageMaker account</strong></p>
+<ol type="1">
+<li><p>Open the Amazon SageMaker console at <a href="https://console.aws.amazon.com/sagemaker/">https://console.aws.amazon.com/sagemaker/</a>.</p></li>
+<li><p>Choose <strong>Git repositories</strong>, then choose <strong>Add repository</strong>.</p></li>
+<li><p>To add an CodeCommit repository, choose <strong>AWS CodeCommit</strong>.</p>
+<ol type="1">
+<li><p>To use an existing CodeCommit repository:</p>
+<ol type="1">
+<li><p>Choose <strong>Use existing repository</strong>.</p></li>
+<li><p>For <strong>Repository</strong>, choose a repository from the list.</p></li>
+<li><p>Enter a name to use for the repository in Amazon SageMaker. The name must be 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></li>
+<li><p>Choose <strong>Add repository</strong>.</p></li>
+</ol></li>
+<li><p>To create a new CodeCommit repository:</p>
+<ol type="1">
+<li><p>Choose <strong>Create new repository</strong>.</p></li>
+<li><p>Enter a name for the repository that you can use in both CodeCommit and Amazon SageMaker. The name must be 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></li>
+<li><p>Choose <strong>Create repository</strong>.</p></li>
+</ol></li>
+</ol></li>
+<li><p>To add a Git repository hosted somewhere other than CodeCommit :</p>
+<ol type="1">
+<li><p>Choose <strong>GitHub/Other Git-based repo</strong>.</p></li>
+<li><p>Enter a name to use for the repository in Amazon SageMaker. The name must be 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></li>
+<li><p>Enter the URL for the repository. <strong>Note</strong><br />
+Do not provide a user name in the URL. Add the username and password in AWS Secrets Manager as described in the next step.</p></li>
+<li><p>For <strong>Git credentials</strong>, choose the credentials to use to authenticate to the repository. This is necessary only if the Git repository is private. <strong>Note</strong><br />
+If you have two-factor authentication enabled for your Git repository, use a personal access token generated by your Git service provider instead of a password.</p>
+<ol type="1">
+<li><p>To use an existing AWS Secrets Manager secret, choose <strong>Use existing secret</strong>, and then choose a secret from the list. For information about creating and storing a secret, see <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_create-basic-secret.html">Creating a Basic Secret</a> in the <em>AWS Secrets Manager User Guide</em>. The name of the secret you use must contain the string <code>sagemaker</code>. <strong>Note</strong><br />
+The secret must have a staging label of <code>AWSCURRENT</code> and must be in the following format:<br />
+<code>{"username": UserName, "password": Password}</code><br />
+For GitHub repositories, we recommend using a personal access token instead of your account password. For information, see <a href="https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/">https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/</a>.</p></li>
+<li><p>To create a new AWS Secrets Manager secret, choose <strong>Create secret</strong>, enter a name for the secret, and then enter the username and password to use to authenticate to the repository. The name for the secret must contain the string <code>sagemaker</code>. <strong>Note</strong><br />
+The IAM role you use to create the secret must have the <code>secretsmanager:GetSecretValue</code> permission in its IAM policy.<br />
+The secret must have a staging label of <code>AWSCURRENT</code> and must be in the following format:<br />
+<code>{"username": UserName, "password": Password}</code><br />
+For GitHub repositories, we recommend using a personal access token instead of your account password.</p></li>
+<li><p>To not use any credentials, choose <strong>No secret</strong>.</p></li>
+</ol></li>
+<li><p>Choose <strong>Create secret</strong>.</p></li>
+</ol></li>
+</ol>
+<p>Use the <code>create-code-repository</code> AWS CLI command. Specify a name for the repository as the value of the <code>code-repository-name</code> argument. The name must be 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen). Also specify the following: + The default branch + The URL of the Git repository <strong>Note</strong><br />
+Do not provide a user name in the URL. Add the username and password in AWS Secrets Manager as described in the next step. + The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains the credentials to use to authenticate the repository as the value of the <code>git-config</code> argument</p>
+<p>For information about creating and storing a secret, see <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_create-basic-secret.html">Creating a Basic Secret</a> in the <em>AWS Secrets Manager User Guide</em>. The following command creates a new repository named <code>MyRespository</code> in your Amazon SageMaker account that points to a Git repository hosted at <code>https://github.com/myprofile/my-repo"</code>.</p>
+<p>For Linux, OS X, or Unix:</p>
+<pre><code>aws sagemaker create-code-repository \
+                    --code-repository-name &quot;MyRepository&quot; \
+                    --git-config &#39;{&quot;Branch&quot;:&quot;master&quot;, &quot;RepositoryUrl&quot; :
+                    &quot;https://github.com/myprofile/my-repo&quot;, &quot;SecretArn&quot; : &quot;arn:aws:secretsmanager:us-east-2:012345678901:secret:my-secret-ABc0DE&quot;}&#39;</code></pre>
+<p>For Windows:</p>
+<pre><code>aws sagemaker create-code-repository ^
+                    --code-repository-name &quot;MyRepository&quot; ^
+                    --git-config &quot;{\&quot;Branch\&quot;:\&quot;master\&quot;, \&quot;RepositoryUrl\&quot; :
+                    \&quot;https://github.com/myprofile/my-repo\&quot;, \&quot;SecretArn\&quot; : \&quot;arn:aws:secretsmanager:us-east-2:012345678901:secret:my-secret-ABc0DE\&quot;}&quot;</code></pre>
+<p><strong>Note</strong><br />
+The secret must have a staging label of <code>AWSCURRENT</code> and must be in the following format:<br />
+<code>{"username": UserName, "password": Password}</code><br />
+For GitHub repositories, we recommend using a personal access token instead of your account password.</p>
+<p>You can associate Git repositories with a notebook instance when you create the notebook instance by using the AWS Management Console, or the AWS CLI.</p>
+<p><strong>Note</strong><br />
+You can use the Amazon SageMaker API <a href="API_CreateNotebookInstance.md">CreateNotebookInstance</a> to associate Git repositories with a notebook instance, but step-by-step instructions are not provided here.</p>
+<p><strong>Note</strong><br />
+If you want to use a CodeCommit repository that is in a different AWS than the notebook instance,set up cross-account access for the repository. For information, see <a href="#nbi-git-cross">Associate a CodeCommit Repository in a Different AWS Account with a Notebook Instance</a>.</p>
+<p><strong>Topics</strong> + <a href="#nbi-git-create-console">Create a Notebook Instance with an Associated Git Repository (Console)</a> + <a href="#nbi-git-create-cli">Create a Notebook Instance with an Associated Git Repository (CLI)</a></p>
+<p><strong>To create a notebook instance and associate Git repositories in the AWS Management Console</strong></p>
+<ol type="1">
+<li><p>Follow the instructions at <a href="gs-setup-working-env.md">Step 2: Create an Amazon SageMaker Notebook Instance</a>.</p></li>
+<li><p>For <strong>Git repositories</strong>, choose Git repositories to associate with the notebook instance.</p>
+<ol type="1">
+<li><p>For <strong>Default repository</strong>, choose a repository that you want to use as your default repository. Amazon SageMaker clones this repository as a subdirectory in the Jupyter startup directory at <code>/home/ec2-user/SageMaker</code>. When you open your notebook instance, it opens in this repository. To choose a repository that is stored as a resource in your account, choose its name from the list. To add a new repository as a resource in your account, choose <strong>Add a repository to Amazon SageMaker (opens the Add repository flow in a new window)</strong> and then follow the instructions at <a href="#nbi-git-create-console">Create a Notebook Instance with an Associated Git Repository (Console)</a>. To clone a public repository that is not stored in your account, choose <strong>Clone a public Git repository to this notebook instance only</strong>, and then specify the URL for that repository.</p></li>
+<li><p>For <strong>Additional repository 1</strong>, choose a repository that you want to add as an additional directory. Amazon SageMaker clones this repository as a subdirectory in the Jupyter startup directory at <code>/home/ec2-user/SageMaker</code>. To choose a repository that is stored as a resource in your account, choose its name from the list. To add a new repository as a resource in your account, choose <strong>Add a repository to Amazon SageMaker (opens the Add repository flow in a new window)</strong> and then follow the instructions at <a href="#nbi-git-create-console">Create a Notebook Instance with an Associated Git Repository (Console)</a>. To clone a repository that is not stored in your account, choose <strong>Clone a public Git repository to this notebook instance only</strong>, and then specify the URL for that repository.</p>
+<p>Repeat this step up to three times to add up to three additional repositories to your notebook instance.</p></li>
+</ol></li>
+</ol>
+<p>To create a notebook instance and associate Git repositories by using the AWS CLI, use the <code>create-notebook-instance</code> command as follows: + Specify the repository that you want to use as your default repository as the value of the <code>default-code-repository</code> argument. Amazon SageMaker clones this repository as a subdirectory in the Jupyter startup directory at <code>/home/ec2-user/SageMaker</code>. When you open your notebook instance, it opens in this repository. To use a repository that is stored as a resource in your Amazon SageMaker account, specify the name of the repository as the value of the <code>default-code-repository</code> argument. To use a repository that is not stored in your account, specify the URL of the repository as the value of the <code>default-code-repository</code> argument. + Specify up to three additional repositories as the value of the <code>additional-code-repositories</code> argument. Amazon SageMaker clones this repository as a subdirectory in the Jupyter startup directory at <code>/home/ec2-user/SageMaker</code>, and the repository is excluded from the default repository by adding it to the <code>.git/info/exclude</code> directory of the default repository. To use repositories that are stored as resources in your Amazon SageMaker account, specify the names of the repositories as the value of the <code>additional-code-repositories</code> argument. To use repositories that are not stored in your account, specify the URLs of the repositories as the value of the <code>additional-code-repositories</code> argument.</p>
+<p>For example, the following command creates a notebook instance that has a repository named <code>MyGitRepo</code>, that is stored as a resource in your Amazon SageMaker account, as a default repository, and an additional repository that is hosted on GitHub:</p>
+<pre><code>aws sagemaker create-notebook-instance \
+                    --notebook-instance-name &quot;MyNotebookInstance&quot; \
+                    --instance-type &quot;ml.t2.medium&quot; \
+                    --role-arn &quot;arn:aws:iam::012345678901:role/service-role/AmazonSageMaker-ExecutionRole-20181129T121390&quot; \
+                    --default-code-repository &quot;MyGitRepo&quot; \
+                    --additional-code-repositories &quot;https://github.com/myprofile/my-other-repo&quot;</code></pre>
+<p><strong>Note</strong><br />
+If you use an AWS CodeCommit repository that does not contain “SageMaker” in its name, add the <code>codecommit:GitPull</code> and <code>codecommit:GitPush</code> permissions to the role that you pass as the <code>role-arn</code> argument to the <code>create-notebook-instance</code> command. For information about how to add permissions to a role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Adding and Removing IAM Policies</a> in the <em>AWS Identity and Access Management User Guide</em>.</p>
+<p>To associate a CodeCommit repository in a different AWS account with your notebook instance, set up cross-account access for the CodeCommit repository.</p>
+<p><strong>To set up cross-account access for a CodeCommit repository and associate it with a notebook instance:</strong></p>
+<ol type="1">
+<li><p>In the AWS account that contains the CodeCommit repository, create an IAM policy that allows access to the repository from users in the account that contains your notebook instance. For information, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/cross-account-administrator-a.html#cross-account-create-policy-a">Step 1: Create a Policy for Repository Access in AccountA</a> in the <em>CodeCommit User Guide</em>.</p></li>
+<li><p>In the AWS account that contains the CodeCommit repository, create an IAM role, and attach the policy that you created in the previous step to that role. For information, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/cross-account-administrator-a.html#cross-account-create-role-a">Step 2: Create a Role for Repository Access in AccountA</a> in the <em>CodeCommit User Guide</em>.</p></li>
+<li><p>Create a profile in the notebook instance that uses the role that you created in the previous step:</p>
+<ol type="1">
+<li><p>Open the notebook instance.</p></li>
+<li><p>Open a terminal in the notebook instance.</p></li>
+<li><p>Edit a new profile by typing the following in the terminal:</p>
+<pre><code>vi /home/ec2-user/.aws/config</code></pre></li>
+<li><p>Edit the file with the following profile information:</p>
+<pre><code>[profile CrossAccountAccessProfile]
+region = us-west-2
+role_arn = arn:aws:iam::CodeCommitAccount:role/CrossAccountRepositoryContributorRole
+credential_source=Ec2InstanceMetadata
+output = json</code></pre>
+<p>Where <em>CodeCommitAccount</em> is the account that contains the CodeCommit repository, <em>CrossAccountAccessProfile</em> is the name of the new profile, and <em>CrossAccountRepositoryContributorRole</em> is the name of the role you created in the previous step.</p></li>
+</ol></li>
+<li><p>On the notebook instance, configure git to use the profile you created in the previous step:</p>
+<ol type="1">
+<li><p>Open the notebook instance.</p></li>
+<li><p>Open a terminal in the notebook instance.</p></li>
+<li><p>Edit the Git configuration file typing the following in the terminal:</p>
+<pre><code>vi /home/ec2-user/.gitconfig</code></pre></li>
+<li><p>Edit the file with the following profile information:</p>
+<pre><code>[credential]
+        helper = !aws codecommit credential-helper --profile CrossAccountAccessProfile $@
+        UseHttpPath = true</code></pre>
+<p>Where <em>CrossAccountAccessProfile</em> is the name of the profile that you created in the previous step.</p></li>
+</ol></li>
+</ol>
+<p>When you open a notebook instance that has Git repositories associated with it, it opens in the default repository, which is installed in your notebook instance directly under <code>/home/ec2-user/SageMaker</code>. You can open and create notebooks, and you can manually run Git commands in a notebook cell. For example:</p>
+<pre><code>!git pull origin master</code></pre>
+<p>To open any of the additional repositories, navigate up one folder. The additional repositories are also installed as directories under <code>/home/ec2-user/SageMaker</code>.</p>
+<p>If you open the notebook instance with a JupyterLab interface, the jupyter-git extension is installed and available to use. For information about the jupyter-git extension for JupyterLab, see <a href="https://github.com/jupyterlab/jupyterlab-git">https://github.com/jupyterlab/jupyterlab-git</a>.</p>
+<p>When you open a notebook instance in JupyterLab, you see the git repositories associated with it on the left menu:</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/git-notebook.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+<p>You can use the jupyter-git extension to manage git visually, instead of using the command line:</p>
+<figure>
+<img src="http://docs.aws.amazon.com/sagemaker/latest/dg/images/jupyterlab-git.png" alt="" /><figcaption>[Image NOT FOUND]</figcaption>
+</figure>
+</body>
+</html>
