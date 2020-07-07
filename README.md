@@ -15,3 +15,13 @@ In Part 2, we will enhance our existing index with Frequently Asked Questions (F
 [Part 3 - Adding Metadata](https://github.com/giuseppe-zappia/amazon-kendra-workshop/blob/master/Part%203%20-%20Adding%20Metadata.md)
 
 In the final section of this workshop, we will go even further in enriching the search experience for end users by building metadata objects to go with the document repository. This metadata will allow us to override certain elements such as the title of a document, or add other metadata that we can use for faceted search.
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License Summary
+
+The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the LICENSE file.
+
+The sample code within this documentation is made available under the MIT-0 license. See the LICENSE-SAMPLECODE file.
