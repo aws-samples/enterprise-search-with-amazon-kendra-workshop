@@ -21,7 +21,7 @@
 - On the Kendra homepage, click on "Create an Index"
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.02.31%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%209.38.50%20AM.png)
 
 
 - This will take you to the "Specify index details" screen, where we will create our first Amazon Kendra search index.
@@ -32,11 +32,13 @@
 
 - Once selected, the Role Name field will appear. Enter "demo-index-role" into this box. It will automatically be prefixed with "AmazonKendra-<region>-".
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.05.20%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%209.42.36%20AM.png)
 
 - Click "Next"
 
 - On the "Specify provisioning" screen, select "Developer edition", which will be sufficient for this workshop.
+
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%209.44.25%20AM.png)
 
 - Click "Create"
 
@@ -44,7 +46,7 @@
 
 - You will be forwarded to the console page for your index, with a message stating that your index is being created. You will need to wait for this index to finish before proceeding. **This takes between 15 and 20 minutes.** You will not need to refresh the page.
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.06.40%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%209.54.09%20AM.png)
 
 - Once your index is finished creating, go to the bar in the top left, click on "Services", type S3 in the search box, and click on the S3 entry to go to the S3 Console
 
@@ -94,9 +96,9 @@
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.01.40%20PM.png)
 
 
-- On the Kendra homepage, click on "Launch Amazon Kendra"
+- On the Kendra homepage, click on "Create an Index"
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.02.31%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%209.38.50%20AM.png)
 
 
 - Click the "Add data sources" button, so we can add data to the index.
@@ -114,7 +116,7 @@
 - Here we will name our data source. Type "demo-s3-datasource" in the "Data source name" field.
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.06.33%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2011.03.23%20AM.png)
 
 
 - Click Next
@@ -130,7 +132,7 @@
 - In the "Set sync run schedule" section, under Frequency, select "Run on demand".
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.11.47%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2010.16.01%20AM.png)
 
 
 - Click Next
@@ -138,27 +140,27 @@
 - On the Review and create screen, click "Create"
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.12.31%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2010.16.51%20AM.png)
 
 
 - A new IAM role will be created, and you will be returned to the index home page.
 
 - Wait for your data source status to change to "Active"
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.14.04%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2010.18.08%20AM.png)
 
 - Once your data source is Active, you can synchronize it. Click the "Sync now" button near the top right corner of your screen.
 
-- Once started, an entry in the 'Sync run history' will show up as "Syncing" and wait for that to complete. It should take about 1 minute.
+- Once started, an entry in the 'Sync run history' will show up as "Syncing - crawling" and wait for that to complete. It should take about 1 minute.
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.15.19%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2011.55.51%20AM.png)
 
 
 - When the Sync run status changes to "Succeeded", that means Kendra has indexed all of our data and it is ready to be searched!
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.19.10%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2011.56.57%20AM.png)
 
 
 - In the left hand menu, click "Search Console" to view the Kendra Demo Console.
@@ -183,7 +185,7 @@
   - time series forecasting
 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.34.52%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.12.48%20PM.png)
 
 
 - Congratulations, you've successfully created an enterprise search instance with Amazon Kendra!
