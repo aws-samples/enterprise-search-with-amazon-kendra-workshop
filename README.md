@@ -2,6 +2,8 @@
 
 In this workshop we will be using Amazon Kendra to setup our own Enterprise Search instance, index HTML/PDF content in Amazon S3, and use a variety of query types to return accurate search results for end users.
 
+**Note: Amazon Kendra pricing and free tier information is available at https://aws.amazon.com/kendra/pricing/. You should delete your index after you are done with this workshop to avoid Kendra related charges.**
+
 This workshop is split into 3 parts:
 
 [Part 1 - Creating a Kendra Index](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/Part%201%20-%20Creating%20a%20Kendra%20Index.md) 
