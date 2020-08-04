@@ -42,7 +42,7 @@ In the IAM role field, we will create a new role for our FAQ. Select "Create a n
 
 Under Role name, type "SagemakerFAQ-Role"
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.00.45%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.43.39%20PM.png)
 
 Click Add
 
