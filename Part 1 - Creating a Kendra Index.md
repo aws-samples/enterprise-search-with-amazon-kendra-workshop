@@ -18,23 +18,29 @@
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.01.40%20PM.png)
 
 
-- On the Kendra homepage, click on "Launch Amazon Kendra"
+- On the Kendra homepage, click on "Create an Index"
 
 
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.02.31%20PM.png)
 
 
-- This will take you to the "Create Index" screen, where we will create our first Amazon Kendra search index.
+- This will take you to the "Specify index details" screen, where we will create our first Amazon Kendra search index.
 
 - In the index name field type "kendra-demo-index"
 
 - For IAM role, select "Create a new role". This will be the role that Kendra uses to push logging and metrics to Amazon Cloudwatch.
 
-- Once selected, the Role Name field will appear. Enter "demo-index-role" into this box
+- Once selected, the Role Name field will appear. Enter "demo-index-role" into this box. It will automatically be prefixed with "AmazonKendra-<region>-".
 
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.05.20%20PM.png)
 
+- Click "Next"
+
+- On the "Specify provisioning" screen, select "Developer edition", which will be sufficient for this workshop.
+
 - Click "Create"
+
+- A message about propogating the IAM role will appear for about 30 seconds.
 
 - You will be forwarded to the console page for your index, with a message stating that your index is being created. You will need to wait for this index to finish before proceeding. **This takes between 15 and 20 minutes.** You will not need to refresh the page.
 
