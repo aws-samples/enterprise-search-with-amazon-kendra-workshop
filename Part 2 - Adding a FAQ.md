@@ -38,8 +38,9 @@ In the FAQ settings section, in the S3 location field, either type in the S3 loc
 
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%205.58.48%20PM.png)
 
-In the IAM role field, we will re-use the role from our S3 data source since it already has the correct permissions. Select the "AmazonKendra-demo-s3-datasource-role" item.
+In the IAM role field, we will create a new role for our FAQ. Select "Create a new role".
 
+Under Role name, type "SagemakerFAQ-Role"
 
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.00.45%20PM.png)
 
