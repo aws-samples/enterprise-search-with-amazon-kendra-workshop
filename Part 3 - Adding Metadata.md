@@ -50,9 +50,9 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.01.40%20PM.png)
 
-- On the Kendra homepage, click on "Launch Amazon Kendra"
+- On the Kendra homepage, click on "Create an Index"
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%204.02.31%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%209.38.50%20AM.png)
 
 - Select kendra-demo-index from the list of indexes.
 
@@ -68,27 +68,27 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - In the "Index Fields" area, click "Add Field" on the top right.
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.44.16%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.49.30%20PM.png)
 
 - In the "Field name" box, enter "tags"
 
 - In the "Data type" box, select "String list", since this field is an array of tag items.
 
-- Under usage types, check all 3 items: 
+- Under usage types, check the 3 available items: 
 
 	- Facetable (allows facets to be created)
 	- Searchable (allows field to participate in determining relevancy to the query)
 	- and Displayable (whether we are going to return this facey in the query response)
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.50.45%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.51.59%20PM.png)
 
 - Click Add
 
 - Now we will enable the "category" facet as well, since we included it in our metadata.
 
-- Inside of the "Index fields" section, find the "Field name" of "category" and check all 3 boxes next to it, similarly to what we did for our custom facet. (Facetable, Searchable, and Displayable).
+- Inside of the "Index fields" section, find the "Field name" of "category" and check all 4 boxes next to it, similarly to what we did for our custom facet. (Facetable, Searchable, and Displayable). You can leave 
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%206.53.17%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.53.50%20PM.png)
 
 - Click "Save" at the bottom of the section.
 
@@ -116,13 +116,13 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Select the radio button next to demo-s3-instance, and click the "Sync now" button near the top of the section.
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.03.44%20PM.png)
+- The "Current sync state" attribute will change to "Syncing - crawling". Wait for it to complete (around 1 minute).
 
-- The "Current sync state" attribute will change to "Syncing". Wait for it to complete (around 1 minute).
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.55.41%20PM.png)
 
 - If "Last sync status" is "Succeeded" and "Current sync state" goes to "Idle" then your synchronization job was a success.
 
-![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-02-20%20at%207.05.45%20PM.png)
+![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.56.12%20PM.png)
 
 - Now we can go back to the search console and see our faceted search in action.
 
