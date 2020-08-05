@@ -86,7 +86,7 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - Now we will enable the "category" facet as well, since we included it in our metadata.
 
-- Inside of the "Index fields" section, find the "Field name" of "category" and check all 4 boxes next to it, similarly to what we did for our custom facet. (Facetable, Searchable, and Displayable). You can leave 
+- Inside of the "Index fields" section, find the "Field name" of "category" and check all 4 boxes next to it. (Facetable, Searchable, Displayable, and Sortable).
 
 ![](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/images/Screen%20Shot%202020-08-04%20at%2012.53.50%20PM.png)
 
@@ -114,7 +114,7 @@ Here is an example of one of the files in that folder (blazingtext_hyperparamete
 
 - We can now re-index our data. We should now be back on the Data sources page.
 
-- Select the radio button next to demo-s3-instance, and click the "Sync now" button near the top of the section.
+- Select the radio button next to demo-s3-datasource, and click the "Sync now" button near the top of the section.
 
 - The "Current sync state" attribute will change to "Syncing - crawling". Wait for it to complete (around 1 minute).
 
