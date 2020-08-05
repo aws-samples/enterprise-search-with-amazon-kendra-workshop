@@ -20,6 +20,8 @@ In the final section of this workshop, we will go even further in enriching the 
 
 [Part 4 - Clean Up](https://github.com/aws-samples/enterprise-search-with-amazon-kendra-workshop/blob/master/Part%204%20-%20Clean%20Up.md)
 
+Lastly we will clean up the resources we created.
+
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
